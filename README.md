@@ -1,1 +1,1 @@
-# CS-481-Seinor-Software
+# CS-481-Senior-Software
