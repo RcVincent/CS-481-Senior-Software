@@ -3,8 +3,10 @@ package model;
 public class User {
 	private int UserID;
 	private String Username, Password, Email;
-	
+	private Position position; 
+	private boolean AdminFlag, ArchiveFlag; 
 	/// Constructor(s)
+	
 	
 	public User() {
 		
@@ -43,4 +45,29 @@ public class User {
 	public String getEmail() {
 		return this.Email;	
 	}
+	
+	public Position getP() {
+		return position;
+	}
+
+	public void setP(Position p) {
+		this.position = p;
+	}
+
+	public boolean isArchiveFlag() {
+		return ArchiveFlag;
+	}
+
+	public void setArchiveFlag(boolean archiveFlag) {
+		ArchiveFlag = archiveFlag;
+	}
+
+	public boolean isAdminFlag() {
+		return AdminFlag;
+	}
+
+	public void setAdminFlag(boolean adminFlag) {
+		AdminFlag = adminFlag;
+	}
+
 }
