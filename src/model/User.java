@@ -46,11 +46,11 @@ public class User {
 		return this.Email;	
 	}
 	
-	public Position getP() {
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setP(Position p) {
+	public void setPosition(Position p) {
 		this.position = p;
 	}
 
