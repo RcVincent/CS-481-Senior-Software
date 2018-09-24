@@ -4,7 +4,7 @@ public class User {
 	private int UserID;
 	private String Username, Password, Email;
 	private Position position; 
-	private boolean AdminFlag, ArchiveFlag; 
+	private boolean AdminFlag, ArchiveFlag, validUser; 
 	/// Constructor(s)
 	
 	
@@ -68,6 +68,14 @@ public class User {
 
 	public void setAdminFlag(boolean adminFlag) {
 		AdminFlag = adminFlag;
+	}
+
+	public boolean isValidUser() {
+		return validUser;
+	}
+
+	public void setValidUser(boolean validUser) {
+		this.validUser = validUser;
 	}
 
 }
