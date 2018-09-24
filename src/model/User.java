@@ -2,7 +2,7 @@ package model;
 
 public class User {
 	private int UserID;
-	private String Username, Password, Email;
+	private String Password, Email;
 	private Position position; 
 	private boolean AdminFlag, ArchiveFlag, validUser; 
 	/// Constructor(s)
@@ -22,13 +22,6 @@ public class User {
 		return this.UserID;	
 	}
 	
-	public void setUsername(String Username) {
-		this.Username = Username;	
-	}
-	
-	public String getUsername() {
-		return this.Username;	
-	}
 	
 	public void setPassword(String Password) {
 		this.Password = Password;	

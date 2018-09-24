@@ -1,7 +1,8 @@
 package modelTests;
 //import org.junit.before;
 
-import org.junit.*; 
+//import org.junit.*; 
+import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,7 +122,8 @@ public class UserTest {
 		userlist.add(admin2); 
 
 	}
-
+	
+	@Test
 	public void testValidEmail() {
 		//prepare the failure lists
 		List<User> failedTests = new ArrayList<User>(); 
@@ -152,14 +154,15 @@ public class UserTest {
 			}
 			
 		}
-		
+
 		assertEquals(failedTests.size(), 1);  
 		assertEquals(userlist.size(), 7);
 		assertEquals(archivelist.size(), 1); 
 
 
 	}
-
+	
+	@Test
 	public void testValidPassword() {
 		//prepare the failure lists
 				List<User> failedTests = new ArrayList<User>(); 
