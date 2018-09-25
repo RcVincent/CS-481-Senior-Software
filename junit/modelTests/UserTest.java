@@ -120,6 +120,7 @@ public class UserTest {
 		admin2.setPosition(a2);
 
 		userlist.add(admin2); 
+		
 
 	}
 	
@@ -128,8 +129,11 @@ public class UserTest {
 		//prepare the failure lists
 		List<User> failedTests = new ArrayList<User>(); 
 		
+		List<User> testlist = new ArrayList<User>(); 
+		testlist.addAll(userlist);
+		
 		//sort through the userlist 
-		for (User u : userlist) {
+		for (User u : testlist) {
 			//if archived immediately stop, there is no reason to search the list anymore 
 			if(u.isArchiveFlag() == false) {
 				
@@ -147,17 +151,17 @@ public class UserTest {
 				userlist.remove(u);
 				
 				//if the user does not already exist in the archive, add them to it 
-				if(!archivelist.contains(u)) {
+				/*if(!archivelist.contains(u)) {
 					archivelist.add(u);
 					
-				}
+				}*/
 			}
 			
 		}
 
 		assertEquals(failedTests.size(), 1);  
 		assertEquals(userlist.size(), 7);
-		assertEquals(archivelist.size(), 1); 
+		//assertEquals(archivelist.size(), 1); 
 
 
 	}
@@ -166,9 +170,12 @@ public class UserTest {
 	public void testValidPassword() {
 		//prepare the failure lists
 				List<User> failedTests = new ArrayList<User>(); 
+				List<User> testlist = new ArrayList<User>(); 
+				
+				testlist.addAll(userlist);
 				
 				//sort through the userlist 
-				for (User u : userlist) {
+				for (User u : testlist) {
 					//if archived immediately stop, there is no reason to search the list anymore 
 					if(u.isArchiveFlag() == false) {
 						
@@ -186,25 +193,71 @@ public class UserTest {
 						userlist.remove(u);
 						
 						//if the user does not already exist in the archive, add them to it 
-						if(!archivelist.contains(u)) {
+						/*if(!archivelist.contains(u)) {
 							archivelist.add(u);
 							
-						}
+						}*/
 					}
 					
 				}
 				
 				assertEquals(failedTests.size(), 1);  
 				assertEquals(userlist.size(), 7);
-				assertEquals(archivelist.size(), 1); 
+				//assertEquals(archivelist.size(), 1); 
 	}
 
+	@Test
 	public void testValidID() {
+		//prepare the failure lists
+				List<User> failedTests = new ArrayList<User>(); 
+				
+				List<User> testlist = new ArrayList<User>(); 
+				testlist.addAll(userlist);
+				
+				//sort through the userlist 
+				for (User u : testlist) {
+					//if archived immediately stop, there is no reason to search the list anymore 
+					if(u.isArchiveFlag() == false) {
+						
+						//if the email is empty its invalid, invalidate that user and remove them from the user list. Also send their manager an email. 
+						if(u.getUserID() <= 0) {
+							u.setValidUser(false);
+							System.out.println("There is an invalid user in the list: " + u.getEmail());
+							userlist.remove(u);
+							failedTests.add(u);
+						}
+					}
+					else {
+						//if the user was invalid, notify and remove them from the user list 
+						System.out.println("This user is marked as archived. Please search the archive list for this information");
+						userlist.remove(u);
+						
+						//if the user does not already exist in the archive, add them to it 
+						/*if(!archivelist.contains(u)) {
+							archivelist.add(u);
+							
+						}*/
+					}
+					
+				}
+
+				assertEquals(failedTests.size(), 1);  
+				assertEquals(userlist.size(), 7);
+				//assertEquals(archivelist.size(), 1); 
+
 
 	}
 
-	public void testValidUser() {
-
+	public void testArchive() {
+		
+	}
+	
+	public void testPositionValidity() {
+		
+	}
+	
+	public void viewPositionSOPListTest() {
+		
 	}
 }
 
