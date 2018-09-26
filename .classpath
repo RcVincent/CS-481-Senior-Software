@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="junit"/>
 	<classpathentry kind="src" path="main"/>
 	<classpathentry exported="true" kind="lib" path="//storage/home/Desktop/CS320_Jetty.zip"/>
+	<classpathentry kind="lib" path="C:/Users/Ryan/Downloads/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
