@@ -5,8 +5,16 @@ public class Position {
 	private int ID, Priority;
 	private SOP Requirements;
 	
+	// Constructors
 	public Position() {
 		
+	}
+	
+	public Position(String Title, int ID, int Priority, SOP Requirements) {
+		this.Title = Title;
+		this.ID = ID;
+		this.Priority = Priority;
+		this.Requirements = Requirements;
 	}
 	
 	// Getters/Setters

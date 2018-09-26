@@ -5,11 +5,17 @@ public class User {
 	private String Password, Email;
 	private Position position; 
 	private boolean AdminFlag, ArchiveFlag, validUser; 
+	
 	/// Constructor(s)
-	
-	
 	public User() {
 		
+	}
+	
+	public User(int UserID, String Password, String Email, Position position) {
+		this.UserID = UserID;
+		this.Password = Password;
+		this.Email = Email;
+		this.position = position;
 	}
 	
 	/// Getters/Setters
