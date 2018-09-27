@@ -5,6 +5,7 @@ public class User {
 	private String Password, Email;
 	private Position position; 
 	private boolean AdminFlag, ArchiveFlag, validUser; 
+	private boolean loggedin;
 	
 	/// Constructor(s)
 	public User() {
@@ -16,6 +17,7 @@ public class User {
 		this.Password = Password;
 		this.Email = Email;
 		this.position = position;
+		loggedin = false;
 	}
 	
 	/// Getters/Setters
@@ -77,4 +79,11 @@ public class User {
 		this.validUser = validUser;
 	}
 
+	public Position getLoginStatus() {
+		return loggedin;
+	}
+
+	public void setLoginStatus(boolean s) {
+		this.position = s;
+	}
 }
