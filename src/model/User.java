@@ -85,4 +85,5 @@ public class User {
 	public void setLoginStatus(boolean l) {
 		loggedin = l;
 	}
+
 }
