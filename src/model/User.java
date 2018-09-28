@@ -78,11 +78,11 @@ public class User {
 		this.validUser = validUser;
 	}
 
-	public Position getLoginStatus() {
+	public boolean getLoginStatus() {
 		return loggedin;
 	}
 
-	public void setLoginStatus(boolean s) {
-		this.position = s;
+	public void setLoginStatus(boolean l) {
+		loggedin = l;
 	}
 }

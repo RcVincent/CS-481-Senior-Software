@@ -1,5 +1,7 @@
 package controller;
+import model.Position;
 import model.User;
+
 public class UserController {
     
     U = this.User();
