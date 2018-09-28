@@ -13,6 +13,10 @@ import java.util.List;
 import DBpersist.IDatabase;
 import DBpersist.DBUtil;
 import DBpersist.PersistenceException;
+import DBpersist.DerbyDatabase.Transaction;
+import model.Position;
+import model.SOP;
+import model.User;
 
 
 
@@ -26,7 +30,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 
-	private interface Transaction<ResultType> {
+	public interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
 	}
 
@@ -94,5 +98,57 @@ public class DerbyDatabase implements IDatabase {
 
 		return conn;
 	}
-
+	
+	public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				
+				//
+				List<User> userList;
+				List<SOP> sopList;
+				List<Position> positionList;
+				
+				try {
+					System.out.println("Init userlist");
+					userList = InitialData.getUsers();
+					 
+				}
+				
+				catch(IOException e) {
+					throw new SQLException("Couldn't read the initial data");
+				}
+				
+				
+				//the create tables lists
+				PreparedStatement insertUsers = null;
+				
+				try {
+					//set up the users list to be imported 
+					System.out.println("Preparing user insertion");
+					insertUsers = conn.prepareStatement("insert into user ()");
+					//actually do the insert 
+					
+					for (User u : userList) {
+						insertUsers.setString(1, u.getEmail()); 
+						insertUsers.setString(2, u.getPassword());
+					}
+					
+					//verify and execute 
+					System.out.println("inserting users");
+					insertUsers.executeBatch();
+					System.out.println("Users table populated");
+					
+					
+					
+					
+					
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(insertUsers);
+				}
+			}	
+		});		
+	}
 }
