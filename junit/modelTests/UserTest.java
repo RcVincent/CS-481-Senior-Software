@@ -20,7 +20,6 @@ public class UserTest {
 	private ArrayList<User> userlist, archivelist; 
 	private ArrayList<Position> positionList; 
 	
-
 	@Before
 	public void setUp() {
 
