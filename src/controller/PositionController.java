@@ -5,6 +5,7 @@ import model.Position;
 import model.SOP;
 
 public class PositionController {
+	private Position p;
 	
 	public PositionController() {
 		
@@ -13,13 +14,14 @@ public class PositionController {
 	public SOP getApplicantSOPs(User u) {
 		
 		// TODO: Return database query 
-		return new SOP(null, null, -1, -1, -1); 
+		return new SOP(); 
 	}
 	
-	public Position change(int positionID) {
+	public Position getPositionByID(int positionID) {
 		
-		// Name is up for debate, just a method to change a user's position
+		// Just a method to pull the position associated with ID
+		// this.p = 
 		// TODO: Database query for Position at specified ID
-		return new Position();
+		return this.p;
 	}
 }
