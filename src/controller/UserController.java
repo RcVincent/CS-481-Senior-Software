@@ -1,5 +1,5 @@
 package controller;
-import model.*;
+import model.User;
 public class UserController {
     
     U = this.User();
@@ -25,6 +25,6 @@ public class UserController {
     }
     
     public void Archive(){
-        
+        U.setArchiveFlag(true);
     } 
 }

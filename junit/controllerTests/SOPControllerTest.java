@@ -1,6 +1,6 @@
 package controllerTests;
 
 import org.junit.*;
-public class UserControllerTest {
+public class SOPControllerTest {
 
 }

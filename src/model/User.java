@@ -29,8 +29,7 @@ public class User {
 	public int getUserID() {
 		return this.UserID;	
 	}
-	
-	
+
 	public void setPassword(String Password) {
 		this.Password = Password;	
 	}

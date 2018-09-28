@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS320_Derby"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS320_Jetty"/>
+	<!--<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS320_Derby"/>>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CS320_Jetty"/> -->
+	<!--For now im just commenting this out till we get it figured out-->
 	<classpathentry kind="output" path="bin"/>
 </classpath>
