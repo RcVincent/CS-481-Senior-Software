@@ -103,11 +103,11 @@ public class DerbyDatabase implements IDatabase {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt1 = null;
-				
+				PreparedStatement user_stmt = null;
+				PreparedStatement pos_stmt = null;
 				try {
 					System.out.println("Prepare to create the user table");
-					stmt1 = conn.prepareStatement(
+					user_stmt = conn.prepareStatement(
 							"create table user (" +
 									" user_id integer primary key" +
 									" generated always as identity (start with 1, increment by 1), " +
@@ -117,22 +117,40 @@ public class DerbyDatabase implements IDatabase {
 							);
 					
 					System.out.println("execute users");
-					stmt1.executeUpdate();
+					user_stmt.executeUpdate();
 					//Print a success if it executes to this point 
 					System.out.println("user table created");
 					
 					
+					pos_stmt = conn.prepareStatement(
+							"create table positions (" +
+							"	positon_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	title varchar(40)," +
+							"	priority integer" +
+							")"
+					);
+					pos_stmt.executeUpdate();
 					
+					System.out.println("Positions table created");	
 					//if the method executed this far it was a success 
 					return true;
 				}
 				finally {
-					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(user_stmt);
+					DBUtil.closeQuietly(pos_stmt);
 					
 				}
 			}
 			
 		});
+}
+	// retrieve Position information - if we end up not needing these types of methods, just delete
+	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
+		position.setID(resultSet.getInt(index++));
+		position.setTitle(resultSet.getString(index++));
+		position.setPriority(resultSet.getInt(index++));
+
 	}
 	
 	public void loadInitialData() {
@@ -187,4 +205,6 @@ public class DerbyDatabase implements IDatabase {
 			}	
 		});		
 	}
+	
+	
 }
