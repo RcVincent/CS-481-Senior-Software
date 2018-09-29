@@ -99,6 +99,42 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
+	public void createTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				
+				try {
+					System.out.println("Prepare to create the user table");
+					stmt1 = conn.prepareStatement(
+							"create table user (" +
+									" user_id integer primary key" +
+									" generated always as identity (start with 1, increment by 1), " +
+									" user_email varchar(40), " +
+									" user_password (varchar(40)," +
+									") "
+							);
+					
+					System.out.println("execute users");
+					stmt1.executeUpdate();
+					//Print a success if it executes to this point 
+					System.out.println("user table created");
+					
+					
+					
+					//if the method executed this far it was a success 
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(stmt1);
+					
+				}
+			}
+			
+		});
+	}
+	
 	public void loadInitialData() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
