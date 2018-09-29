@@ -99,6 +99,13 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
+	// retrieve Position information - if we end up not needing these types of methods, just delete
+	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
+		position.setID(resultSet.getInt(index++));
+		position.setTitle(resultSet.getString(index++));
+		position.setPriority(resultSet.getInt(index++));
+	}
+	
 	public void loadInitialData() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
@@ -150,5 +157,33 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}	
 		});		
+	}
+	
+	public void createTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+
+				PreparedStatement pos_stmt = null;
+			
+				try {
+					pos_stmt = conn.prepareStatement(
+							"create table positions (" +
+							"	positon_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	title varchar(40)," +
+							"	priority integer" +
+							")"
+					);
+					pos_stmt.executeUpdate();
+					
+					System.out.println("Positions table created");					
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(pos_stmt);
+				}
+			}
+		});
 	}
 }
