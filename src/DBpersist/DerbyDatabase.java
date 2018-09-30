@@ -132,6 +132,8 @@ public class DerbyDatabase implements IDatabase {
 							"	priority integer" +
 							")"
 					);
+					
+					System.out.println("execute positions");
 					pos_stmt.executeUpdate();
 					
 					System.out.println("Positions table created");
@@ -143,9 +145,11 @@ public class DerbyDatabase implements IDatabase {
 							"	name varchar(80)," +
 							"	desc varchar(400)," +
 							"	author_id integer," + // author_id = user.id?
-							"	priority integer" +
+							"	priority integer" + 
+							"   revision integer" +
 							")"
 					);
+					System.out.println("execute SOPs");
 					sop_stmt.executeUpdate();
 					
 					System.out.println("SOPs table created");
@@ -155,12 +159,27 @@ public class DerbyDatabase implements IDatabase {
 				finally {
 					DBUtil.closeQuietly(user_stmt);
 					DBUtil.closeQuietly(pos_stmt);
+					DBUtil.closeQuietly(sop_stmt);
 					
 				}
 			}
 			
 		});
 }
+	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
+		user.setUserID(resultSet.getInt(index++));
+		user.setEmail(resultSet.getString(index++)); 
+		user.setPassword(resultSet.getString(index++));
+		
+	}
+	
+	private void loadSOP(SOP sop, ResultSet resultSet, int index) throws SQLException {
+		sop.setID(resultSet.getInt(index++));
+		sop.setName(resultSet.getString(index++));
+		sop.setDescription(resultSet.getString(index++));
+		sop.setPriority(resultSet.getInt(index++));
+		sop.setRevision(resultSet.getInt(index++));
+	}
 	// retrieve Position information - if we end up not needing these types of methods, just delete
 	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
 		position.setID(resultSet.getInt(index++));

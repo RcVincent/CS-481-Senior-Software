@@ -7,6 +7,7 @@ public class SOP{
 	private int ID;
 	// Assuming Author refers to a User, authorID would be their userID then.
 	private int authorID;
+	private int revision; 
 	
 	public SOP(String name, String description, int priority, int ID, int authorID){
 		this.name = name;
@@ -54,5 +55,13 @@ public class SOP{
 	
 	public void setAuthorID(int authorID){
 		this.authorID = authorID;
+	}
+
+	public int getRevision() {
+		return revision;
+	}
+
+	public void setRevision(int revision) {
+		this.revision = revision;
 	}
 }
