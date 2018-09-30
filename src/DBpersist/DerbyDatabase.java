@@ -105,6 +105,7 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement user_stmt = null;
 				PreparedStatement pos_stmt = null;
+				PreparedStatement sop_stmt = null;
 				try {
 					System.out.println("Prepare to create the user table");
 					user_stmt = conn.prepareStatement(
@@ -123,16 +124,31 @@ public class DerbyDatabase implements IDatabase {
 					
 					
 					pos_stmt = conn.prepareStatement(
-							"create table positions (" +
+							"create table position (" +
 							"	positon_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +
 							"	title varchar(40)," +
+							"	requirements integer," + // requirements = sop.id?
 							"	priority integer" +
 							")"
 					);
 					pos_stmt.executeUpdate();
 					
-					System.out.println("Positions table created");	
+					System.out.println("Positions table created");
+					
+					sop_stmt = conn.prepareStatement(
+							"create table sop (" +
+							"	sop_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	name varchar(80)," +
+							"	desc varchar(400)," +
+							"	author_id integer," + // author_id = user.id?
+							"	priority integer" +
+							")"
+					);
+					sop_stmt.executeUpdate();
+					
+					System.out.println("SOPs table created");
 					//if the method executed this far it was a success 
 					return true;
 				}
