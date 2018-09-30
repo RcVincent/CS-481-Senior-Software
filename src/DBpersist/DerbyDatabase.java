@@ -113,7 +113,10 @@ public class DerbyDatabase implements IDatabase {
 									" user_id integer primary key" +
 									" generated always as identity (start with 1, increment by 1), " +
 									" user_email varchar(40), " +
-									" user_password (varchar(40)," +
+									" user_password varchar(40)," +
+									" user_adminFlag"+
+									" user_firstname varchar(40) " +
+									" user_lastname varchar(40)" +
 									") "
 							);
 					
@@ -166,10 +169,14 @@ public class DerbyDatabase implements IDatabase {
 			
 		});
 }
+	
 	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
 		user.setUserID(resultSet.getInt(index++));
 		user.setEmail(resultSet.getString(index++)); 
 		user.setPassword(resultSet.getString(index++));
+		user.setAdminFlag(resultSet.getString(index++));
+		user.setFirstname(resultSet.getString(index++));
+		user.setLastname(resultSet.getString(index++));
 		
 	}
 	
@@ -180,12 +187,12 @@ public class DerbyDatabase implements IDatabase {
 		sop.setPriority(resultSet.getInt(index++));
 		sop.setRevision(resultSet.getInt(index++));
 	}
+	
 	// retrieve Position information - if we end up not needing these types of methods, just delete
 	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
 		position.setID(resultSet.getInt(index++));
 		position.setTitle(resultSet.getString(index++));
 		position.setPriority(resultSet.getInt(index++));
-
 	}
 	
 	public void loadInitialData() {
@@ -241,5 +248,15 @@ public class DerbyDatabase implements IDatabase {
 		});		
 	}
 	
-	
+	//main method to generate the DB
+	public static void main(String[] args) throws IOException {
+		System.out.println("Creating tables ");
+		DerbyDatabase db = new DerbyDatabase(); 
+		db.createTables();
+		System.out.println("Users");
+		System.out.println("SOPs");
+		System.out.println("Positions");
+		
+		System.out.println("Sucess!");
+	}
 }

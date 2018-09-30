@@ -4,8 +4,9 @@ public class User {
 	private int UserID;
 	private String Password, Email;
 	private Position position; 
-	private boolean AdminFlag, ArchiveFlag, validUser; 
+	private boolean ArchiveFlag, validUser; 
 	private boolean loggedin;
+	private String AdminFlag, Firstname, Lastname; 
 	
 	/// Constructor(s)
 	public User() {
@@ -62,11 +63,11 @@ public class User {
 		ArchiveFlag = archiveFlag;
 	}
 
-	public boolean isAdminFlag() {
+	public String isAdminFlag() {
 		return AdminFlag;
 	}
 
-	public void setAdminFlag(boolean adminFlag) {
+	public void setAdminFlag(String adminFlag) {
 		AdminFlag = adminFlag;
 	}
 
@@ -84,6 +85,22 @@ public class User {
 
 	public void setLoginStatus(boolean l) {
 		loggedin = l;
+	}
+
+	public String getFirstname() {
+		return Firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		Firstname = firstname;
+	}
+
+	public String getLastname() {
+		return Lastname;
+	}
+
+	public void setLastname(String lastname) {
+		Lastname = lastname;
 	}
 
 }

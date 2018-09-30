@@ -30,7 +30,7 @@ public class UserTest {
 		user1.setUserID(902685223);
 		user1.setEmail("gmailsucks@bing.com");
 		user1.setPassword("Pass");
-		user1.setAdminFlag(false); 
+		user1.setAdminFlag("user"); 
 		user1.setArchiveFlag(false);
 
 		p1 = new Position(); 
@@ -41,7 +41,7 @@ public class UserTest {
 		user2.setUserID(901678905);
 		user2.setEmail("bingSucks@gmail.com");
 		user2.setPassword("Yeet");
-		user2.setAdminFlag(false); 
+		user2.setAdminFlag("user"); 
 		user2.setArchiveFlag(false);
 
 		p2 = new Position(); 
@@ -52,7 +52,7 @@ public class UserTest {
 		user3.setUserID(901678509);
 		user3.setEmail("IamADegenerate@ycp.edu");
 		user3.setPassword("No");
-		user3.setAdminFlag(false);
+		user3.setAdminFlag("user");
 		user3.setArchiveFlag(true);
 
 		p3 = new Position(); 
@@ -64,7 +64,7 @@ public class UserTest {
 		user4.setEmail(""); 
 		user4.setPassword("lelelele");
 		user4.setArchiveFlag(false);
-		user4.setAdminFlag(false);
+		user4.setAdminFlag("user");
 
 		user4.setPosition(p2);
 		userlist.add(user4); 
@@ -73,7 +73,7 @@ public class UserTest {
 		user5.setUserID(900174502);
 		user5.setEmail("yayayaya@mrc.org");
 		user5.setPassword("");
-		user5.setAdminFlag(false);
+		user5.setAdminFlag("user");
 		user5.setArchiveFlag(false);
 
 		user5.setPosition(p2);
@@ -90,7 +90,7 @@ public class UserTest {
 		user7 = new User(); 
 		user7.setUserID(899245663);
 		user7.setEmail("kbdack@hot.com");
-		user7.setAdminFlag(false);
+		user7.setAdminFlag("user");
 		user7.setArchiveFlag(false);
 
 		user7.setPosition(null);
@@ -101,7 +101,7 @@ public class UserTest {
 		admin1.setEmail("admin@email.com");
 		admin1.setPassword("LetmeIn");
 		admin1.setArchiveFlag(false);
-		admin1.setAdminFlag(true);
+		admin1.setAdminFlag("admin");
 
 		a1 = new Position(); 
 		admin1.setPosition(a1);
@@ -113,7 +113,7 @@ public class UserTest {
 		admin2.setEmail("admin2@email.com");
 		admin2.setPassword("Now");
 		admin2.setArchiveFlag(false);
-		admin2.setAdminFlag(true);
+		admin2.setAdminFlag("admin");
 
 		a2 = new Position();
 		admin2.setPosition(a2);
@@ -256,6 +256,10 @@ public class UserTest {
 	}
 	
 	public void viewPositionSOPListTest() {
+		
+	}
+	
+	public void testFindAdmins() {
 		
 	}
 }
