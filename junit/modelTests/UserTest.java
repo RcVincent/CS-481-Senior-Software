@@ -15,7 +15,7 @@ import model.SOP;
 
 public class UserTest {
 	private User user1, user2, user3, user4, user5, user6, user7;
-	private User admin1, admin2; 
+	private User admin1, admin2, admin3; 
 	private Position p1, p2, p3, a1, a2;
 	private ArrayList<User> userlist, archivelist; 
 	private ArrayList<Position> positionList; 
@@ -117,9 +117,15 @@ public class UserTest {
 
 		a2 = new Position();
 		admin2.setPosition(a2);
-
+		
 		userlist.add(admin2); 
 		
+		admin3 = new User(); 
+		admin3.setUserID(126); 
+		admin3.setEmail("");
+		admin3.setPassword("OpenUP");
+		admin3.setArchiveFlag(false);
+		admin3.setAdminFlag("Admin");
 
 	}
 	
@@ -137,7 +143,7 @@ public class UserTest {
 			if(u.isArchiveFlag() == false) {
 				
 				//if the email is empty its invalid, invalidate that user and remove them from the user list. Also send their manager an email. 
-				if(u.getEmail() == "" || u.getEmail() == " ") {
+				if(u.getEmail() == "" || u.getEmail() == " " && (u.isAdminFlag() == "user" || u.isAdminFlag() == "User")) {
 					u.setValidUser(false);
 					System.out.println("There is an invalid user in the list: " + u.getEmail());
 					userlist.remove(u);
@@ -218,7 +224,7 @@ public class UserTest {
 					//if archived immediately stop, there is no reason to search the list anymore 
 					if(u.isArchiveFlag() == false) {
 						
-						//if the email is empty its invalid, invalidate that user and remove them from the user list. Also send their manager an email. 
+						//if the user id is empty its invalid, invalidate that user and remove them from the user list. Also send their manager an email. 
 						if(u.getUserID() <= 0) {
 							u.setValidUser(false);
 							System.out.println("There is an invalid user in the list: " + u.getEmail());
@@ -259,8 +265,33 @@ public class UserTest {
 		
 	}
 	
+	@Test
 	public void testFindAdmins() {
+		List<User> adminList = new ArrayList<User>(); 
+		List<User> failedAdminList = new ArrayList<User>(); 
+		List<User> testlist = new ArrayList<User>(); 
 		
+		testlist.addAll(userlist);
+		
+		//sort through the user list to find the admins 
+		for(User u: testlist) {
+			//if archived immediately stop, there is no reason to search the list anymore
+			if(u.isArchiveFlag() == false) {
+				//if the user is an admin 
+				if(u.isAdminFlag() == "admin" || u.isAdminFlag() == "Admin") {
+					adminList.add(u); 
+					
+					if(u.getEmail()== "" || u.getEmail() == " ") {
+						failedAdminList.add(u); 
+						adminList.remove(u);
+						System.out.println("There was an invalid admin and they have been removed");
+					}
+				}
+			}
+		}
+		
+		assertEquals(1, failedAdminList.size());
+		assertEquals(2, adminList.size()); 
 	}
 }
 
