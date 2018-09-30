@@ -1,3 +1,6 @@
 package controller;
 import model.Position;
-public class PositionController {}
+public class PositionController {
+	
+	
+}
