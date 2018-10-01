@@ -24,24 +24,40 @@ public class PositionTest {
 		p4 = new Position();
 		positionList = new ArrayList<Position>();
 		
+		List<SOP> p1Reqs = new ArrayList<SOP>(); 
+		List<SOP> p2Reqs = new ArrayList<SOP>();
+		List<SOP> p3Reqs = new ArrayList<SOP>(); 
+		List<SOP> p4Reqs = new ArrayList<SOP>();
+		
+		req1 = new SOP(null, null, 0, 0, 0, 0); 
+		req2 = new SOP(null, null, 0, 0, 0, 0); 
+		req3 = new SOP(null, null, 0, 0, 0, 0);
+		req4 = new SOP(null, null, 0, 0, 0, 0);
+		
+		p1Reqs.add(req1);
+		p2Reqs.add(req2);
+		p3Reqs.add(req3);
+		p4Reqs.add(req4);
+		
+		
 		p1.setID(1);
 		p1.setPriority(1);
-		p1.setRequirements(req1);
+		p1.setRequirements(p1Reqs);
 		p1.setTitle("CEO");
 		
 		p2.setID(10);
 		p2.setPriority(4);
-		p2.setRequirements(req2);
+		p2.setRequirements(p2Reqs);
 		p2.setTitle("Manager");
 		
 		p3.setID(0);
 		p3.setPriority(0);
-		p3.setRequirements(req3);
+		p3.setRequirements(p3Reqs);
 		p3.setTitle("Admin");
 		
 		p4.setID(999);
 		p4.setPriority(8);
-		p4.setRequirements(req4);
+		p4.setRequirements(p4Reqs);
 		p4.setTitle("Maintenance");
 		
 		positionList.add(p3);
@@ -66,10 +82,10 @@ public class PositionTest {
 	
 	@Test 
 	public void testRequirements() {
-		assertEquals(req1, p1.getRequirements());
-		assertEquals(req2, p2.getRequirements());
-		assertEquals(req3, positionList.get(0).getRequirements());
-		assertEquals(req4, positionList.get(1).getRequirements());
+		assertEquals(req1, p1.getRequirements().get(0));
+		assertEquals(req2, p2.getRequirements().get(0));
+		assertEquals(req3, positionList.get(0).getRequirements().get(0));
+		assertEquals(req4, positionList.get(1).getRequirements().get(0));
 	}
 	
 	@Test

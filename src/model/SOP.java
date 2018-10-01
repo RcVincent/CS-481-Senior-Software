@@ -9,12 +9,16 @@ public class SOP{
 	private int authorID;
 	private int revision; 
 	
-	public SOP(String name, String description, int priority, int ID, int authorID){
+	public SOP() {
+		//empty constructor incase we want one 
+	}
+	public SOP(String name, String description, int priority, int ID, int authorID, int revision){
 		this.name = name;
 		this.description = description;
 		this.priority = priority;
 		this.ID = ID;
 		this.authorID = authorID;
+		this.revision = revision; 
 	}
 	
 	public String getName(){

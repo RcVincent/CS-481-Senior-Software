@@ -1,4 +1,4 @@
-package database;
+package Fakedatabase;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class FakeDatabase {
 
 	public FakeDatabase() {
 		u1 = new User(0, "Pass", "test@ycp.edu", p1);
-		p1 = new Position("Admin", 0, 0, s1);
+		p1 = new Position("Admin", 1, 1);
 
 		userList.add(u1);
 	}

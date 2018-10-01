@@ -1,20 +1,21 @@
 package model;
 
+import java.util.List;
+
 public class Position {
 	private String Title;
 	private int ID, Priority;
-	private SOP Requirements;
-	
+	private List<SOP> Requirements;
+	private boolean isValid; 
 	// Constructors
 	public Position() {
 		
 	}
 	
-	public Position(String Title, int ID, int Priority, SOP Requirements) {
+	public Position(String Title, int ID, int Priority) {
 		this.Title = Title;
 		this.ID = ID;
 		this.Priority = Priority;
-		this.Requirements = Requirements;
 	}
 	
 	// Getters/Setters
@@ -42,11 +43,19 @@ public class Position {
 		return this.Priority;	
 	}
 	
-	public void setRequirements(SOP Requirements) {
+	public void setRequirements(List<SOP> Requirements) {
 		this.Requirements = Requirements;	
 	}
 	
-	public SOP getRequirements() {
+	public List<SOP> getRequirements() {
 		return this.Requirements;	
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
 	}
 }
