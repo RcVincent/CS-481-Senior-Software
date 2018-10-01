@@ -44,21 +44,25 @@ public class PositionTest {
 		p1.setPriority(1);
 		p1.setRequirements(p1Reqs);
 		p1.setTitle("CEO");
+		p1.setValid(true);
 		
 		p2.setID(10);
 		p2.setPriority(4);
 		p2.setRequirements(p2Reqs);
 		p2.setTitle("Manager");
+		p2.setValid(true);
 		
 		p3.setID(0);
 		p3.setPriority(0);
 		p3.setRequirements(p3Reqs);
 		p3.setTitle("Admin");
+		p3.setValid(true);
 		
 		p4.setID(999);
 		p4.setPriority(8);
 		p4.setRequirements(p4Reqs);
 		p4.setTitle("Maintenance");
+		p4.setValid(false);
 		
 		positionList.add(p3);
 		positionList.add(p4);
@@ -94,5 +98,13 @@ public class PositionTest {
 		assertEquals("Manager", p2.getTitle());
 		assertEquals("Admin", positionList.get(0).getTitle());
 		assertEquals("Maintenance", positionList.get(1).getTitle());
+	}
+	
+	@Test
+	public void testValid() {
+		assertEquals(true, p1.isValid());
+		assertEquals(true, p2.isValid());
+		assertEquals(true, p3.isValid());
+		assertEquals(false, p4.isValid());
 	}
 }
