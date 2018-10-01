@@ -174,10 +174,10 @@ public class DerbyDatabase implements IDatabase {
 		user.setUserID(resultSet.getInt(index++));
 		user.setEmail(resultSet.getString(index++)); 
 		user.setPassword(resultSet.getString(index++));
-		user.setAdminFlag(resultSet.getString(index++));
 		user.setFirstname(resultSet.getString(index++));
 		user.setLastname(resultSet.getString(index++));
-		
+		user.setAdminFlag(resultSet.getString(index++));
+		user.setArchiveFlag(resultSet.getBoolean(index++));
 	}
 	
 	private void loadSOP(SOP sop, ResultSet resultSet, int index) throws SQLException {
@@ -188,7 +188,6 @@ public class DerbyDatabase implements IDatabase {
 		sop.setRevision(resultSet.getInt(index++));
 	}
 	
-	// retrieve Position information - if we end up not needing these types of methods, just delete
 	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
 		position.setID(resultSet.getInt(index++));
 		position.setTitle(resultSet.getString(index++));
@@ -208,7 +207,8 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					System.out.println("Init userlist");
 					userList = InitialData.getUsers();
-					 
+					positionList = InitialData.getPositions();
+					sopList = InitialData.getSOPs();
 				}
 				
 				catch(IOException e) {
@@ -218,6 +218,8 @@ public class DerbyDatabase implements IDatabase {
 				
 				//the create tables lists
 				PreparedStatement insertUsers = null;
+				PreparedStatement insertPositions = null;
+				PreparedStatement insertSOPs = null;
 				
 				try {
 					//set up the users list to be imported 
@@ -226,14 +228,62 @@ public class DerbyDatabase implements IDatabase {
 					//actually do the insert 
 					
 					for (User u : userList) {
-						insertUsers.setString(1, u.getEmail()); 
-						insertUsers.setString(2, u.getPassword());
+						insertUsers.setInt(1, u.getUserID());
+						insertUsers.setString(2, u.getEmail()); 
+						insertUsers.setString(3, u.getPassword());
+						insertUsers.setString(4, u.getFirstname());
+						insertUsers.setString(5, u.getLastname());
+						insertUsers.setString(6, u.isAdminFlag());
+						insertUsers.setBoolean(7, u.isArchiveFlag());
 					}
 					
 					//verify and execute 
 					System.out.println("inserting users");
 					insertUsers.executeBatch();
 					System.out.println("Users table populated");
+					
+					
+					
+					
+					
+					
+					// Set up the Positions list to be imported 
+					System.out.println("Preparing position insertion");
+					insertPositions = conn.prepareStatement("insert into position ()");
+					
+					for (Position p : positionList) {
+						insertPositions.setInt(1, p.getID());
+						insertPositions.setString(2, p.getTitle());
+						insertPositions.setInt(3, p.getPriority());
+					}
+					
+					// Insert Positions
+					System.out.println("Inserting positions");
+					insertPositions.executeBatch();
+					System.out.println("Positions table populated");
+					
+					
+					
+					
+					
+										
+					// Set up the SOPs list to be imported 
+					System.out.println("Preparing sop insertion");
+					insertSOPs = conn.prepareStatement("insert into sop ()");
+					
+					for (SOP s : sopList) {
+						insertSOPs.setInt(1, s.getID());
+						insertSOPs.setString(2, s.getName());
+						insertSOPs.setString(3, s.getDescription());
+						insertSOPs.setInt(4, s.getPriority());
+						insertSOPs.setInt(5, s.getRevision());
+					}
+					
+					// Insert SOPs
+					System.out.println("Inserting sops");
+					insertSOPs.executeBatch();
+					System.out.println("SOPs table populated");
+					
 					
 					
 					
