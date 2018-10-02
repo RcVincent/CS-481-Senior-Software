@@ -2,6 +2,7 @@ package controller;
 
 import model.User;
 import model.Position;
+
 import model.SOP;
 
 public class PositionController {
@@ -25,3 +26,4 @@ public class PositionController {
 		return this.p;
 	}
 }
+

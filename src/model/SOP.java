@@ -1,4 +1,6 @@
-package model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SOP{
 	private String name;
@@ -8,6 +10,7 @@ public class SOP{
 	// Assuming Author refers to a User, authorID would be their userID then.
 	private int authorID;
 	private int revision; 
+  private List<Position> positionsAffected = new ArrayList<Position>(); 
 	
 	public SOP() {
 		//empty constructor incase we want one 
@@ -21,6 +24,25 @@ public class SOP{
 		this.revision = revision; 
 	}
 	
+  public ArrayList<Position> showPositionsAffected(int id) {
+		ArrayList<Position> positions = new ArrayList<Position>();
+	
+		for(int i = 0; i < positionsAffected.size(); i++) {
+			if(positionsAffected.get(i).getRegulatingSOPs().get(i).getSopIdNumber() == sopID) {
+				positions.add(positionsAffected.get(i));
+			}
+		}
+		return positions;
+	}
+  
+  public List<Position> getPositionsAffected() {
+		return positionsAffected;
+	}
+
+  public void setPositionsAffected(List<Position> positionsAffected) {
+		this.positionsAffected = positionsAffected;
+	}
+  
 	public String getName(){
 		return name;
 	}
@@ -69,3 +91,4 @@ public class SOP{
 		this.revision = revision;
 	}
 }
+
