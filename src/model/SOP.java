@@ -1,3 +1,5 @@
+package model;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,9 @@ public class SOP{
 	
   public ArrayList<Position> showPositionsAffected(int id) {
 		ArrayList<Position> positions = new ArrayList<Position>();
-	
+		
 		for(int i = 0; i < positionsAffected.size(); i++) {
-			if(positionsAffected.get(i).getRegulatingSOPs().get(i).getSopIdNumber() == sopID) {
+			if(positionsAffected.get(i).getRequirements().get(i).getID() == id) {
 				positions.add(positionsAffected.get(i));
 			}
 		}

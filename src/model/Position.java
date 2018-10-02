@@ -58,4 +58,5 @@ public class Position {
 	public void setValid(boolean isValid) {
 		this.isValid = isValid;
 	}
+
 }

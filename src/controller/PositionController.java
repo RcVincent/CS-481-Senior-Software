@@ -11,10 +11,9 @@ public class PositionController {
 	public PositionController() {
 		
 	}
-	
-<<<<<<< HEAD
-}   
-=======
+
+   
+
 	public SOP getApplicantSOPs(User u) {
 		
 		// TODO: Return database query 
@@ -30,4 +29,4 @@ public class PositionController {
 	}
 }
 
->>>>>>> 0a9e125b2044c57b8407db0cdd3c2285d584badd
+
