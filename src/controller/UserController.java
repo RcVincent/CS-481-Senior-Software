@@ -1,15 +1,20 @@
 package controller;
+import model.Position;
 import model.User;
-public class UserController {
-    
-    U = this.User();
 
+public class UserController {
+	User U = new User();
+	
+	public UserController() {
+		
+	}
+    
     public void login(){
         U.setLoginStatus(true);
     }
     
     public void logout(){
-    U.setLoginStatus(false);
+    	U.setLoginStatus(false);
     }
     
     public boolean Authenticate(){

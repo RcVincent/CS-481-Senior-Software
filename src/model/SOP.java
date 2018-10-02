@@ -2,19 +2,29 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class SOP {
-	private int id; 
+public class SOP{
 	private String name;
-	private String priority;
-	
-	private List<Position> positionsAffected = new ArrayList<Position>(); 
-	
-	
+	private String description;
+	private int priority;
+	private int ID;
+	// Assuming Author refers to a User, authorID would be their userID then.
+	private int authorID;
+	private int revision; 
+  private List<Position> positionsAffected = new ArrayList<Position>(); 
 	
 	public SOP() {
+		//empty constructor incase we want one 
+	}
+	public SOP(String name, String description, int priority, int ID, int authorID, int revision){
+		this.name = name;
+		this.description = description;
+		this.priority = priority;
+		this.ID = ID;
+		this.authorID = authorID;
+		this.revision = revision; 
 	}
 	
-	public ArrayList<Position> showPositionsAffected(int id) {
+  public ArrayList<Position> showPositionsAffected(int id) {
 		ArrayList<Position> positions = new ArrayList<Position>();
 	
 		for(int i = 0; i < positionsAffected.size(); i++) {
@@ -24,56 +34,61 @@ public class SOP {
 		}
 		return positions;
 	}
-
-	//Auto generated methods 
-	public String getPriority() {
-		return priority;
-	}
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
-	public int getSopIdNumber() {
-		return sopIdNumber;
-	}
-	public void setSopIdNumber(int sopIdNumber) {
-		this.sopIdNumber = sopIdNumber;
-	}
-	public String getSopName() {
-		return sopName;
-	}
-	public void setSopName(String sopName) {
-		this.sopName = sopName;
-	}
-	
-	public List<Position> getPositionsAffected() {
+  
+  public List<Position> getPositionsAffected() {
 		return positionsAffected;
 	}
 
-	public void setPositionsAffected(List<Position> positionsAffected) {
+  public void setPositionsAffected(List<Position> positionsAffected) {
 		this.positionsAffected = positionsAffected;
 	}
-
-	public boolean isIsComplete() {
-		return IsComplete;
+  
+	public String getName(){
+		return name;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+	}
+	
+	public int getPriority(){
+		return priority;
+	}
+	
+	public void setPriority(int priority){
+		this.priority = priority;
+	}
+	
+	public int getID(){
+		return ID;
+	}
+	
+	public void setID(int ID){
+		this.ID = ID;
+	}
+	
+	public int getAuthorID(){
+		return authorID;
+	}
+	
+	public void setAuthorID(int authorID){
+		this.authorID = authorID;
 	}
 
-	public void setIsComplete(boolean isComplete) {
-		IsComplete = isComplete;
-	}
-
-	public String getRevision() {
+	public int getRevision() {
 		return revision;
 	}
 
-	public void setRevision(String revision) {
+	public void setRevision(int revision) {
 		this.revision = revision;
 	}
-
-	public String getSopPurpose() {
-		return sopPurpose;
-	}
-
-	public void setSopPurpose(String sopPurpose) {
-		this.sopPurpose = sopPurpose;
-	}
 }
+
