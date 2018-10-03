@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Test Web App for Tomcat 7 or Other Servlet 3.0 Container</title>
+<head><title>CS481 Project - Index</title>
 </head>
 <body>
 <table class="title">
