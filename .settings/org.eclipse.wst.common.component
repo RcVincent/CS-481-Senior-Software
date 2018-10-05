@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="CS481-Senior-Software">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/junit"/>
+        <property name="java-output-path" value="/CS481-Senior-Software/bin"/>
+        <property name="context-root" value="CS481-Senior-Software"/>
+    </wb-module>
+</project-modules>
