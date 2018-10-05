@@ -97,9 +97,9 @@ public class SqlDatabase {
 					pos_stmt = conn.createStatement();
 					String pos_sql = "CREATE TABLE IF NOT EXISTS Position (" +
 									 "position_id INT NOT NULL," +
-									 "pos_title VARCHAR(80) NOT NULL," +
-									 "pos_desc VARCHAR(255) NOT NULL," +
-									 "pos_priority INT NOT NULL," +
+									 "title VARCHAR(80) NOT NULL," +
+									 "description VARCHAR(255) NOT NULL," +
+									 "priority INT NOT NULL," +
 									 "PRIMARY KEY (position_id)," +
 									 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
 					System.out.println("execute positions");
