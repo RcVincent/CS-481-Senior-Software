@@ -78,7 +78,7 @@ public class SqlDatabase {
 	}
 
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("C:/Users/Zackeree/Downloads/mysql-connector-java-8.0.12/mysql-connector-java-8.0.12/mysql-connector-java-8.0.12.jar");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/CS481db?user=root&password=password");
 
 		conn.setAutoCommit(false);
 
@@ -95,13 +95,13 @@ public class SqlDatabase {
 				try {
 					
 					pos_stmt = conn.createStatement();
-					String pos_sql = "CREATE TABLE IF NOT EXISTS `CS481-Schema`.`Position` (" +
-									 "`position_id` INT NOT NULL," +
-									 "`pos_title` VARCHAR(80) NOT NULL," +
-									 "`pos_desc` VARCHAR(255) NOT NULL," +
-									 "`pos_priority` INT NOT NULL," +
-									 "PRIMARY KEY (`position_id`)," +
-									 "UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC) VISIBLE);";
+					String pos_sql = "CREATE TABLE IF NOT EXISTS Position (" +
+									 "position_id INT NOT NULL," +
+									 "pos_title VARCHAR(80) NOT NULL," +
+									 "pos_desc VARCHAR(255) NOT NULL," +
+									 "pos_priority INT NOT NULL," +
+									 "PRIMARY KEY (position_id)," +
+									 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
 					System.out.println("execute positions");
 					pos_stmt.executeUpdate(pos_sql);
 					System.out.println("Positions table created");
@@ -110,22 +110,22 @@ public class SqlDatabase {
 					
 					System.out.println("Prepare to create the user table");
 					user_stmt = conn.createStatement();
-					String user_sql = "CREATE TABLE IF NOT EXISTS `CS481-Schema`.`User` (" +
-									  "`user_id` INT NOT NULL," +
-									  "`email` VARCHAR(255) NOT NULL," +
-									  "`password` VARCHAR(32) NOT NULL, " +
-									  "`first_name` VARCHAR(80) NOT NULL, " +
-									  "`last_name` VARCHAR(80) NOT NULL, " +
-									  "`admin_flag` TINYINT NOT NULL, " +
-									  "`archive_flag` TINYINT NOT NULL, " +
-									  "`create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-									  "`Position_position_id` INT NOT NULL, " +
-									  "PRIMARY KEY (`user_id`), " +
-									  "UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE, " +
-									  "INDEX `fk_User_Position_idx` (`Position_position_id` ASC) VISIBLE, " +
-									  "CONSTRAINT `User_Position` " +
-									  "FOREIGN KEY (`Position_position_id`) " +
-									  "REFERENCES `CS481-Schema`.`Position` (`position_id`) " +
+					String user_sql = "CREATE TABLE IF NOT EXISTS User (" +
+									  "user_id INT NOT NULL," +
+									  "email VARCHAR(255) NOT NULL," +
+									  "password VARCHAR(32) NOT NULL, " +
+									  "first_name VARCHAR(80) NOT NULL, " +
+									  "last_name VARCHAR(80) NOT NULL, " +
+									  "admin_flag TINYINT NOT NULL, " +
+									  "archive_flag TINYINT NOT NULL, " +
+									  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+									  "position_id INT NOT NULL, " +
+									  "PRIMARY KEY (user_id), " +
+									  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
+									  "INDEX fk_User_Position_idx (position_id ASC) VISIBLE, " +
+									  "CONSTRAINT User_Position " +
+									  "FOREIGN KEY (position_id) " +
+									  "REFERENCES Position (position_id) " +
 									  "ON DELETE NO ACTION " +
 									  "ON UPDATE NO ACTION);"; 
 					System.out.println("execute users");
@@ -133,21 +133,21 @@ public class SqlDatabase {
 					System.out.println("user table created");
 
 					sop_stmt = conn.createStatement();
-					String sop_sql = "CREATE TABLE IF NOT EXISTS `CS481-Schema`.`SOP` (" +
-							"`sop_id` INT NOT NULL," +
-							"`sop_title` VARCHAR(80) NOT NULL," +
-							"`sop_desc` VARCHAR(255) NOT NULL," +
-							"`sop_priority` INT NOT NULL," +
-							"`sop_version` INT NOT NULL," +
-							"`sop_filepath` VARCHAR(255) NOT NULL," +
-							"`author_id` INT NOT NULL," +
-							"PRIMARY KEY (`sop_id`)," +
-							"UNIQUE INDEX `sop_id_UNIQUE` (`sop_id` ASC) VISIBLE," +
-							"INDEX `fk_SOP_User1_idx` (`author_id` ASC) VISIBLE," +
-							"CONSTRAINT `fk_SOP_User1`" +
-							"FOREIGN KEY (`author_id`)" +
-							"REFERENCES `CS481-Schema`.`User` (`user_id`)" +
-							"ON DELETE NO ACTION" +
+					String sop_sql = "CREATE TABLE IF NOT EXISTS SOP (" +
+							"sop_id INT NOT NULL, " +
+							"title VARCHAR(80) NOT NULL, " +
+							"description VARCHAR(255) NOT NULL, " +
+							"priority INT NOT NULL, " +
+							"version INT NOT NULL, " +
+							"filepath VARCHAR(255) NOT NULL, " +
+							"author_id INT NOT NULL, " +
+							"PRIMARY KEY (sop_id), " +
+							"UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
+							"INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
+							"CONSTRAINT fk_SOP_User1 " +
+							"FOREIGN KEY (author_id) " +
+							"REFERENCES User (user_id) " +
+							"ON DELETE NO ACTION " +
 							"ON UPDATE NO ACTION);";
 					System.out.println("execute SOPs");
 					sop_stmt.executeUpdate(sop_sql);
