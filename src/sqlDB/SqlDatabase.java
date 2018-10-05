@@ -278,6 +278,42 @@ public class SqlDatabase {
 		});		
 	}
 	
+	public Integer insertPosition(final String title, final String description, final int priority) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement insertPos = null;		
+				
+				ResultSet resultSet1 = null;
+				
+				// not even sure anymore
+				Integer pos_id = -1;
+					
+				try {
+				insertPos = conn.prepareStatement(
+						"insert into Position values (default, ?, ?, ?)"
+				);
+				insertPos.setString(1, title);
+				insertPos.setString(2, description);
+				insertPos.setInt(3, priority);
+							
+				// Execute the update
+				insertPos.executeUpdate();
+							
+				resultSet1 = insertPos.executeQuery();
+							
+				System.out.println("Position successfully inserted");							
+					
+				return pos_id;
+				
+				} finally {
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(insertPos);			
+				}
+			} 
+		});
+	}
+	
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables ");
