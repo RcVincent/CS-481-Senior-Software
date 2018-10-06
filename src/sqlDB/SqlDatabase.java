@@ -278,7 +278,7 @@ public class SqlDatabase {
 		});		
 	}
 	
-	public Integer insertPosition(final String title, final String description, final int priority) {
+	public Integer insertPosition(Position p) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -286,15 +286,19 @@ public class SqlDatabase {
 				
 				ResultSet resultSet1 = null;
 
-				Integer pos_id = -1;
+				if(p.getTitle() == null || p.getDescription() == null || p.getPriority() == 0) {
+					System.out.println("Improperly formed Position. Following fields must be initialized: "
+							+ "Title, Description, Priority");	
+					return -1;
+				}
 					
 				try {
 				insertPos = conn.prepareStatement(
 						"insert into Position values (default, ?, ?, ?)"
 				);
-				insertPos.setString(1, title);
-				insertPos.setString(2, description);
-				insertPos.setInt(3, priority);
+				insertPos.setString(1, p.getTitle());
+				insertPos.setString(2, p.getDescription());
+				insertPos.setInt(3, p.getPriority());
 							
 				// Execute the update
 				insertPos.executeUpdate();
@@ -302,8 +306,8 @@ public class SqlDatabase {
 				resultSet1 = insertPos.executeQuery();
 							
 				System.out.println("Position successfully inserted");							
-					
-				return pos_id;
+
+				return 1;
 				
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
