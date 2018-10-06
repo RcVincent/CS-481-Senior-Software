@@ -164,6 +164,112 @@ public class SqlDatabase {
 			
 		});
 }
+
+	public Integer insertPosition(final Position p) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement insertPos = null;		
+				
+				ResultSet resultSet1 = null;
+					
+				try {
+				insertPos = conn.prepareStatement(
+						"insert into Position values (default, ?, ?, ?)"
+				);
+				insertPos.setString(1, p.getTitle());
+				insertPos.setString(2, p.getDescription());
+				insertPos.setInt(3, p.getPriority());
+							
+				// Execute the update
+				insertPos.executeUpdate();
+							
+				resultSet1 = insertPos.executeQuery();
+							
+				System.out.println("Position successfully inserted");							
+
+				return 1;
+				
+				} finally {
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(insertPos);			
+				}
+			} 
+		});
+	}
+	
+	public Integer insertUser(final User u) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement insertUser = null;		
+				
+				ResultSet resultSet1 = null;
+					
+				try {
+				insertUser = conn.prepareStatement(
+						"insert into User values (default, ?, ?, ?, ?, ?, ?, default, ?)"
+				);
+				insertUser.setString(1, u.getEmail());
+				insertUser.setString(2, u.getPassword());
+				insertUser.setString(3, u.getFirstname());
+				insertUser.setString(4, u.getLastname());
+				insertUser.setString(5, u.isAdminFlag());
+				insertUser.setBoolean(6, u.isArchiveFlag());
+				insertUser.setInt(7, u.getPosition().getID());
+							
+				// Execute the update
+				insertUser.executeUpdate();
+							
+				resultSet1 = insertUser.executeQuery();
+							
+				System.out.println("User successfully registered!");							
+					
+				return 1;
+				
+				} finally {
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(insertUser);			
+				}
+			} 
+		});
+	}
+	
+	public Integer insertSOP(final SOP s, final String filepath) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement insertSOP = null;		
+				 
+				ResultSet resultSet1 = null;
+					
+				try {
+				insertSOP = conn.prepareStatement(
+						"insert into SOP values (default, ?, ?, ?, ?, ?, ?)"
+				);
+				insertSOP.setString(1, s.getName());
+				insertSOP.setString(2, s.getDescription());
+				insertSOP.setInt(3, s.getPriority());
+				insertSOP.setInt(4, s.getRevision());
+				insertSOP.setString(5, filepath);
+				insertSOP.setInt(6, s.getAuthorID());
+							
+				// Execute the update
+				insertSOP.executeUpdate();
+							
+				resultSet1 = insertSOP.executeQuery();
+							
+				System.out.println("SOP successfully inserted");							
+					
+				return 1;
+				
+				} finally {
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(insertSOP);			
+				}
+			} 
+		});
+	}
 	
 	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
 		user.setUserID(resultSet.getInt(index++));
@@ -276,125 +382,6 @@ public class SqlDatabase {
 				}
 			}	
 		});		
-	}
-	
-	public Integer insertPosition(Position p) {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertPos = null;		
-				
-				ResultSet resultSet1 = null;
-
-				if(p.getTitle() == null || p.getDescription() == null || p.getPriority() == 0) {
-					System.out.println("Improperly formed Position. Following fields must be initialized: "
-							+ "Title, Description, Priority");	
-					return -1;
-				}
-					
-				try {
-				insertPos = conn.prepareStatement(
-						"insert into Position values (default, ?, ?, ?)"
-				);
-				insertPos.setString(1, p.getTitle());
-				insertPos.setString(2, p.getDescription());
-				insertPos.setInt(3, p.getPriority());
-							
-				// Execute the update
-				insertPos.executeUpdate();
-							
-				resultSet1 = insertPos.executeQuery();
-							
-				System.out.println("Position successfully inserted");							
-
-				return 1;
-				
-				} finally {
-					DBUtil.closeQuietly(resultSet1);
-					DBUtil.closeQuietly(insertPos);			
-				}
-			} 
-		});
-	}
-	
-	public Integer insertUser(final String email, final String password, final String firstname, 
-							  final String lastname, final String adminflag, final boolean archiveflag, 
-							  final int pos_id) {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertUser = null;		
-				
-				ResultSet resultSet1 = null;
-				
-				Integer user_id = -1;
-					
-				try {
-				insertUser = conn.prepareStatement(
-						"insert into User values (default, ?, ?, ?, ?, ?, ?, default, ?)"
-				);
-				insertUser.setString(1, email);
-				insertUser.setString(2, password);
-				insertUser.setString(3, firstname);
-				insertUser.setString(4, lastname);
-				insertUser.setString(5, adminflag);
-				insertUser.setBoolean(6, archiveflag);
-				insertUser.setInt(7, pos_id);
-							
-				// Execute the update
-				insertUser.executeUpdate();
-							
-				resultSet1 = insertUser.executeQuery();
-							
-				System.out.println("User successfully registered!");							
-					
-				return user_id;
-				
-				} finally {
-					DBUtil.closeQuietly(resultSet1);
-					DBUtil.closeQuietly(insertUser);			
-				}
-			} 
-		});
-	}
-	
-	public Integer insertSOP(final String title, final String description, final int priority,
-							 final int version, final String filepath, final int author_id) {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertSOP = null;		
-				
-				ResultSet resultSet1 = null;
-		
-				Integer SOP_id = -1;
-					
-				try {
-				insertSOP = conn.prepareStatement(
-						"insert into SOP values (default, ?, ?, ?, ?, ?, ?)"
-				);
-				insertSOP.setString(1, title);
-				insertSOP.setString(2, description);
-				insertSOP.setInt(3, priority);
-				insertSOP.setInt(4, version);
-				insertSOP.setString(5, filepath);
-				insertSOP.setInt(6, author_id);
-							
-				// Execute the update
-				insertSOP.executeUpdate();
-							
-				resultSet1 = insertSOP.executeQuery();
-							
-				System.out.println("SOP successfully inserted");							
-					
-				return SOP_id;
-				
-				} finally {
-					DBUtil.closeQuietly(resultSet1);
-					DBUtil.closeQuietly(insertSOP);			
-				}
-			} 
-		});
 	}
 	
 	//main method to generate the DB
