@@ -91,15 +91,19 @@ public class SqlDatabaseTest {
 		querySOP = new ArrayList<SOP>();
 		
 		u1 = new User();
+		u1.setUserID(1);
+		u1.setEmail("CEO@Google.com");
+		u1.setPassword("beard");
+		u1.setFirstname("Chuck");
+		u1.setLastname("Norris");
+		u1.setAdminFlag("true");
+		u1.setArchiveFlag(false);
+		u1.setPosition(p1);
+		
 		u2 = new User();
 		u3 = new User();
 		
 		queryUser = new ArrayList<User>();
-	}
-	
-	@Test
-	public void testInsertUser() {
-		
 	}
 	
 	@Test
@@ -125,6 +129,31 @@ public class SqlDatabaseTest {
 		assertEquals(p1.getPriority(), queryPos.get(0).getPriority());
 		assertEquals(p2.getPriority(), queryPos.get(1).getPriority());
 		assertEquals(p3.getPriority(), queryPos.get(2).getPriority());
+	}
+	
+	@Test
+	public void testInsertUser() {
+		db.insertUser(u1);
+		//db.insertUser(u2);
+		//db.insertUser(u3);
+		
+		queryUser = db.findAllUsers();
+
+		assertEquals(u1.getUserID(), queryUser.get(0).getUserID());
+
+		assertEquals(u1.getEmail(), queryUser.get(0).getEmail());
+		
+		assertEquals(u1.getPassword(), queryUser.get(0).getPassword());
+
+		assertEquals(u1.getFirstname(), queryUser.get(0).getFirstname());
+
+		assertEquals(u1.getLastname(), queryUser.get(0).getLastname());
+
+		assertEquals(u1.isAdminFlag(), queryUser.get(0).isAdminFlag());
+		
+		assertEquals(u1.isArchiveFlag(), queryUser.get(0).isArchiveFlag());
+	
+		assertEquals(u1.getPosition().getID(), queryUser.get(0).getPosition().getID());
 	}
 	
 	@Test

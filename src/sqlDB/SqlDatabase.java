@@ -116,7 +116,7 @@ public class SqlDatabase {
 									  "password VARCHAR(32) NOT NULL, " +
 									  "first_name VARCHAR(80) NOT NULL, " +
 									  "last_name VARCHAR(80) NOT NULL, " +
-									  "admin_flag TINYINT NOT NULL, " +
+									  "admin_flag VARCHAR(32) NOT NULL, " +
 									  "archive_flag TINYINT NOT NULL, " +
 									  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 									  "position_id INT NOT NULL, " +
