@@ -271,117 +271,177 @@ public class SqlDatabase {
 		});
 	}
 	
-	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
-		user.setUserID(resultSet.getInt(index++));
-		user.setEmail(resultSet.getString(index++)); 
-		user.setPassword(resultSet.getString(index++));
-		user.setFirstname(resultSet.getString(index++));
-		user.setLastname(resultSet.getString(index++));
-		user.setAdminFlag(resultSet.getString(index++));
-		user.setArchiveFlag(resultSet.getBoolean(index++));
-	}
-	
-	private void loadSOP(SOP sop, ResultSet resultSet, int index) throws SQLException {
-		sop.setID(resultSet.getInt(index++));
-		sop.setName(resultSet.getString(index++));
-		sop.setDescription(resultSet.getString(index++));
-		sop.setPriority(resultSet.getInt(index++));
-		sop.setRevision(resultSet.getInt(index++));
-	}
-	
-	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
-		position.setID(resultSet.getInt(index++));
-		position.setTitle(resultSet.getString(index++));
-		position.setPriority(resultSet.getInt(index++));
-	}
-	
-	public void loadInitialData() {
-		executeTransaction(new Transaction<Boolean>() {
+	public List<Position> findAllPositions() {
+		return executeTransaction(new Transaction<List<Position>>() {
 			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				
-				//
-				List<User> userList;
-				List<SOP> sopList;
-				List<Position> positionList;
+			public List<Position> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 				
 				try {
-					System.out.println("Init userlist");
-					userList = InitialData.getUsers();
-					positionList = InitialData.getPositions();
-					sopList = InitialData.getSOPs();
+					stmt = conn.prepareStatement(
+							"SELECT * FROM Position");
+					
+					List<Position> result = new ArrayList<Position>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Position p = new Position();
+						p.setID(resultSet.getInt(1));
+						p.setTitle(resultSet.getString(2));
+						p.setDescription(resultSet.getString(3));
+						p.setPriority(resultSet.getInt(4));
+						
+						result.add(p);
+					}
+					
+					if (!found) {
+						System.out.println("No Positions were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
 				}
-				
-				catch(IOException e) {
-					throw new SQLException("Couldn't read the initial data");
-				}
-				
-				
-				//the create tables lists
-				PreparedStatement insertUsers = null;
-				PreparedStatement insertPositions = null;
-				PreparedStatement insertSOPs = null;
+			}
+		});
+	}
+	
+	public List<User> findAllUsers() {
+		return executeTransaction(new Transaction<List<User>>() {
+			@Override
+			public List<User> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 				
 				try {
-					//set up the users list to be imported 
-					System.out.println("Preparing user insertion");
-					insertUsers = conn.prepareStatement("insert into user ()");
-					//actually do the insert 
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User");
 					
-					for (User u : userList) {
-						insertUsers.setInt(1, u.getUserID());
-						insertUsers.setString(2, u.getEmail()); 
-						insertUsers.setString(3, u.getPassword());
-						insertUsers.setString(4, u.getFirstname());
-						insertUsers.setString(5, u.getLastname());
-						insertUsers.setString(6, u.isAdminFlag());
-						insertUsers.setBoolean(7, u.isArchiveFlag());
+					List<User> result = new ArrayList<User>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						User u = new User();
+						u.setUserID(resultSet.getInt(1));
+						u.setEmail(resultSet.getString(2));
+						u.setPassword(resultSet.getString(3));
+						u.setFirstname(resultSet.getString(4));
+						u.setLastname(resultSet.getString(5));
+						u.setAdminFlag(resultSet.getString(6));
+						u.setArchiveFlag(resultSet.getBoolean(7));
+						u.setPosition(findPositionByID(resultSet.getInt(9)));			
+						
+						result.add(u);
 					}
 					
-					//verify and execute 
-					System.out.println("inserting users");
-					insertUsers.executeBatch();
-					System.out.println("Users table populated");
+					if (!found) {
+						System.out.println("No Users were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findAllSOPs() {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 				
-					// Set up the Positions list to be imported 
-					System.out.println("Preparing position insertion");
-					insertPositions = conn.prepareStatement("insert into position ()");
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP");
 					
-					for (Position p : positionList) {
-						insertPositions.setInt(1, p.getID());
-						insertPositions.setString(2, p.getTitle());
-						insertPositions.setInt(3, p.getPriority());
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
 					}
 					
-					// Insert Positions
-					System.out.println("Inserting positions");
-					insertPositions.executeBatch();
-					System.out.println("Positions table populated");
-					
-					// Set up the SOPs list to be imported 
-					System.out.println("Preparing sop insertion");
-					insertSOPs = conn.prepareStatement("insert into sop ()");
-					
-					for (SOP s : sopList) {
-						insertSOPs.setInt(1, s.getID());
-						insertSOPs.setString(2, s.getName());
-						insertSOPs.setString(3, s.getDescription());
-						insertSOPs.setInt(4, s.getPriority());
-						insertSOPs.setInt(5, s.getRevision());
+					if (!found) {
+						System.out.println("No SOPs were found in the database");
 					}
 					
-					// Insert SOPs
-					System.out.println("Inserting sops");
-					insertSOPs.executeBatch();
-					System.out.println("SOPs table populated");
-
-					return true;
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
 				}
-				finally {
-					DBUtil.closeQuietly(insertUsers);
+			}
+		});
+	}
+	
+	public Position findPositionByID(int position_id) {
+		return executeTransaction(new Transaction<Position>() {
+			@Override
+			public Position execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM Position WHERE position_id = ?");
+					stmt.setInt(1, position_id);
+					
+					Position result = new Position();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setTitle(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+					}
+					
+					if (!found) {
+						System.out.println("No Positions were found with this ID");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
 				}
-			}	
-		});		
+			}
+		});
 	}
 	
 	//main method to generate the DB
