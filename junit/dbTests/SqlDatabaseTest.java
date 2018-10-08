@@ -4,8 +4,9 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import controller.PositionController;
@@ -24,11 +25,20 @@ public class SqlDatabaseTest {
 	private List<SOP> querySOP;
 	private List<User> queryUser;
 	
+	@BeforeClass
+	public static void cleanBefore(){
+		// Clean the database in case someone/something else messed with it
+		SqlDatabase.cleanDB();
+	}
+	
+	@AfterClass
+	public static void cleanAfter(){
+		// Clean the database for the next person
+		SqlDatabase.cleanDB();
+	}
+	
 	@Before
 	public void setUp(){
-    // Clean the database in case someone/something else messed with it
-		SqlDatabase.cleanDB();
-    
 		db = new SqlDatabase();
 		
 		p1 = new Position();
@@ -62,12 +72,6 @@ public class SqlDatabaseTest {
 		u3 = new User();
 		
 		queryUser = new ArrayList<User>();
-	}
-  
-  @After
-	public void cleanUp(){
-		// Clean the database for the next person
-		SqlDatabase.cleanDB();
 	}
 	
 	@Test
