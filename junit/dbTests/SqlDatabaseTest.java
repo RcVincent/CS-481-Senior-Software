@@ -16,20 +16,48 @@ import sqlDB.SqlDatabase;
 public class SqlDatabaseTest {
 
 	private SqlDatabase db;
-	private Position p;
-	private SOP s;
-	private User u;
+	private Position p1, p2, p3;
+	private SOP s1, s2, s3;
+	private User u1, u2, u3;
+	private List<Position> queryPos;
+	private List<SOP> querySOP;
+	private List<User> queryUser;
 	
 	@Before
 	public void setUp(){
 		db = new SqlDatabase();
 		
-		p = new Position();
-		//p.setID(ID);
+		p1 = new Position();
+		p1.setID(1);
+		p1.setTitle("CEO");
+		p1.setDescription("Does stuff");
+		p1.setPriority(1);
 		
-		s = new SOP();
+		p2 = new Position();
+		p2.setID(2);
+		p2.setTitle("Programmer");
+		p2.setDescription("Does more stuff");
+		p2.setPriority(2);
 		
-		u = new User();
+		p3 = new Position();
+		p3.setID(3);
+		p3.setTitle("Debugger");
+		p3.setDescription("Fixes bugs");
+		p3.setPriority(2);
+		
+		queryPos = new ArrayList<Position>();
+		
+		s1 = new SOP();
+		s2 = new SOP();
+		s3 = new SOP();
+
+		querySOP = new ArrayList<SOP>();
+		
+		u1 = new User();
+		u2 = new User();
+		u3 = new User();
+		
+		queryUser = new ArrayList<User>();
 	}
 	
 	@Test
@@ -39,7 +67,27 @@ public class SqlDatabaseTest {
 	
 	@Test
 	public void testInsertPosition() {
+		db.insertPosition(p1);
+		db.insertPosition(p2);
+		db.insertPosition(p3);
 		
+		queryPos = db.findAllPositions();
+		
+		assertEquals(p1.getID(), queryPos.get(0).getID());
+		assertEquals(p2.getID(), queryPos.get(1).getID());
+		assertEquals(p3.getID(), queryPos.get(2).getID());
+		
+		assertEquals(p1.getTitle(), queryPos.get(0).getTitle());
+		assertEquals(p2.getTitle(), queryPos.get(1).getTitle());
+		assertEquals(p3.getTitle(), queryPos.get(2).getTitle());
+		
+		assertEquals(p1.getDescription(), queryPos.get(0).getDescription());
+		assertEquals(p2.getDescription(), queryPos.get(1).getDescription());
+		assertEquals(p3.getDescription(), queryPos.get(2).getDescription());
+		
+		assertEquals(p1.getPriority(), queryPos.get(0).getPriority());
+		assertEquals(p2.getPriority(), queryPos.get(1).getPriority());
+		assertEquals(p3.getPriority(), queryPos.get(2).getPriority());
 	}
 	
 	@Test
