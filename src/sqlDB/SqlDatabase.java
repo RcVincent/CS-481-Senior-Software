@@ -446,6 +446,324 @@ public class SqlDatabase {
 		});
 	}
 	
+	public User getUserByID(final int ID) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE user_id = ?");
+					
+					stmt.setInt(1, ID);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with ID <" + ID + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByEmail(final String email) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ?");
+					
+					stmt.setString(1, email);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + email + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByFirstName(final String firstname) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE first_name = ?");
+					
+					stmt.setString(1, firstname);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with firstname <" + firstname + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByLastName(final String lastname) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE last_name = ?");
+					
+					stmt.setString(1, lastname);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with lastname <" + lastname + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User changeUserPassword(final String email, final String oldPass, final String newPass) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE User SET password = ? WHERE email = ? AND password = ? ");
+					
+					stmt.setString(1, newPass);
+					stmt.setString(2, email);
+					stmt.setString(3, oldPass);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ? and password = ?");
+					
+					stmt2.setString(1, email);
+					stmt2.setString(2, newPass);
+					
+					resultSet = stmt2.executeQuery();
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + email + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
+	public User changeUserEmail(final String oldEmail, final String newEmail, final String Pass) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE User SET email = ? WHERE email = ? AND password = ? ");
+					
+					stmt.setString(1, newEmail);
+					stmt.setString(2, oldEmail);
+					stmt.setString(3, Pass);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ? and password = ?");
+					
+					stmt2.setString(1, newEmail);
+					stmt2.setString(2, Pass);
+					
+					resultSet = stmt2.executeQuery();
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + newEmail + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables ");
