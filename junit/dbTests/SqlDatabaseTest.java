@@ -62,8 +62,31 @@ public class SqlDatabaseTest {
 		queryPos = new ArrayList<Position>();
 		
 		s1 = new SOP();
+		s1.setID(1);
+		s1.setName("Do stuff");
+		s1.setDescription("Do it now");
+		s1.setPriority(2);
+		s1.setRevision(1);
+		s1.setAuthorID(p1.getID());
+		s1.setArchiveFlag(true);
+		
 		s2 = new SOP();
+		s2.setID(2);
+		s2.setName("Do different stuff");
+		s2.setDescription("Do it now");
+		s2.setPriority(2);
+		s2.setRevision(2);
+		s2.setAuthorID(p1.getID());
+		s2.setArchiveFlag(false);
+		
 		s3 = new SOP();
+		s3.setID(3);
+		s3.setName("Do more stuff");
+		s3.setDescription("Do it yesterday");
+		s3.setPriority(1);
+		s3.setRevision(1);
+		s3.setAuthorID(p2.getID());
+		s3.setArchiveFlag(false);
 
 		querySOP = new ArrayList<SOP>();
 		
@@ -106,7 +129,39 @@ public class SqlDatabaseTest {
 	
 	@Test
 	public void testInsertSOP() {
+		db.insertSOP(s1);
+		db.insertSOP(s2);
+		db.insertSOP(s3);
 		
+		querySOP = db.findAllSOPs();
+		
+		assertEquals(s1.getID(), querySOP.get(0).getID());
+		assertEquals(s2.getID(), querySOP.get(1).getID());
+		assertEquals(s3.getID(), querySOP.get(2).getID());
+		
+		assertEquals(s1.getName(), querySOP.get(0).getName());
+		assertEquals(s2.getName(), querySOP.get(1).getName());
+		assertEquals(s3.getName(), querySOP.get(2).getName());
+
+		assertEquals(s1.getDescription(), querySOP.get(0).getDescription());
+		assertEquals(s2.getDescription(), querySOP.get(1).getDescription());
+		assertEquals(s3.getDescription(), querySOP.get(2).getDescription());
+
+		assertEquals(s1.getPriority(), querySOP.get(0).getPriority());
+		assertEquals(s2.getPriority(), querySOP.get(1).getPriority());
+		assertEquals(s3.getPriority(), querySOP.get(2).getPriority());
+
+		assertEquals(s1.getRevision(), querySOP.get(0).getRevision());
+		assertEquals(s2.getRevision(), querySOP.get(1).getRevision());
+		assertEquals(s3.getRevision(), querySOP.get(2).getRevision());
+
+		assertEquals(s1.getAuthorID(), querySOP.get(0).getAuthorID());
+		assertEquals(s2.getAuthorID(), querySOP.get(1).getAuthorID());
+		assertEquals(s3.getAuthorID(), querySOP.get(2).getAuthorID());
+		
+		assertEquals(s1.getArchiveFlag(), querySOP.get(0).getArchiveFlag());
+		assertEquals(s2.getArchiveFlag(), querySOP.get(1).getArchiveFlag());
+		assertEquals(s3.getArchiveFlag(), querySOP.get(2).getArchiveFlag());	
 	}
 	
 	@Test
