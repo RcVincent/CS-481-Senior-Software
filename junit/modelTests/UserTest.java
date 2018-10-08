@@ -163,12 +163,12 @@ public class UserTest {
 		p4.setID(10);
 
 		//get the SOPs ready 
-		s1 = new SOP("How to sign your name", "Lets be honest here", 1, 1, 124, 3); 
-		s2 = new SOP("How to sign into your machine", "Yes we are serious", 2, 2, 125, 5);
-		s3 = new SOP("How to flush a toilet", "Some of ya'll nasty", 6, 33, 124, 1); 
-		s4 = new SOP("How to sigh out", "Can't have you lot logged in all the time", 3, 55, 124, 2); 
-		s5 = new SOP("Lelelele", "To annoy the flying Duchman", 8, 68, 125, 4); 
-		s6 = new SOP(null, null, -1, 0, 0, 0); 
+		s1 = new SOP("How to sign your name", "Lets be honest here", 1, 1, 124, 3, false); 
+		s2 = new SOP("How to sign into your machine", "Yes we are serious", 2, 2, 125, 5, false);
+		s3 = new SOP("How to flush a toilet", "Some of ya'll nasty", 6, 33, 124, 1, false); 
+		s4 = new SOP("How to sigh out", "Can't have you lot logged in all the time", 3, 55, 124, 2, false); 
+		s5 = new SOP("Lelelele", "To annoy the flying Duchman", 8, 68, 125, 4, false); 
+		s6 = new SOP(null, null, -1, 0, 0, 0, false); 
 
 		//add them to the sop list
 		sopList = new ArrayList<SOP>(); 

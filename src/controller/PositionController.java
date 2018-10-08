@@ -17,7 +17,7 @@ public class PositionController {
 	public SOP getApplicantSOPs(User u) {
 		
 		// TODO: Return database query 
-		return new SOP(null, null, -1, -1, -1, -1); 
+		return new SOP(null, null, -1, -1, -1, -1, false); 
 	}
 	
 	public Position getPositionByID(int positionID) {

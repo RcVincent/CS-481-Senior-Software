@@ -141,6 +141,7 @@ public class SqlDatabase {
 							"version INT NOT NULL, " +
 							"filepath VARCHAR(255) NOT NULL, " +
 							"author_id INT NOT NULL, " +
+							"archive_flag TINYINT NOT NULL, " +
 							"PRIMARY KEY (sop_id), " +
 							"UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
 							"INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
@@ -245,7 +246,7 @@ public class SqlDatabase {
 					
 				try {
 				insertSOP = conn.prepareStatement(
-						"insert into SOP values (default, ?, ?, ?, ?, ?, ?)"
+						"insert into SOP values (default, ?, ?, ?, ?, ?, ?, ?)"
 				);
 				insertSOP.setString(1, s.getName());
 				insertSOP.setString(2, s.getDescription());
@@ -253,6 +254,7 @@ public class SqlDatabase {
 				insertSOP.setInt(4, s.getRevision());
 				insertSOP.setString(5, filepath);
 				insertSOP.setInt(6, s.getAuthorID());
+				insertSOP.setBoolean(7, s.getArchiveFlag());
 							
 				// Execute the update
 				insertSOP.executeUpdate();

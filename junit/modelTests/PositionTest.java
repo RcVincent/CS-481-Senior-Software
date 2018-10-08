@@ -39,12 +39,12 @@ public class PositionTest {
 		List<SOP> p7Reqs = new ArrayList<SOP>();
 		List<SOP> p8Reqs = new ArrayList<SOP>();
 		
-		req1 = new SOP("Test 1", "For testing", 1, 1, 12, 7); 
-		req2 = new SOP("Test 2", "For testing", 2, 2, 12, 6); 
-		req3 = new SOP("Test 3", "For testing", 3, 3, 0, 1);
-		req4 = new SOP(null, null, 0, 0, 0, 0);
-		req5 = new SOP("", "testing", 1, 5, 23, 4); 
-		req6 = new SOP("Test 6", " ", 4, 6, 0, 0);
+		req1 = new SOP("Test 1", "For testing", 1, 1, 12, 7, false); 
+		req2 = new SOP("Test 2", "For testing", 2, 2, 12, 6, false); 
+		req3 = new SOP("Test 3", "For testing", 3, 3, 0, 1, false);
+		req4 = new SOP(null, null, 0, 0, 0, 0, false);
+		req5 = new SOP("", "testing", 1, 5, 23, 4, false); 
+		req6 = new SOP("Test 6", " ", 4, 6, 0, 0, false);
 		
 		p1Reqs.add(req1);
 		p1Reqs.add(req2);
