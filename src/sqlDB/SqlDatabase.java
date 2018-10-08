@@ -1002,4 +1002,48 @@ public class SqlDatabase {
 		System.out.println("SOPs");
 		System.out.println("Positions");
 	}
+	
+	public static void cleanDB(){
+		SqlDatabase db = new SqlDatabase();
+		System.out.println("Recreating Database...");
+		db.recreateDB();
+		System.out.println("Creating Tables again...");
+		db.createTables();
+		// TODO: Load Initial Data (Currently method isn't setup)
+		/*System.out.println("Loading initial data...");
+		db.loadInitialData();
+		*/
+		System.out.println("Database cleaned.");
+	}
+	
+	public void recreateDB(){
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				Statement drop_stmt = null;
+				Statement create_stmt = null;
+				try {
+					
+					drop_stmt = conn.createStatement();
+					String drop_sql = "drop database CS481db;";
+					System.out.println("execute drop DB");
+					drop_stmt.executeUpdate(drop_sql);
+					System.out.println("Database dropped.");
+					
+					create_stmt = conn.createStatement();
+					String create_sql = "CREATE database CS481db;"; 
+					System.out.println("execute create DB");
+					create_stmt.executeUpdate(create_sql);
+					System.out.println("database recreated");
+					
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(drop_stmt);
+					DBUtil.closeQuietly(create_stmt);					
+				}
+			}
+			
+		});
+	}
 }
