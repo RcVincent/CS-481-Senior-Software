@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 
 public class Position {
-	private String Title;
+	private String Title, Description;
 	private int ID, Priority;
 	private List<SOP> Requirements;
 	private boolean isValid; 
@@ -14,6 +14,7 @@ public class Position {
 	
 	public Position(String Title, int ID, int Priority) {
 		this.Title = Title;
+		this.Description = Description;
 		this.ID = ID;
 		this.Priority = Priority;
 	}
@@ -25,6 +26,14 @@ public class Position {
 	
 	public String getTitle() {
 		return this.Title;	
+	}
+	
+	public void setDescription(String Description) {
+		this.Description = Description;	
+	}
+	
+	public String getDescription() {
+		return this.Description;	
 	}
 	
 	public void setID(int ID) {

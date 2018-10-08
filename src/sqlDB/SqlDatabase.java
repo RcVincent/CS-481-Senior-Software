@@ -7,11 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import DBpersist.IDatabase;
 import DBpersist.InitialData;
 import DBpersist.DBUtil;
+import DBpersist.DerbyDatabase;
 import DBpersist.PersistenceException;
+import DBpersist.DerbyDatabase.Transaction;
 import model.Position;
 import model.SOP;
 import model.User;
@@ -136,6 +141,7 @@ public class SqlDatabase {
 							"version INT NOT NULL, " +
 							"filepath VARCHAR(255) NOT NULL, " +
 							"author_id INT NOT NULL, " +
+							"archive_flag TINYINT NOT NULL, " +
 							"PRIMARY KEY (sop_id), " +
 							"UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
 							"INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
@@ -158,138 +164,23 @@ public class SqlDatabase {
 			}
 			
 		});
-	}
-	
-	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
-		user.setUserID(resultSet.getInt(index++));
-		user.setEmail(resultSet.getString(index++)); 
-		user.setPassword(resultSet.getString(index++));
-		user.setFirstname(resultSet.getString(index++));
-		user.setLastname(resultSet.getString(index++));
-		user.setAdminFlag(resultSet.getString(index++));
-		user.setArchiveFlag(resultSet.getBoolean(index++));
-	}
-	
-	private void loadSOP(SOP sop, ResultSet resultSet, int index) throws SQLException {
-		sop.setID(resultSet.getInt(index++));
-		sop.setName(resultSet.getString(index++));
-		sop.setDescription(resultSet.getString(index++));
-		sop.setPriority(resultSet.getInt(index++));
-		sop.setRevision(resultSet.getInt(index++));
-	}
-	
-	private void loadPosition(Position position, ResultSet resultSet, int index) throws SQLException {
-		position.setID(resultSet.getInt(index++));
-		position.setTitle(resultSet.getString(index++));
-		position.setPriority(resultSet.getInt(index++));
-	}
-	
-	public void loadInitialData() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				
-				//
-				List<User> userList;
-				List<SOP> sopList;
-				List<Position> positionList;
-				
-				try {
-					System.out.println("Init userlist");
-					userList = InitialData.getUsers();
-					positionList = InitialData.getPositions();
-					sopList = InitialData.getSOPs();
-				}
-				
-				catch(IOException e) {
-					throw new SQLException("Couldn't read the initial data");
-				}
-				
-				
-				//the create tables lists
-				PreparedStatement insertUsers = null;
-				PreparedStatement insertPositions = null;
-				PreparedStatement insertSOPs = null;
-				
-				try {
-					//set up the users list to be imported 
-					System.out.println("Preparing user insertion");
-					insertUsers = conn.prepareStatement("insert into user ()");
-					//actually do the insert 
-					
-					for (User u : userList) {
-						insertUsers.setInt(1, u.getUserID());
-						insertUsers.setString(2, u.getEmail()); 
-						insertUsers.setString(3, u.getPassword());
-						insertUsers.setString(4, u.getFirstname());
-						insertUsers.setString(5, u.getLastname());
-						insertUsers.setString(6, u.isAdminFlag());
-						insertUsers.setBoolean(7, u.isArchiveFlag());
-					}
-					
-					//verify and execute 
-					System.out.println("inserting users");
-					insertUsers.executeBatch();
-					System.out.println("Users table populated");
-				
-					// Set up the Positions list to be imported 
-					System.out.println("Preparing position insertion");
-					insertPositions = conn.prepareStatement("insert into position ()");
-					
-					for (Position p : positionList) {
-						insertPositions.setInt(1, p.getID());
-						insertPositions.setString(2, p.getTitle());
-						insertPositions.setInt(3, p.getPriority());
-					}
-					
-					// Insert Positions
-					System.out.println("Inserting positions");
-					insertPositions.executeBatch();
-					System.out.println("Positions table populated");
-					
-					// Set up the SOPs list to be imported 
-					System.out.println("Preparing sop insertion");
-					insertSOPs = conn.prepareStatement("insert into sop ()");
-					
-					for (SOP s : sopList) {
-						insertSOPs.setInt(1, s.getID());
-						insertSOPs.setString(2, s.getName());
-						insertSOPs.setString(3, s.getDescription());
-						insertSOPs.setInt(4, s.getPriority());
-						insertSOPs.setInt(5, s.getRevision());
-					}
-					
-					// Insert SOPs
-					System.out.println("Inserting sops");
-					insertSOPs.executeBatch();
-					System.out.println("SOPs table populated");
+}
 
-					return true;
-				}
-				finally {
-					DBUtil.closeQuietly(insertUsers);
-				}
-			}	
-		});		
-	}
-	
-	public Integer insertPosition(final String title, final String description, final int priority) {
+	public Integer insertPosition(final Position p) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertPos = null;		
 				
 				ResultSet resultSet1 = null;
-
-				Integer pos_id = -1;
 					
 				try {
 				insertPos = conn.prepareStatement(
 						"insert into Position values (default, ?, ?, ?)"
 				);
-				insertPos.setString(1, title);
-				insertPos.setString(2, description);
-				insertPos.setInt(3, priority);
+				insertPos.setString(1, p.getTitle());
+				insertPos.setString(2, p.getDescription());
+				insertPos.setInt(3, p.getPriority());
 							
 				// Execute the update
 				insertPos.executeUpdate();
@@ -297,8 +188,8 @@ public class SqlDatabase {
 				resultSet1 = insertPos.executeQuery();
 							
 				System.out.println("Position successfully inserted");							
-					
-				return pos_id;
+
+				return 1;
 				
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
@@ -308,29 +199,25 @@ public class SqlDatabase {
 		});
 	}
 	
-	public Integer insertUser(final String email, final String password, final String firstname, 
-							  final String lastname, final String adminflag, final boolean archiveflag, 
-							  final int pos_id) {
+	public Integer insertUser(final User u) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertUser = null;		
 				
 				ResultSet resultSet1 = null;
-				
-				Integer user_id = -1;
 					
 				try {
 				insertUser = conn.prepareStatement(
 						"insert into User values (default, ?, ?, ?, ?, ?, ?, default, ?)"
 				);
-				insertUser.setString(1, email);
-				insertUser.setString(2, password);
-				insertUser.setString(3, firstname);
-				insertUser.setString(4, lastname);
-				insertUser.setString(5, adminflag);
-				insertUser.setBoolean(6, archiveflag);
-				insertUser.setInt(7, pos_id);
+				insertUser.setString(1, u.getEmail());
+				insertUser.setString(2, u.getPassword());
+				insertUser.setString(3, u.getFirstname());
+				insertUser.setString(4, u.getLastname());
+				insertUser.setString(5, u.isAdminFlag());
+				insertUser.setBoolean(6, u.isArchiveFlag());
+				insertUser.setInt(7, u.getPosition().getID());
 							
 				// Execute the update
 				insertUser.executeUpdate();
@@ -339,7 +226,7 @@ public class SqlDatabase {
 							
 				System.out.println("User successfully registered!");							
 					
-				return user_id;
+				return 1;
 				
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
@@ -349,27 +236,25 @@ public class SqlDatabase {
 		});
 	}
 	
-	public Integer insertSOP(final String title, final String description, final int priority,
-							 final int version, final String filepath, final int author_id) {
+	public Integer insertSOP(final SOP s, final String filepath) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertSOP = null;		
-				
+				 
 				ResultSet resultSet1 = null;
-		
-				Integer SOP_id = -1;
 					
 				try {
 				insertSOP = conn.prepareStatement(
-						"insert into SOP values (default, ?, ?, ?, ?, ?, ?)"
+						"insert into SOP values (default, ?, ?, ?, ?, ?, ?, ?)"
 				);
-				insertSOP.setString(1, title);
-				insertSOP.setString(2, description);
-				insertSOP.setInt(3, priority);
-				insertSOP.setInt(4, version);
+				insertSOP.setString(1, s.getName());
+				insertSOP.setString(2, s.getDescription());
+				insertSOP.setInt(3, s.getPriority());
+				insertSOP.setInt(4, s.getRevision());
 				insertSOP.setString(5, filepath);
-				insertSOP.setInt(6, author_id);
+				insertSOP.setInt(6, s.getAuthorID());
+				insertSOP.setBoolean(7, s.getArchiveFlag());
 							
 				// Execute the update
 				insertSOP.executeUpdate();
@@ -378,7 +263,7 @@ public class SqlDatabase {
 							
 				System.out.println("SOP successfully inserted");							
 					
-				return SOP_id;
+				return 1;
 				
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
@@ -386,6 +271,507 @@ public class SqlDatabase {
 				}
 			} 
 		});
+	}
+	
+	public List<Position> findAllPositions() {
+		return executeTransaction(new Transaction<List<Position>>() {
+			@Override
+			public List<Position> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM Position");
+					
+					List<Position> result = new ArrayList<Position>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Position p = new Position();
+						p.setID(resultSet.getInt(1));
+						p.setTitle(resultSet.getString(2));
+						p.setDescription(resultSet.getString(3));
+						p.setPriority(resultSet.getInt(4));
+						
+						result.add(p);
+					}
+					
+					if (!found) {
+						System.out.println("No Positions were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<User> findAllUsers() {
+		return executeTransaction(new Transaction<List<User>>() {
+			@Override
+			public List<User> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User");
+					
+					List<User> result = new ArrayList<User>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						User u = new User();
+						u.setUserID(resultSet.getInt(1));
+						u.setEmail(resultSet.getString(2));
+						u.setPassword(resultSet.getString(3));
+						u.setFirstname(resultSet.getString(4));
+						u.setLastname(resultSet.getString(5));
+						u.setAdminFlag(resultSet.getString(6));
+						u.setArchiveFlag(resultSet.getBoolean(7));
+						u.setPosition(findPositionByID(resultSet.getInt(9)));			
+						
+						result.add(u);
+					}
+					
+					if (!found) {
+						System.out.println("No Users were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findAllSOPs() {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP");
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public Position findPositionByID(int position_id) {
+		return executeTransaction(new Transaction<Position>() {
+			@Override
+			public Position execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM Position WHERE position_id = ?");
+					stmt.setInt(1, position_id);
+					
+					Position result = new Position();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setTitle(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+					}
+					
+					if (!found) {
+						System.out.println("No Positions were found with this ID");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByID(final int ID) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE user_id = ?");
+					
+					stmt.setInt(1, ID);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with ID <" + ID + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByEmail(final String email) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ?");
+					
+					stmt.setString(1, email);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + email + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByFirstName(final String firstname) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE first_name = ?");
+					
+					stmt.setString(1, firstname);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with firstname <" + firstname + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User getUserByLastName(final String lastname) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE last_name = ?");
+					
+					stmt.setString(1, lastname);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with lastname <" + lastname + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public User changeUserPassword(final String email, final String oldPass, final String newPass) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE User SET password = ? WHERE email = ? AND password = ? ");
+					
+					stmt.setString(1, newPass);
+					stmt.setString(2, email);
+					stmt.setString(3, oldPass);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ? and password = ?");
+					
+					stmt2.setString(1, email);
+					stmt2.setString(2, newPass);
+					
+					resultSet = stmt2.executeQuery();
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + email + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
+	public User changeUserEmail(final String oldEmail, final String newEmail, final String Pass) {
+
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE User SET email = ? WHERE email = ? AND password = ? ");
+					
+					stmt.setString(1, newEmail);
+					stmt.setString(2, oldEmail);
+					stmt.setString(3, Pass);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE email = ? and password = ?");
+					
+					stmt2.setString(1, newEmail);
+					stmt2.setString(2, Pass);
+					
+					resultSet = stmt2.executeQuery();
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with email <" + newEmail + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
+	//main method to generate the DB
+	public static void main(String[] args) throws IOException {
+		System.out.println("Creating tables ");
+		SqlDatabase db = new SqlDatabase(); 
+		db.createTables();
+		System.out.println("Users");
+		System.out.println("SOPs");
+		System.out.println("Positions");
 	}
 	
 	public static void cleanDB(){
@@ -430,15 +816,5 @@ public class SqlDatabase {
 			}
 			
 		});
-	}
-	
-	//main method to generate the DB
-	public static void main(String[] args) throws IOException {
-		System.out.println("Creating tables ");
-		SqlDatabase db = new SqlDatabase(); 
-		db.createTables();
-		System.out.println("Users");
-		System.out.println("SOPs");
-		System.out.println("Positions");
 	}
 }
