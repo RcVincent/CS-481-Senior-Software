@@ -96,7 +96,7 @@ public class SqlDatabase {
 					
 					pos_stmt = conn.createStatement();
 					String pos_sql = "CREATE TABLE IF NOT EXISTS Position (" +
-									 "position_id INT NOT NULL," +
+									 "position_id INT NOT NULL AUTO_INCREMENT," +
 									 "title VARCHAR(80) NOT NULL," +
 									 "description VARCHAR(255) NOT NULL," +
 									 "priority INT NOT NULL," +
@@ -111,7 +111,7 @@ public class SqlDatabase {
 					System.out.println("Prepare to create the user table");
 					user_stmt = conn.createStatement();
 					String user_sql = "CREATE TABLE IF NOT EXISTS User (" +
-									  "user_id INT NOT NULL," +
+									  "user_id INT NOT NULL AUTO_INCREMENT," +
 									  "email VARCHAR(255) NOT NULL," +
 									  "password VARCHAR(32) NOT NULL, " +
 									  "first_name VARCHAR(80) NOT NULL, " +
@@ -134,12 +134,12 @@ public class SqlDatabase {
 
 					sop_stmt = conn.createStatement();
 					String sop_sql = "CREATE TABLE IF NOT EXISTS SOP (" +
-									  "sop_id INT NOT NULL, " +
+									  "sop_id INT NOT NULL AUTO_INCREMENT, " +
 									  "title VARCHAR(80) NOT NULL, " +
 									  "description VARCHAR(255) NOT NULL, " +
 									  "priority INT NOT NULL, " +
 									  "version INT NOT NULL, " +
-									  "filepath VARCHAR(255) NOT NULL, " +
+					//				  "filepath VARCHAR(255) NOT NULL, " +
 									  "author_id INT NOT NULL, " +
 									  "archive_flag TINYINT NOT NULL, " +
 									  "PRIMARY KEY (sop_id), " +
@@ -172,11 +172,11 @@ public class SqlDatabase {
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertPos = null;		
 				
-				ResultSet resultSet1 = null;
 					
 				try {
 				insertPos = conn.prepareStatement(
-						"insert into Position values (default, ?, ?, ?)"
+						"insert into Position (title, description, priority)"
+						+ " values (?, ?, ?)"
 				);
 				insertPos.setString(1, p.getTitle());
 				insertPos.setString(2, p.getDescription());
@@ -185,14 +185,11 @@ public class SqlDatabase {
 				// Execute the update
 				insertPos.executeUpdate();
 							
-				resultSet1 = insertPos.executeQuery();
-							
 				System.out.println("Position successfully inserted");							
 
 				return 1;
 				
 				} finally {
-					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(insertPos);			
 				}
 			} 
@@ -204,12 +201,12 @@ public class SqlDatabase {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertUser = null;		
-				
-				ResultSet resultSet1 = null;
-					
+
 				try {
 				insertUser = conn.prepareStatement(
-						"insert into User values (default, ?, ?, ?, ?, ?, ?, default, ?)"
+						"insert into User "
+						+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
+						+ " values (?, ?, ?, ?, ?, ?, ?)"
 				);
 				insertUser.setString(1, u.getEmail());
 				insertUser.setString(2, u.getPassword());
@@ -222,51 +219,51 @@ public class SqlDatabase {
 				// Execute the update
 				insertUser.executeUpdate();
 							
-				resultSet1 = insertUser.executeQuery();
-							
 				System.out.println("User successfully registered!");							
 					
 				return 1;
 				
 				} finally {
-					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(insertUser);			
 				}
 			} 
 		});
 	}
 	
-	public Integer insertSOP(final SOP s, final String filepath) {
+	public Integer insertSOP(final SOP s) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement insertSOP = null;		
-				 
-				ResultSet resultSet1 = null;
-					
+					/*"sop_id INT NOT NULL AUTO_INCREMENT, " +
+									  "title VARCHAR(80) NOT NULL, " +
+									  "description VARCHAR(255) NOT NULL, " +
+									  "priority INT NOT NULL, " +
+									  "version INT NOT NULL, " +
+									  "author_id INT NOT NULL, " +
+									  "archive_flag TINYINT NOT NULL, " +*/
 				try {
 				insertSOP = conn.prepareStatement(
-						"insert into SOP values (default, ?, ?, ?, ?, ?, ?, ?)"
+						"insert into SOP "
+						+ "(title, description, priority, version, author_id, archive_flag)"
+						+ " values (?, ?, ?, ?, ?, ?)"
 				);
 				insertSOP.setString(1, s.getName());
 				insertSOP.setString(2, s.getDescription());
 				insertSOP.setInt(3, s.getPriority());
 				insertSOP.setInt(4, s.getRevision());
-				insertSOP.setString(5, filepath);
-				insertSOP.setInt(6, s.getAuthorID());
-				insertSOP.setBoolean(7, s.getArchiveFlag());
+				//insertSOP.setString(5, filepath);
+				insertSOP.setInt(5, s.getAuthorID());
+				insertSOP.setBoolean(6, s.getArchiveFlag());
 							
 				// Execute the update
 				insertSOP.executeUpdate();
-							
-				resultSet1 = insertSOP.executeQuery();
 							
 				System.out.println("SOP successfully inserted");							
 					
 				return 1;
 				
 				} finally {
-					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(insertSOP);			
 				}
 			} 
