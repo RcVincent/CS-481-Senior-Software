@@ -134,22 +134,22 @@ public class SqlDatabase {
 
 					sop_stmt = conn.createStatement();
 					String sop_sql = "CREATE TABLE IF NOT EXISTS SOP (" +
-							"sop_id INT NOT NULL, " +
-							"title VARCHAR(80) NOT NULL, " +
-							"description VARCHAR(255) NOT NULL, " +
-							"priority INT NOT NULL, " +
-							"version INT NOT NULL, " +
-							"filepath VARCHAR(255) NOT NULL, " +
-							"author_id INT NOT NULL, " +
-							"archive_flag TINYINT NOT NULL, " +
-							"PRIMARY KEY (sop_id), " +
-							"UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
-							"INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
-							"CONSTRAINT fk_SOP_User1 " +
-							"FOREIGN KEY (author_id) " +
-							"REFERENCES User (user_id) " +
-							"ON DELETE NO ACTION " +
-							"ON UPDATE NO ACTION);";
+									  "sop_id INT NOT NULL, " +
+									  "title VARCHAR(80) NOT NULL, " +
+									  "description VARCHAR(255) NOT NULL, " +
+									  "priority INT NOT NULL, " +
+									  "version INT NOT NULL, " +
+									  "filepath VARCHAR(255) NOT NULL, " +
+									  "author_id INT NOT NULL, " +
+									  "archive_flag TINYINT NOT NULL, " +
+									  "PRIMARY KEY (sop_id), " +
+									  "UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
+									  "INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
+									  "CONSTRAINT fk_SOP_User1 " +
+									  "FOREIGN KEY (author_id) " +
+									  "REFERENCES User (user_id) " +
+									  "ON DELETE NO ACTION " +
+									  "ON UPDATE NO ACTION);";
 					System.out.println("execute SOPs");
 					sop_stmt.executeUpdate(sop_sql);
 					System.out.println("SOPs table created");
@@ -759,6 +759,238 @@ public class SqlDatabase {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
 					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
+	public SOP findSOPbyID(int id) {
+		return executeTransaction(new Transaction<SOP>() {
+			@Override
+			public SOP execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE sop_id = ?");
+					
+					stmt.setInt(1, id);
+					
+					SOP result = new SOP();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setName(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+						result.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						result.setAuthorID(resultSet.getInt(7));
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found with that ID");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findSOPbyName(String name) {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE title = ?");
+					
+					stmt.setString(1, name);
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found with that name");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findSOPbyPriority(int priority) {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE priority = ?");
+					
+					stmt.setInt(1, priority);
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found with that priority");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findSOPbyVersion(int version) {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE version = ?");
+					
+					stmt.setInt(1, version);
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found with that version");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	public List<SOP> findSOPbyAuthorID(int id) {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE author_id = ?");
+					
+					stmt.setInt(1, id);
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found with that author");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
 				}
 			}
 		});
