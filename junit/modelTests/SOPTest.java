@@ -17,13 +17,13 @@ public class SOPTest{
 	@Before
 	public void setup(){
 		sop = new SOP("How to Avoid Sexual Harassment", "A how-to guide for men on avoiding sexually harassing women in "
-				+ "the workplace environment.", 1, 5, 70, 2);
+				+ "the workplace environment.", 1, 5, 70, 2, false);
 		
-		invalidSOP1 = new SOP(" ", "A book about nothing", 2, 4, 66, 6); 
-		invalidSOP2 = new SOP("A test", " ", 3, 5, 89, 7);
-		invalidSOP3 = new SOP("Another test", "A very silly test to be honest", 0, 2, 99, 1);
-		invalidSOP4 = new SOP("A third test", "This is getting silly", 4, 0, 98, 3);
-		invalidSOP5 = new SOP("A final test", "Finally over", 5, 4, 124, 0); 
+		invalidSOP1 = new SOP(" ", "A book about nothing", 2, 4, 66, 6, false); 
+		invalidSOP2 = new SOP("A test", " ", 3, 5, 89, 7, false);
+		invalidSOP3 = new SOP("Another test", "A very silly test to be honest", 0, 2, 99, 1, false);
+		invalidSOP4 = new SOP("A third test", "This is getting silly", 4, 0, 98, 3, false);
+		invalidSOP5 = new SOP("A final test", "Finally over", 5, 4, 124, 0, false); 
 		
 		invalidList = new ArrayList<SOP>();
 		invalidList.add(invalidSOP1);

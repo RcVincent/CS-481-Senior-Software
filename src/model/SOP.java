@@ -12,18 +12,20 @@ public class SOP{
 	// Assuming Author refers to a User, authorID would be their userID then.
 	private int authorID;
 	private int revision; 
+	private boolean archiveFlag;
   private List<Position> positionsAffected = new ArrayList<Position>(); 
 	
 	public SOP() {
 		//empty constructor incase we want one 
 	}
-	public SOP(String name, String description, int priority, int ID, int authorID, int revision){
+	public SOP(String name, String description, int priority, int ID, int authorID, int revision, boolean archiveFlag){
 		this.name = name;
 		this.description = description;
 		this.priority = priority;
 		this.ID = ID;
 		this.authorID = authorID;
-		this.revision = revision; 
+		this.revision = revision;
+		this.archiveFlag = archiveFlag;
 	}
 	
   public ArrayList<Position> showPositionsAffected(int id) {
@@ -91,6 +93,14 @@ public class SOP{
 
 	public void setRevision(int revision) {
 		this.revision = revision;
+	}
+	
+	public boolean getArchiveFlag() {
+		return archiveFlag;
+	}
+	
+	public void setArchiveFlag(boolean archiveFlag) {
+		this.archiveFlag = archiveFlag;
 	}
 }
 
