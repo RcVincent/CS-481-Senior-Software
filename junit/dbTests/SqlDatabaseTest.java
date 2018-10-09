@@ -9,11 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import DBpersist.SqlDatabase;
 import controller.PositionController;
 import model.Position;
 import model.User;
 import model.SOP;
-import sqlDB.SqlDatabase;
 
 public class SqlDatabaseTest {
 
