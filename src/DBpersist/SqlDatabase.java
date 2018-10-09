@@ -1,4 +1,4 @@
-package sqlDB;
+package DBpersist;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,15 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import DBpersist.IDatabase;
-import DBpersist.InitialData;
-import DBpersist.DBUtil;
-import DBpersist.DerbyDatabase;
-import DBpersist.PersistenceException;
-import DBpersist.DerbyDatabase.Transaction;
 import model.Position;
 import model.SOP;
 import model.User;
@@ -116,7 +109,7 @@ public class SqlDatabase {
 									  "password VARCHAR(32) NOT NULL, " +
 									  "first_name VARCHAR(80) NOT NULL, " +
 									  "last_name VARCHAR(80) NOT NULL, " +
-									  "admin_flag TINYINT NOT NULL, " +
+									  "admin_flag VARCHAR(32) NOT NULL, " +
 									  "archive_flag TINYINT NOT NULL, " +
 									  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 									  "position_id INT NOT NULL, " +
