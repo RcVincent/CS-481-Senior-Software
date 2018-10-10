@@ -85,6 +85,7 @@ public class SqlDatabase {
 				Statement user_stmt = null;
 				Statement pos_stmt = null;
 				Statement sop_stmt = null;
+				Statement pos_sop_stmt = null;
 				try {
 					
 					pos_stmt = conn.createStatement();
@@ -146,6 +147,17 @@ public class SqlDatabase {
 					System.out.println("execute SOPs");
 					sop_stmt.executeUpdate(sop_sql);
 					System.out.println("SOPs table created");
+					
+					pos_sop_stmt = conn.createStatement();
+					String pos_sop_sql = "CREATE TABLE IF NOT EXISTS PositionSOP (" +
+										"position_id INT NOT NULL, " +
+										"sop_id INT NOT NULL, " +
+										"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+										"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+										");";
+					System.out.println("Execute create PositionSOP table");
+					pos_sop_stmt.executeUpdate(pos_sop_sql);
+					System.out.println("PositionSOP table created");
 					return true;
 				}
 				finally {
