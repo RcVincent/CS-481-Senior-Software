@@ -1,9 +1,11 @@
 package controller;
+import DBpersist.SqlDatabase;
 import model.Position;
 import model.User;
 
 public class UserController {
 	User U = new User();
+	SqlDatabase db = new SqlDatabase(); 
 	
 	public UserController() {
 		
@@ -58,4 +60,34 @@ public class UserController {
     public void Archive(){
         U.setArchiveFlag(true);
     } 
+    
+    //************************************
+  	//Implementing DB calls 
+  	//************************************
+    
+    public User FindUserByID(int userID) {
+    	return db.getUserByID(userID);
+    }
+    
+    public User findUserByFirstname(String fname) {
+    	return db.getUserByFirstName(fname);
+    }
+    
+    public User findUserByLastname(String lname) {
+    	return db.getUserByLastName(lname);
+    }
+    
+    public User findUserByEmail(String email) {
+    	return db.getUserByEmail(email);
+    }
+    
+    //will implement these later
+    public void changeUserEmail() {
+    	
+    }
+    
+    public void changeUserPassword() {
+    	
+    }
+    
 }
