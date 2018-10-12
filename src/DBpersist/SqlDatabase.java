@@ -1051,4 +1051,76 @@ public class SqlDatabase {
 			
 		});
 	}
+	
+	public static void testDB(){
+		SqlDatabase db = new SqlDatabase();
+		db.createTestDB();
+		db.createTables();
+	}
+	
+	public static void delTestDB() {
+		SqlDatabase db = new SqlDatabase();
+		db.deleteTestDB();
+	}
+	
+	public void createTestDB(){
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				Statement create_stmt = null;
+				Statement use_stmt = null;
+				try {					
+					create_stmt = conn.createStatement();
+					String create_sql = "CREATE database CS481dbtest;"; 
+					System.out.println("Creating test database..");
+					create_stmt.executeUpdate(create_sql);
+					System.out.println("Test database created!");
+					
+					use_stmt = conn.createStatement();
+					String use_sql = "use CS481dbtest;";
+					System.out.println("Switching to test database..");
+					use_stmt.executeUpdate(use_sql);
+					System.out.println("Now using test database");
+					
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(create_stmt);	
+					DBUtil.closeQuietly(use_stmt);				
+				}
+			}
+			
+		});
+	}
+	
+	public void deleteTestDB(){
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				Statement drop_stmt = null;
+				Statement use_stmt = null;
+				try {
+					
+					drop_stmt = conn.createStatement();
+					String drop_sql = "drop database CS481dbtest;";
+					System.out.println("Deleting test database..");
+					drop_stmt.executeUpdate(drop_sql);
+					System.out.println("Test database deleted");
+					
+					use_stmt = conn.createStatement();
+					String use_sql = "use CS481db;"; 
+					System.out.println("Switching back to main database..");
+					use_stmt.executeUpdate(use_sql);
+					System.out.println("Now using main database");
+					
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(drop_stmt);
+					DBUtil.closeQuietly(use_stmt);					
+				}
+			}
+			
+		});
+	}
 }
