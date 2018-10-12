@@ -169,6 +169,57 @@ public class SqlDatabase {
 			}
 			
 		});
+	}
+	
+	public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Position> posList;
+				List<SOP> SOPList;
+				
+				try {
+					userList       = InitialData.getUsers();
+					posList		   = InitialData.getPositions();
+					SOPList		   = InitialData.getSOPs();
+				} catch (IOException e) {
+					throw new SQLException("Couldn't read initial data", e);
+				}
+
+				PreparedStatement insertUser       = null;
+				PreparedStatement insertPos		   = null;
+				PreparedStatement insertSOP	       = null;
+
+				try {
+					// Insert Users
+					insertUser = conn.prepareStatement(
+							"insert into User "
+							+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
+							+ " values (?, ?, ?, ?, ?, ?, ?)"
+					);
+					for (User u : userList) {
+						insertUser.setString(1, u.getEmail());
+						insertUser.setString(2, u.getPassword());
+						insertUser.setString(3, u.getFirstname());
+						insertUser.setString(4, u.getLastname());
+						insertUser.setString(5, u.isAdminFlag());
+						insertUser.setBoolean(6, u.isArchiveFlag());
+						insertUser.setInt(7, u.getPosition().getID());
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					System.out.println("User table populated");
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertPos);
+					DBUtil.closeQuietly(insertSOP);
+				}
+			}
+		});
 }
 
 	public Integer insertPosition(final Position p) {
