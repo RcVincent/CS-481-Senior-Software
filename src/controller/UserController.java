@@ -1,4 +1,7 @@
 package controller;
+import java.util.ArrayList;
+import java.util.List;
+
 import DBpersist.SqlDatabase;
 import model.Position;
 import model.User;
@@ -11,6 +14,29 @@ public class UserController {
 		
 	}
     
+	/*public ArrayList<User> matchUserNameWithPassword(String username) {
+
+		List<User> userList = db.matchUsernameWithPassword(username);
+
+		ArrayList<User> users = new ArrayList<User>();
+
+		for(User user : userList) {
+			users.add(user);
+		}
+
+		return users;
+	}*/
+	
+	public static boolean authenticate(User u, String pswd) {
+		boolean real = false;
+		if(u.getPassword().equals(pswd)){
+
+			real = true;
+		}
+
+		return real;
+	}
+	
     public void login(){
         U.setLoginStatus(true);
     }
