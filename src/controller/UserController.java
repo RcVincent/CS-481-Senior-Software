@@ -108,12 +108,12 @@ public class UserController {
     }
     
     //will implement these later
-    public void changeUserEmail() {
-    	
+    public void changeUserEmail(String oldEmail, String newEmail, String pass) {
+    	db.changeUserEmail(oldEmail, newEmail, pass);
     }
     
-    public void changeUserPassword() {
-    	
+    public void changeUserPassword(String email, String oldPass, String newPass) {
+    	db.changeUserPassword(email, oldPass, newPass);
     }
     
 }
