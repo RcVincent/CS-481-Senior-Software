@@ -499,6 +499,169 @@ public class SqlDatabase {
 		});
 	}
 	
+	public ArrayList<Position> getPositionByName(String title){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * from Position where title = ?");
+					stmt.setString(1, title);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+	
+	public ArrayList<Position> getPositionByPriority(int priority){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * from Position where priority = ?");
+					stmt.setInt(1, priority);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+	
+	public Position getPositionByUser(int userID){
+		return executeTransaction(new Transaction<Position>(){
+			@Override
+			public Position execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT Position.position_id, Position.title, Position.description, Position.priority " +
+							"from Position, User where user_id = ? and Position.position_id = User.position_id");
+					stmt.setInt(1, userID);
+					
+					resultSet = stmt.executeQuery();
+					
+					Position position = new Position();
+					
+					position.setID(resultSet.getInt(1));
+					position.setTitle(resultSet.getString(2));
+					position.setDescription(resultSet.getString(3));
+					position.setPriority(resultSet.getInt(4));
+					
+					return position;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+	
+	public ArrayList<Position> getPositionBySOPID(int SOPID){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT Position.position_id, Position.title, Position.description, Position.priority " + 
+							"from Position, PositionSOP where PositionSOP.sop_id = ? and " +
+							"Position.position_id = PositionSOP.position_id");
+					stmt.setInt(1, SOPID);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+	
+	public Boolean deletePosition(int position_id){
+		return executeTransaction(new Transaction<Boolean>(){
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				int removed = 0;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"DELETE FROM Position where position_id = ?");
+					stmt.setInt(1, position_id);
+					
+					removed = stmt.executeUpdate();
+					
+					return removed == 1;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
 	public User getUserByID(final int ID) {
 
 		return executeTransaction(new Transaction<User>() {
