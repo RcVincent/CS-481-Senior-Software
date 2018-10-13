@@ -54,7 +54,7 @@ public class CreateAccountServlet extends HttpServlet{
 		
 		//add to the DB
 		//uc
-		//req.setAttribute("sessionid", userProfile);
+		req.setAttribute("sessionid", userProfile);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/Index");
