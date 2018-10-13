@@ -164,6 +164,31 @@ public class SqlDatabase {
 					DBUtil.closeQuietly(user_stmt);
 					DBUtil.closeQuietly(pos_stmt);
 					DBUtil.closeQuietly(sop_stmt);
+					DBUtil.closeQuietly(pos_sop_stmt);
+					
+				}
+			}
+			
+		});
+	}
+
+	public void createDatabase() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				Statement db_stmt = null;
+				try {
+					
+					db_stmt = conn.createStatement();
+					String db_sql = "create database if not exists cs481db;";
+					System.out.println("Creating database");
+					db_stmt.executeUpdate(db_sql);
+					System.out.println("Database created with name CS481db");
+					
+					return true;
+				}
+				finally {
+					DBUtil.closeQuietly(db_stmt);
 					
 				}
 			}
@@ -211,7 +236,7 @@ public class SqlDatabase {
 					insertUser.executeBatch();
 					
 					System.out.println("User table populated");
-					
+					// TODO: Position and SOP
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertUser);
@@ -368,6 +393,263 @@ public class SqlDatabase {
 		});
 	}
 	
+	public Position findPositionByID(int position_id) {
+		return executeTransaction(new Transaction<Position>() {
+			@Override
+			public Position execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM Position WHERE position_id = ?");
+					stmt.setInt(1, position_id);
+					
+					Position result = new Position();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setTitle(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+					}
+					
+					if (!found) {
+						System.out.println("No Positions were found with this ID");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	public Position getPositionByUser(int userID){
+		return executeTransaction(new Transaction<Position>(){
+			@Override
+			public Position execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT Position.position_id, Position.title, Position.description, Position.priority " +
+							"from Position, User where user_id = ? and Position.position_id = User.position_id");
+					stmt.setInt(1, userID);
+					
+					resultSet = stmt.executeQuery();
+					
+					Position position = new Position();
+					
+					position.setID(resultSet.getInt(1));
+					position.setTitle(resultSet.getString(2));
+					position.setDescription(resultSet.getString(3));
+					position.setPriority(resultSet.getInt(4));
+					
+					return position;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+
+	public ArrayList<Position> getPositionBySOPID(int SOPID){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT Position.position_id, Position.title, Position.description, Position.priority " + 
+							"from Position, PositionSOP where PositionSOP.sop_id = ? and " +
+							"Position.position_id = PositionSOP.position_id");
+					stmt.setInt(1, SOPID);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+
+	public ArrayList<Position> getPositionByName(String title){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * from Position where title = ?");
+					stmt.setString(1, title);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+
+	public ArrayList<Position> getPositionByPriority(int priority){
+		return executeTransaction(new Transaction<ArrayList<Position>>(){
+			@Override
+			public ArrayList<Position> execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * from Position where priority = ?");
+					stmt.setInt(1, priority);
+					
+					resultSet = stmt.executeQuery();
+					
+					ArrayList<Position> positions = new ArrayList<Position>();
+					
+					Position position;
+					
+					while(resultSet.next()){
+						position = new Position();
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+						positions.add(position);
+					}
+					
+					return positions;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+	}
+
+	public Position changePositionPriority(final Position p, final int priority) {
+		return executeTransaction(new Transaction<Position>() {
+			@Override
+			public Position execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+	
+	
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE Position SET priority = ? WHERE position_id = ? ");
+					
+					stmt.setInt(1, priority);
+					stmt.setInt(2, p.getID());
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE position_id = ?");
+					
+					stmt2.setInt(1, p.getID());
+					
+					resultSet = stmt2.executeQuery();
+					
+					Position position = new Position(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						position.setID(resultSet.getInt(1));
+						position.setTitle(resultSet.getString(2));
+						position.setDescription(resultSet.getString(3));
+						position.setPriority(resultSet.getInt(4));
+					}
+	
+					// check if the position exists
+					if (!found) {
+						System.out.println("Position with ID "+ p.getID() +" was not found in the Position table");
+					}
+	
+					return position;
+	
+	
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+
+	public Boolean deletePosition(int position_id){
+		return executeTransaction(new Transaction<Boolean>(){
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				int removed = 0;
+				
+				try{
+					stmt = conn.prepareStatement(
+							"DELETE FROM Position where position_id = ?");
+					stmt.setInt(1, position_id);
+					
+					removed = stmt.executeUpdate();
+					
+					return removed == 1;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
 	public List<User> findAllUsers() {
 		return executeTransaction(new Transaction<List<User>>() {
 			@Override
@@ -408,254 +690,6 @@ public class SqlDatabase {
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-	
-	public List<SOP> findAllSOPs() {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP");
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found in the database");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-	
-	public Position findPositionByID(int position_id) {
-		return executeTransaction(new Transaction<Position>() {
-			@Override
-			public Position execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM Position WHERE position_id = ?");
-					stmt.setInt(1, position_id);
-					
-					Position result = new Position();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						result.setID(resultSet.getInt(1));
-						result.setTitle(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-					}
-					
-					if (!found) {
-						System.out.println("No Positions were found with this ID");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-	
-	public ArrayList<Position> getPositionByName(String title){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * from Position where title = ?");
-					stmt.setString(1, title);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
-	}
-	
-	public ArrayList<Position> getPositionByPriority(int priority){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * from Position where priority = ?");
-					stmt.setInt(1, priority);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
-	}
-	
-	public Position getPositionByUser(int userID){
-		return executeTransaction(new Transaction<Position>(){
-			@Override
-			public Position execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT Position.position_id, Position.title, Position.description, Position.priority " +
-							"from Position, User where user_id = ? and Position.position_id = User.position_id");
-					stmt.setInt(1, userID);
-					
-					resultSet = stmt.executeQuery();
-					
-					Position position = new Position();
-					
-					position.setID(resultSet.getInt(1));
-					position.setTitle(resultSet.getString(2));
-					position.setDescription(resultSet.getString(3));
-					position.setPriority(resultSet.getInt(4));
-					
-					return position;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
-	}
-	
-	public ArrayList<Position> getPositionBySOPID(int SOPID){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT Position.position_id, Position.title, Position.description, Position.priority " + 
-							"from Position, PositionSOP where PositionSOP.sop_id = ? and " +
-							"Position.position_id = PositionSOP.position_id");
-					stmt.setInt(1, SOPID);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
-	}
-	
-	public Boolean deletePosition(int position_id){
-		return executeTransaction(new Transaction<Boolean>(){
-			@Override
-			public Boolean execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				int removed = 0;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"DELETE FROM Position where position_id = ?");
-					stmt.setInt(1, position_id);
-					
-					removed = stmt.executeUpdate();
-					
-					return removed == 1;
-				}finally{
 					DBUtil.closeQuietly(stmt);
 				}
 			}
@@ -980,7 +1014,67 @@ public class SqlDatabase {
 		});
 	}
 	
-	public SOP findSOPbyID(int id) {
+	public Boolean archiveUser(final int user_id) {
+		// TODO
+		return true;
+	}
+
+	public User changePosition(final int user_id, final int position_id) {
+		// TODO:
+		return null;
+	}
+	
+	public User findUserByPosition(final int position_id) {
+		// TODO:
+		return null;
+	}
+		
+	public List<SOP> findAllSOPs() {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM SOP");
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+					//	s.setFilepath(resultSet.getString(6);
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	public SOP findSOPbyID(final int id) {
 		return executeTransaction(new Transaction<SOP>() {
 			@Override
 			public SOP execute(Connection conn) throws SQLException {
@@ -1024,7 +1118,7 @@ public class SqlDatabase {
 		});
 	}
 	
-	public List<SOP> findSOPbyName(String name) {
+	public List<SOP> findSOPbyName(final String name) {
 		return executeTransaction(new Transaction<List<SOP>>() {
 			@Override
 			public List<SOP> execute(Connection conn) throws SQLException {
@@ -1071,7 +1165,7 @@ public class SqlDatabase {
 		});
 	}
 	
-	public List<SOP> findSOPbyPriority(int priority) {
+	public List<SOP> findSOPbyPriority(final int priority) {
 		return executeTransaction(new Transaction<List<SOP>>() {
 			@Override
 			public List<SOP> execute(Connection conn) throws SQLException {
@@ -1118,7 +1212,7 @@ public class SqlDatabase {
 		});
 	}
 	
-	public List<SOP> findSOPbyVersion(int version) {
+	public List<SOP> findSOPbyVersion(final int version) {
 		return executeTransaction(new Transaction<List<SOP>>() {
 			@Override
 			public List<SOP> execute(Connection conn) throws SQLException {
@@ -1165,7 +1259,7 @@ public class SqlDatabase {
 		});
 	}
 	
-	public List<SOP> findSOPbyAuthorID(int id) {
+	public List<SOP> findSOPbyAuthorID(final int id) {
 		return executeTransaction(new Transaction<List<SOP>>() {
 			@Override
 			public List<SOP> execute(Connection conn) throws SQLException {
@@ -1212,14 +1306,29 @@ public class SqlDatabase {
 		});
 	}
 	
-	//main method to generate the DB
-	public static void main(String[] args) throws IOException {
-		System.out.println("Creating tables ");
-		SqlDatabase db = new SqlDatabase(); 
-		db.createTables();
-		System.out.println("Users");
-		System.out.println("SOPs");
-		System.out.println("Positions");
+	public Boolean archiveSOP() {
+		// TODO
+		return false;
+	}
+
+	public SOP revertSOP(final SOP s) {
+		// TODO;
+		return null;
+	}
+	
+	public SOP findSOPbyPosition(final int position_id) {
+		// TODO
+		return null;
+	}
+	
+	public Position addSOPtoPosition(final int position_id, final int sop_id) {
+		// TODO;
+		return null;
+	}
+	
+	public SOP changeSOPPriority(final int sop_id, final int priority) {
+		// TODO
+		return null;
 	}
 	
 	public static void cleanDB(){
@@ -1336,5 +1445,16 @@ public class SqlDatabase {
 			}
 			
 		});
+	}
+	
+	//main method to generate the DB
+	public static void main(String[] args) throws IOException {
+		System.out.println("Creating tables ");
+		SqlDatabase db = new SqlDatabase(); 
+		db.createTables();
+		db.createDatabase();
+		System.out.println("Users");
+		System.out.println("SOPs");
+		System.out.println("Positions");
 	}
 }
