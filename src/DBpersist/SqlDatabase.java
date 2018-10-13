@@ -1015,18 +1015,147 @@ public class SqlDatabase {
 	}
 	
 	public Boolean archiveUser(final int user_id) {
-		// TODO
-		return true;
+		return executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT archive_flag FROM User where user_id = ?");
+					
+					stmt.setInt(1, user_id);
+					resultSet = stmt.executeQuery();
+					
+					boolean result = !resultSet.getBoolean(1);
+					
+					
+					stmt2 = conn.prepareStatement(
+							"UPDATE User SET archive_flag = ? WHERE user_id = ? ");
+					
+					stmt2.setBoolean(1, result);
+					stmt2.setInt(2, user_id);
+					stmt2.executeUpdate();
+					
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
 	}
 
 	public User changePosition(final int user_id, final int position_id) {
-		// TODO:
-		return null;
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE User SET position_id = ? WHERE user_id = ? ");
+					
+					stmt.setInt(1, position_id);
+					stmt.setInt(2, user_id);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM User WHERE user_id = ?");
+					
+					stmt2.setInt(1, user_id);
+					
+					resultSet = stmt2.executeQuery();
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+
+					if (!found) {
+						System.out.println("User with ID <" + user_id + "> was not found in the User table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
 	}
 	
 	public User findUserByPosition(final int position_id) {
-		// TODO:
-		return null;
+		return executeTransaction(new Transaction<User>() {
+			@Override
+			public User execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT * FROM User WHERE position_id = ?");
+					
+					stmt.setInt(1, position_id);
+					resultSet = stmt.executeQuery();
+
+					//if anything is found, return it in a list format
+					User result = new User(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setUserID(resultSet.getInt(1));
+						result.setEmail(resultSet.getString(2));
+						result.setPassword(resultSet.getString(3));
+						result.setFirstname(resultSet.getString(4));
+						result.setLastname(resultSet.getString(5));
+						result.setAdminFlag(resultSet.getString(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.getPosition().setID(resultSet.getInt(9));
+					}
+
+					// check if the title was found
+					if (!found) {
+						System.out.println("User with Position ID <" + position_id + "> was not found in the Users table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 		
 	public List<SOP> findAllSOPs() {
@@ -1306,13 +1435,102 @@ public class SqlDatabase {
 		});
 	}
 	
-	public Boolean archiveSOP() {
-		// TODO
-		return false;
+	public Boolean archiveSOP(final int sop_id) {
+		return executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"SELECT archive_flag FROM SOP where sop_id = ?");
+					
+					stmt.setInt(1, sop_id);
+					resultSet = stmt.executeQuery();
+					
+					boolean result = !resultSet.getBoolean(1);
+					
+					
+					stmt2 = conn.prepareStatement(
+							"UPDATE SOP SET archive_flag = ? WHERE sop_id = ? ");
+					
+					stmt2.setBoolean(1, result);
+					stmt2.setInt(2, sop_id);
+					stmt2.executeUpdate();
+					
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
 	}
 
-	public SOP revertSOP(final SOP s) {
-		// TODO;
+	public SOP revertSOP(final int sop_id, final int revision) {
+		return executeTransaction(new Transaction<SOP>() {
+			@Override
+			public SOP execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE SOP SET version = ? WHERE sop_id = ? ");
+					
+					stmt.setInt(1, revision);
+					stmt.setInt(2, sop_id);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE sop_id = ?");
+					
+					stmt2.setInt(1, sop_id);
+					
+					resultSet = stmt2.executeQuery();
+
+					SOP result = new SOP(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						result.setID(resultSet.getInt(1));
+						result.setName(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+						result.setRevision(resultSet.getInt(5));
+						result.setAuthorID(resultSet.getInt(7));
+					}
+
+
+					if (!found) {
+						System.out.println("SOP with ID <" + sop_id + "> was not found in the SOP table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
+	}
+	
+	public SOP findSOPthruPosition(final int user_id) {
+		// TODO: User -> Position -> requirements
 		return null;
 	}
 	
