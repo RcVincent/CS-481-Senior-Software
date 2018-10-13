@@ -45,11 +45,15 @@ public class CreatePositionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("Getting Position info from the webform");
 		
+		int priority = 0;
 		String positionTitle = req.getParameter("title");
 		String positionDescription = req.getParameter("description");
+		String Priority = req.getParameter("priority");
+		priority = Integer.parseInt(Priority);
 		
 		pc = new PositionController(); 
 		
+		//get the created position and error check it. 
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");

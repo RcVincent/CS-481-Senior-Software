@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,12 +54,18 @@ public class CreateSOPServlet extends HttpServlet{
 		int priority = 0; 
 		int authorID = 0; 
 		
+		 
 		
 		sopName = req.getParameter("title");
 		sopDescription = req.getParameter("description");
-		//priority = req.getParameter("priority");
-		//version = req.getParameter("revision");
-		//authorID = session.getAttribute("user_id"); 
+		
+		String Priority = req.getParameter("priority");
+		priority = Integer.parseInt(Priority);
+		
+		String Version = req.getParameter("revision");
+		version = Integer.parseInt(Version);
+
+		authorID = (int) session.getAttribute("user_id"); 
 		
 		sc = new SOPController(); 
 		
@@ -66,10 +73,30 @@ public class CreateSOPServlet extends HttpServlet{
 		
 		req.setAttribute("title", sopName);
 		req.setAttribute("description", sopDescription);
+		req.setAttribute("priority", priority);
+		req.setAttribute("version", version);
+		req.setAttribute("author_id", authorID);
 		//set the version, id, author id, 
 		
+		//test the sop we just made
+		List<SOP> test = sc.findSOPbyName(sopName); 
+		
+		if(test.isEmpty()) {
+			errorMessage = "There was no SOP with name" + sopName + "added to the database";
+			return; 
+		}else {
+			SOP testSOP = test.get(0); 
+			if(!sc.validSOP(testSOP)) {
+				errorMessage = "There is an invalid field in the sop, please try again"; 
+			}
+			else {
+				successMessage = "Succcessfully created SOP!";
+			}
+		}
 		
 		req.setAttribute("errorMessage", errorMessage);
+		
+		
 		req.setAttribute("successMessage" , successMessage);
 		
 		if(req.getParameter("index") != null) {

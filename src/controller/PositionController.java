@@ -17,7 +17,16 @@ public class PositionController {
 		
 	}
 
-   
+   public boolean validPosition(Position p) {
+	   if(p.getDescription() == "" || p.getDescription() == " " ||
+		  p.getTitle()	== "" | p.getTitle() == " " ||
+		  p.getID() <= 0 || p.getPriority() <= 0) {
+		   return false; 
+	   }
+	   else {
+		   return true; 
+	   }
+   }
 
 	public SOP getApplicantSOPs(User u) {
 		
