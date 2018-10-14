@@ -1614,9 +1614,26 @@ public class SqlDatabase {
 		});
 	}
 	
-	public Position addSOPtoPosition(final int position_id, final int sop_id) {
-		// TODO;
-		return null;
+	public Boolean addSOPtoPosition(final int position_id, final int sop_id) {
+		return executeTransaction(new Transaction<Boolean>(){
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"insert into PositionSOP (position_id, sop_id) values (?, ?)");
+					stmt.setInt(1, position_id);
+					stmt.setInt(2, sop_id);
+					
+					stmt.executeUpdate();
+					
+					return true;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 	
 	public SOP changeSOPPriority(final int sop_id, final int priority) {
