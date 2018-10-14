@@ -7,7 +7,7 @@ public class User {
 	private boolean ArchiveFlag, validUser; 
 	private boolean loggedin;
 	private String AdminFlag, Firstname, Lastname; 
-	
+	private String sessionid;
 	/// Constructor(s)
 	public User() {
 		
@@ -101,6 +101,14 @@ public class User {
 
 	public void setLastname(String lastname) {
 		Lastname = lastname;
+	}
+
+	public String getSessionid() {
+		return sessionid;
+	}
+
+	public void setSessionid(String sessionid) {
+		this.sessionid = sessionid;
 	}
 
 }
