@@ -16,6 +16,46 @@ import model.User;
 
 public class InitialData {
 
+
+	//Position db will be for authentication and hold primary key for positions
+	public static List<Position> getPositions() throws IOException {
+
+		//read the Position file
+		List<Position> positionList = new ArrayList<Position>();
+		ReadCSV readPosition = new ReadCSV("Positions.csv");
+		System.out.println("about to loop position csv");
+		try {
+			//set this id, and auto generate them: they are not unique to the table anymore
+			Integer positionId = 1;
+			while(true) {
+				List<String> tuple = readPosition.next();
+				if(tuple == null) {
+					System.out.println("breaking for empty");
+					break;
+
+				}
+				System.out.println("Looping Position");
+				Iterator<String> i = tuple.iterator();
+				Position position = new Position();
+
+				position.setID(positionId++);
+				position.setTitle(i.next());
+				position.setDescription(i.next());
+				position.setPriority(Integer.parseInt(i.next()));
+				
+				/*position_id, title, description, priority*/
+				
+				positionList.add(position);
+
+			}
+			System.out.println("position List loaded from the CSV file");
+			return positionList;
+		}
+		finally {
+			readPosition.close();
+		}
+
+	}
 	//user db will be for authentication and hold a primary key for users and admins
 	public static List<User> getUsers() throws IOException {
 		//read the users file
@@ -35,13 +75,17 @@ public class InitialData {
 
 				// read User ID from CSV file, but don't use it
 				// auto-generate User ID, instead
-				user.setUserID(userId++);				
+				user.setUserID(userId++);	
+				user.setEmail(i.next());			
 				user.setPassword(i.next());
-				user.setEmail(i.next());
-				//user.setAdminFlag(i.next());
-				//user.setFirstName(i.next());
-				//user.setLastName(i.next());
+				user.setFirstname(i.next());
+				user.setLastname(i.next());
+				user.setAdminFlag(i.next());
+				user.setArchiveFlag(Boolean.parseBoolean(i.next()));
+				// Figure out the proper way to do position, use position by id query?
 				userList.add(user);
+				/*user_id, email, password, first_name, last_name
+				 * admin_flag, archive_flag, create_time, position_id*/
 			}
 
 			System.out.println("UserList loaded from CSV file");	
@@ -70,11 +114,17 @@ public class InitialData {
 				System.out.println("taking the data from ReadCSV and adding it");
 
 				Iterator<String> i = tuple.iterator();
-				//SOP sop = new SOP(//sopID++, i.next(), );
+				SOP sop = new SOP();
 
-				//we can use this or use the classes getters and setters
-
-				//sopList.add(sop);
+				sop.setID(sopId++);
+				sop.setName(i.next());
+				sop.setDescription((i.next()));
+				sop.setPriority(Integer.parseInt(i.next()));
+				sop.setRevision(Integer.parseInt(i.next()));
+				sop.setAuthorID(Integer.parseInt(i.next()));
+				sop.setArchiveFlag(Boolean.parseBoolean(i.next()));
+				
+				/*sop_id, title, description, priority, version, author_id, archive_flag*/
 
 			}
 			System.out.println("SOPList loaded from the CSV file");
@@ -84,44 +134,4 @@ public class InitialData {
 			readSOP.close();
 		}
 	}
-	//Position db will be for authentication and hold primary key for positions
-	public static List<Position> getPositions() throws IOException {
-
-		//read the Position file
-		List<Position> positionList = new ArrayList<Position>();
-		ReadCSV readPosition = new ReadCSV("Positions.csv");
-		System.out.println("about to loop position csv");
-		try {
-			//set this id, and auto generate them: they are not unique to the table anymore
-			Integer positionId = 1;
-			while(true) {
-				List<String> tuple = readPosition.next();
-				if(tuple == null) {
-					System.out.println("breaking for empty");
-					break;
-
-				}
-				System.out.println("Looping Position");
-				Iterator<String> i = tuple.iterator();
-				Position position = new Position();
-
-				//using the getters and setters in here 
-
-				positionList.add(position);
-
-
-			}
-			System.out.println("position List loaded from the CSV file");
-			return positionList;
-		}
-		finally {
-			readPosition.close();
-		}
-
-	}
-	
-	
-	
-
-
 }
