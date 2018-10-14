@@ -2,13 +2,13 @@ package edu.ycp.cs481.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ycp.cs481.db.SqlDatabase;
+import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
 
 public class UserController {
 	User U = new User();
-	SqlDatabase db = new SqlDatabase(); 
+	Database db = new Database(); 
 	
 	public UserController() {
 		

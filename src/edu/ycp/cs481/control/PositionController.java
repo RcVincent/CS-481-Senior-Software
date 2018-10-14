@@ -2,14 +2,14 @@ package edu.ycp.cs481.control;
 
 import java.util.List;
 
-import edu.ycp.cs481.db.SqlDatabase;
+import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
 public class PositionController {
 	private Position p;
-	SqlDatabase db = new SqlDatabase(); 
+	Database db = new Database(); 
 	
 	public PositionController() {
 		

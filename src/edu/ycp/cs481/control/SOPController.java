@@ -1,13 +1,13 @@
 package edu.ycp.cs481.control;
 import java.util.List;
 
-import edu.ycp.cs481.db.SqlDatabase;
+import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.SOP;
 
 public class SOPController {
 	SOP sop1 = new SOP("Testing purposes", "For testing", 4, 1, 123, 2, false); 
 	SOP sop2 = new SOP();
-	SqlDatabase db = new SqlDatabase(); 
+	Database db = new Database(); 
 	
 	
 	

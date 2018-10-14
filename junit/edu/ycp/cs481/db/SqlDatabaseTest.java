@@ -10,14 +10,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.ycp.cs481.control.PositionController;
-import edu.ycp.cs481.db.SqlDatabase;
+import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
 public class SqlDatabaseTest {
 
-	private SqlDatabase db;
+	private Database db;
 	private Position p1, p2, p3;
 	private SOP s1, s2, s3;
 	private User u1, u2, u3;
@@ -28,18 +28,18 @@ public class SqlDatabaseTest {
 	@BeforeClass
 	public static void cleanBefore(){
 		// Clean the database in case someone/something else messed with it
-		SqlDatabase.cleanDB();
+		Database.cleanDB();
 	}
 	
 	@AfterClass
 	public static void cleanAfter(){
 		// Clean the database for the next person
-		SqlDatabase.cleanDB();
+		Database.cleanDB();
 	}
 	
 	@Before
 	public void setUp(){
-		db = new SqlDatabase();
+		db = new Database();
 		
 		p1 = new Position();
 		p1.setID(1);

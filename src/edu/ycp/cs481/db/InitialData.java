@@ -138,8 +138,8 @@ public class InitialData {
 		}
 	}
 	
-	public static List<Pair<Position, SOP>> getPosSOPs() throws IOException {
+	/*public static List<Pair<Position, SOP>> getPosSOPs() throws IOException {
 		// TODO:
 		return null;
-	}
+	}*/
 }

@@ -14,7 +14,7 @@ import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
-public class SqlDatabase {
+public class Database {
 	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -78,7 +78,113 @@ public class SqlDatabase {
 		return conn;
 	}
 	
-	public void createTables() {
+	/*
+	 * This method is used in executing a list of updates to the database (e.g. create tables, insert data, etc.)
+	 */
+	public boolean executeUpdates(ArrayList<String> names, ArrayList<String> sqls){
+		return executeTransaction(new Transaction<Boolean>(){
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				ArrayList<Statement> stmts = new ArrayList<Statement>();
+				try{
+					boolean hasNames = names != null;
+					if(hasNames && names.size() != sqls.size()){
+						throw new IllegalArgumentException("Must have all sql statements named or pass null names array!");
+					}
+					for(int i = 0; i < sqls.size(); i++){
+						if(hasNames){
+							System.out.println("Starting " + names.get(i));
+						}
+						stmts.add(conn.createStatement());
+						stmts.get(i).executeUpdate(sqls.get(i));
+						if(hasNames){
+							System.out.println("Finished " + names.get(i));
+						}
+					}
+					return true;
+				}finally{
+					for(Statement stmt: stmts){
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			}
+		});
+	}
+	
+	public boolean executeUpdate(String name, String sql){
+		ArrayList<String> names = new ArrayList<String>();
+		names.add(name);
+		
+		ArrayList<String> sqls = new ArrayList<String>();
+		sqls.add(sql);
+		
+		return executeUpdates(names, sqls);
+	}
+	
+	public void createTables(){
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> sqls = new ArrayList<String>();
+		
+		names.add("Create Position table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Position (" +
+				 "position_id INT NOT NULL AUTO_INCREMENT," +
+				 "title VARCHAR(80) NOT NULL," +
+				 "description VARCHAR(255) NOT NULL," +
+				 "priority INT NOT NULL," +
+				 "PRIMARY KEY (position_id)," +
+				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);");
+		
+		names.add("Create Users table");
+		sqls.add("CREATE TABLE IF NOT EXISTS User (" +
+				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "email VARCHAR(255) NOT NULL," +
+				  "password VARCHAR(32) NOT NULL, " +
+				  "first_name VARCHAR(80) NOT NULL, " +
+				  "last_name VARCHAR(80) NOT NULL, " +
+				  "admin_flag VARCHAR(32) NOT NULL, " +
+				  "archive_flag TINYINT NOT NULL, " +
+				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+				  "position_id INT NOT NULL, " +
+				  "PRIMARY KEY (user_id), " +
+				  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
+				  "INDEX fk_User_Position_idx (position_id ASC) VISIBLE, " +
+				  "CONSTRAINT User_Position " +
+				  "FOREIGN KEY (position_id) " +
+				  "REFERENCES Position (position_id) " +
+				  "ON DELETE NO ACTION " +
+				  "ON UPDATE NO ACTION);");
+		
+		names.add("Create SOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS SOP (" +
+				  "sop_id INT NOT NULL AUTO_INCREMENT, " +
+				  "title VARCHAR(80) NOT NULL, " +
+				  "description VARCHAR(255) NOT NULL, " +
+				  "priority INT NOT NULL, " +
+				  "version INT NOT NULL, " +
+//				  "filepath VARCHAR(255) NOT NULL, " +
+				  "author_id INT NOT NULL, " +
+				  "archive_flag TINYINT NOT NULL, " +
+				  "PRIMARY KEY (sop_id), " +
+				  "UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
+				  "INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
+				  "CONSTRAINT fk_SOP_User1 " +
+				  "FOREIGN KEY (author_id) " +
+				  "REFERENCES User (user_id) " +
+				  "ON DELETE NO ACTION " +
+				  "ON UPDATE NO ACTION);");
+		
+		names.add("Create PositionSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS PositionSOP (" +
+					"position_id INT NOT NULL, " +
+					"sop_id INT NOT NULL, " +
+					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+					");");
+		
+		executeUpdates(names, sqls);
+	}
+	
+	public void oldCreateTables() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
@@ -1694,7 +1800,7 @@ public class SqlDatabase {
 	}
 	
 	public static void cleanDB(){
-		SqlDatabase db = new SqlDatabase();
+		Database db = new Database();
 		System.out.println("Recreating Database...");
 		db.recreateDB();
 		System.out.println("Creating Tables again...");
@@ -1738,13 +1844,13 @@ public class SqlDatabase {
 	}
 	
 	public static void testDB(){
-		SqlDatabase db = new SqlDatabase();
+		Database db = new Database();
 		db.createTestDB();
 		db.createTables();
 	}
 	
 	public static void delTestDB() {
-		SqlDatabase db = new SqlDatabase();
+		Database db = new Database();
 		db.deleteTestDB();
 	}
 	
@@ -1810,11 +1916,11 @@ public class SqlDatabase {
 	}
 	
 	//main method to generate the DB
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException{
 		System.out.println("Creating tables ");
-		SqlDatabase db = new SqlDatabase(); 
-		db.createTables();
+		Database db = new Database();
 		db.createDatabase();
+		db.createTables();
 		System.out.println("Users");
 		System.out.println("SOPs");
 		System.out.println("Positions");
