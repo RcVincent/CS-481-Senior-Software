@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 import model.Position;
 import model.SOP;
 import model.User;
@@ -37,6 +38,7 @@ public class InitialData {
 				System.out.println("Looping Position");
 				Iterator<String> i = tuple.iterator();
 				Position position = new Position();
+				Integer.parseInt(i.next());
 
 				position.setID(positionId++);
 				position.setTitle(i.next());
@@ -72,6 +74,7 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();
 				User user = new User();
+				Integer.parseInt(i.next());
 
 				// read User ID from CSV file, but don't use it
 				// auto-generate User ID, instead
@@ -115,6 +118,7 @@ public class InitialData {
 
 				Iterator<String> i = tuple.iterator();
 				SOP sop = new SOP();
+				Integer.parseInt(i.next());
 
 				sop.setID(sopId++);
 				sop.setName(i.next());
@@ -133,5 +137,10 @@ public class InitialData {
 		finally {
 			readSOP.close();
 		}
+	}
+	
+	public static List<Pair<Position, SOP>> getPosSOPs() throws IOException {
+		// TODO:
+		return null;
 	}
 }
