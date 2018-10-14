@@ -269,7 +269,7 @@ public class SqlDatabase {
 						insertUser.addBatch();
 					}
 					
-					System.out.println("User table populated");
+					System.out.println("SOP table populated");
 					// TODO:  PositionSOP junction table
 					return true;
 				} finally {
