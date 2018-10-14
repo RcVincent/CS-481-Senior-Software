@@ -67,6 +67,10 @@ public class PositionController {
 		return db.changePositionPriority(p, priority);
 	}
 	
+	public Integer insertPosition(Position p) {
+		return db.insertPosition(p);
+	}
+	
 	
 	
 	
