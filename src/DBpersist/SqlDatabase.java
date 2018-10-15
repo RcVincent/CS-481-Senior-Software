@@ -204,6 +204,103 @@ public class SqlDatabase {
 				List<Position> posList;
 				List<SOP> SOPList;
 				
+				userList       = InitialData.getInitialUsers();
+				posList		   = InitialData.getInitialPositions();
+				SOPList		   = InitialData.getInitialSOPs();
+			
+
+				PreparedStatement insertUser       = null;
+				PreparedStatement insertPos		   = null;
+				PreparedStatement insertSOP	       = null;
+				PreparedStatement insertPosSOP	   = null;
+
+				try {
+					// Insert Positions
+					insertPos = conn.prepareStatement(
+							"insert into Position "
+							+ "(title, description, priority)"
+							+ " values (?, ?, ?)"
+					);
+					for (Position p : posList) {
+						insertPos.setString(1, p.getTitle());
+						insertPos.setString(2, p.getDescription());
+						insertPos.setInt(3, p.getPriority());
+						insertPos.addBatch();
+					}
+					insertPos.executeBatch();
+					
+					System.out.println("Position table populated");
+					
+					// Insert Users
+					insertUser = conn.prepareStatement(
+							"insert into User "
+							+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
+							+ " values (?, ?, ?, ?, ?, ?, ?)"
+					);
+					for (User u : userList) {
+						insertUser.setString(1, u.getEmail());
+						insertUser.setString(2, u.getPassword());
+						insertUser.setString(3, u.getFirstname());
+						insertUser.setString(4, u.getLastname());
+						insertUser.setString(5, u.isAdminFlag());
+						insertUser.setBoolean(6, u.isArchiveFlag());
+						insertUser.setInt(7, u.getPosition().getID());
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					System.out.println("User table populated");
+					
+					// Insert SOPs
+					insertSOP = conn.prepareStatement(
+							"insert into SOP "
+							+ "(title, description, priority, version, author_id, archive_flag)"
+							+ " values (?, ?, ?, ?, ?, ?)"
+					);
+					for (SOP s : SOPList) {
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
+					}
+					
+					System.out.println("SOP table populated");
+
+					// TODO
+					/*// Insert PositionSOPs
+					insertPosSOP = conn.prepareStatement(
+							"insert into PositionSOP "
+							+ "(position_id, sop_id)"
+							+ " values (?, ?)"
+					);
+					for (Position p: posList) {
+						insertPosSOP.setInt(1, p.getID());
+						insertPosSOP.setInt(2, p.getRequirements());
+					}
+					*/
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertPos);
+					DBUtil.closeQuietly(insertSOP);
+					DBUtil.closeQuietly(insertPosSOP);
+				}
+			}
+		});
+	}
+
+	
+	/*public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Position> posList;
+				List<SOP> SOPList;
+				
 				try {
 					userList       = InitialData.getUsers();
 					posList		   = InitialData.getPositions();
@@ -260,13 +357,13 @@ public class SqlDatabase {
 							+ " values (?, ?, ?, ?, ?, ?)"
 					);
 					for (SOP s : SOPList) {
-						insertUser.setString(1, s.getName());
-						insertUser.setString(2, s.getDescription());
-						insertUser.setInt(3, s.getPriority());
-						insertUser.setInt(4, s.getRevision());
-						insertUser.setInt(5, s.getAuthorID());
-						insertUser.setBoolean(6, s.getArchiveFlag());
-						insertUser.addBatch();
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
 					}
 					
 					System.out.println("SOP table populated");
@@ -279,7 +376,7 @@ public class SqlDatabase {
 				}
 			}
 		});
-}
+	}*/
 
 	public Integer insertPosition(final Position p) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -1813,8 +1910,9 @@ public class SqlDatabase {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables ");
 		SqlDatabase db = new SqlDatabase(); 
+		//db.createDatabase();
 		db.createTables();
-		db.createDatabase();
+		db.loadInitialData();
 		System.out.println("Users");
 		System.out.println("SOPs");
 		System.out.println("Positions");
