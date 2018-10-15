@@ -67,7 +67,7 @@ public class SqlDatabaseTest {
 		s1.setDescription("Do it now");
 		s1.setPriority(2);
 		s1.setRevision(1);
-		s1.setAuthorID(p1.getID());
+		s1.setAuthorID(1);
 		s1.setArchiveFlag(true);
 		
 		s2 = new SOP();
@@ -75,8 +75,8 @@ public class SqlDatabaseTest {
 		s2.setName("Do different stuff");
 		s2.setDescription("Do it now");
 		s2.setPriority(2);
-		s2.setRevision(2);
-		s2.setAuthorID(p1.getID());
+		s2.setRevision(1);
+		s2.setAuthorID(1);
 		s2.setArchiveFlag(false);
 		
 		s3 = new SOP();
@@ -85,7 +85,7 @@ public class SqlDatabaseTest {
 		s3.setDescription("Do it yesterday");
 		s3.setPriority(1);
 		s3.setRevision(1);
-		s3.setAuthorID(p2.getID());
+		s3.setAuthorID(1);
 		s3.setArchiveFlag(false);
 
 		querySOP = new ArrayList<SOP>();
@@ -98,7 +98,7 @@ public class SqlDatabaseTest {
 		u1.setLastname("Norris");
 		u1.setAdminFlag("true");
 		u1.setArchiveFlag(false);
-		u1.setPosition(p1);
+		u1.setPosition(db.findAllPositions().get(0));
 		
 		u2 = new User();
 		u3 = new User();
@@ -153,7 +153,7 @@ public class SqlDatabaseTest {
 		
 		assertEquals(u1.isArchiveFlag(), queryUser.get(queryUser.size()-1).isArchiveFlag());
 	
-		assertEquals(u1.getPosition().getID(), queryUser.get(queryUser.size()-1).getPosition().getID());
+		assertEquals(u1.getPosition().getID(), queryUser.get(0).getPosition().getID());
 	}
 	
 	@Test
@@ -185,8 +185,8 @@ public class SqlDatabaseTest {
 		assertEquals(s3.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
 
 		assertEquals(s1.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
-		assertEquals(s2.getAuthorID(), querySOP.get(querySOP.size()-2).getAuthorID());
-		assertEquals(s3.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
+		assertEquals(s2.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
+		assertEquals(s3.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
 		
 		assertEquals(s1.getArchiveFlag(), querySOP.get(querySOP.size()-3).getArchiveFlag());
 		assertEquals(s2.getArchiveFlag(), querySOP.get(querySOP.size()-2).getArchiveFlag());
