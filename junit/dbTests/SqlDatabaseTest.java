@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import DBpersist.InitialData;
 import DBpersist.SqlDatabase;
 import controller.PositionController;
 import model.Position;
@@ -193,23 +194,127 @@ public class SqlDatabaseTest {
 		assertEquals(s3.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());	
 	}
 	
+	// Testing for our initial data, to ensure that all of our inserts were parsed correctly
 	@Test
-	public void testGetAllUsers() {
-		
+	public void testFindAllUsers() {
+		queryUser = db.findAllUsers();
+		int numUsers = queryUser.size();
+		assertEquals(new InitialData().getInitialUsers().size(), numUsers);
 	}
 	
 	@Test
 	public void testGetAllPositions() {
-		
+		queryPos = db.findAllPositions();
+		int numPositions = queryPos.size();
+		assertEquals(new InitialData().getInitialPositions().size(), numPositions);
 	}
 	
 	@Test
 	public void testGetAllSOPs() {
+		querySOP = db.findAllSOPs();
+		int numSOPs = querySOP.size();
+		assertEquals(new InitialData().getInitialSOPs().size(), numSOPs);
+	}
+	
+	@Test
+	public void testFindPositionByID() {
+		queryPos = db.findAllPositions();
+		
+		for(Position p : queryPos) {
+			assertEquals(p.getID(), db.findPositionByID(p.getID()).getID());
+			assertEquals(p.getTitle(), db.findPositionByID(p.getID()).getTitle());
+			assertEquals(p.getDescription(), db.findPositionByID(p.getID()).getDescription());
+			assertEquals(p.getPriority(), db.findPositionByID(p.getID()).getPriority());
+		}
+	}
+	
+	@Test
+	public void testFindSOPByID() {
+		querySOP = db.findAllSOPs();
+		
+		for(SOP s : querySOP) {
+			assertEquals(s.getID(), db.findSOPbyID(s.getID()).getID());
+			assertEquals(s.getName(), db.findSOPbyID(s.getID()).getName());
+			assertEquals(s.getDescription(), db.findSOPbyID(s.getID()).getDescription());
+			assertEquals(s.getPriority(), db.findSOPbyID(s.getID()).getPriority());
+			assertEquals(s.getRevision(), db.findSOPbyID(s.getID()).getRevision());
+			assertEquals(s.getAuthorID(), db.findSOPbyID(s.getID()).getAuthorID());
+			assertEquals(s.getArchiveFlag(), db.findSOPbyID(s.getID()).getArchiveFlag());
+		}
+	}
+	
+	@Test
+	public void testFindSOPbyAuthorID() {
 		
 	}
 	
 	@Test
-	public void testGetPositionByID() {
+	public void testFindSOPbyName() {
+		
+	}
+	
+	@Test
+	public void testFindSOPbyPosition() {
+		
+	}
+	
+	@Test
+	public void testFindSOPbyPriority() {
+		
+	}
+	
+	@Test
+	public void testFindSOPbyVersion() {
+		
+	}
+	
+	@Test
+	public void testFindSOPthruPosition() {
+		
+	}
+	
+	@Test
+	public void testFindUserByPosition() {
+		
+	}
+	
+	@Test
+	public void testGetPositionByName() {
+		
+	}
+	
+	@Test
+	public void testGetPositionByPriority() {
+		
+	}
+	
+	@Test
+	public void testGetPositionBySOPID() {
+		
+	}
+	
+	@Test
+	public void testGetPositionByUser() {
+		
+	}
+	
+	@Test
+	public void testGetUserByEmail() {
+		
+	}
+	
+	@Test
+	public void testGetUserByFirstname() {
+		
+	}
+	
+	@Test
+	public void testGetUserByLastname() {
+		
+	}
+	
+	@Test
+	public void testGetUserByID() {
 		
 	}
 }
