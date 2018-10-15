@@ -859,7 +859,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -908,7 +908,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -957,7 +957,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1006,7 +1006,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1066,7 +1066,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1127,7 +1127,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1223,7 +1223,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 
@@ -1272,7 +1272,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
