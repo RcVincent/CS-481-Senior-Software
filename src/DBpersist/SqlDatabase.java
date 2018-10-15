@@ -1798,10 +1798,8 @@ public class SqlDatabase {
 		db.recreateDB();
 		System.out.println("Creating Tables again...");
 		db.createTables();
-		// TODO: Load Initial Data (Currently method isn't setup)
-		/*System.out.println("Loading initial data...");
+		System.out.println("Loading initial data...");
 		db.loadInitialData();
-		*/
 		System.out.println("Database cleaned.");
 	}
 	

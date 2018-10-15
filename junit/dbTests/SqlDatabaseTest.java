@@ -42,19 +42,19 @@ public class SqlDatabaseTest {
 		db = new SqlDatabase();
 		
 		p1 = new Position();
-		p1.setID(1);
+		p1.setID(3);
 		p1.setTitle("CEO");
 		p1.setDescription("Does stuff");
 		p1.setPriority(1);
 		
 		p2 = new Position();
-		p2.setID(2);
+		p2.setID(4);
 		p2.setTitle("Programmer");
 		p2.setDescription("Does more stuff");
 		p2.setPriority(2);
 		
 		p3 = new Position();
-		p3.setID(3);
+		p3.setID(5);
 		p3.setTitle("Debugger");
 		p3.setDescription("Fixes bugs");
 		p3.setPriority(2);
@@ -62,7 +62,7 @@ public class SqlDatabaseTest {
 		queryPos = new ArrayList<Position>();
 		
 		s1 = new SOP();
-		s1.setID(1);
+		s1.setID(3);
 		s1.setName("Do stuff");
 		s1.setDescription("Do it now");
 		s1.setPriority(2);
@@ -71,7 +71,7 @@ public class SqlDatabaseTest {
 		s1.setArchiveFlag(true);
 		
 		s2 = new SOP();
-		s2.setID(2);
+		s2.setID(4);
 		s2.setName("Do different stuff");
 		s2.setDescription("Do it now");
 		s2.setPriority(2);
@@ -80,7 +80,7 @@ public class SqlDatabaseTest {
 		s2.setArchiveFlag(false);
 		
 		s3 = new SOP();
-		s3.setID(3);
+		s3.setID(5);
 		s3.setName("Do more stuff");
 		s3.setDescription("Do it yesterday");
 		s3.setPriority(1);
@@ -91,7 +91,7 @@ public class SqlDatabaseTest {
 		querySOP = new ArrayList<SOP>();
 		
 		u1 = new User();
-		u1.setUserID(1);
+		u1.setUserID(3);
 		u1.setEmail("CEO@Google.com");
 		u1.setPassword("beard");
 		u1.setFirstname("Chuck");
@@ -114,21 +114,21 @@ public class SqlDatabaseTest {
 		
 		queryPos = db.findAllPositions();
 		
-		assertEquals(p1.getID(), queryPos.get(0).getID());
-		assertEquals(p2.getID(), queryPos.get(1).getID());
-		assertEquals(p3.getID(), queryPos.get(2).getID());
+		assertEquals(p1.getID(), queryPos.get(queryPos.size()-3).getID());
+		assertEquals(p2.getID(), queryPos.get(queryPos.size()-2).getID());
+		assertEquals(p3.getID(), queryPos.get(queryPos.size()-1).getID());
 		
-		assertEquals(p1.getTitle(), queryPos.get(0).getTitle());
-		assertEquals(p2.getTitle(), queryPos.get(1).getTitle());
-		assertEquals(p3.getTitle(), queryPos.get(2).getTitle());
+		assertEquals(p1.getTitle(), queryPos.get(queryPos.size()-3).getTitle());
+		assertEquals(p2.getTitle(), queryPos.get(queryPos.size()-2).getTitle());
+		assertEquals(p3.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
 		
-		assertEquals(p1.getDescription(), queryPos.get(0).getDescription());
-		assertEquals(p2.getDescription(), queryPos.get(1).getDescription());
-		assertEquals(p3.getDescription(), queryPos.get(2).getDescription());
+		assertEquals(p1.getDescription(), queryPos.get(queryPos.size()-3).getDescription());
+		assertEquals(p2.getDescription(), queryPos.get(queryPos.size()-2).getDescription());
+		assertEquals(p3.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
 		
-		assertEquals(p1.getPriority(), queryPos.get(0).getPriority());
-		assertEquals(p2.getPriority(), queryPos.get(1).getPriority());
-		assertEquals(p3.getPriority(), queryPos.get(2).getPriority());
+		assertEquals(p1.getPriority(), queryPos.get(queryPos.size()-3).getPriority());
+		assertEquals(p2.getPriority(), queryPos.get(queryPos.size()-2).getPriority());
+		assertEquals(p3.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
 	}
 	
 	@Test
