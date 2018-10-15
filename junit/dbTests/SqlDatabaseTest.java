@@ -200,20 +200,58 @@ public class SqlDatabaseTest {
 		queryUser = db.findAllUsers();
 		int numUsers = queryUser.size();
 		assertEquals(new InitialData().getInitialUsers().size(), numUsers);
+		
+		int i = 0;
+		
+		for(User u: queryUser) {
+			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			i++;
+		}
 	}
 	
 	@Test
-	public void testGetAllPositions() {
+	public void testFindAllPositions() { // Will fail if testInsertPosition is called first
 		queryPos = db.findAllPositions();
 		int numPositions = queryPos.size();
-		assertEquals(new InitialData().getInitialPositions().size(), numPositions);
+		assertEquals(new InitialData().getInitialPositions().size(), numPositions); 
+		
+		int i = 0;
+		
+		for(Position p: queryPos) {
+			assertEquals(p.getID(), new InitialData().getInitialPositions().get(i).getID());
+			assertEquals(p.getTitle(), new InitialData().getInitialPositions().get(i).getTitle());
+			assertEquals(p.getDescription(), new InitialData().getInitialPositions().get(i).getDescription());
+			assertEquals(p.getPriority(), new InitialData().getInitialPositions().get(i).getPriority());
+			
+			// Make sure we don't get a null pointer exception
+			if(i < new InitialData().getInitialPositions().size())
+				i++;
+		}
 	}
 	
 	@Test
-	public void testGetAllSOPs() {
+	public void testFindAllSOPs() { // TODO
 		querySOP = db.findAllSOPs();
 		int numSOPs = querySOP.size();
 		assertEquals(new InitialData().getInitialSOPs().size(), numSOPs);
+		
+		int i = 0;
+		
+		for(SOP s: querySOP) {
+			assertEquals(s.getID(), new InitialData().getInitialSOPs().get(i).getID());
+			assertEquals(s.getName(), new InitialData().getInitialSOPs().get(i).getName());
+			assertEquals(s.getDescription(), new InitialData().getInitialSOPs().get(i).getDescription());
+			assertEquals(s.getPriority(), new InitialData().getInitialSOPs().get(i).getPriority());
+			assertEquals(s.getRevision(), new InitialData().getInitialSOPs().get(i).getRevision());
+			assertEquals(s.getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
+			assertEquals(s.getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
+			
+			if(i < new InitialData().getInitialSOPs().size())
+				i++;
+		}
 	}
 	
 	@Test
@@ -245,76 +283,96 @@ public class SqlDatabaseTest {
 	
 	@Test
 	public void testFindSOPbyAuthorID() {
+		querySOP = db.findAllSOPs();
 		
+				
 	}
 	
 	@Test
 	public void testFindSOPbyName() {
-		
+		querySOP = db.findAllSOPs();
 	}
 	
 	@Test
 	public void testFindSOPbyPosition() {
-		
+		querySOP = db.findAllSOPs();
 	}
 	
 	@Test
 	public void testFindSOPbyPriority() {
-		
+		querySOP = db.findAllSOPs();
 	}
 	
 	@Test
 	public void testFindSOPbyVersion() {
-		
+		querySOP = db.findAllSOPs();
 	}
 	
 	@Test
 	public void testFindSOPthruPosition() {
-		
+		querySOP = db.findAllSOPs();
 	}
 	
 	@Test
 	public void testFindUserByPosition() {
-		
+		queryUser = db.findAllUsers();
 	}
 	
 	@Test
 	public void testGetPositionByName() {
+		queryPos = db.findAllPositions();
 		
 	}
 	
 	@Test
 	public void testGetPositionByPriority() {
+		queryPos = db.findAllPositions();
 		
 	}
 	
 	@Test
 	public void testGetPositionBySOPID() {
+		queryPos = db.findAllPositions();
 		
 	}
 	
 	@Test
 	public void testGetPositionByUser() {
+		queryPos = db.findAllPositions();
 		
 	}
 	
 	@Test
 	public void testGetUserByEmail() {
+		queryUser = db.findAllUsers();
 		
 	}
 	
 	@Test
 	public void testGetUserByFirstname() {
+		queryUser = db.findAllUsers();
 		
 	}
 	
 	@Test
 	public void testGetUserByLastname() {
+		queryUser = db.findAllUsers();
 		
 	}
 	
 	@Test
-	public void testGetUserByID() {
+	public void testGetUserByID() { // TODO
+		queryUser = db.findAllUsers();
 		
+		for(User u: queryUser) {
+			assertEquals(u.getUserID(), db.getUserByID(u.getUserID()).getUserID());
+			assertEquals(u.getEmail(), db.getUserByID(u.getUserID()).getEmail());
+			assertEquals(u.getPassword(), db.getUserByID(u.getUserID()).getPassword());
+			assertEquals(u.getFirstname(), db.getUserByID(u.getUserID()).getFirstname());
+			assertEquals(u.getLastname(), db.getUserByID(u.getUserID()).getLastname());
+			assertEquals(u.isAdminFlag(), db.getUserByID(u.getUserID()).isAdminFlag());
+			assertEquals(u.isArchiveFlag(), db.getUserByID(u.getUserID()).isArchiveFlag());
+			assertEquals(u.getPosition().getID(), db.getUserByID(u.getUserID()).getPosition().getID());
+		}
 	}
 }
