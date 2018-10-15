@@ -139,21 +139,21 @@ public class SqlDatabaseTest {
 		
 		queryUser = db.findAllUsers();
 
-		assertEquals(u1.getUserID(), queryUser.get(0).getUserID());
+		assertEquals(u1.getUserID(), queryUser.get(queryUser.size()-1).getUserID());
 
-		assertEquals(u1.getEmail(), queryUser.get(0).getEmail());
+		assertEquals(u1.getEmail(), queryUser.get(queryUser.size()-1).getEmail());
 		
-		assertEquals(u1.getPassword(), queryUser.get(0).getPassword());
+		assertEquals(u1.getPassword(), queryUser.get(queryUser.size()-1).getPassword());
 
-		assertEquals(u1.getFirstname(), queryUser.get(0).getFirstname());
+		assertEquals(u1.getFirstname(), queryUser.get(queryUser.size()-1).getFirstname());
 
-		assertEquals(u1.getLastname(), queryUser.get(0).getLastname());
+		assertEquals(u1.getLastname(), queryUser.get(queryUser.size()-1).getLastname());
 
-		assertEquals(u1.isAdminFlag(), queryUser.get(0).isAdminFlag());
+		assertEquals(u1.isAdminFlag(), queryUser.get(queryUser.size()-1).isAdminFlag());
 		
-		assertEquals(u1.isArchiveFlag(), queryUser.get(0).isArchiveFlag());
+		assertEquals(u1.isArchiveFlag(), queryUser.get(queryUser.size()-1).isArchiveFlag());
 	
-		assertEquals(u1.getPosition().getID(), queryUser.get(0).getPosition().getID());
+		assertEquals(u1.getPosition().getID(), queryUser.get(queryUser.size()-1).getPosition().getID());
 	}
 	
 	@Test
@@ -164,33 +164,33 @@ public class SqlDatabaseTest {
 		
 		querySOP = db.findAllSOPs();
 		
-		assertEquals(s1.getID(), querySOP.get(0).getID());
-		assertEquals(s2.getID(), querySOP.get(1).getID());
-		assertEquals(s3.getID(), querySOP.get(2).getID());
+		assertEquals(s1.getID(), querySOP.get(querySOP.size()-3).getID());
+		assertEquals(s2.getID(), querySOP.get(querySOP.size()-2).getID());
+		assertEquals(s3.getID(), querySOP.get(querySOP.size()-1).getID());
 		
-		assertEquals(s1.getName(), querySOP.get(0).getName());
-		assertEquals(s2.getName(), querySOP.get(1).getName());
-		assertEquals(s3.getName(), querySOP.get(2).getName());
+		assertEquals(s1.getName(), querySOP.get(querySOP.size()-3).getName());
+		assertEquals(s2.getName(), querySOP.get(querySOP.size()-2).getName());
+		assertEquals(s3.getName(), querySOP.get(querySOP.size()-1).getName());
 
-		assertEquals(s1.getDescription(), querySOP.get(0).getDescription());
-		assertEquals(s2.getDescription(), querySOP.get(1).getDescription());
-		assertEquals(s3.getDescription(), querySOP.get(2).getDescription());
+		assertEquals(s1.getDescription(), querySOP.get(querySOP.size()-3).getDescription());
+		assertEquals(s2.getDescription(), querySOP.get(querySOP.size()-2).getDescription());
+		assertEquals(s3.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
 
-		assertEquals(s1.getPriority(), querySOP.get(0).getPriority());
-		assertEquals(s2.getPriority(), querySOP.get(1).getPriority());
-		assertEquals(s3.getPriority(), querySOP.get(2).getPriority());
+		assertEquals(s1.getPriority(), querySOP.get(querySOP.size()-3).getPriority());
+		assertEquals(s2.getPriority(), querySOP.get(querySOP.size()-2).getPriority());
+		assertEquals(s3.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
 
-		assertEquals(s1.getRevision(), querySOP.get(0).getRevision());
-		assertEquals(s2.getRevision(), querySOP.get(1).getRevision());
-		assertEquals(s3.getRevision(), querySOP.get(2).getRevision());
+		assertEquals(s1.getRevision(), querySOP.get(querySOP.size()-3).getRevision());
+		assertEquals(s2.getRevision(), querySOP.get(querySOP.size()-2).getRevision());
+		assertEquals(s3.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
 
-		assertEquals(s1.getAuthorID(), querySOP.get(0).getAuthorID());
-		assertEquals(s2.getAuthorID(), querySOP.get(1).getAuthorID());
-		assertEquals(s3.getAuthorID(), querySOP.get(2).getAuthorID());
+		assertEquals(s1.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
+		assertEquals(s2.getAuthorID(), querySOP.get(querySOP.size()-2).getAuthorID());
+		assertEquals(s3.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
 		
-		assertEquals(s1.getArchiveFlag(), querySOP.get(0).getArchiveFlag());
-		assertEquals(s2.getArchiveFlag(), querySOP.get(1).getArchiveFlag());
-		assertEquals(s3.getArchiveFlag(), querySOP.get(2).getArchiveFlag());	
+		assertEquals(s1.getArchiveFlag(), querySOP.get(querySOP.size()-3).getArchiveFlag());
+		assertEquals(s2.getArchiveFlag(), querySOP.get(querySOP.size()-2).getArchiveFlag());
+		assertEquals(s3.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());	
 	}
 	
 	@Test
