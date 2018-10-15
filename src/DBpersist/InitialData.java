@@ -16,14 +16,17 @@ import model.User;
 
 
 public class InitialData {
-	static List<User> uList;
-	User u1, u2, u3, u4;
-	static List<Position> pList;
-	Position p1, p2, p3, p4;
-	static List<SOP> sList;	
-	SOP s1, s2, s3, s4;
+	private List<User> uList;
+	private User u1, u2, u3, u4;
+	private List<Position> pList;
+	private Position p1, p2, p3, p4;
+	private List<SOP> sList;	
+	private SOP s1, s2, s3, s4;
 	
 	public InitialData() {
+		uList = new ArrayList<User>();
+		pList = new ArrayList<Position>();
+		sList = new ArrayList<SOP>();
 		p1 = new Position();
 		p1.setID(1);
 		p1.setTitle("Administrator");
@@ -87,15 +90,15 @@ public class InitialData {
 	}
 
 
-	public static List<User> getInitialUsers() {
+	public List<User> getInitialUsers() {
 		return uList;
 	}
 	
-	public static List<Position> getInitialPositions() {
+	public List<Position> getInitialPositions() {
 		return pList;
 	}
 	
-	public static List<SOP> getInitialSOPs() {
+	public List<SOP> getInitialSOPs() {
 		return sList;
 	}
 	

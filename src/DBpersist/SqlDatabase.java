@@ -204,9 +204,9 @@ public class SqlDatabase {
 				List<Position> posList;
 				List<SOP> SOPList;
 				
-				userList       = InitialData.getInitialUsers();
-				posList		   = InitialData.getInitialPositions();
-				SOPList		   = InitialData.getInitialSOPs();
+				userList       = new InitialData().getInitialUsers();
+				posList		   = new InitialData().getInitialPositions();
+				SOPList		   = new InitialData().getInitialSOPs();
 			
 
 				PreparedStatement insertUser       = null;
@@ -266,6 +266,7 @@ public class SqlDatabase {
 						insertSOP.setBoolean(6, s.getArchiveFlag());
 						insertSOP.addBatch();
 					}
+					insertSOP.executeBatch();
 					
 					System.out.println("SOP table populated");
 
@@ -365,6 +366,7 @@ public class SqlDatabase {
 						insertSOP.setBoolean(6, s.getArchiveFlag());
 						insertSOP.addBatch();
 					}
+					insertSOP.executeBatch();
 					
 					System.out.println("SOP table populated");
 					// TODO:  PositionSOP junction table
