@@ -14,7 +14,7 @@ import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
-public class SqlDatabaseTest {
+public class DatabaseTest {
 
 	private Database db;
 	private Position p1, p2, p3;
