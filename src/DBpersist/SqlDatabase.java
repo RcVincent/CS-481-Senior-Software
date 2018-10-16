@@ -204,19 +204,33 @@ public class SqlDatabase {
 				List<Position> posList;
 				List<SOP> SOPList;
 				
-				try {
-					userList       = InitialData.getUsers();
-					posList		   = InitialData.getPositions();
-					SOPList		   = InitialData.getSOPs();
-				} catch (IOException e) {
-					throw new SQLException("Couldn't read initial data", e);
-				}
+				userList       = new InitialData().getInitialUsers();
+				posList		   = new InitialData().getInitialPositions();
+				SOPList		   = new InitialData().getInitialSOPs();
+			
 
 				PreparedStatement insertUser       = null;
 				PreparedStatement insertPos		   = null;
 				PreparedStatement insertSOP	       = null;
+				PreparedStatement insertPosSOP	   = null;
 
 				try {
+					// Insert Positions
+					insertPos = conn.prepareStatement(
+							"insert into Position "
+							+ "(title, description, priority)"
+							+ " values (?, ?, ?)"
+					);
+					for (Position p : posList) {
+						insertPos.setString(1, p.getTitle());
+						insertPos.setString(2, p.getDescription());
+						insertPos.setInt(3, p.getPriority());
+						insertPos.addBatch();
+					}
+					insertPos.executeBatch();
+					
+					System.out.println("Position table populated");
+					
 					// Insert Users
 					insertUser = conn.prepareStatement(
 							"insert into User "
@@ -236,7 +250,126 @@ public class SqlDatabase {
 					insertUser.executeBatch();
 					
 					System.out.println("User table populated");
-					// TODO: Position and SOP
+					
+					// Insert SOPs
+					insertSOP = conn.prepareStatement(
+							"insert into SOP "
+							+ "(title, description, priority, version, author_id, archive_flag)"
+							+ " values (?, ?, ?, ?, ?, ?)"
+					);
+					for (SOP s : SOPList) {
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
+					}
+					insertSOP.executeBatch();
+					
+					System.out.println("SOP table populated");
+
+					// TODO
+					/*// Insert PositionSOPs
+					insertPosSOP = conn.prepareStatement(
+							"insert into PositionSOP "
+							+ "(position_id, sop_id)"
+							+ " values (?, ?)"
+					);
+					for (Position p: posList) {
+						insertPosSOP.setInt(1, p.getID());
+						insertPosSOP.setInt(2, p.getRequirements());
+					}
+					*/
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertPos);
+					DBUtil.closeQuietly(insertSOP);
+					DBUtil.closeQuietly(insertPosSOP);
+				}
+			}
+		});
+	}
+
+	
+	/*public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Position> posList;
+				List<SOP> SOPList;
+				
+				try {
+					userList       = InitialData.getUsers();
+					posList		   = InitialData.getPositions();
+					SOPList		   = InitialData.getSOPs();
+				} catch (IOException e) {
+					throw new SQLException("Couldn't read initial data", e);
+				}
+
+				PreparedStatement insertUser       = null;
+				PreparedStatement insertPos		   = null;
+				PreparedStatement insertSOP	       = null;
+
+				try {
+					// Insert Positions
+					insertPos = conn.prepareStatement(
+							"insert into Position "
+							+ "(title, description, priority)"
+							+ " values (?, ?, ?)"
+					);
+					for (Position p : posList) {
+						insertPos.setString(1, p.getTitle());
+						insertPos.setString(2, p.getDescription());
+						insertPos.setInt(3, p.getPriority());
+						insertPos.addBatch();
+					}
+					insertPos.executeBatch();
+					
+					System.out.println("Position table populated");
+					
+					// Insert Users
+					insertUser = conn.prepareStatement(
+							"insert into User "
+							+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
+							+ " values (?, ?, ?, ?, ?, ?, ?)"
+					);
+					for (User u : userList) {
+						insertUser.setString(1, u.getEmail());
+						insertUser.setString(2, u.getPassword());
+						insertUser.setString(3, u.getFirstname());
+						insertUser.setString(4, u.getLastname());
+						insertUser.setString(5, u.isAdminFlag());
+						insertUser.setBoolean(6, u.isArchiveFlag());
+						insertUser.setInt(7, u.getPosition().getID());
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					System.out.println("User table populated");
+					
+					// Insert SOPs
+					insertSOP = conn.prepareStatement(
+							"insert into SOP "
+							+ "(title, description, priority, version, author_id, archive_flag)"
+							+ " values (?, ?, ?, ?, ?, ?)"
+					);
+					for (SOP s : SOPList) {
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
+					}
+					insertSOP.executeBatch();
+					
+					System.out.println("SOP table populated");
+					// TODO:  PositionSOP junction table
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertUser);
@@ -245,7 +378,7 @@ public class SqlDatabase {
 				}
 			}
 		});
-}
+	}*/
 
 	public Integer insertPosition(final Position p) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -726,7 +859,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -775,7 +908,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -824,7 +957,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -873,7 +1006,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -933,7 +1066,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -994,7 +1127,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1090,7 +1223,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 
@@ -1139,7 +1272,7 @@ public class SqlDatabase {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1184,8 +1317,8 @@ public class SqlDatabase {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1230,8 +1363,8 @@ public class SqlDatabase {
 						result.setDescription(resultSet.getString(3));
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						result.setAuthorID(resultSet.getInt(7));
+						result.setAuthorID(resultSet.getInt(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
 					}
 					
 					if (!found) {
@@ -1534,19 +1667,129 @@ public class SqlDatabase {
 		return null;
 	}
 	
-	public SOP findSOPbyPosition(final int position_id) {
-		// TODO
-		return null;
+	public List<SOP> findSOPbyPosition(final int position_id) {
+		return executeTransaction(new Transaction<List<SOP>>() {
+			@Override
+			public List<SOP> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"SELECT * FROM PositionSOP WHERE position_id = ?");
+					
+					stmt.setInt(1, position_id);
+					
+					List<SOP> result = new ArrayList<SOP>();
+					
+					resultSet = stmt.executeQuery();
+					
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						SOP s = new SOP();
+						s.setID(resultSet.getInt(1));
+						s.setName(resultSet.getString(2));
+						s.setDescription(resultSet.getString(3));
+						s.setPriority(resultSet.getInt(4));
+						s.setRevision(resultSet.getInt(5));
+						s.setAuthorID(resultSet.getInt(7));
+						
+						result.add(s);
+					}
+					
+					if (!found) {
+						System.out.println("No SOPs were found for that position");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 	
-	public Position addSOPtoPosition(final int position_id, final int sop_id) {
-		// TODO;
-		return null;
+	public Boolean addSOPtoPosition(final int position_id, final int sop_id) {
+		return executeTransaction(new Transaction<Boolean>(){
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"insert into PositionSOP (position_id, sop_id) values (?, ?)");
+					stmt.setInt(1, position_id);
+					stmt.setInt(2, sop_id);
+					
+					stmt.executeUpdate();
+					
+					return true;
+				}finally{
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 	
 	public SOP changeSOPPriority(final int sop_id, final int priority) {
-		// TODO
-		return null;
+		return executeTransaction(new Transaction<SOP>() {
+			@Override
+			public SOP execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+
+				try{
+					stmt = conn.prepareStatement(
+							"UPDATE SOP SET priority = ? WHERE sop_id = ? ");
+					
+					stmt.setInt(1, priority);
+					stmt.setInt(2, sop_id);
+					stmt.executeUpdate();
+					
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT * FROM SOP WHERE sop_id = ?");
+					
+					stmt2.setInt(1, sop_id);
+					
+					resultSet = stmt2.executeQuery();
+
+					SOP result = new SOP(); 
+					
+					Boolean found = false;
+					
+					while(resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setName(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+						result.setRevision(resultSet.getInt(5));
+						result.setAuthorID(resultSet.getInt(7));
+					}
+
+
+					if (!found) {
+						System.out.println("SOP with ID <" + sop_id + "> was not found in the SOP table");
+					}
+
+					return result;
+
+
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2); 
+				}
+			}
+		});
 	}
 	
 	public static void cleanDB(){
@@ -1555,10 +1798,8 @@ public class SqlDatabase {
 		db.recreateDB();
 		System.out.println("Creating Tables again...");
 		db.createTables();
-		// TODO: Load Initial Data (Currently method isn't setup)
-		/*System.out.println("Loading initial data...");
+		System.out.println("Loading initial data...");
 		db.loadInitialData();
-		*/
 		System.out.println("Database cleaned.");
 	}
 	
@@ -1669,8 +1910,9 @@ public class SqlDatabase {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables ");
 		SqlDatabase db = new SqlDatabase(); 
+		//db.createDatabase();
 		db.createTables();
-		db.createDatabase();
+		db.loadInitialData();
 		System.out.println("Users");
 		System.out.println("SOPs");
 		System.out.println("Positions");
