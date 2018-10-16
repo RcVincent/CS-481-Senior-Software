@@ -122,7 +122,7 @@ public class SOPTest{
 	}
 	
 	@Test
-	public void testSetRevision() {
+	public void testSetRevision(){
 		//Ensure SOP version was set correctly in the constructor 
 		//testSetRevision(); 
 		

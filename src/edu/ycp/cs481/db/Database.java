@@ -79,26 +79,26 @@ public class Database {
 	}
 	
 	/*
-	 * This method is used in executing a list of updates to the database (e.g. create tables, insert data, etc.)
+	 * This method is used in executing a list of updates to the database (e.g. create tables, update data, etc.)
 	 */
-	public boolean executeUpdates(ArrayList<String> names, ArrayList<String> sqls){
+	public boolean executeUpdates(String[] names, String[] sqls){
 		return executeTransaction(new Transaction<Boolean>(){
 			@Override
 			public Boolean execute(Connection conn) throws SQLException{
 				ArrayList<Statement> stmts = new ArrayList<Statement>();
 				try{
 					boolean hasNames = names != null;
-					if(hasNames && names.size() != sqls.size()){
+					if(hasNames && names.length != sqls.length){
 						throw new IllegalArgumentException("Must have all sql statements named or pass null names array!");
 					}
-					for(int i = 0; i < sqls.size(); i++){
+					for(int i = 0; i < sqls.length; i++){
 						if(hasNames){
-							System.out.println("Starting " + names.get(i));
+							System.out.println("Starting " + names[i]);
 						}
 						stmts.add(conn.createStatement());
-						stmts.get(i).executeUpdate(sqls.get(i));
+						stmts.get(i).executeUpdate(sqls[i]);
 						if(hasNames){
-							System.out.println("Finished " + names.get(i));
+							System.out.println("Finished " + names[i]);
 						}
 					}
 					return true;
@@ -112,30 +112,28 @@ public class Database {
 	}
 	
 	public boolean executeUpdate(String name, String sql){
-		ArrayList<String> names = new ArrayList<String>();
-		names.add(name);
-		
-		ArrayList<String> sqls = new ArrayList<String>();
-		sqls.add(sql);
-		
-		return executeUpdates(names, sqls);
+		return executeUpdates(new String[]{name}, new String[]{sql});
+	}
+	
+	public void createDatabase(){
+		executeUpdate("Create CS481DB database", "create database if not exists cs481db");
 	}
 	
 	public void createTables(){
-		ArrayList<String> names = new ArrayList<String>();
-		ArrayList<String> sqls = new ArrayList<String>();
+		String[] names = new String[4];
+		String[] sqls = new String[4];
 		
-		names.add("Create Position table");
-		sqls.add("CREATE TABLE IF NOT EXISTS Position (" +
+		names[0] = "Create Position table";
+		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
 				 "position_id INT NOT NULL AUTO_INCREMENT," +
 				 "title VARCHAR(80) NOT NULL," +
 				 "description VARCHAR(255) NOT NULL," +
 				 "priority INT NOT NULL," +
 				 "PRIMARY KEY (position_id)," +
-				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);");
+				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
 		
-		names.add("Create Users table");
-		sqls.add("CREATE TABLE IF NOT EXISTS User (" +
+		names[1] = "Create Users table";
+		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
 				  "password VARCHAR(32) NOT NULL, " +
@@ -152,10 +150,10 @@ public class Database {
 				  "FOREIGN KEY (position_id) " +
 				  "REFERENCES Position (position_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);");
+				  "ON UPDATE NO ACTION);";
 		
-		names.add("Create SOP table");
-		sqls.add("CREATE TABLE IF NOT EXISTS SOP (" +
+		names[2] = "Create SOP table";
+		sqls[2] = "CREATE TABLE IF NOT EXISTS SOP (" +
 				  "sop_id INT NOT NULL AUTO_INCREMENT, " +
 				  "title VARCHAR(80) NOT NULL, " +
 				  "description VARCHAR(255) NOT NULL, " +
@@ -171,135 +169,17 @@ public class Database {
 				  "FOREIGN KEY (author_id) " +
 				  "REFERENCES User (user_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);");
+				  "ON UPDATE NO ACTION);";
 		
-		names.add("Create PositionSOP table");
-		sqls.add("CREATE TABLE IF NOT EXISTS PositionSOP (" +
+		names[3] = "Create PositionSOP table";
+		sqls[3] = "CREATE TABLE IF NOT EXISTS PositionSOP (" +
 					"position_id INT NOT NULL, " +
 					"sop_id INT NOT NULL, " +
 					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
-					");");
+					");";
 		
 		executeUpdates(names, sqls);
-	}
-	
-	public void oldCreateTables() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				Statement user_stmt = null;
-				Statement pos_stmt = null;
-				Statement sop_stmt = null;
-				Statement pos_sop_stmt = null;
-				try {
-					
-					pos_stmt = conn.createStatement();
-					String pos_sql = "CREATE TABLE IF NOT EXISTS Position (" +
-									 "position_id INT NOT NULL AUTO_INCREMENT," +
-									 "title VARCHAR(80) NOT NULL," +
-									 "description VARCHAR(255) NOT NULL," +
-									 "priority INT NOT NULL," +
-									 "PRIMARY KEY (position_id)," +
-									 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
-					System.out.println("execute positions");
-					pos_stmt.executeUpdate(pos_sql);
-					System.out.println("Positions table created");
-					
-					
-					
-					System.out.println("Prepare to create the user table");
-					user_stmt = conn.createStatement();
-					String user_sql = "CREATE TABLE IF NOT EXISTS User (" +
-									  "user_id INT NOT NULL AUTO_INCREMENT," +
-									  "email VARCHAR(255) NOT NULL," +
-									  "password VARCHAR(32) NOT NULL, " +
-									  "first_name VARCHAR(80) NOT NULL, " +
-									  "last_name VARCHAR(80) NOT NULL, " +
-									  "admin_flag VARCHAR(32) NOT NULL, " +
-									  "archive_flag TINYINT NOT NULL, " +
-									  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-									  "position_id INT NOT NULL, " +
-									  "PRIMARY KEY (user_id), " +
-									  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
-									  "INDEX fk_User_Position_idx (position_id ASC) VISIBLE, " +
-									  "CONSTRAINT User_Position " +
-									  "FOREIGN KEY (position_id) " +
-									  "REFERENCES Position (position_id) " +
-									  "ON DELETE NO ACTION " +
-									  "ON UPDATE NO ACTION);"; 
-					System.out.println("execute users");
-					user_stmt.executeUpdate(user_sql);
-					System.out.println("user table created");
-
-					sop_stmt = conn.createStatement();
-					String sop_sql = "CREATE TABLE IF NOT EXISTS SOP (" +
-									  "sop_id INT NOT NULL AUTO_INCREMENT, " +
-									  "title VARCHAR(80) NOT NULL, " +
-									  "description VARCHAR(255) NOT NULL, " +
-									  "priority INT NOT NULL, " +
-									  "version INT NOT NULL, " +
-					//				  "filepath VARCHAR(255) NOT NULL, " +
-									  "author_id INT NOT NULL, " +
-									  "archive_flag TINYINT NOT NULL, " +
-									  "PRIMARY KEY (sop_id), " +
-									  "UNIQUE INDEX sop_id_UNIQUE (sop_id ASC) VISIBLE, " +
-									  "INDEX fk_SOP_User1_idx (author_id ASC) VISIBLE, " +
-									  "CONSTRAINT fk_SOP_User1 " +
-									  "FOREIGN KEY (author_id) " +
-									  "REFERENCES User (user_id) " +
-									  "ON DELETE NO ACTION " +
-									  "ON UPDATE NO ACTION);";
-					System.out.println("execute SOPs");
-					sop_stmt.executeUpdate(sop_sql);
-					System.out.println("SOPs table created");
-					
-					pos_sop_stmt = conn.createStatement();
-					String pos_sop_sql = "CREATE TABLE IF NOT EXISTS PositionSOP (" +
-										"position_id INT NOT NULL, " +
-										"sop_id INT NOT NULL, " +
-										"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
-										"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
-										");";
-					System.out.println("Execute create PositionSOP table");
-					pos_sop_stmt.executeUpdate(pos_sop_sql);
-					System.out.println("PositionSOP table created");
-					return true;
-				}
-				finally {
-					DBUtil.closeQuietly(user_stmt);
-					DBUtil.closeQuietly(pos_stmt);
-					DBUtil.closeQuietly(sop_stmt);
-					DBUtil.closeQuietly(pos_sop_stmt);
-					
-				}
-			}
-			
-		});
-	}
-
-	public void createDatabase() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				Statement db_stmt = null;
-				try {
-					
-					db_stmt = conn.createStatement();
-					String db_sql = "create database if not exists cs481db;";
-					System.out.println("Creating database");
-					db_stmt.executeUpdate(db_sql);
-					System.out.println("Database created with name CS481db");
-					
-					return true;
-				}
-				finally {
-					DBUtil.closeQuietly(db_stmt);
-					
-				}
-			}
-			
-		});
 	}
 	
 	public void loadInitialData() {
@@ -385,110 +265,81 @@ public class Database {
 				}
 			}
 		});
-}
-
-	public Integer insertPosition(final Position p) {
-		return executeTransaction(new Transaction<Integer>() {
+	}
+	
+	public Integer insertAndGetID(String table, String id_str, String[] args, String[] values){
+		return executeTransaction(new Transaction<Integer>(){
 			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertPos = null;		
+			public Integer execute(Connection conn) throws SQLException{
+				Statement insert = null;
+				Statement selectID = null;
+				ResultSet id = null;
 				
-					
-				try {
-				insertPos = conn.prepareStatement(
-						"insert into Position (title, description, priority)"
-						+ " values (?, ?, ?)"
-				);
-				insertPos.setString(1, p.getTitle());
-				insertPos.setString(2, p.getDescription());
-				insertPos.setInt(3, p.getPriority());
-							
-				// Execute the update
-				insertPos.executeUpdate();
-							
-				System.out.println("Position successfully inserted");							
-
-				return 1;
-				
-				} finally {
-					DBUtil.closeQuietly(insertPos);			
+				if(args.length != values.length){
+					throw new IllegalArgumentException("Args and Values don't match up!");
 				}
-			} 
+				
+				try{
+					insert = conn.createStatement();
+					String insertSQL = "insert into " + table + " (";
+					for(int i = 0; i < args.length; i++){
+						if(i == args.length - 1){
+							insertSQL += args[i] + ") values (";
+						}else{
+							insertSQL += args[i] + ", ";
+						}
+					}
+					for(int i = 0; i < values.length; i++){
+						if(i == values.length - 1){
+							insertSQL += "'" + values[i] + "');";
+						}else{
+							insertSQL += "'" + values[i] + "', ";
+						}
+					}
+					insert.executeUpdate(insertSQL);
+					System.out.println("Executed Insert of a " + table + "!");
+					
+					selectID = conn.createStatement();
+					String selectSQL = "select " + id_str + " from " + table + " where ";
+					for(int i = 0; i < args.length; i++){
+						selectSQL += args[i] + " = '" + values[i] + "'";
+						if(i != args.length - 1){
+							selectSQL += " and ";
+						}else{
+							selectSQL += ";";
+						}
+					}
+					id = selectID.executeQuery(selectSQL);
+					System.out.println("Pulled out " + id_str + " of just inserted " + table + "!");
+					
+					id.next();
+					return id.getInt(1);
+				}finally{
+					DBUtil.closeQuietly(insert);
+					DBUtil.closeQuietly(selectID);
+					DBUtil.closeQuietly(id);
+				}
+			}
 		});
 	}
 	
-	public Integer insertUser(final User u) {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertUser = null;		
-
-				try {
-				insertUser = conn.prepareStatement(
-						"insert into User "
-						+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
-						+ " values (?, ?, ?, ?, ?, ?, ?)"
-				);
-				insertUser.setString(1, u.getEmail());
-				insertUser.setString(2, u.getPassword());
-				insertUser.setString(3, u.getFirstname());
-				insertUser.setString(4, u.getLastname());
-				insertUser.setString(5, u.isAdminFlag());
-				insertUser.setBoolean(6, u.isArchiveFlag());
-				insertUser.setInt(7, u.getPosition().getID());
-							
-				// Execute the update
-				insertUser.executeUpdate();
-							
-				System.out.println("User successfully registered!");							
-					
-				return 1;
-				
-				} finally {
-					DBUtil.closeQuietly(insertUser);			
-				}
-			} 
-		});
+	public Integer insertPosition(Position p){
+		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
+				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
 	
-	public Integer insertSOP(final SOP s) {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException {
-				PreparedStatement insertSOP = null;		
-					/*"sop_id INT NOT NULL AUTO_INCREMENT, " +
-									  "title VARCHAR(80) NOT NULL, " +
-									  "description VARCHAR(255) NOT NULL, " +
-									  "priority INT NOT NULL, " +
-									  "version INT NOT NULL, " +
-									  "author_id INT NOT NULL, " +
-									  "archive_flag TINYINT NOT NULL, " +*/
-				try {
-				insertSOP = conn.prepareStatement(
-						"insert into SOP "
-						+ "(title, description, priority, version, author_id, archive_flag)"
-						+ " values (?, ?, ?, ?, ?, ?)"
-				);
-				insertSOP.setString(1, s.getName());
-				insertSOP.setString(2, s.getDescription());
-				insertSOP.setInt(3, s.getPriority());
-				insertSOP.setInt(4, s.getRevision());
-				//insertSOP.setString(5, filepath);
-				insertSOP.setInt(5, s.getAuthorID());
-				insertSOP.setBoolean(6, s.getArchiveFlag());
-							
-				// Execute the update
-				insertSOP.executeUpdate();
-							
-				System.out.println("SOP successfully inserted");							
-					
-				return 1;
-				
-				} finally {
-					DBUtil.closeQuietly(insertSOP);			
-				}
-			} 
-		});
+	public Integer insertUser(User u){
+		return insertAndGetID("User", "user_id", 
+				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
+				new String[]{u.getEmail(), u.getPassword(), u.getFirstname(), u.getLastname(), u.isAdminFlag(),
+						String.valueOf(u.isArchiveFlag()), String.valueOf(u.getPosition().getID())});
+	}
+	
+	public Integer insertSOP(SOP s){
+		return insertAndGetID("SOP", "sop_id", 
+				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
+				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
+						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
 	}
 	
 	public List<Position> findAllPositions() {
@@ -1917,12 +1768,10 @@ public class Database {
 	
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
-		System.out.println("Creating tables ");
 		Database db = new Database();
 		db.createDatabase();
 		db.createTables();
-		System.out.println("Users");
-		System.out.println("SOPs");
-		System.out.println("Positions");
+		// TODO: Load Initial Data
+		System.out.println("Database creation finished");
 	}
 }
