@@ -85,4 +85,24 @@ public class SOPController {
 		return db.findSOPbyAuthorID(authorID);
 	}
 	
+	public List<SOP> findAllSOPs() {
+		return db.findAllSOPs();
+	}
+	
+	public boolean archiveSOP(int sopID) {
+		return db.archiveSOP(sopID);
+	}
+	
+	public SOP revertSOP(int sopID, int version) {
+		return db.revertSOP(sopID, version);
+	}
+	
+	public SOP changeSOPPirority(int sop_id, int priority) {
+		return db.changeSOPPriority(sop_id, priority);
+	}
+	
+	public Integer insertSOP(SOP s) {
+		return db.insertSOP(s); 
+	}
+	
 }
