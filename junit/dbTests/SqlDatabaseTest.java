@@ -286,18 +286,34 @@ public class SqlDatabaseTest {
 	public void testGetPositionByName() {
 		queryPos = db.findAllPositions();
 		
+		for(int i = 0; i < p_size; i++) {
+			assertEquals(queryPos.get(i).getID(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getID());
+			assertEquals(queryPos.get(i).getTitle(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getTitle());
+			assertEquals(queryPos.get(i).getDescription(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getDescription());
+			assertEquals(queryPos.get(i).getPriority(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getPriority());
+		}
 	}
 	
 	@Test
 	public void testGetPositionByPriority() {
 		queryPos = db.findAllPositions();
 		
+		assertEquals(queryPos.get(0).getID(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getID());
+		assertEquals(queryPos.get(0).getTitle(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getTitle());
+		assertEquals(queryPos.get(0).getDescription(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getDescription());
+		assertEquals(queryPos.get(0).getPriority(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getPriority());
+
 	}
 	
-	@Test
+	@Test //TODO: 
 	public void testGetPositionBySOPID() {
 		queryPos = db.findAllPositions();
-		
+		querySOP = db.findAllSOPs();
+		/*
+		assertEquals(queryPos.get(0).getID(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getID());
+		assertEquals(queryPos.get(0).getTitle(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getTitle());
+		assertEquals(queryPos.get(0).getDescription(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getDescription());
+		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());*/
 	}
 	
 	@Test
