@@ -1317,8 +1317,8 @@ public class SqlDatabase {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1363,8 +1363,8 @@ public class SqlDatabase {
 						result.setDescription(resultSet.getString(3));
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						result.setAuthorID(resultSet.getInt(7));
+						result.setAuthorID(resultSet.getInt(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
 					}
 					
 					if (!found) {
