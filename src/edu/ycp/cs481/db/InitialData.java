@@ -78,8 +78,10 @@ public class InitialData {
 		
 		sList.add(s2);
 		p2.setRequirements(sList);
+		sList.remove(s2);
 		
 		sList.add(s1);
+		sList.add(s2);
 		p1.setRequirements(sList);		
 		
 		uList.add(u1);
