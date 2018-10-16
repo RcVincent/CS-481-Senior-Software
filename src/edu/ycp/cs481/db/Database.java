@@ -151,7 +151,7 @@ public class Database {
 					stmt = conn.createStatement();
 					resultSet = stmt.executeQuery(sql);
 					if(name != null){
-						System.out.println("Finised query " + name);
+						System.out.println("Finished query " + name);
 					}
 					
 					resultSet.next();
@@ -632,7 +632,7 @@ public class Database {
 		});
 	}
 
-	public Position changePositionPriority(final Position p, final int priority) {
+	public Position changePositionPriority(final int position_id, final int priority) {
 		return executeTransaction(new Transaction<Position>() {
 			@Override
 			public Position execute(Connection conn) throws SQLException {
@@ -646,14 +646,14 @@ public class Database {
 							"UPDATE Position SET priority = ? WHERE position_id = ? ");
 					
 					stmt.setInt(1, priority);
-					stmt.setInt(2, p.getID());
+					stmt.setInt(2, position_id);
 					stmt.executeUpdate();
 					
 					
 					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE position_id = ?");
+							"SELECT * FROM Position WHERE position_id = ?");
 					
-					stmt2.setInt(1, p.getID());
+					stmt2.setInt(1, position_id);
 					
 					resultSet = stmt2.executeQuery();
 					
@@ -671,7 +671,7 @@ public class Database {
 	
 					// check if the position exists
 					if (!found) {
-						System.out.println("Position with ID "+ p.getID() +" was not found in the Position table");
+						System.out.println("Position with ID "+ position_id +" was not found in the Position table");
 					}
 	
 					return position;
@@ -1333,8 +1333,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1380,8 +1380,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1427,8 +1427,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1474,8 +1474,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1620,7 +1620,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}

@@ -236,15 +236,29 @@ public class DatabaseTest {
 	public void testFindSOPbyAuthorID() {
 		querySOP = db.findAllSOPs();
 		
-		
+		assertEquals(querySOP.get(0).getID(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
 	}
 	
 	@Test
 	public void testFindSOPbyName() {
 		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getID(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getArchiveFlag());
 	}
 	
-	@Test
+	@Test // TODO: Implement after PositionSOP
 	public void testFindSOPbyPosition() {
 		querySOP = db.findAllSOPs();
 	}
@@ -252,14 +266,30 @@ public class DatabaseTest {
 	@Test
 	public void testFindSOPbyPriority() {
 		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getID(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
 	}
 	
 	@Test
 	public void testFindSOPbyVersion() {
 		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getID(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
 	}
 	
-	@Test
+	@Test // TODO: Implement after PositionSOP
 	public void testFindSOPthruPosition() {
 		querySOP = db.findAllSOPs();
 	}
@@ -303,7 +333,7 @@ public class DatabaseTest {
 
 	}
 	
-	@Test //TODO: 
+	@Test //TODO: After PositionSOP is implemented
 	public void testGetPositionBySOPID() {
 		queryPos = db.findAllPositions();
 		querySOP = db.findAllSOPs();
@@ -389,5 +419,22 @@ public class DatabaseTest {
 			assertEquals(u.isArchiveFlag(), db.getUserByID(u.getUserID()).isArchiveFlag());
 			assertEquals(u.getPosition().getID(), db.getUserByID(u.getUserID()).getPosition().getID());
 		}
+	}
+	
+	@Test
+	public void testDeletePosition() {
+		assertEquals(false, db.deletePosition(10));
+		// TODO: Foreign key constraints 
+		// assertEquals(true, db.deletePosition(1));
+	}
+	
+	@Test // TODO: this breaks testInsertPosition and testFindAllPositions //
+	public void testChangePositionPriority() {
+		/*queryPos = db.findAllPositions();
+		int insert_id = db.insertPosition(queryPos.get(0));
+		
+		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
+		assertEquals(2, changedPriority.getPriority());
+		*/
 	}
 }
