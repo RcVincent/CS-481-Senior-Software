@@ -474,44 +474,17 @@ public class Database {
 		}
 		return null;
 	}
-
+	
 	public ArrayList<Position> getPositionByPriority(int priority){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * from Position where priority = ?");
-					stmt.setInt(1, priority);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
+		try{
+			return executeQuery("Get Position by Priority", "select * from Position where priority = " + priority, posResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public Position changePositionPriority(final int position_id, final int priority) {
+	public Position changePositionPriority(Position pos, int priority) {
 		return executeTransaction(new Transaction<Position>() {
 			@Override
 			public Position execute(Connection conn) throws SQLException {
@@ -525,14 +498,14 @@ public class Database {
 							"UPDATE Position SET priority = ? WHERE position_id = ? ");
 					
 					stmt.setInt(1, priority);
-					stmt.setInt(2, position_id);
+					stmt.setInt(2, pos.getID());
 					stmt.executeUpdate();
 					
 					
 					stmt2 = conn.prepareStatement(
 							"SELECT * FROM Position WHERE position_id = ?");
 					
-					stmt2.setInt(1, position_id);
+					stmt2.setInt(1, pos.getID());
 					
 					resultSet = stmt2.executeQuery();
 					
@@ -550,7 +523,7 @@ public class Database {
 	
 					// check if the position exists
 					if (!found) {
-						System.out.println("Position with ID "+ position_id +" was not found in the Position table");
+						System.out.println("Position with ID "+ pos.getID() +" was not found in the Position table");
 					}
 	
 					return position;
