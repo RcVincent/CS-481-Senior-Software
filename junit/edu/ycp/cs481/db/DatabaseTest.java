@@ -423,7 +423,9 @@ public class DatabaseTest {
 	
 	@Test
 	public void testDeletePosition() {
-		assertEquals(false, db.deletePosition(10));
+		// TODO: Do a deletion of a Position that exists and ensure it was deleted successfully rather than 
+		// checking booleans, as a deletion of one that doesn't exist is expected to just do nothing and say nothing?
+		//assertEquals(false, db.deletePosition(10));
 		// TODO: Foreign key constraints 
 		// assertEquals(true, db.deletePosition(1));
 	}

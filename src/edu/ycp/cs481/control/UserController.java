@@ -95,12 +95,12 @@ public class UserController {
     	return db.getUserByID(userID);
     }
     
-    public User findUserByFirstname(String fname) {
-    	return db.getUserByFirstName(fname);
+    public ArrayList<User> findUsersByFirstname(String fname) {
+    	return db.getUsersByFirstName(fname);
     }
     
-    public User findUserByLastname(String lname) {
-    	return db.getUserByLastName(lname);
+    public ArrayList<User> findUsersByLastname(String lname) {
+    	return db.getUsersByLastName(lname);
     }
     
     public User findUserByEmail(String email) {
@@ -120,8 +120,12 @@ public class UserController {
     	return db.findAllUsers(); 
     }
     
-    public Boolean ArchiveUser(int userID) {
-    	return db.archiveUser(userID);
+    public void ArchiveUser(int userID){
+    	db.archiveUser(userID);
+    }
+    
+    public void unarchiveUser(int userID){
+    	db.unarchiveUser(userID);
     }
     
     public User changePosition(int userID, int positionID) {

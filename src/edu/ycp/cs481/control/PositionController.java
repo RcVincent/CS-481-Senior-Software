@@ -69,8 +69,8 @@ public class PositionController {
 		return db.insertPosition(p);
 	}
 	
-	public Boolean removePosition(int positionID) {
-		return db.deletePosition(positionID);
+	public void removePosition(int positionID) {
+		db.deletePosition(positionID);
 	}
 	
 	

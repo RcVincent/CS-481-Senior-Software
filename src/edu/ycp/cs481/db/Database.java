@@ -483,7 +483,8 @@ public class Database {
 		}
 		return null;
 	}
-
+	
+	// TODO: Change this to use Execute Update? Not sure why it gets the Position back again, perhaps to update?
 	public Position changePositionPriority(Position pos, int priority) {
 		return executeTransaction(new Transaction<Position>() {
 			@Override
@@ -537,271 +538,73 @@ public class Database {
 			}
 		});
 	}
-
-	public Boolean deletePosition(int position_id){
-		return executeTransaction(new Transaction<Boolean>(){
-			@Override
-			public Boolean execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				int removed = 0;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"DELETE FROM Position where position_id = ?");
-					stmt.setInt(1, position_id);
-					
-					removed = stmt.executeUpdate();
-					
-					return removed == 1;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-
-	public List<User> findAllUsers() {
-		return executeTransaction(new Transaction<List<User>>() {
-			@Override
-			public List<User> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User");
-					
-					List<User> result = new ArrayList<User>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						User u = new User();
-						u.setUserID(resultSet.getInt(1));
-						u.setEmail(resultSet.getString(2));
-						u.setPassword(resultSet.getString(3));
-						u.setFirstname(resultSet.getString(4));
-						u.setLastname(resultSet.getString(5));
-						u.setAdminFlag(resultSet.getBoolean(6));
-						u.setArchiveFlag(resultSet.getBoolean(7));
-						u.setPosition(findPositionByID(resultSet.getInt(9)));			
-						
-						result.add(u);
-					}
-					
-					if (!found) {
-						System.out.println("No Users were found in the database");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	
+	public void deletePosition(int position_id){
+		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
 	}
 	
-	public User getUserByID(final int ID) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User WHERE user_id = ?");
-					
-					stmt.setInt(1, ID);
-					resultSet = stmt.executeQuery();
-
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with ID <" + ID + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<User> findAllUsers(){
+		try{
+			return executeQuery("Get All Users", "select * from User", userResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public User getUserByEmail(final String email) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User WHERE email = ?");
-					
-					stmt.setString(1, email);
-					resultSet = stmt.executeQuery();
-
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with email <" + email + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
+	public User getUserByID(int ID){
+		try{
+			ArrayList<User> results = executeQuery("Get User By ID", "select * from User where user_id = " + ID, userResFormat);
+			if(results.size() == 0){
+				System.out.println("No User found with ID " + ID);
+			}else if(results.size() > 1){
+				System.out.println("Multiple Users found with ID " + ID + "! Returning null");
+			}else{
+				return results.get(0);
 			}
-		});
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public User getUserByFirstName(final String firstname) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User WHERE first_name = ?");
-					
-					stmt.setString(1, firstname);
-					resultSet = stmt.executeQuery();
-
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with firstname <" + firstname + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
+	public User getUserByEmail(String email){
+		try{
+			ArrayList<User> results = executeQuery("Get User By Email", "select * from User where email = '" + 
+					email + "'", userResFormat);
+			if(results.size() == 0){
+				System.out.println("No User found with email " + email);
+			}else if(results.size() > 1){
+				System.out.println("Multiple Users found with email " + email + "! Returning null");
+			}else{
+				return results.get(0);
 			}
-		});
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public User getUserByLastName(final String lastname) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User WHERE last_name = ?");
-					
-					stmt.setString(1, lastname);
-					resultSet = stmt.executeQuery();
-
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with lastname <" + lastname + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<User> getUsersByFirstName(String firstName){
+		try{
+			return executeQuery("Get Users By First Name", "select * from User where first_name = '" + firstName + "'", 
+					userResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
+	public ArrayList<User> getUsersByLastName(String lastName){
+		try{
+			return executeQuery("Get Users By Last Name", "select * from User where last_name = '" + lastName + "'", userResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
 	public User changeUserPassword(final String email, final String oldPass, final String newPass) {
 
 		return executeTransaction(new Transaction<User>() {
@@ -863,6 +666,7 @@ public class Database {
 		});
 	}
 	
+	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
 	public User changeUserEmail(final String oldEmail, final String newEmail, final String Pass) {
 
 		return executeTransaction(new Transaction<User>() {
@@ -924,44 +728,15 @@ public class Database {
 		});
 	}
 	
-	public Boolean archiveUser(final int user_id) {
-		return executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT archive_flag FROM User where user_id = ?");
-					
-					stmt.setInt(1, user_id);
-					resultSet = stmt.executeQuery();
-					
-					boolean result = !resultSet.getBoolean(1);
-					
-					
-					stmt2 = conn.prepareStatement(
-							"UPDATE User SET archive_flag = ? WHERE user_id = ? ");
-					
-					stmt2.setBoolean(1, result);
-					stmt2.setInt(2, user_id);
-					stmt2.executeUpdate();
-					
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
+	public void archiveUser(int userID){
+		executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
 	}
-
+	
+	public void unarchiveUser(int userID){
+		executeUpdate("Unarchive User with ID " + userID, "update User set archive_flag = false where user_id = " + userID);
+	}
+	
+	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
 	public User changePosition(final int user_id, final int position_id) {
 		return executeTransaction(new Transaction<User>() {
 			@Override
