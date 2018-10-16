@@ -15,6 +15,8 @@ import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
 public class Database {
+	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
+	
 	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -275,101 +277,54 @@ public class Database {
 		executeUpdates(names, sqls);
 	}
 	
-	public void loadInitialData() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				List<User> userList;
-				List<Position> posList;
-				List<SOP> SOPList;
-				
-				userList       = new InitialData().getInitialUsers();
-				posList		   = new InitialData().getInitialPositions();
-				SOPList		   = new InitialData().getInitialSOPs();
-			
-
-				PreparedStatement insertUser       = null;
-				PreparedStatement insertPos		   = null;
-				PreparedStatement insertSOP	       = null;
-				PreparedStatement insertPosSOP	   = null;
-
-				try {
-					// Insert Positions
-					insertPos = conn.prepareStatement(
-							"insert into Position "
-							+ "(title, description, priority)"
-							+ " values (?, ?, ?)"
-					);
-					for (Position p : posList) {
-						insertPos.setString(1, p.getTitle());
-						insertPos.setString(2, p.getDescription());
-						insertPos.setInt(3, p.getPriority());
-						insertPos.addBatch();
-					}
-					insertPos.executeBatch();
-					
-					System.out.println("Position table populated");
-					
-					// Insert Users
-					insertUser = conn.prepareStatement(
-							"insert into User "
-							+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
-							+ " values (?, ?, ?, ?, ?, ?, ?)"
-					);
-					for (User u : userList) {
-						insertUser.setString(1, u.getEmail());
-						insertUser.setString(2, u.getPassword());
-						insertUser.setString(3, u.getFirstname());
-						insertUser.setString(4, u.getLastname());
-						insertUser.setBoolean(5, u.isAdminFlag());
-						insertUser.setBoolean(6, u.isArchiveFlag());
-						insertUser.setInt(7, u.getPosition().getID());
-						insertUser.addBatch();
-					}
-					insertUser.executeBatch();
-					
-					System.out.println("User table populated");
-					
-					// Insert SOPs
-					insertSOP = conn.prepareStatement(
-							"insert into SOP "
-							+ "(title, description, priority, version, author_id, archive_flag)"
-							+ " values (?, ?, ?, ?, ?, ?)"
-					);
-					for (SOP s : SOPList) {
-						insertSOP.setString(1, s.getName());
-						insertSOP.setString(2, s.getDescription());
-						insertSOP.setInt(3, s.getPriority());
-						insertSOP.setInt(4, s.getRevision());
-						insertSOP.setInt(5, s.getAuthorID());
-						insertSOP.setBoolean(6, s.getArchiveFlag());
-						insertSOP.addBatch();
-					}
-					insertSOP.executeBatch();
-					
-					System.out.println("SOP table populated");
-
-					// TODO
-					/*// Insert PositionSOPs
-					insertPosSOP = conn.prepareStatement(
-							"insert into PositionSOP "
-							+ "(position_id, sop_id)"
-							+ " values (?, ?)"
-					);
-					for (Position p: posList) {
-						insertPosSOP.setInt(1, p.getID());
-						insertPosSOP.setInt(2, p.getRequirements());
-					}
-					*/
-					return true;
-				} finally {
-					DBUtil.closeQuietly(insertUser);
-					DBUtil.closeQuietly(insertPos);
-					DBUtil.closeQuietly(insertSOP);
-					DBUtil.closeQuietly(insertPosSOP);
-				}
-			}
-		});
+	public void loadInitialData(){
+		InitialData initData = new InitialData();
+		
+		// They must go in this order
+		List<Position> posList = initData.getInitialPositions();
+		List<User> userList = initData.getInitialUsers();
+		List<SOP> sopList = initData.getInitialSOPs();
+		
+		int numInserts = posList.size() + userList.size() + sopList.size();
+		// TODO: Add PositionSOP connections to size
+		
+		String[] names = new String[numInserts];
+		String[] sqls = new String[numInserts];
+		
+		int currentInsert = 0;
+		for(Position p: posList){
+			names[currentInsert] = "Insert Position " + p.getTitle();
+			sqls[currentInsert] = "insert into Position (title, description, priority) " +
+					"values ('" + p.getTitle() + "', '" + p.getDescription() + "', " + p.getPriority() + ")";
+			currentInsert++;
+		}
+		
+		for(User u: userList){
+			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
+			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
+					"position_id)  values ('" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getFirstname() +
+					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
+					u.getPosition().getID() + ")";
+			currentInsert++;
+		}
+		
+		for(SOP s: sopList){
+			names[currentInsert] = "Insert SOP " + s.getName();
+			sqls[currentInsert] = "insert into SOP (title, description, priority, version, author_id, archive_flag)" +
+					" values ('" + s.getName() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
+					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")";
+			currentInsert++;
+		}
+		
+		// TODO: Insert PositionSOP connections
+		/*
+			names[currentInsert] = "Insert SOP " + <sop_name> + " and Position " + <position_name> + " connection";
+			sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
+					" values (" + <pos_id> + ", " + <sop_id> + ")";
+			currentInsert++;
+		 */
+		
+		executeUpdates(names, sqls);
 	}
 	
 	public Integer insertAndGetID(String table, String id_str, String[] args, String[] values){
@@ -462,138 +417,62 @@ public class Database {
 			return executeQuery("Get All Positions", "select * from Position", posResFormat);
 		}catch(SQLException e){
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 	
 	public Position findPositionByID(int position_id){
 		try{
 			ArrayList<Position> results = executeQuery("Get Position by ID", "select * from Position where position_id = " 
 					+ position_id, posResFormat);
-			if(results.size() != 1){
+			if(results.size() == 0){
 				System.out.println("No position found with id " + position_id + "!");
-				return null;
+			}else if(results.size() > 1){
+				System.out.println("More than one position found with id " + position_id + "! Returning null");
 			}else{
 				return results.get(0);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
-
-	public Position getPositionByUser(int userID){
-		return executeTransaction(new Transaction<Position>(){
-			@Override
-			public Position execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT Position.position_id, Position.title, Position.description, Position.priority " +
-							"from Position, User where user_id = ? and Position.position_id = User.position_id");
-					stmt.setInt(1, userID);
-					
-					resultSet = stmt.executeQuery();
-					
-					Position result = new Position();
-					boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						result.setID(resultSet.getInt(1));
-						result.setTitle(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-					}
-					
-					if (!found) {
-						System.out.println("No Positions were found for this User");
-					}
-					
-					return result;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
+	
+	public Position getPositionOfUser(int userID){
+		try{
+			ArrayList<Position> results = executeQuery("Get Position By User", "select " + positionPieces + 
+					" from Position, User where user_id = " + userID + " and Position.position_id = User.position_id", 
+					posResFormat);
+			if(results.size() == 0){
+				System.out.println("No positions found for User_id " + userID + "!");
+			}else if(results.size() > 1){
+				System.out.println("More than one position found for User_id " + userID + "! Returning null");
+			}else{
+				return results.get(0);
 			}
-		});
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
-
+	
 	public ArrayList<Position> getPositionBySOPID(int SOPID){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT Position.position_id, Position.title, Position.description, Position.priority " + 
-							"from Position, PositionSOP where PositionSOP.sop_id = ? and " +
-							"Position.position_id = PositionSOP.position_id");
-					stmt.setInt(1, SOPID);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
+		try{
+			return executeQuery("Get Position by SOP ID", "select " + positionPieces + " from Position, PositionSOP where "
+					+ "PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", posResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ArrayList<Position> getPositionByName(String title){
-		return executeTransaction(new Transaction<ArrayList<Position>>(){
-			@Override
-			public ArrayList<Position> execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * from Position where title = ?");
-					stmt.setString(1, title);
-					
-					resultSet = stmt.executeQuery();
-					
-					ArrayList<Position> positions = new ArrayList<Position>();
-					
-					Position position;
-					
-					while(resultSet.next()){
-						position = new Position();
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-						positions.add(position);
-					}
-					
-					return positions;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
+		try{
+			return executeQuery("Get Position by Title", "SELECT * from Position where title = '" + title + "'", posResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ArrayList<Position> getPositionByPriority(int priority){

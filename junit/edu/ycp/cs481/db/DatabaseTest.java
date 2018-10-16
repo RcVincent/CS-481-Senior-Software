@@ -320,10 +320,10 @@ public class DatabaseTest {
 		queryUser = db.findAllUsers();
 		
 		for(int i = 0; i < u_size; i++) {
-			assertEquals(queryPos.get(i).getID(), db.getPositionByUser(queryUser.get(i).getUserID()).getID());
-			assertEquals(queryPos.get(i).getTitle(), db.getPositionByUser(queryUser.get(i).getUserID()).getTitle());
-			assertEquals(queryPos.get(i).getDescription(), db.getPositionByUser(queryUser.get(i).getUserID()).getDescription());
-			assertEquals(queryPos.get(i).getPriority(), db.getPositionByUser(queryUser.get(i).getUserID()).getPriority());
+			assertEquals(queryPos.get(i).getID(), db.getPositionOfUser(queryUser.get(i).getUserID()).getID());
+			assertEquals(queryPos.get(i).getTitle(), db.getPositionOfUser(queryUser.get(i).getUserID()).getTitle());
+			assertEquals(queryPos.get(i).getDescription(), db.getPositionOfUser(queryUser.get(i).getUserID()).getDescription());
+			assertEquals(queryPos.get(i).getPriority(), db.getPositionOfUser(queryUser.get(i).getUserID()).getPriority());
 		}
 	}
 	

@@ -54,7 +54,7 @@ public class PositionController {
 	}
 	
 	public Position getPositionByUser(int userID) {
-		return db.getPositionByUser(userID);
+		return db.getPositionOfUser(userID);
 	}
 	
 	public List<Position> getPositionBySOPId(int sopID) {
