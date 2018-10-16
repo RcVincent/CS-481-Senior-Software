@@ -25,6 +25,7 @@ public class SqlDatabaseTest {
 	private List<Position> queryPos, pList;
 	private List<SOP> querySOP, sList;
 	private List<User> queryUser, uList;
+	private int p_size, u_size, s_size;
 	
 	@BeforeClass
 	public static void cleanBefore(){
@@ -109,6 +110,10 @@ public class SqlDatabaseTest {
 		u3 = new User();
 		
 		queryUser = new ArrayList<User>();
+
+		p_size = new InitialData().getInitialPositions().size();
+		u_size = new InitialData().getInitialUsers().size();
+		s_size = new InitialData().getInitialSOPs().size();
 	}
 	
 	@Test
@@ -122,34 +127,11 @@ public class SqlDatabaseTest {
 		for(Position p: pList) {
 			db.insertPosition(p);
 			queryPos = db.findAllPositions();
-			// +2 is because of our initial data
-			assertEquals(p.getID() + 2, queryPos.get(queryPos.size()-1).getID());
+			assertEquals(p.getID() + p_size, queryPos.get(queryPos.size()-1).getID());
 			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
 			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
 			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
 		}
-		/*
-		db.insertPosition(p1);
-		db.insertPosition(p2);
-		db.insertPosition(p3);
-		
-		queryPos = db.findAllPositions();
-		
-		assertEquals(p1.getID(), queryPos.get(queryPos.size()-3).getID());
-		assertEquals(p2.getID(), queryPos.get(queryPos.size()-2).getID());
-		assertEquals(p3.getID(), queryPos.get(queryPos.size()-1).getID());
-		
-		assertEquals(p1.getTitle(), queryPos.get(queryPos.size()-3).getTitle());
-		assertEquals(p2.getTitle(), queryPos.get(queryPos.size()-2).getTitle());
-		assertEquals(p3.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
-		
-		assertEquals(p1.getDescription(), queryPos.get(queryPos.size()-3).getDescription());
-		assertEquals(p2.getDescription(), queryPos.get(queryPos.size()-2).getDescription());
-		assertEquals(p3.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
-		
-		assertEquals(p1.getPriority(), queryPos.get(queryPos.size()-3).getPriority());
-		assertEquals(p2.getPriority(), queryPos.get(queryPos.size()-2).getPriority());
-		assertEquals(p3.getPriority(), queryPos.get(queryPos.size()-1).getPriority());*/
 	}
 	
 	@Test
@@ -157,8 +139,7 @@ public class SqlDatabaseTest {
 		for(User u: uList) {
 			db.insertUser(u);
 			queryUser = db.findAllUsers();
-			// +2 is because of our initial data
-			assertEquals(u.getUserID() + 2, queryUser.get(queryUser.size()-1).getUserID());
+			assertEquals(u.getUserID() + u_size, queryUser.get(queryUser.size()-1).getUserID());
 			assertEquals(u.getEmail(), queryUser.get(queryUser.size()-1).getEmail());
 			assertEquals(u.getPassword(), queryUser.get(queryUser.size()-1).getPassword());
 			assertEquals(u.getFirstname(), queryUser.get(queryUser.size()-1).getFirstname());
@@ -167,28 +148,6 @@ public class SqlDatabaseTest {
 			assertEquals(u.isArchiveFlag(), queryUser.get(queryUser.size()-1).isArchiveFlag());
 			assertEquals(u.getPosition().getID(), queryUser.get(queryUser.size()-1).getPosition().getID());
 		}
-		/*
-		db.insertUser(u1);
-		//db.insertUser(u2);
-		//db.insertUser(u3);
-		
-		queryUser = db.findAllUsers();
-
-		assertEquals(u1.getUserID(), queryUser.get(queryUser.size()-1).getUserID());
-
-		assertEquals(u1.getEmail(), queryUser.get(queryUser.size()-1).getEmail());
-		
-		assertEquals(u1.getPassword(), queryUser.get(queryUser.size()-1).getPassword());
-
-		assertEquals(u1.getFirstname(), queryUser.get(queryUser.size()-1).getFirstname());
-
-		assertEquals(u1.getLastname(), queryUser.get(queryUser.size()-1).getLastname());
-
-		assertEquals(u1.isAdminFlag(), queryUser.get(queryUser.size()-1).isAdminFlag());
-		
-		assertEquals(u1.isArchiveFlag(), queryUser.get(queryUser.size()-1).isArchiveFlag());
-	
-		assertEquals(u1.getPosition().getID(), queryUser.get(0).getPosition().getID());*/
 	}
 	
 	@Test
@@ -196,8 +155,7 @@ public class SqlDatabaseTest {
 		for(SOP s: sList) {
 			db.insertSOP(s);
 			querySOP = db.findAllSOPs();
-			// TODO: Why is this failing?
-			//assertEquals(s.getID() + 2, querySOP.get(querySOP.size()-1).getID());
+			assertEquals(s.getID() + s_size, querySOP.get(querySOP.size()-1).getID());
 			assertEquals(s.getName(), querySOP.get(querySOP.size()-1).getName());
 			assertEquals(s.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
 			assertEquals(s.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
@@ -205,100 +163,47 @@ public class SqlDatabaseTest {
 			assertEquals(s.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
 			assertEquals(s.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());
 		}
-		
-		/*
-		db.insertSOP(s1);
-		db.insertSOP(s2);
-		db.insertSOP(s3);
-		
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(s1.getID(), querySOP.get(querySOP.size()-3).getID());
-		assertEquals(s2.getID(), querySOP.get(querySOP.size()-2).getID());
-		assertEquals(s3.getID(), querySOP.get(querySOP.size()-1).getID());
-		
-		assertEquals(s1.getName(), querySOP.get(querySOP.size()-3).getName());
-		assertEquals(s2.getName(), querySOP.get(querySOP.size()-2).getName());
-		assertEquals(s3.getName(), querySOP.get(querySOP.size()-1).getName());
-
-		assertEquals(s1.getDescription(), querySOP.get(querySOP.size()-3).getDescription());
-		assertEquals(s2.getDescription(), querySOP.get(querySOP.size()-2).getDescription());
-		assertEquals(s3.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
-
-		assertEquals(s1.getPriority(), querySOP.get(querySOP.size()-3).getPriority());
-		assertEquals(s2.getPriority(), querySOP.get(querySOP.size()-2).getPriority());
-		assertEquals(s3.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
-
-		assertEquals(s1.getRevision(), querySOP.get(querySOP.size()-3).getRevision());
-		assertEquals(s2.getRevision(), querySOP.get(querySOP.size()-2).getRevision());
-		assertEquals(s3.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
-
-		assertEquals(s1.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
-		assertEquals(s2.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
-		assertEquals(s3.getAuthorID(), querySOP.get(querySOP.size()-3).getAuthorID());
-		
-		assertEquals(s1.getArchiveFlag(), querySOP.get(querySOP.size()-3).getArchiveFlag());
-		assertEquals(s2.getArchiveFlag(), querySOP.get(querySOP.size()-2).getArchiveFlag());
-		assertEquals(s3.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());	*/
 	}
 	
-	// Testing for our initial data, to ensure that all of our inserts were parsed correctly
+	/// Testing for our initial data, to ensure that all of our inserts were parsed correctly \\\
+   ///																						   \\\
 	@Test
 	public void testFindAllUsers() {
 		queryUser = db.findAllUsers();
-		int numUsers = queryUser.size();
-		assertEquals(new InitialData().getInitialUsers().size(), numUsers);
 		
-		int i = 0;
-		
-		for(User u: queryUser) {
-			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
-			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
-			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
-			assertEquals(u.getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
-			i++;
+		for(int i = 0; i < u_size; i++) {
+			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
+			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
 		}
 	}
 	
 	@Test
-	public void testFindAllPositions() { // Will fail if testInsertPosition is called first
+	public void testFindAllPositions() {
 		queryPos = db.findAllPositions();
-		/*
-		for(int i = 0; i < queryPos.size(); i++) {
+		
+		for(int i = 0; i < p_size; i++)
+		{
+			assertEquals(queryPos.get(i).getID(), new InitialData().getInitialPositions().get(i).getID());
 			assertEquals(queryPos.get(i).getTitle(), new InitialData().getInitialPositions().get(i).getTitle());
 			assertEquals(queryPos.get(i).getDescription(), new InitialData().getInitialPositions().get(i).getDescription());
 			assertEquals(queryPos.get(i).getPriority(), new InitialData().getInitialPositions().get(i).getPriority());
-		}*/
-		int i = 0;
-		for(Position p: queryPos) {
-			//assertEquals(p.getID(), new InitialData().getInitialPositions().get(i).getID());
-			assertEquals(p.getTitle(), new InitialData().getInitialPositions().get(i).getTitle());
-			assertEquals(p.getDescription(), new InitialData().getInitialPositions().get(i).getDescription());
-			assertEquals(p.getPriority(), new InitialData().getInitialPositions().get(i).getPriority());
-			
-			// Make sure we don't get a null pointer exception
-			if(i+1 < new InitialData().getInitialPositions().size())
-				i++;
 		}
 	}
 	
 	@Test
-	public void testFindAllSOPs() { // TODO
+	public void testFindAllSOPs() { 
 		querySOP = db.findAllSOPs();
 		
-		int i = 0;
-		
-		for(SOP s: querySOP) {
-			//assertEquals(s.getID(), new InitialData().getInitialSOPs().get(i).getID()); TODO: Why is this failing?
-			assertEquals(s.getName(), new InitialData().getInitialSOPs().get(i).getName());
-			assertEquals(s.getDescription(), new InitialData().getInitialSOPs().get(i).getDescription());
-			assertEquals(s.getPriority(), new InitialData().getInitialSOPs().get(i).getPriority());
-			assertEquals(s.getRevision(), new InitialData().getInitialSOPs().get(i).getRevision());
-			assertEquals(s.getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
-			assertEquals(s.getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
-			
-			if(i+1 < new InitialData().getInitialSOPs().size())
-				i++;
+		for(int i = 0; i < s_size; i++) {
+			assertEquals(querySOP.get(i).getID(), new InitialData().getInitialSOPs().get(i).getID());
+			assertEquals(querySOP.get(i).getName(), new InitialData().getInitialSOPs().get(i).getName());
+			assertEquals(querySOP.get(i).getDescription(), new InitialData().getInitialSOPs().get(i).getDescription());
+			assertEquals(querySOP.get(i).getPriority(), new InitialData().getInitialSOPs().get(i).getPriority());
+			assertEquals(querySOP.get(i).getRevision(), new InitialData().getInitialSOPs().get(i).getRevision());
+			assertEquals(querySOP.get(i).getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
+			assertEquals(querySOP.get(i).getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
 		}
 	}
 	
@@ -333,7 +238,7 @@ public class SqlDatabaseTest {
 	public void testFindSOPbyAuthorID() {
 		querySOP = db.findAllSOPs();
 		
-				
+		
 	}
 	
 	@Test
@@ -398,8 +303,14 @@ public class SqlDatabaseTest {
 	@Test
 	public void testGetPositionByUser() {
 		queryPos = db.findAllPositions();
+		queryUser = db.findAllUsers();
 		
-		
+		for(int i = 0; i < u_size; i++) {
+			assertEquals(queryPos.get(i).getID(), db.getPositionByUser(queryUser.get(i).getUserID()).getID());
+			assertEquals(queryPos.get(i).getTitle(), db.getPositionByUser(queryUser.get(i).getUserID()).getTitle());
+			assertEquals(queryPos.get(i).getDescription(), db.getPositionByUser(queryUser.get(i).getUserID()).getDescription());
+			assertEquals(queryPos.get(i).getPriority(), db.getPositionByUser(queryUser.get(i).getUserID()).getPriority());
+		}
 	}
 	
 	@Test

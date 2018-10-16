@@ -581,14 +581,23 @@ public class SqlDatabase {
 					
 					resultSet = stmt.executeQuery();
 					
-					Position position = new Position();
+					Position result = new Position();
+					boolean found = false;
 					
-					position.setID(resultSet.getInt(1));
-					position.setTitle(resultSet.getString(2));
-					position.setDescription(resultSet.getString(3));
-					position.setPriority(resultSet.getInt(4));
+					while (resultSet.next()) {
+						found = true;
+						
+						result.setID(resultSet.getInt(1));
+						result.setTitle(resultSet.getString(2));
+						result.setDescription(resultSet.getString(3));
+						result.setPriority(resultSet.getInt(4));
+					}
 					
-					return position;
+					if (!found) {
+						System.out.println("No Positions were found for this User");
+					}
+					
+					return result;
 				}finally{
 					DBUtil.closeQuietly(stmt);
 					DBUtil.closeQuietly(resultSet);
