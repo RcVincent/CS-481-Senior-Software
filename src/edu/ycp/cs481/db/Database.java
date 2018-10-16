@@ -190,6 +190,104 @@ public class Database {
 				List<Position> posList;
 				List<SOP> SOPList;
 				
+				userList       = new InitialData().getInitialUsers();
+				posList		   = new InitialData().getInitialPositions();
+				SOPList		   = new InitialData().getInitialSOPs();
+			
+
+				PreparedStatement insertUser       = null;
+				PreparedStatement insertPos		   = null;
+				PreparedStatement insertSOP	       = null;
+				PreparedStatement insertPosSOP	   = null;
+
+				try {
+					// Insert Positions
+					insertPos = conn.prepareStatement(
+							"insert into Position "
+							+ "(title, description, priority)"
+							+ " values (?, ?, ?)"
+					);
+					for (Position p : posList) {
+						insertPos.setString(1, p.getTitle());
+						insertPos.setString(2, p.getDescription());
+						insertPos.setInt(3, p.getPriority());
+						insertPos.addBatch();
+					}
+					insertPos.executeBatch();
+					
+					System.out.println("Position table populated");
+					
+					// Insert Users
+					insertUser = conn.prepareStatement(
+							"insert into User "
+							+ "(email, password, first_name, last_name, admin_flag, archive_flag, position_id)"
+							+ " values (?, ?, ?, ?, ?, ?, ?)"
+					);
+					for (User u : userList) {
+						insertUser.setString(1, u.getEmail());
+						insertUser.setString(2, u.getPassword());
+						insertUser.setString(3, u.getFirstname());
+						insertUser.setString(4, u.getLastname());
+						insertUser.setString(5, u.isAdminFlag());
+						insertUser.setBoolean(6, u.isArchiveFlag());
+						insertUser.setInt(7, u.getPosition().getID());
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
+					
+					System.out.println("User table populated");
+					
+					// Insert SOPs
+					insertSOP = conn.prepareStatement(
+							"insert into SOP "
+							+ "(title, description, priority, version, author_id, archive_flag)"
+							+ " values (?, ?, ?, ?, ?, ?)"
+					);
+					for (SOP s : SOPList) {
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
+					}
+					insertSOP.executeBatch();
+					
+					System.out.println("SOP table populated");
+
+					// TODO
+					/*// Insert PositionSOPs
+					insertPosSOP = conn.prepareStatement(
+							"insert into PositionSOP "
+							+ "(position_id, sop_id)"
+							+ " values (?, ?)"
+					);
+					for (Position p: posList) {
+						insertPosSOP.setInt(1, p.getID());
+						insertPosSOP.setInt(2, p.getRequirements());
+					}
+					*/
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertPos);
+					DBUtil.closeQuietly(insertSOP);
+					DBUtil.closeQuietly(insertPosSOP);
+				}
+			}
+		});
+	}
+
+	
+	/*public void loadInitialData() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				List<User> userList;
+				List<Position> posList;
+				List<SOP> SOPList;
+				
 				try {
 					userList       = InitialData.getUsers();
 					posList		   = InitialData.getPositions();
@@ -246,14 +344,15 @@ public class Database {
 							+ " values (?, ?, ?, ?, ?, ?)"
 					);
 					for (SOP s : SOPList) {
-						insertUser.setString(1, s.getName());
-						insertUser.setString(2, s.getDescription());
-						insertUser.setInt(3, s.getPriority());
-						insertUser.setInt(4, s.getRevision());
-						insertUser.setInt(5, s.getAuthorID());
-						insertUser.setBoolean(6, s.getArchiveFlag());
-						insertUser.addBatch();
+						insertSOP.setString(1, s.getName());
+						insertSOP.setString(2, s.getDescription());
+						insertSOP.setInt(3, s.getPriority());
+						insertSOP.setInt(4, s.getRevision());
+						insertSOP.setInt(5, s.getAuthorID());
+						insertSOP.setBoolean(6, s.getArchiveFlag());
+						insertSOP.addBatch();
 					}
+					insertSOP.executeBatch();
 					
 					System.out.println("SOP table populated");
 					// TODO:  PositionSOP junction table
@@ -265,7 +364,7 @@ public class Database {
 				}
 			}
 		});
-	}
+	}*/
 	
 	public Integer insertAndGetID(String table, String id_str, String[] args, String[] values){
 		return executeTransaction(new Transaction<Integer>(){
@@ -717,7 +816,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -766,7 +865,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -815,7 +914,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -864,7 +963,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -924,7 +1023,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -985,7 +1084,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1081,7 +1180,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 
@@ -1130,7 +1229,7 @@ public class Database {
 						result.setLastname(resultSet.getString(5));
 						result.setAdminFlag(resultSet.getString(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.getPosition().setID(resultSet.getInt(9));
+						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
 
 					// check if the title was found
@@ -1175,8 +1274,8 @@ public class Database {
 						s.setDescription(resultSet.getString(3));
 						s.setPriority(resultSet.getInt(4));
 						s.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						s.setAuthorID(resultSet.getInt(7));
+						s.setAuthorID(resultSet.getInt(6));
+						s.setArchiveFlag(resultSet.getBoolean(7));
 						
 						result.add(s);
 					}
@@ -1221,8 +1320,8 @@ public class Database {
 						result.setDescription(resultSet.getString(3));
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
-					//	s.setFilepath(resultSet.getString(6);
-						result.setAuthorID(resultSet.getInt(7));
+						result.setAuthorID(resultSet.getInt(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
 					}
 					
 					if (!found) {
@@ -1656,10 +1755,8 @@ public class Database {
 		db.recreateDB();
 		System.out.println("Creating Tables again...");
 		db.createTables();
-		// TODO: Load Initial Data (Currently method isn't setup)
-		/*System.out.println("Loading initial data...");
+		System.out.println("Loading initial data...");
 		db.loadInitialData();
-		*/
 		System.out.println("Database cleaned.");
 	}
 	
@@ -1771,7 +1868,7 @@ public class Database {
 		Database db = new Database();
 		db.createDatabase();
 		db.createTables();
-		// TODO: Load Initial Data
+		db.loadInitialData();
 		System.out.println("Database creation finished");
 	}
 }
