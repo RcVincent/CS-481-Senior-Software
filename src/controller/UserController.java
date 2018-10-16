@@ -116,4 +116,22 @@ public class UserController {
     	db.changeUserPassword(email, oldPass, newPass);
     }
     
+    public List<User> findAllUsers() {
+    	return db.findAllUsers(); 
+    }
+    
+    public Boolean ArchiveUser(int userID) {
+    	return db.archiveUser(userID);
+    }
+    
+    public User changePosition(int userID, int positionID) {
+    	return db.changePosition(userID, positionID);
+    }
+    
+    public User findUserbyPosition(int positionID) {
+    	return db.findUserByPosition(positionID);
+    }
+    
+    
+    
 }
