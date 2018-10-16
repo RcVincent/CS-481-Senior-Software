@@ -139,7 +139,7 @@ public class Database {
 				  "password VARCHAR(32) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
-				  "admin_flag VARCHAR(32) NOT NULL, " +
+				  "admin_flag TINYINT NOT NULL, " +
 				  "archive_flag TINYINT NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 				  "position_id INT NOT NULL, " +
@@ -228,7 +228,7 @@ public class Database {
 						insertUser.setString(2, u.getPassword());
 						insertUser.setString(3, u.getFirstname());
 						insertUser.setString(4, u.getLastname());
-						insertUser.setString(5, u.isAdminFlag());
+						insertUser.setBoolean(5, u.isAdminFlag());
 						insertUser.setBoolean(6, u.isArchiveFlag());
 						insertUser.setInt(7, u.getPosition().getID());
 						insertUser.addBatch();
@@ -389,10 +389,15 @@ public class Database {
 						}
 					}
 					for(int i = 0; i < values.length; i++){
-						if(i == values.length - 1){
-							insertSQL += "'" + values[i] + "');";
+						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+							insertSQL += values[i];
 						}else{
-							insertSQL += "'" + values[i] + "', ";
+							insertSQL += "'" + values[i] + "'";
+						}
+						if(i == values.length - 1){
+							insertSQL += ");";
+						}else{
+							insertSQL += ", ";
 						}
 					}
 					insert.executeUpdate(insertSQL);
@@ -401,7 +406,12 @@ public class Database {
 					selectID = conn.createStatement();
 					String selectSQL = "select " + id_str + " from " + table + " where ";
 					for(int i = 0; i < args.length; i++){
-						selectSQL += args[i] + " = '" + values[i] + "'";
+						selectSQL += args[i] + " = ";
+						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+							selectSQL += values[i];
+						}else{
+							selectSQL += "'" + values[i] + "'";
+						}
 						if(i != args.length - 1){
 							selectSQL += " and ";
 						}else{
@@ -430,7 +440,7 @@ public class Database {
 	public Integer insertUser(User u){
 		return insertAndGetID("User", "user_id", 
 				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{u.getEmail(), u.getPassword(), u.getFirstname(), u.getLastname(), u.isAdminFlag(),
+				new String[]{u.getEmail(), u.getPassword(), u.getFirstname(), u.getLastname(), String.valueOf(u.isAdminFlag()),
 						String.valueOf(u.isArchiveFlag()), String.valueOf(u.getPosition().getID())});
 	}
 	
@@ -775,7 +785,7 @@ public class Database {
 						u.setPassword(resultSet.getString(3));
 						u.setFirstname(resultSet.getString(4));
 						u.setLastname(resultSet.getString(5));
-						u.setAdminFlag(resultSet.getString(6));
+						u.setAdminFlag(resultSet.getBoolean(6));
 						u.setArchiveFlag(resultSet.getBoolean(7));
 						u.setPosition(findPositionByID(resultSet.getInt(9)));			
 						
@@ -823,7 +833,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -872,7 +882,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -921,7 +931,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -970,7 +980,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -1030,7 +1040,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -1091,7 +1101,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -1187,7 +1197,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}
@@ -1236,7 +1246,7 @@ public class Database {
 						result.setPassword(resultSet.getString(3));
 						result.setFirstname(resultSet.getString(4));
 						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getString(6));
+						result.setAdminFlag(resultSet.getBoolean(6));
 						result.setArchiveFlag(resultSet.getBoolean(7));
 						result.setPosition(findPositionByID(resultSet.getInt(9)));
 					}

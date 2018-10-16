@@ -63,7 +63,7 @@ public class LoginServlet extends HttpServlet{
 					
 					loginUser.setSessionid(req.getSession().getId());
 					
-					if(u.isAdminFlag().equals("Admin") || u.isAdminFlag().equals("Admin")) {
+					if(u.isAdminFlag()){
 						resp.sendRedirect(req.getContextPath() + "/index");
 					} else {
 						resp.sendRedirect(req.getContextPath() + "/MainPage");

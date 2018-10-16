@@ -100,7 +100,7 @@ public class SqlDatabaseTest {
 		u1.setPassword("beard");
 		u1.setFirstname("Chuck");
 		u1.setLastname("Norris");
-		u1.setAdminFlag("true");
+		u1.setAdminFlag(true);
 		u1.setArchiveFlag(false);
 		u1.setPosition(db.findAllPositions().get(0));
 		

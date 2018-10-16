@@ -51,7 +51,7 @@ public class CreateAccountServlet extends HttpServlet{
 		userProfile.setLastname(Lastname);
 		
 		String isAdmin = (String) req.getParameter("admin_flag");
-		userProfile.setAdminFlag(isAdmin);
+		userProfile.setAdminFlag(Boolean.parseBoolean(isAdmin));
 		
 		//add to the DB
 		//uc

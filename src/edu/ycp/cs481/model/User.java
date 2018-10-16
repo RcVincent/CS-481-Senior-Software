@@ -4,9 +4,9 @@ public class User {
 	private int UserID;
 	private String Password, Email;
 	private Position position; 
-	private boolean ArchiveFlag, validUser; 
+	private boolean AdminFlag, ArchiveFlag, validUser; 
 	private boolean loggedin;
-	private String AdminFlag, Firstname, Lastname; 
+	private String Firstname, Lastname; 
 	private String sessionid;
 	/// Constructor(s)
 	public User() {
@@ -63,11 +63,11 @@ public class User {
 		ArchiveFlag = archiveFlag;
 	}
 
-	public String isAdminFlag() {
+	public boolean isAdminFlag() {
 		return AdminFlag;
 	}
 
-	public void setAdminFlag(String adminFlag) {
+	public void setAdminFlag(boolean adminFlag) {
 		AdminFlag = adminFlag;
 	}
 
