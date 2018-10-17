@@ -6,7 +6,7 @@
 		</style> 
 <body>
 
-<form action="${pageContext.servletContext.contextPath}/changePassword" method="post">
+<form action="${pageContext.servletContext.contextPath}/change_email" method="post">
 <h1>Passwords did not match. Re-enter Passwords <br></h1>
 <h3>Old Email: <input type="email" name="oldEmail">   <br></h3>
 <h3>New Email: <input type="email" name="newEmail"></h3>
