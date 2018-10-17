@@ -17,6 +17,7 @@ import edu.ycp.cs481.model.User;
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
+	public String dbName = "cs481db";
 	
 	static {
 		try {
@@ -167,7 +168,7 @@ public class Database {
 	}
 
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/CS481db?user=root&password=password");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName +"?user=root&password=password");
 
 		conn.setAutoCommit(false);
 
@@ -913,7 +914,8 @@ public class Database {
 						result.setDescription(resultSet.getString(3));
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(7));
+						result.setAuthorID(resultSet.getInt(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
 					}
 
 
@@ -992,7 +994,8 @@ public class Database {
 						result.setDescription(resultSet.getString(3));
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(7));
+						result.setAuthorID(resultSet.getInt(6));
+						result.setArchiveFlag(resultSet.getBoolean(7));
 					}
 
 
