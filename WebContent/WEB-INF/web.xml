@@ -46,6 +46,26 @@
   </servlet-mapping>
   
   <servlet>
+  	<servlet-name>RetryChangePassword</servlet-name>	
+  	<servlet-class>servlets.RetryChangePasswordServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>RetryChangePassword</servlet-name>
+  	<url-pattern>retrychangepassword</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  	<servlet-name>RetryChangeEmail</servlet-name>	
+  	<servlet-class>servlets.RetryChangeEmailServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>RetryChangeEmail</servlet-name>
+  	<url-pattern>retrychangeemail</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
   	<servlet-name>CreateSOP</servlet-name>
   	<servlet-class>servlets.CreateSOPServlet</servlet-class>
   </servlet>
