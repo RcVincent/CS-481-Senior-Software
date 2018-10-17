@@ -11,7 +11,7 @@
 
 	<body>
 
-	<form action="${pageContext.servletContext.contextPath}/createPosition" method="post">
+	<form action="${pageContext.servletContext.contextPath}/create_position" method="post">
 	Position Name: <input type="text" name="positionName"><br>
 	Position Duty: <textarea rows="4" cols="50" name="positionDuty" >
 	Enter Position Duty here...</textarea><br>

@@ -1,5 +1,4 @@
 package edu.ycp.cs481.servlets;
-
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,23 +9,19 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 
-@SuppressWarnings("serial")
-public class ChangeEmailServlet extends HttpServlet {
-	
-	@Override
+
+public class RetryChangeEmailServlet extends HttpServlet{
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
 		HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
-		
-		req.getRequestDispatcher("/change_email.jsp").forward(req, resp);
+		req.getRequestDispatcher("/retrychangeemail.jsp").forward(req, resp);
 	}
 	
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		if(req.getParameter("index") != null) {
 			System.out.println("returning to index");
@@ -56,6 +51,7 @@ public class ChangeEmailServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/retrychangeemail");
 		}
 		
-		req.getRequestDispatcher("/change_email.jsp").forward(req, resp);
+		req.getRequestDispatcher("/retrychangeemail.jsp").forward(req, resp);
 	}
+
 }

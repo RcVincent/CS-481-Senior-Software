@@ -12,7 +12,7 @@
 
 	<h1 style="text-align: center;"><span style="text-decoration: underline;">Create SOP</span></h1>
   
-	<form action="${pageContext.servletContext.contextPath}/createSOP" method="post">
+	<form action="${pageContext.servletContext.contextPath}/create_sop" method="post">
 	SOP Title: <input type="text" name="title"><br>
 	SOP Purpose: <textarea rows="4" cols="50" name="description" >
 	Enter SOP Purpose here...</textarea><br>
