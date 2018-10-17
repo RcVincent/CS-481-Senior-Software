@@ -15,6 +15,7 @@ public class PositionController {
 	
 	public PositionController() {
 		
+		
 	}
 
    public boolean validPosition(Position p) {
