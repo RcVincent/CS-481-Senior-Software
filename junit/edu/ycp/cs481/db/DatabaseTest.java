@@ -299,14 +299,14 @@ public class DatabaseTest {
 		queryUser = db.findAllUsers();
 		
 		for(User u: queryUser) {
-			assertEquals(u.getUserID(), db.findUserByPosition(u.getPosition().getID()).getUserID());
-			assertEquals(u.getEmail(), db.findUserByPosition(u.getPosition().getID()).getEmail());
-			assertEquals(u.getPassword(), db.findUserByPosition(u.getPosition().getID()).getPassword());
-			assertEquals(u.getFirstname(), db.findUserByPosition(u.getPosition().getID()).getFirstname());
-			assertEquals(u.getLastname(), db.findUserByPosition(u.getPosition().getID()).getLastname());
-			assertEquals(u.isAdminFlag(), db.findUserByPosition(u.getPosition().getID()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.findUserByPosition(u.getPosition().getID()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.findUserByPosition(u.getPosition().getID()).getPosition().getID());
+			assertEquals(u.getUserID(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getUserID());
+			assertEquals(u.getEmail(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getEmail());
+			assertEquals(u.getPassword(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPassword());
+			assertEquals(u.getFirstname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getFirstname());
+			assertEquals(u.getLastname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getLastname());
+			assertEquals(u.isAdminFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isAdminFlag());
+			assertEquals(u.isArchiveFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isArchiveFlag());
+			assertEquals(u.getPosition().getID(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPosition().getID());
 		}
 	}
 	
@@ -378,14 +378,14 @@ public class DatabaseTest {
 		queryUser = db.findAllUsers();
 		
 		for(User u: queryUser) {
-			assertEquals(u.getUserID(), db.getUserByFirstName(u.getFirstname()).getUserID());
-			assertEquals(u.getEmail(), db.getUserByFirstName(u.getFirstname()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByFirstName(u.getFirstname()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByFirstName(u.getFirstname()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByFirstName(u.getFirstname()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByFirstName(u.getFirstname()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByFirstName(u.getFirstname()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByFirstName(u.getFirstname()).getPosition().getID());
+			assertEquals(u.getUserID(), db.getUsersByFirstName(u.getFirstname()).get(0).getUserID());
+			assertEquals(u.getEmail(), db.getUsersByFirstName(u.getFirstname()).get(0).getEmail());
+			assertEquals(u.getPassword(), db.getUsersByFirstName(u.getFirstname()).get(0).getPassword());
+			assertEquals(u.getFirstname(), db.getUsersByFirstName(u.getFirstname()).get(0).getFirstname());
+			assertEquals(u.getLastname(), db.getUsersByFirstName(u.getFirstname()).get(0).getLastname());
+			assertEquals(u.isAdminFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isAdminFlag());
+			assertEquals(u.isArchiveFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isArchiveFlag());
+			assertEquals(u.getPosition().getID(), db.getUsersByFirstName(u.getFirstname()).get(0).getPosition().getID());
 		}
 	}
 	
@@ -394,14 +394,14 @@ public class DatabaseTest {
 		queryUser = db.findAllUsers();
 		
 		for(User u: queryUser) {
-			assertEquals(u.getUserID(), db.getUserByLastName(u.getLastname()).getUserID());
-			assertEquals(u.getEmail(), db.getUserByLastName(u.getLastname()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByLastName(u.getLastname()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByLastName(u.getLastname()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByLastName(u.getLastname()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByLastName(u.getLastname()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByLastName(u.getLastname()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByLastName(u.getLastname()).getPosition().getID());
+			assertEquals(u.getUserID(), db.getUsersByLastName(u.getLastname()).get(0).getUserID());
+			assertEquals(u.getEmail(), db.getUsersByLastName(u.getLastname()).get(0).getEmail());
+			assertEquals(u.getPassword(), db.getUsersByLastName(u.getLastname()).get(0).getPassword());
+			assertEquals(u.getFirstname(), db.getUsersByLastName(u.getLastname()).get(0).getFirstname());
+			assertEquals(u.getLastname(), db.getUsersByLastName(u.getLastname()).get(0).getLastname());
+			assertEquals(u.isAdminFlag(), db.getUsersByLastName(u.getLastname()).get(0).isAdminFlag());
+			assertEquals(u.isArchiveFlag(), db.getUsersByLastName(u.getLastname()).get(0).isArchiveFlag());
+			assertEquals(u.getPosition().getID(), db.getUsersByLastName(u.getLastname()).get(0).getPosition().getID());
 		}
 	}
 	
@@ -438,5 +438,45 @@ public class DatabaseTest {
 		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
 		assertEquals(2, changedPriority.getPriority());
 		*/
+	}
+	
+	@Test
+	public void testChangeUserPassword() {
+		
+	}
+	
+	@Test
+	public void testChangeUserEmail() {
+		
+	}
+	
+	@Test
+	public void testArchiveUser() {
+		
+	}
+	
+	@Test
+	public void testArchiveSOP() {
+		
+	}
+	
+	@Test
+	public void testChangePosition() {
+		
+	}
+	
+	@Test
+	public void testRevertSOP() {
+		
+	}
+	
+	@Test
+	public void testAddSOPtoPosition() {
+		
+	}
+	
+	@Test
+	public void testChangeSOPPriority() {
+		
 	}
 }
