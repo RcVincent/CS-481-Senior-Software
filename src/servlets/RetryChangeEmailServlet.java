@@ -1,5 +1,4 @@
 package servlets;
-
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,24 +9,19 @@ import javax.servlet.http.HttpSession;
 import controller.UserController;
 import model.User;
 
-public class ChangeEmailServlet extends HttpServlet {
-	
-	private static final long serialVersionUID = 1L;
 
-	@Override
+public class RetryChangeEmailServlet extends HttpServlet{
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
 		HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
-		
-		req.getRequestDispatcher("/change_email.jsp").forward(req, resp);
+		req.getRequestDispatcher("/retrychangeemail.jsp").forward(req, resp);
 	}
 	
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		if(req.getParameter("index") != null) {
 			System.out.println("returning to index");
@@ -57,6 +51,7 @@ public class ChangeEmailServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/retrychangeemail");
 		}
 		
-		req.getRequestDispatcher("/change_email.jsp").forward(req, resp);
+		req.getRequestDispatcher("/retrychangeemail.jsp").forward(req, resp);
 	}
+
 }
