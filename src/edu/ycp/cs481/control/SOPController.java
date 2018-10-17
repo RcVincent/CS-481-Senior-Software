@@ -68,28 +68,32 @@ public class SOPController {
 		return db.findSOPbyID(sopID);
 	}
 	
-	public List<SOP> findSOPbyName(String sopName) {
-		return db.findSOPbyName(sopName);
+	public List<SOP> findSOPsByTitle(String sopTitle) {
+		return db.findSOPsByTitle(sopTitle);
 	}
 	
-	public List<SOP> findSOPbyPriority(int priority) {
-		return db.findSOPbyPriority(priority);
+	public List<SOP> findSOPsByPriority(int priority) {
+		return db.findSOPsByPriority(priority);
 	}
 	
-	public List<SOP> findSOPbyVersion(int revision) {
-		return db.findSOPbyVersion(revision); 
+	public List<SOP> findSOPsByVersion(int revision) {
+		return db.findSOPsByVersion(revision); 
 	}
 	
-	public List<SOP> findSOPbyAuthorID(int authorID) {
-		return db.findSOPbyAuthorID(authorID);
+	public List<SOP> findSOPsByAuthorID(int authorID) {
+		return db.findSOPsByAuthorID(authorID);
 	}
 	
 	public List<SOP> findAllSOPs() {
 		return db.findAllSOPs();
 	}
 	
-	public boolean archiveSOP(int sopID) {
-		return db.archiveSOP(sopID);
+	public void archiveSOP(int sopID){
+		db.archiveSOP(sopID);
+	}
+	
+	public void unarchiveSOP(int sopID){
+		db.unarchiveSOP(sopID);
 	}
 	
 	public SOP revertSOP(int sopID, int version) {

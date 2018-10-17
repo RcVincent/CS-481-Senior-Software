@@ -132,8 +132,8 @@ public class UserController {
     	return db.changePosition(userID, positionID);
     }
     
-    public User findUserbyPosition(int positionID) {
-    	return db.findUserByPosition(positionID);
+    public ArrayList<User> findUsersWithPosition(int positionID) {
+    	return db.findUsersWithPosition(positionID);
     }
     
     

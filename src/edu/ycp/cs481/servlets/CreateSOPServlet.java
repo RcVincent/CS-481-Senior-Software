@@ -47,7 +47,7 @@ public class CreateSOPServlet extends HttpServlet{
 		String errorMessage = null; 
 		String successMessage = null; 
 		
-		String sopName = null; 
+		String sopTitle = null; 
 		String sopDescription = null; 
 		int sopid = 0; 
 		int version = 0; 
@@ -56,7 +56,7 @@ public class CreateSOPServlet extends HttpServlet{
 		
 		 
 		
-		sopName = req.getParameter("title");
+		sopTitle = req.getParameter("title");
 		sopDescription = req.getParameter("description");
 		
 		String Priority = req.getParameter("priority");
@@ -71,7 +71,7 @@ public class CreateSOPServlet extends HttpServlet{
 		
 		//add the sop to the db
 		
-		req.setAttribute("title", sopName);
+		req.setAttribute("title", sopTitle);
 		req.setAttribute("description", sopDescription);
 		req.setAttribute("priority", priority);
 		req.setAttribute("version", version);
@@ -79,10 +79,10 @@ public class CreateSOPServlet extends HttpServlet{
 		//set the version, id, author id, 
 		
 		//test the sop we just made
-		List<SOP> test = sc.findSOPbyName(sopName); 
+		List<SOP> test = sc.findSOPsByTitle(sopTitle); 
 		
 		if(test.isEmpty()) {
-			errorMessage = "There was no SOP with name" + sopName + "added to the database";
+			errorMessage = "There was no SOP with name" + sopTitle + "added to the database";
 			return; 
 		}else {
 			SOP testSOP = test.get(0); 

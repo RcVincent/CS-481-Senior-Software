@@ -16,6 +16,7 @@ import edu.ycp.cs481.model.User;
 
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
+	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
 	
 	static {
 		try {
@@ -795,369 +796,87 @@ public class Database {
 		});
 	}
 	
-	public User findUserByPosition(final int position_id) {
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT * FROM User WHERE position_id = ?");
-					
-					stmt.setInt(1, position_id);
-					resultSet = stmt.executeQuery();
-
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with Position ID <" + position_id + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-		
-	public List<SOP> findAllSOPs() {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP");
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found in the database");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-
-	public SOP findSOPbyID(final int id) {
-		return executeTransaction(new Transaction<SOP>() {
-			@Override
-			public SOP execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE sop_id = ?");
-					
-					stmt.setInt(1, id);
-					
-					SOP result = new SOP();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						result.setID(resultSet.getInt(1));
-						result.setName(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found with that ID");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<User> findUsersWithPosition(int position_id){
+		try{
+			return executeQuery("Find Users With Position " + position_id, "select * from User where position_id = " + position_id,
+					userResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public List<SOP> findSOPbyName(final String name) {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE title = ?");
-					
-					stmt.setString(1, name);
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found with that name");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<SOP> findAllSOPs(){
+		try{
+			return executeQuery("Get All SOPs", "select * from SOP", sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public List<SOP> findSOPbyPriority(final int priority) {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE priority = ?");
-					
-					stmt.setInt(1, priority);
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found with that priority");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
+	public SOP findSOPbyID(int sop_id){
+		try{
+			ArrayList<SOP> results = executeQuery("Get SOP By ID", "select * from SOP where sop_id = " + sop_id, sopResFormat);
+			if(results.size() == 0){
+				System.out.println("No SOP found with ID " + sop_id);
+			}else if(results.size() > 1){
+				System.out.println("Multiple SOPS found with ID " + sop_id + "! Returning null");
+			}else{
+				return results.get(0);
 			}
-		});
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public List<SOP> findSOPbyVersion(final int version) {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE version = ?");
-					
-					stmt.setInt(1, version);
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found with that version");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<SOP> findSOPsByTitle(String title){
+		try{
+			return executeQuery("Get SOPs By Title", "select * from SOP where title = '" + title + "'", sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public List<SOP> findSOPbyAuthorID(final int id) {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE author_id = ?");
-					
-					stmt.setInt(1, id);
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found with that author");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<SOP> findSOPsByPriority(int priority){
+		try{
+			return executeQuery("Get SOPs By Priority", "select * from SOP where priority = " + priority, sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public Boolean archiveSOP(final int sop_id) {
-		return executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"SELECT archive_flag FROM SOP where sop_id = ?");
-					
-					stmt.setInt(1, sop_id);
-					resultSet = stmt.executeQuery();
-					
-					boolean result = !resultSet.getBoolean(1);
-					
-					
-					stmt2 = conn.prepareStatement(
-							"UPDATE SOP SET archive_flag = ? WHERE sop_id = ? ");
-					
-					stmt2.setBoolean(1, result);
-					stmt2.setInt(2, sop_id);
-					stmt2.executeUpdate();
-					
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
+	public ArrayList<SOP> findSOPsByVersion(int version){
+		try{
+			return executeQuery("Get SOPs By Version", "select * from SOP where version = " + version, sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
-
+	
+	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
+		try{
+			return executeQuery("Get SOPs by Author_ID", "select * from SOP where author_id = " + authorID, sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void archiveSOP(int sop_id){
+		executeUpdate("Archive SOP with ID " + sop_id, "update SOP set archive_flag = true where sop_id = " + sop_id);
+	}
+	
+	public void unarchiveSOP(int sop_id){
+		executeUpdate("Unarchive SOP with ID " + sop_id, "update SOP set archive_flag = false where sop_id = " + sop_id);
+	}
+	
+	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
+	// unarchiving the old one?
 	public SOP revertSOP(final int sop_id, final int revision) {
 		return executeTransaction(new Transaction<SOP>() {
 			@Override
@@ -1214,80 +933,28 @@ public class Database {
 		});
 	}
 	
+	// TODO: Remove this? Already know User's Position in all/most cases?
 	public SOP findSOPthruPosition(final int user_id) {
 		// TODO: User -> Position -> requirements
 		return null;
 	}
 	
-	public List<SOP> findSOPbyPosition(final int position_id) {
-		return executeTransaction(new Transaction<List<SOP>>() {
-			@Override
-			public List<SOP> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"SELECT * FROM PositionSOP WHERE position_id = ?");
-					
-					stmt.setInt(1, position_id);
-					
-					List<SOP> result = new ArrayList<SOP>();
-					
-					resultSet = stmt.executeQuery();
-					
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						SOP s = new SOP();
-						s.setID(resultSet.getInt(1));
-						s.setName(resultSet.getString(2));
-						s.setDescription(resultSet.getString(3));
-						s.setPriority(resultSet.getInt(4));
-						s.setRevision(resultSet.getInt(5));
-						s.setAuthorID(resultSet.getInt(6));
-						s.setArchiveFlag(resultSet.getBoolean(7));
-						
-						result.add(s);
-					}
-					
-					if (!found) {
-						System.out.println("No SOPs were found for that position");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public ArrayList<SOP> findSOPsByPosition(int position_id){
+		try{
+			return executeQuery("Get SOPs By Position", "select " + sopPieces + " from PositionSOP, SOP " + 
+					"where position_id = " + position_id, sopResFormat);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public Boolean addSOPtoPosition(final int position_id, final int sop_id) {
-		return executeTransaction(new Transaction<Boolean>(){
-			@Override
-			public Boolean execute(Connection conn) throws SQLException{
-				PreparedStatement stmt = null;
-				
-				try {
-					stmt = conn.prepareStatement(
-							"insert into PositionSOP (position_id, sop_id) values (?, ?)");
-					stmt.setInt(1, position_id);
-					stmt.setInt(2, sop_id);
-					
-					stmt.executeUpdate();
-					
-					return true;
-				}finally{
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public void addSOPtoPosition(int positionID, int sopID){
+		executeUpdate("Insert Position " + positionID + " and SOP " + sopID + " connection", 
+				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
 	}
 	
+	// TODO: Change this to use executeUpdate()? Not sure why it returns an SOP, perhaps for updating it locally?
 	public SOP changeSOPPriority(final int sop_id, final int priority) {
 		return executeTransaction(new Transaction<SOP>() {
 			@Override

@@ -233,29 +233,29 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testFindSOPbyAuthorID() {
+	public void testfindSOPsByAuthorID() {
 		querySOP = db.findAllSOPs();
 		
-		assertEquals(querySOP.get(0).getID(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getID());
-		assertEquals(querySOP.get(0).getName(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
+		assertEquals(querySOP.get(0).getID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
 	}
 	
 	@Test
-	public void testFindSOPbyName() {
+	public void testfindSOPsByTitle() {
 		querySOP = db.findAllSOPs();
 		
-		assertEquals(querySOP.get(0).getID(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getID());
-		assertEquals(querySOP.get(0).getName(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyName(querySOP.get(0).getName()).get(0).getArchiveFlag());
+		assertEquals(querySOP.get(0).getID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getArchiveFlag());
 	}
 	
 	@Test // TODO: Implement after PositionSOP
@@ -264,29 +264,29 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testFindSOPbyPriority() {
+	public void testfindSOPsByPriority() {
 		querySOP = db.findAllSOPs();
 		
-		assertEquals(querySOP.get(0).getID(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getID());
-		assertEquals(querySOP.get(0).getName(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
+		assertEquals(querySOP.get(0).getID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
 	}
 	
 	@Test
-	public void testFindSOPbyVersion() {
+	public void testfindSOPsByVersion() {
 		querySOP = db.findAllSOPs();
 		
-		assertEquals(querySOP.get(0).getID(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getID());
-		assertEquals(querySOP.get(0).getName(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPbyVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
+		assertEquals(querySOP.get(0).getID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getID());
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
 	}
 	
 	@Test // TODO: Implement after PositionSOP
