@@ -414,30 +414,94 @@ public class Database {
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
 	}
 	
-	public ArrayList<Position> findAllPositions(){
+	public ArrayList<Position> searchForPosition(int position_id, String title, String description, int priority){
 		try{
-			return executeQuery("Get All Positions", "select * from Position", posResFormat);
+			String name = "";
+			String sql = "select * from Position";
+			if(position_id == -1 && (title == null || title.equalsIgnoreCase("")) && 
+					(description == null || description.equalsIgnoreCase("")) && priority == -1){
+				name = "Get All Positions";
+			}else{
+				name = "Get Position with ";
+				sql += " where ";
+				boolean prevSet = false;
+				
+				if(position_id != -1){
+					name += "id of " + position_id;
+					sql += "position_id = " + position_id;
+					prevSet = true;
+				}
+				
+				if(title != null && !title.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "title of " + title;
+					sql += "title = '" + title + "'";
+					prevSet = true;
+				}
+				
+				// TODO: Likely edit description (and possibly title) to search for partial? Not sure if this does that.
+				if(description != null && !description.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "description of " + description;
+					sql += "description = '" + description + "'";
+					prevSet = true;
+				}
+				
+				if(priority != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "priority " + priority;
+					sql += "priority = " + priority;
+					prevSet = true;
+				}
+			}
+			ArrayList<Position> results = executeQuery(name, sql, posResFormat);
+			if(position_id != -1){
+				if(results.size() == 0){
+					System.out.println("No Position found with ID " + position_id);
+				}else if(results.size() > 1){
+					System.out.println("Multiple Positions found with ID " + position_id + "! Returning null");
+					return null;
+				}
+			}
+			return results;
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	@Deprecated // TODO: Remove, use searchForPosition instead
+	public ArrayList<Position> findAllPositions(){
+		return searchForPosition(-1, null, null, -1);
+	}
+	
+	@Deprecated // TODO: Remove, use searchForPosition instead
 	public Position findPositionByID(int position_id){
-		try{
-			ArrayList<Position> results = executeQuery("Get Position by ID", "select * from Position where position_id = " 
-					+ position_id, posResFormat);
-			if(results.size() == 0){
-				System.out.println("No position found with id " + position_id + "!");
-			}else if(results.size() > 1){
-				System.out.println("More than one position found with id " + position_id + "! Returning null");
-			}else{
-				return results.get(0);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
+		ArrayList<Position> result = searchForPosition(position_id, null, null, -1);
+		if(result != null){
+			return result.get(0);
+		}else{
+			return null;
 		}
-		return null;
+	}
+	
+	@Deprecated // TODO: Remove, use searchForPosition instead
+	public ArrayList<Position> getPositionByName(String title){
+		return searchForPosition(-1, title, null, -1);
+	}
+	
+	@Deprecated // TODO: Remove, use searchForPosition instead
+	public ArrayList<Position> getPositionByPriority(int priority){
+		return searchForPosition(-1, null, null, priority);
 	}
 	
 	public Position getPositionOfUser(int userID){
@@ -462,24 +526,6 @@ public class Database {
 		try{
 			return executeQuery("Get Position by SOP ID", "select " + positionPieces + " from Position, PositionSOP where "
 					+ "PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", posResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public ArrayList<Position> getPositionByName(String title){
-		try{
-			return executeQuery("Get Position by Title", "SELECT * from Position where title = '" + title + "'", posResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public ArrayList<Position> getPositionByPriority(int priority){
-		try{
-			return executeQuery("Get Position by Priority", "select * from Position where priority = " + priority, posResFormat);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -808,11 +854,12 @@ public class Database {
 		return null;
 	}
 	
-	public ArrayList<SOP> searchForSOPs(int sop_id, String title, int priority, int version, int author_id){
+	public ArrayList<SOP> searchForSOPs(int sop_id, String title, String description, int priority, int version, int author_id){
 		try{
 			String name = "";
 			String sql = "select * from SOP";
-			if(sop_id == -1 && (title == null || title.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
+			if(sop_id == -1 && (title == null || title.equalsIgnoreCase("")) &&
+					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
 					author_id == -1){
 				name = "Get All SOPs";
 			}else{
@@ -833,6 +880,18 @@ public class Database {
 					}
 					name += "title of " + title;
 					sql += "title = '" + title + "'";
+					prevSet = true;
+				}
+				
+				// TODO: Likely need to change to search partial descriptions
+				if(description != null && !description.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "description of " + description;
+					sql += "description = '" + description + "'";
+					prevSet = true;
 				}
 				
 				if(priority != -1){
@@ -842,6 +901,7 @@ public class Database {
 					}
 					name += "priority " + priority;
 					sql += "priority = " + priority;
+					prevSet = true;
 				}
 				
 				if(version != -1){
@@ -851,6 +911,7 @@ public class Database {
 					}
 					name += "version " + version;
 					sql += "version = " + version;
+					prevSet = true;
 				}
 				
 				if(author_id != -1){
@@ -860,6 +921,7 @@ public class Database {
 					}
 					name += "author_id of" + author_id;
 					sql += "author_id = " + author_id;
+					prevSet = true;
 				}
 			}
 			ArrayList<SOP> results = executeQuery(name, sql, sopResFormat);
@@ -880,32 +942,37 @@ public class Database {
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findAllSOPs(){
-		return searchForSOPs(-1, null, -1, -1, -1);
+		return searchForSOPs(-1, null, null, -1, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public SOP findSOPbyID(int sop_id){
-		return searchForSOPs(sop_id, null, -1, -1, -1).get(0);
+		ArrayList<SOP> result = searchForSOPs(sop_id, null, null, -1, -1, -1);
+		if(result != null){
+			return result.get(0);
+		}else{
+			return null;
+		}
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByTitle(String title){
-		return searchForSOPs(-1, title, -1, -1, -1);
+		return searchForSOPs(-1, title, null, -1, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByPriority(int priority){
-		return searchForSOPs(-1, null, priority, -1, -1);
+		return searchForSOPs(-1, null, null, priority, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByVersion(int version){
-		return searchForSOPs(-1, null, -1, version, -1);
+		return searchForSOPs(-1, null, null, -1, version, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		return searchForSOPs(-1, null, -1, -1, authorID);
+		return searchForSOPs(-1, null, null, -1, -1, authorID);
 	}
 	
 	public void archiveSOP(int sop_id){
