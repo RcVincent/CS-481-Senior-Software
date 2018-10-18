@@ -414,11 +414,11 @@ public class Database {
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
 	}
 	
-	public ArrayList<Position> searchForPosition(int position_id, String title, String description, int priority){
+	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
 		try{
 			String name = "";
 			String sql = "select * from Position";
-			if(position_id == -1 && (title == null || title.equalsIgnoreCase("")) && 
+			if(positionID == -1 && (title == null || title.equalsIgnoreCase("")) && 
 					(description == null || description.equalsIgnoreCase("")) && priority == -1){
 				name = "Get All Positions";
 			}else{
@@ -426,9 +426,9 @@ public class Database {
 				sql += " where ";
 				boolean prevSet = false;
 				
-				if(position_id != -1){
-					name += "id of " + position_id;
-					sql += "position_id = " + position_id;
+				if(positionID != -1){
+					name += "id of " + positionID;
+					sql += "position_id = " + positionID;
 					prevSet = true;
 				}
 				
@@ -464,11 +464,11 @@ public class Database {
 				}
 			}
 			ArrayList<Position> results = executeQuery(name, sql, posResFormat);
-			if(position_id != -1){
+			if(positionID != -1){
 				if(results.size() == 0){
-					System.out.println("No Position found with ID " + position_id);
+					System.out.println("No Position found with ID " + positionID);
 				}else if(results.size() > 1){
-					System.out.println("Multiple Positions found with ID " + position_id + "! Returning null");
+					System.out.println("Multiple Positions found with ID " + positionID + "! Returning null");
 					return null;
 				}
 			}
@@ -479,14 +479,14 @@ public class Database {
 		return null;
 	}
 	
-	@Deprecated // TODO: Remove, use searchForPosition instead
+	@Deprecated // TODO: Remove, use searchForPositions instead
 	public ArrayList<Position> findAllPositions(){
-		return searchForPosition(-1, null, null, -1);
+		return searchForPositions(-1, null, null, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForPosition instead
+	@Deprecated // TODO: Remove, use searchForPositions instead
 	public Position findPositionByID(int position_id){
-		ArrayList<Position> result = searchForPosition(position_id, null, null, -1);
+		ArrayList<Position> result = searchForPositions(position_id, null, null, -1);
 		if(result != null){
 			return result.get(0);
 		}else{
@@ -494,14 +494,14 @@ public class Database {
 		}
 	}
 	
-	@Deprecated // TODO: Remove, use searchForPosition instead
+	@Deprecated // TODO: Remove, use searchForPositions instead
 	public ArrayList<Position> getPositionByName(String title){
-		return searchForPosition(-1, title, null, -1);
+		return searchForPositions(-1, title, null, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForPosition instead
+	@Deprecated // TODO: Remove, use searchForPositions instead
 	public ArrayList<Position> getPositionByPriority(int priority){
-		return searchForPosition(-1, null, null, priority);
+		return searchForPositions(-1, null, null, priority);
 	}
 	
 	public Position getPositionOfUser(int userID){
@@ -591,65 +591,123 @@ public class Database {
 		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
 	}
 	
+	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
+		try{
+			String name = "";
+			String sql = "select * from User";
+			if(userID == -1 && (email == null || email.equalsIgnoreCase("")) && 
+					(firstName == null || firstName.equalsIgnoreCase("")) && 
+					(lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
+				name = "Get All Users";
+			}else{
+				name = "Get User with ";
+				sql += " where ";
+				boolean prevSet = false;
+				
+				if(userID != -1){
+					name += "id of " + userID;
+					sql += "user_id = " + userID;
+					prevSet = true;
+				}
+				
+				// TODO: Likely change strings for searching by partial?
+				if(email != null && !email.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "email of " + email;
+					sql += "email = '" + email + "'";
+					prevSet = true;
+				}
+				
+				if(firstName != null && !firstName.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "first name of " + firstName;
+					sql += "first_name = '" + firstName + "'";
+					prevSet = true;
+				}
+				
+				if(lastName != null && !lastName.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "last name of " + lastName;
+					sql += "last_name = '" + lastName + "'";
+					prevSet = true;
+				}
+				
+				if(positionID != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "position ID of " + positionID;
+					sql += "position_id = " + positionID;
+					prevSet = true;
+				}
+			}
+			ArrayList<User> results = executeQuery(name, sql, userResFormat);
+			if(results.size() == 0 && userID != -1){
+				System.out.println("No User found with ID " + userID);
+			}else if(results.size() > 1){
+				if(userID != -1){
+					System.out.println("Multiple Users found with ID " + userID + "! Returning null");
+					return null;
+				}else if(email != null && !email.equalsIgnoreCase("")){
+					System.out.println("Multiple Users found with email " + email + "! Returning null");
+					return null;
+				}
+			}
+			return results;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Deprecated // TODO: Remove, use searchForUsers instead
 	public ArrayList<User> findAllUsers(){
-		try{
-			return executeQuery("Get All Users", "select * from User", userResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForUsers(-1, null, null, null, -1);
 	}
 	
+	@Deprecated // TODO: Remove, use searchForUsers instead
 	public User getUserByID(int ID){
-		try{
-			ArrayList<User> results = executeQuery("Get User By ID", "select * from User where user_id = " + ID, userResFormat);
-			if(results.size() == 0){
-				System.out.println("No User found with ID " + ID);
-			}else if(results.size() > 1){
-				System.out.println("Multiple Users found with ID " + ID + "! Returning null");
-			}else{
-				return results.get(0);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
+		ArrayList<User> result = searchForUsers(ID, null, null, null, -1);
+		if(result != null){
+			return result.get(0);
+		}else{
+			return null;
 		}
-		return null;
 	}
 	
+	@Deprecated // TODO: Remove, use searchForUsers instead
 	public User getUserByEmail(String email){
-		try{
-			ArrayList<User> results = executeQuery("Get User By Email", "select * from User where email = '" + 
-					email + "'", userResFormat);
-			if(results.size() == 0){
-				System.out.println("No User found with email " + email);
-			}else if(results.size() > 1){
-				System.out.println("Multiple Users found with email " + email + "! Returning null");
-			}else{
-				return results.get(0);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
+		ArrayList<User> result = searchForUsers(-1, email, null, null, -1);
+		if(result != null){
+			return result.get(0);
+		}else{
+			return null;
 		}
-		return null;
 	}
 	
+	@Deprecated // TODO: Remove, use searchForUsers instead
 	public ArrayList<User> getUsersByFirstName(String firstName){
-		try{
-			return executeQuery("Get Users By First Name", "select * from User where first_name = '" + firstName + "'", 
-					userResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForUsers(-1, null, firstName, null, -1);
 	}
 	
+	@Deprecated // TODO: Remove, use searchForUsers instead
 	public ArrayList<User> getUsersByLastName(String lastName){
-		try{
-			return executeQuery("Get Users By Last Name", "select * from User where last_name = '" + lastName + "'", userResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForUsers(-1, null, null, lastName, -1);
+	}
+	
+	@Deprecated // TODO: Remove, use searchForUsers instead
+	public ArrayList<User> findUsersWithPosition(int position_id){
+		return searchForUsers(-1, null, null, null, position_id);
 	}
 	
 	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
@@ -844,32 +902,22 @@ public class Database {
 		});
 	}
 	
-	public ArrayList<User> findUsersWithPosition(int position_id){
-		try{
-			return executeQuery("Find Users With Position " + position_id, "select * from User where position_id = " + position_id,
-					userResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public ArrayList<SOP> searchForSOPs(int sop_id, String title, String description, int priority, int version, int author_id){
+	public ArrayList<SOP> searchForSOPss(int sopID, String title, String description, int priority, int version, int authorID){
 		try{
 			String name = "";
 			String sql = "select * from SOP";
-			if(sop_id == -1 && (title == null || title.equalsIgnoreCase("")) &&
+			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
 					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
-					author_id == -1){
+					authorID == -1){
 				name = "Get All SOPs";
 			}else{
 				name = "Get SOP with ";
 				sql += " where ";
 				boolean prevSet = false;
 				
-				if(sop_id != -1){
-					name += "id of " + sop_id;
-					sql += "sop_id = " + sop_id;
+				if(sopID != -1){
+					name += "id of " + sopID;
+					sql += "sop_id = " + sopID;
 					prevSet = true;
 				}
 				
@@ -914,22 +962,22 @@ public class Database {
 					prevSet = true;
 				}
 				
-				if(author_id != -1){
+				if(authorID != -1){
 					if(prevSet){
 						name += " and ";
 						sql += " and ";
 					}
-					name += "author_id of" + author_id;
-					sql += "author_id = " + author_id;
+					name += "author_id of" + authorID;
+					sql += "author_id = " + authorID;
 					prevSet = true;
 				}
 			}
 			ArrayList<SOP> results = executeQuery(name, sql, sopResFormat);
-			if(sop_id != -1){
+			if(sopID != -1){
 				if(results.size() == 0){
-					System.out.println("No SOP found with ID " + sop_id);
+					System.out.println("No SOP found with ID " + sopID);
 				}else if(results.size() > 1){
-					System.out.println("Multiple SOPs found with ID " + sop_id + "! Returning null");
+					System.out.println("Multiple SOPs found with ID " + sopID + "! Returning null");
 					return null;
 				}
 			}
@@ -940,14 +988,14 @@ public class Database {
 		return null;
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findAllSOPs(){
-		return searchForSOPs(-1, null, null, -1, -1, -1);
+		return searchForSOPss(-1, null, null, -1, -1, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public SOP findSOPbyID(int sop_id){
-		ArrayList<SOP> result = searchForSOPs(sop_id, null, null, -1, -1, -1);
+		ArrayList<SOP> result = searchForSOPss(sop_id, null, null, -1, -1, -1);
 		if(result != null){
 			return result.get(0);
 		}else{
@@ -955,24 +1003,24 @@ public class Database {
 		}
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByTitle(String title){
-		return searchForSOPs(-1, title, null, -1, -1, -1);
+		return searchForSOPss(-1, title, null, -1, -1, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByPriority(int priority){
-		return searchForSOPs(-1, null, null, priority, -1, -1);
+		return searchForSOPss(-1, null, null, priority, -1, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByVersion(int version){
-		return searchForSOPs(-1, null, null, -1, version, -1);
+		return searchForSOPss(-1, null, null, -1, version, -1);
 	}
 	
-	@Deprecated // TODO: Remove, use searchForSOPs instead
+	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		return searchForSOPs(-1, null, null, -1, -1, authorID);
+		return searchForSOPss(-1, null, null, -1, -1, authorID);
 	}
 	
 	public void archiveSOP(int sop_id){
