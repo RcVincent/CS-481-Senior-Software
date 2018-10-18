@@ -739,6 +739,7 @@ public class Database {
 	}
 	
 	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
+	// Also this currently updates the Position in a weird way (doing a sub-transaction within the greater one)
 	public User changePosition(final int user_id, final int position_id) {
 		return executeTransaction(new Transaction<User>() {
 			@Override
@@ -807,65 +808,104 @@ public class Database {
 		return null;
 	}
 	
-	public ArrayList<SOP> findAllSOPs(){
+	public ArrayList<SOP> searchForSOPs(int sop_id, String title, int priority, int version, int author_id){
 		try{
-			return executeQuery("Get All SOPs", "select * from SOP", sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public SOP findSOPbyID(int sop_id){
-		try{
-			ArrayList<SOP> results = executeQuery("Get SOP By ID", "select * from SOP where sop_id = " + sop_id, sopResFormat);
-			if(results.size() == 0){
-				System.out.println("No SOP found with ID " + sop_id);
-			}else if(results.size() > 1){
-				System.out.println("Multiple SOPS found with ID " + sop_id + "! Returning null");
+			String name = "";
+			String sql = "select * from SOP";
+			if(sop_id == -1 && (title == null || title.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
+					author_id == -1){
+				name = "Get All SOPs";
 			}else{
-				return results.get(0);
+				name = "Get SOP with ";
+				sql += " where ";
+				boolean prevSet = false;
+				
+				if(sop_id != -1){
+					name += "id of " + sop_id;
+					sql += "sop_id = " + sop_id;
+					prevSet = true;
+				}
+				
+				if(title != null && !title.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "title of " + title;
+					sql += "title = '" + title + "'";
+				}
+				
+				if(priority != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "priority " + priority;
+					sql += "priority = " + priority;
+				}
+				
+				if(version != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "version " + version;
+					sql += "version = " + version;
+				}
+				
+				if(author_id != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "author_id of" + author_id;
+					sql += "author_id = " + author_id;
+				}
 			}
+			ArrayList<SOP> results = executeQuery(name, sql, sopResFormat);
+			if(sop_id != -1){
+				if(results.size() == 0){
+					System.out.println("No SOP found with ID " + sop_id);
+				}else if(results.size() > 1){
+					System.out.println("Multiple SOPs found with ID " + sop_id + "! Returning null");
+					return null;
+				}
+			}
+			return results;
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
+	public ArrayList<SOP> findAllSOPs(){
+		return searchForSOPs(-1, null, -1, -1, -1);
+	}
+	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
+	public SOP findSOPbyID(int sop_id){
+		return searchForSOPs(sop_id, null, -1, -1, -1).get(0);
+	}
+	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByTitle(String title){
-		try{
-			return executeQuery("Get SOPs By Title", "select * from SOP where title = '" + title + "'", sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForSOPs(-1, title, -1, -1, -1);
 	}
 	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByPriority(int priority){
-		try{
-			return executeQuery("Get SOPs By Priority", "select * from SOP where priority = " + priority, sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForSOPs(-1, null, priority, -1, -1);
 	}
 	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByVersion(int version){
-		try{
-			return executeQuery("Get SOPs By Version", "select * from SOP where version = " + version, sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForSOPs(-1, null, -1, version, -1);
 	}
 	
+	@Deprecated // TODO: Remove, use searchForSOPs instead
 	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		try{
-			return executeQuery("Get SOPs by Author_ID", "select * from SOP where author_id = " + authorID, sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
+		return searchForSOPs(-1, null, -1, -1, authorID);
 	}
 	
 	public void archiveSOP(int sop_id){
@@ -935,12 +975,6 @@ public class Database {
 		});
 	}
 	
-	// TODO: Remove this? Already know User's Position in all/most cases?
-	public SOP findSOPthruPosition(final int user_id) {
-		// TODO: User -> Position -> requirements
-		return null;
-	}
-	
 	public ArrayList<SOP> findSOPsByPosition(int position_id){
 		try{
 			return executeQuery("Get SOPs By Position", "select " + sopPieces + " from PositionSOP, SOP " + 
@@ -956,7 +990,14 @@ public class Database {
 				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
 	}
 	
-	// TODO: Change this to use executeUpdate()? Not sure why it returns an SOP, perhaps for updating it locally?
+	/*
+	public void changeSOPPriority(SOP sop, int priority){
+		executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
+				"where sop_id = " + sop.getID());
+		sop.setPriority(priority);
+	}*/
+	
+	// TODO: Remove this to use about method? Not sure at the moment
 	public SOP changeSOPPriority(final int sop_id, final int priority) {
 		return executeTransaction(new Transaction<SOP>() {
 			@Override
