@@ -12,6 +12,8 @@
 <ul>
   <li><a href="login">Login</a></li>
   <li><a href="create_account">Create Account</a></li>
+  <li><a href="create_position"></a></li>
+  <li><a href="create_sop"></a><li> 
 </ul>
 </fieldset>
 <p/>
