@@ -54,7 +54,8 @@ public class CreateAccountServlet extends HttpServlet{
 		userProfile.setAdminFlag(Boolean.parseBoolean(isAdmin));
 		
 		//add to the DB
-		//uc
+		uc.insertUser(userProfile);
+		
 		req.setAttribute("sessionid", userProfile);
 		
 		if(req.getParameter("index") != null) {

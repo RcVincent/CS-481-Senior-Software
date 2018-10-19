@@ -91,6 +91,9 @@ public class UserController {
   	//Implementing DB calls 
   	//************************************
     
+    public Integer insertUser(User u) {
+    	return db.insertUser(u);
+    }
     public User FindUserByID(int userID) {
     	return db.getUserByID(userID);
     }
