@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <servlet>
   	<servlet-name>Index</servlet-name>
-  	<servlet-class>servlets.IndexServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.IndexServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>Index</servlet-name>
@@ -10,7 +10,7 @@
   </servlet-mapping>
   <servlet>
   	<servlet-name>Login</servlet-name>
-  	<servlet-class>servlets.LoginServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.LoginServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>Login</servlet-name>
@@ -18,7 +18,7 @@
   </servlet-mapping>
   <servlet>
   	<servlet-name>CreateAccount</servlet-name>
-  	<servlet-class>servlets.CreateAccountServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.CreateAccountServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>CreateAccount</servlet-name>
@@ -27,7 +27,7 @@
   
   <servlet>
   	<servlet-name>ChangeEmail</servlet-name>
-  	<servlet-class>servlets.ChangeEmailServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.ChangeEmailServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -37,7 +37,7 @@
   
   <servlet>
   	<servlet-name>ChangePassword</servlet-name>
-  	<servlet-class>servlets.ChangePasswordServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.ChangePasswordServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -47,27 +47,27 @@
   
   <servlet>
   	<servlet-name>RetryChangePassword</servlet-name>	
-  	<servlet-class>servlets.RetryChangePasswordServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.RetryChangePasswordServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
   	<servlet-name>RetryChangePassword</servlet-name>
-  	<url-pattern>retrychangepassword</url-pattern>
+  	<url-pattern>/retrychangepassword</url-pattern>
   </servlet-mapping>
   
     <servlet>
   	<servlet-name>RetryChangeEmail</servlet-name>	
-  	<servlet-class>servlets.RetryChangeEmailServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.RetryChangeEmailServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
   	<servlet-name>RetryChangeEmail</servlet-name>
-  	<url-pattern>retrychangeemail</url-pattern>
+  	<url-pattern>/retrychangeemail</url-pattern>
   </servlet-mapping>
   
   <servlet>
   	<servlet-name>CreateSOP</servlet-name>
-  	<servlet-class>servlets.CreateSOPServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.CreateSOPServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -77,7 +77,7 @@
   
   <servlet>
   	<servlet-name>CreatePosition</servlet-name>
-  	<servlet-class>servlets.CreatePositionServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.CreatePositionServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -87,7 +87,7 @@
   
   <servlet>
   	<servlet-name>ChangePositionPriority</servlet-name>
-  	<servlet-class>servlets.ChangePositionPriorityServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.ChangePositionPriorityServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -97,7 +97,7 @@
   
   <servlet>
   	<servlet-name>ChangeSOPPriority</servlet-name>
-  	<servlet-class>servlets.ChangeSOPPriorityServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs481.servlets.ChangeSOPPriorityServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>

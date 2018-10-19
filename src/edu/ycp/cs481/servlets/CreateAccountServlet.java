@@ -19,12 +19,12 @@ public class CreateAccountServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Create Account Servlet: doGet");
 		
-		HttpSession session = req.getSession(); 
+		/*HttpSession session = req.getSession(); 
 		System.out.println(session.getAttribute("email")); 
 		if(session.getAttribute("email") == null) {
-			resp.sendRedirect(req.getContextPath() + "/Login");
+			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}
+		}*/
 		
 		//do the request 
 		req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
@@ -54,7 +54,8 @@ public class CreateAccountServlet extends HttpServlet{
 		userProfile.setAdminFlag(Boolean.parseBoolean(isAdmin));
 		
 		//add to the DB
-		//uc
+		uc.insertUser(userProfile);
+		
 		req.setAttribute("sessionid", userProfile);
 		
 		if(req.getParameter("index") != null) {
