@@ -14,11 +14,11 @@ import edu.ycp.cs481.model.User;
 
 public class InitialData {
 	private List<User> uList;
-	private User u1, u2, u3, u4;
+	private User u1, u2;
 	private List<Position> pList;
-	private Position p1, p2, p3, p4;
+	private Position p1, p2, p3;
 	private List<SOP> sList;	
-	private SOP s1, s2, s3, s4;
+	private SOP s1, s2;
 	
 	public InitialData() {
 		uList = new ArrayList<User>();
@@ -35,6 +35,12 @@ public class InitialData {
 		p2.setTitle("User");
 		p2.setDescription("This is used as a temporary position for those without one.");
 		p2.setPriority(3);
+		
+		p3 = new Position();
+		p3.setID(3);
+		p3.setTitle("Delete me!");
+		p3.setDescription("Do it now!");
+		p3.setPriority(1);
 		
 		u1 = new User();
 		u1.setUserID(1);
@@ -86,6 +92,7 @@ public class InitialData {
 		uList.add(u2);
 		pList.add(p1);
 		pList.add(p2);
+		pList.add(p3);
 	}
 
 

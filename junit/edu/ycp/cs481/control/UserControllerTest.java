@@ -23,8 +23,10 @@ public class UserControllerTest {
 		controller = new UserController();
 	}
 	
-	@Test
+	/*@Test
 	public void testValidateEmail() {
 		// TODO:assertEquals(false, controller.validateEmail(u1.getEmail()));
-	}
+	}*/
+	
+	
 }
