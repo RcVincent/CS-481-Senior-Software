@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html>
-<title>Change Password</title>
+<title>Change Email</title>
 		<style type = "text/css">
 		
 		</style>
@@ -18,7 +18,6 @@
 				
 </form>
 
-<p><b>Note:</b> The characters in a password field are masked (shown as asterisks or circles).</p>
-	</body>
+</body>
 	
 </html>	
