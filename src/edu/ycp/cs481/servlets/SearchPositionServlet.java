@@ -12,7 +12,8 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.model.Position;
 
-public class SearchPositionServlet HttpServlet{
+@SuppressWarnings("serial")
+public class SearchPositionServlet extends HttpServlet{
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

@@ -1,5 +1,7 @@
 package edu.ycp.cs481.servlets;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +34,8 @@ public class RetryChangeEmailServlet extends HttpServlet{
 		
 		String email = (String) session.getAttribute("email");
 		UserController uc = new UserController(); 
-		
-		User user = uc.findUserByEmail(email);
+		ArrayList<User> result = uc.searchForUsers(0, email, "", "", 0); 
+		User user = result.get(0);
 		
 		String oldEmail = (String) req.getParameter("oldEmail"); 
 		String newEmail = (String) req.getParameter("newEmail");

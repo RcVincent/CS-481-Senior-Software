@@ -1,6 +1,8 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,9 @@ public class ChangePositionPriorityServlet extends HttpServlet {
 		
 		String positionID = req.getParameter("PositionID");
 		int id = Integer.parseInt(positionID);
-		Position p = pc.getPositionByID(id);
+		
+		ArrayList<Position> result = pc.searchForPosition(id, "", "", 0);
+		Position p = result.get(0);
 	
 		String NewPriority = req.getParameter("newPriority");
 		int newp = Integer.parseInt(NewPriority);

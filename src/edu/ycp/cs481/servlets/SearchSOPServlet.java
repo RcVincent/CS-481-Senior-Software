@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.model.SOP;
 
+@SuppressWarnings("serial")
 public class SearchSOPServlet extends HttpServlet {
 
 	@Override
@@ -35,15 +36,38 @@ public class SearchSOPServlet extends HttpServlet {
 		
 		SOPController sc = new SOPController(); 
 		
-		String id = req.getParameter(); 
-		String title = req.getParameter();
-		String desc = req.getParameter(); 
-		String prio = req.getParameter();
-		String version = req.getParameter();
-		String authorid = req.getParameter(); 
+		String id = req.getParameter("sopID"); 
+		String title = req.getParameter("title");
+		String desc = req.getParameter("description"); 
+		String prio = req.getParameter("priority");
+		String version = req.getParameter("version");
+		String authorid = req.getParameter("authorID"); 
 		
 		int sopID, priority, revision, authorID; 
 		
+		if(id == null || id == "" || id == " ") {
+			sopID = -1; 
+		}else {
+			sopID = Integer.parseInt(id);
+		}
+		
+		if(prio == null || prio == "" || prio == " ") {
+			priority = 0; 
+		} else {
+			priority = Integer.parseInt(prio);
+		}
+		
+		if(version == null || version == "" || version == " ") {
+			revision = 0; 
+		} else {
+			revision = Integer.parseInt(version);
+		}
+		
+		if(authorid == null || authorid == "" || authorid == " ") {
+			authorID = 0;
+		} else {
+			authorID = Integer.parseInt(authorid);
+		}
 		ArrayList<SOP> result = sc.searchForSOP(sopID, title, desc, priority, revision, authorID);
 		
 		if(req.getParameter("index") != null) {
