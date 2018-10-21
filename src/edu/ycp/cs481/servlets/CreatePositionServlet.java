@@ -31,11 +31,11 @@ public class CreatePositionServlet extends HttpServlet {
 			return;
 		}
 		
-		if(session.getAttribute("isAdmin").equals("User") || 
+		/*if(session.getAttribute("isAdmin").equals("User") || 
 			session.getAttribute("isAdmin").equals("user")){
 			resp.sendRedirect(req.getContextPath() + "/MainPage");
 
-		}
+		}*/
 		
 		req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
 	}

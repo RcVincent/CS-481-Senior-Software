@@ -24,7 +24,8 @@
 	<input type="submit">
 	<td><input type = "Submit" name = "index" value = "Index" /> </td>
 	</form>
-
+	
 	</form>
+	<p>Want to head back to the index? <a href="index">Index</a>
 	</body>
 </html>		

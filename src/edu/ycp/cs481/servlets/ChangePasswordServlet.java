@@ -20,11 +20,11 @@ public class ChangePasswordServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
 		
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}
+		}*/
 		
 		req.getRequestDispatcher("/change_password.jsp").forward(req, resp);
 	}

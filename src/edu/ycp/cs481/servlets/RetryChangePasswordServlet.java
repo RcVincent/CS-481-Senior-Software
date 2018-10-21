@@ -23,13 +23,13 @@ public class RetryChangePasswordServlet extends HttpServlet{
 
 		//get session information so we can re rout a user or admin back to the login page
 		//will help implement a time out in the future 
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if (session.getAttribute("email")== null) {
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 
-		}
+		}*/
 		req.getRequestDispatcher("/_view/retrychangepassword.jsp").forward(req, resp);
 	}
 	

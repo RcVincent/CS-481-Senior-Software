@@ -17,9 +17,8 @@
 	Enter Position Duty here...</textarea><br>
 	Priority (1-10): <input type = "text" name = "priority"><br>
 	<td><input type = "Submit" name = "submit" value = "Submit" /> </td>
-	<td><input type = "Submit" name = "index" value = "Index" /> </td>
 
 	</form>
-
+	<li><a href="login">login</a></li>
 	</body>
 </html>		

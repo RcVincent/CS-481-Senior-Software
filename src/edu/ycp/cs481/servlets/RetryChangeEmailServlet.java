@@ -15,11 +15,11 @@ import edu.ycp.cs481.model.User;
 public class RetryChangeEmailServlet extends HttpServlet{
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}
+		}*/
 		
 		req.getRequestDispatcher("/retrychangeemail.jsp").forward(req, resp);
 	}
