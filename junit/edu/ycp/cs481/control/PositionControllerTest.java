@@ -28,12 +28,12 @@ public class PositionControllerTest {
 		pos2.setTitle("CEO");
 	}
 	
-	@Test
+	//@Test
 	public void testGetApplicantsSOP() {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testGetPositionByID() {
 		// These will be commented out until we get our database tables up
 		//assertEquals(poscontrol.getPositionByID(pos1.getID()).getTitle(), "Admin");
