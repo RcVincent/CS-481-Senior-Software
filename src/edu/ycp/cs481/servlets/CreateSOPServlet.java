@@ -79,7 +79,7 @@ public class CreateSOPServlet extends HttpServlet{
 		//set the version, id, author id, 
 		
 		//test the sop we just made
-		List<SOP> test = sc.findSOPsByTitle(sopTitle); 
+		List<SOP> test = sc.searchForSOP(-1, sopTitle, Version, authorID, authorID, authorID); 
 		
 		if(test.isEmpty()) {
 			errorMessage = "There was no SOP with name" + sopTitle + "added to the database";

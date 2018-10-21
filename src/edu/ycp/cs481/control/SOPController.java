@@ -1,4 +1,5 @@
 package edu.ycp.cs481.control;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs481.db.Database;
@@ -63,29 +64,8 @@ public class SOPController {
 	//************************************
 	//Implementing DB calls 
 	//************************************
-	
-	public SOP findSOPbyID(int sopID) {
-		return db.findSOPbyID(sopID);
-	}
-	
-	public List<SOP> findSOPsByTitle(String sopTitle) {
-		return db.findSOPsByTitle(sopTitle);
-	}
-	
-	public List<SOP> findSOPsByPriority(int priority) {
-		return db.findSOPsByPriority(priority);
-	}
-	
-	public List<SOP> findSOPsByVersion(int revision) {
-		return db.findSOPsByVersion(revision); 
-	}
-	
-	public List<SOP> findSOPsByAuthorID(int authorID) {
-		return db.findSOPsByAuthorID(authorID);
-	}
-	
-	public List<SOP> findAllSOPs() {
-		return db.findAllSOPs();
+	public ArrayList<SOP> searchForSOP(int sopID, String title, String description, int priority, int version, int authorID) {
+		return db.searchForSOPss(sopID, title, description, priority, version, authorID);
 	}
 	
 	public void archiveSOP(int sopID){

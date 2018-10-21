@@ -12,23 +12,21 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 
-public class ChangePasswordServlet extends HttpServlet {
+public class SearchUsersServlet extends HttpServlet {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
-		
 		HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
-		req.getRequestDispatcher("/change_password.jsp").forward(req, resp);
+		
+		req.getRequestDispatcher("/searchUsers.jsp").forward(req, resp);
 	}
 	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
@@ -37,32 +35,37 @@ public class ChangePasswordServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		
-		HttpSession session = req.getSession();
-		
-		String email = (String) session.getAttribute("email");
 		UserController uc = new UserController(); 
 		
-		ArrayList<User> result = uc.searchForUsers(0, email, "", "", 0);
+		String email = (String) req.getParameter("email");
+		String fname = (String) req.getParameter("firstname"); 
+		String lname = (String) req.getParameter("lastname");
+		String id = (String) req.getParameter("userID");
+		String pID = (String) req.getParameter("positionID");
+		int searchID;
+		int posSearchID; 
 		
-		User user = result.get(0);
-		
-		String oldPassword = (String) req.getParameter("oldPass"); 
-		String newPassword = (String) req.getParameter("newPass");
-		String newPassword2 = (String) req.getParameter("newPass2");
-		
-		if(newPassword.equals(newPassword2)) {
-			uc.changeUserPassword(user.getEmail(), oldPassword, newPassword);
-			System.out.println(user.getEmail()); 
-			System.out.println(oldPassword); 
-			System.out.println(newPassword); 
+		if(id == null || id == "" || id == " ") {
+			searchID = -1; 
 		}
 		
 		else {
-			System.out.println("The passwords donot match please try again");
-			resp.sendRedirect(req.getContextPath() + "/retrychangepassword");
+			searchID = Integer.parseInt(id);
 		}
 		
-		req.getRequestDispatcher("/change_password.jsp").forward(req, resp);
+		if(pID == null || pID == "" || pID == " ") {
+			posSearchID = 2;
+		}
+		else {
+			posSearchID = Integer.parseInt(pID);
+		}
 		
+		ArrayList<User> result = uc.searchForUsers(searchID, email, fname, lname, posSearchID);
+		
+		if(req.getParameter("index") != null) {
+			resp.sendRedirect(req.getContextPath() + "/index");
+		}
+		
+		req.getRequestDispatcher("/searchUsers.jsp").forward(req, resp);
 	}
 }

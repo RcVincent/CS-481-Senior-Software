@@ -95,25 +95,8 @@ public class UserController {
     	return db.insertUser(u);
     }
     
-    public User insertUser(User u) {
-    	int id = db.insertUser(u);
-    	return db.getUserByID(id);
-    }
-    
-    public User FindUserByID(int userID) {
-    	return db.getUserByID(userID);
-    }
-    
-    public ArrayList<User> findUsersByFirstname(String fname) {
-    	return db.getUsersByFirstName(fname);
-    }
-    
-    public ArrayList<User> findUsersByLastname(String lname) {
-    	return db.getUsersByLastName(lname);
-    }
-    
-    public User findUserByEmail(String email) {
-    	return db.getUserByEmail(email);
+    public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
+    	return db.searchForUsers(id, email, fname, lname, positionID);
     }
     
     //will implement these later
@@ -123,10 +106,6 @@ public class UserController {
     
     public void changeUserPassword(String email, String oldPass, String newPass) {
     	db.changeUserPassword(email, oldPass, newPass);
-    }
-    
-    public List<User> findAllUsers() {
-    	return db.findAllUsers(); 
     }
     
     public void ArchiveUser(int userID){
@@ -141,9 +120,7 @@ public class UserController {
     	return db.changePosition(userID, positionID);
     }
     
-    public ArrayList<User> findUsersWithPosition(int positionID) {
-    	return db.findUsersWithPosition(positionID);
-    }
+    
     
     
     
