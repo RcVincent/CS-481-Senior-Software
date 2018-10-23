@@ -82,7 +82,7 @@ public class Database {
 		@Override
 		public ArrayList<Position> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<Position> positions = new ArrayList<Position>();
-			do{
+			while(resultSet.next()){
 				Position p = new Position();
 				p.setID(resultSet.getInt(1));
 				p.setTitle(resultSet.getString(2));
@@ -90,7 +90,7 @@ public class Database {
 				p.setPriority(resultSet.getInt(4));
 				
 				positions.add(p);
-			}while(resultSet.next());
+			}
 			
 			return positions;
 		}
@@ -100,7 +100,8 @@ public class Database {
 		@Override
 		public ArrayList<User> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<User> users = new ArrayList<User>();
-			do{
+			
+			while(resultSet.next()){
 				User u = new User();
 				
 				u.setUserID(resultSet.getInt(1));
@@ -110,10 +111,10 @@ public class Database {
 				u.setLastname(resultSet.getString(5));
 				u.setAdminFlag(resultSet.getBoolean(6));
 				u.setArchiveFlag(resultSet.getBoolean(7));
-				u.setPosition(findPositionByID(resultSet.getInt(9)));
+				u.setPosition(searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				
 				users.add(u);
-			}while(resultSet.next());
+			}
 			
 			return users;
 		}
@@ -123,19 +124,20 @@ public class Database {
 		@Override
 		public ArrayList<SOP> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<SOP> sops = new ArrayList<SOP>();
-			do{
-				SOP s = new SOP();
-				
-				s.setID(resultSet.getInt(1));
-				s.setName(resultSet.getString(2));
-				s.setDescription(resultSet.getString(3));
-				s.setPriority(resultSet.getInt(4));
-				s.setRevision(resultSet.getInt(5));
-				s.setAuthorID(resultSet.getInt(6));
-				s.setArchiveFlag(resultSet.getBoolean(7));
-				
-				sops.add(s);
-			}while(resultSet.next());
+			
+			while(resultSet.next()){
+					SOP s = new SOP();
+					
+					s.setID(resultSet.getInt(1));
+					s.setName(resultSet.getString(2));
+					s.setDescription(resultSet.getString(3));
+					s.setPriority(resultSet.getInt(4));
+					s.setRevision(resultSet.getInt(5));
+					s.setAuthorID(resultSet.getInt(6));
+					s.setArchiveFlag(resultSet.getBoolean(7));
+					
+					sops.add(s);
+			}
 			
 			return sops;
 		}
@@ -158,7 +160,6 @@ public class Database {
 						System.out.println("Finished query " + name);
 					}
 					
-					resultSet.next();
 					return querExec.convertFromResultSet(resultSet);
 				}finally{
 					DBUtil.closeQuietly(resultSet);
