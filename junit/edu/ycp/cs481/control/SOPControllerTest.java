@@ -90,31 +90,133 @@ public class SOPControllerTest {
 		sopList.add(sop2);
 	}
 	
-	public void TestChangeVersion() {
-		
-	}
 	
-	public void testChangePriority() {
-		
-	}
 	
 	public void testArchiveSOP() {
 		
 	}
 	
+	@Test
 	public void testSearchByID() {
+		int searchID = 1;
 		
+		List<SOP> testList = sc.searchForSOP(searchID, "", "", 0, 0, 0);
+		
+		if(testList.isEmpty()) {
+			System.out.println("The search for sop with id "+ searchID + " failed."); 
+			fail();
+		} else {
+			assertEquals(1, testList.size()); 
+			
+			SOP s = testList.get(0);
+			assertEquals("Login", s.getName());
+			assertEquals(7, s.getPriority());
+			assertEquals(1, s.getRevision());
+		}
 	}
 	
+	@Test
 	public void testSearchByName() {
+		String searchName = "Logout";
+		List<SOP> testList = sc.searchForSOP(0, searchName, "", 0, 0, 0);
 		
+		if(testList.isEmpty()) {
+			System.out.println("The search for sop with name "+searchName+ "failed."); 
+			fail();
+		} else {
+			
+			assertEquals(1, testList.size()); 
+			SOP s = testList.get(0);
+			assertEquals(7, s.getPriority());
+			assertEquals(2, s.getRevision()); 
+			assertEquals(2, s.getID()); 
+		}
 	}
 	
+	@Test
 	public void testSearchByPriority() {
+		int searchPrio = 7; 
+		List<SOP> testList = sc.searchForSOP(0, "", "", searchPrio, 0, 0);
 		
+		if(testList.isEmpty()) {
+			System.out.println("The search for sop with "+ searchPrio+ "failed."); 
+			fail();
+		} else {
+			
+			assertEquals(2, testList.size());
+			
+			SOP s1 = testList.get(0); 
+			assertEquals("Login", s1.getName());
+			assertEquals(7, s1.getPriority());
+			assertEquals(1, s1.getRevision());
+			assertEquals(1, s1.getID()); 
+			assertEquals(12, s1.getAuthorID());
+			
+			SOP s2 = testList.get(1);
+			assertEquals("Logout", s2.getName());
+			assertEquals(7, s2.getPriority());
+			assertEquals(2, s2.getRevision()); 
+			assertEquals(2, s2.getID()); 
+			assertEquals(12, s2.getAuthorID());
+			
+		}		
 	}
-
+	
+	@Test
 	public void testSearchByAuthor() {
+		int searchAuthorID = 12; 
+		List<SOP> testList = sc.searchForSOP(0, "", "", 0, 0, searchAuthorID);
 		
+		if(testList.isEmpty()) {
+			System.out.println("The search for sop with author id "+ searchAuthorID + "failed."); 
+			fail();
+		} else {
+			assertEquals(2, testList.size());
+			
+			SOP s1 = testList.get(0); 
+			assertEquals("Login", s1.getName());
+			assertEquals(7, s1.getPriority());
+			assertEquals(1, s1.getRevision());
+			assertEquals(1, s1.getID()); 
+			
+			
+			SOP s2 = testList.get(1);
+			assertEquals("Logout", s2.getName());
+			assertEquals(7, s2.getPriority());
+			assertEquals(2, s2.getRevision()); 
+			assertEquals(2, s2.getID()); 
+		}
+	}
+	
+	@Test
+	public void TestChangeVersion() {
+		int newVersion = 2; 
+		
+		assertEquals(1, sop1.getRevision()); 
+		sc.revertSOP(sop1.getID(), newVersion);
+		
+		if(sop1.getRevision() == 1) {
+			System.out.println("Reversioning of sop not successful");
+			fail();
+		}
+		else {
+			assertEquals(2, sop1.getRevision()); 
+		}
+	}
+	
+	@Test
+	public void testChangePriority() {
+		int newPriority = 8; 
+		
+		assertEquals(1, sop2.getPriority());
+		
+		sc.changeSOPPirority(2, newPriority);
+		
+		if(sop2.getPriority() == 7) {
+			System.out.println("Changing the priority of the sop failed");
+			fail(); 
+		} else {
+			assertEquals(8, sop2.getPriority()); 
+		}
 	}
 }

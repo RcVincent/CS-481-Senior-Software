@@ -138,6 +138,118 @@ public class UserControllerTest {
 		
 	}
 	
+	
+	@Test
+	public void testSearchByFName() {
+		String searchFirstName = "Stan";
+		
+		List<User> testList = uc.searchForUsers(0, "", searchFirstName, "", 0);
+		
+		if(testList.isEmpty()) {
+			System.out.println("Search failed for user with firstname" + searchFirstName);
+			fail();
+			
+		} else {
+		assertEquals(1, testList.size());
+		
+		User u = testList.get(0);
+		
+		assertEquals("Smith", u.getLastname());
+		assertEquals("rookie@email.com", u.getEmail());
+		assertEquals(4, u.getUserID());
+		}
+	}
+	
+	@Test
+	public void testSearchByLName() {
+		String searchLastName = "Smith";
+		
+		List<User> testList = uc.searchForUsers(0, "", "", searchLastName, 0);
+		
+		if(testList.isEmpty()) {
+			System.out.println("Search failed for user with lastname" + searchLastName);
+			fail();
+			
+		} else {
+		assertEquals(2, testList.size());
+		
+		User u = testList.get(0);
+		assertEquals("Rodger", u.getFirstname());
+		assertEquals("Admin@google.com", u.getEmail());
+		assertEquals(12, u.getUserID());
+		
+		User u2 = testList.get(1);
+		assertEquals("Stan", u.getFirstname());
+		assertEquals("rookie@email.com", u.getEmail());
+		assertEquals(4, u.getUserID());
+		}
+	}
+	
+	@Test
+	public void testSearchByFUllName() {
+		String firstname = "Stan";
+		String lastname = "Smith"; 
+		
+		List<User> testList = uc.searchForUsers(0, "", firstname, lastname, 0);
+		
+		if(testList.isEmpty()) {
+			System.out.println("Search failed for user with first name " + firstname + " and last name " + lastname);
+			fail(); 
+			
+		} else {
+		assertEquals(1, testList.size());
+		
+		User u = testList.get(0);
+		
+		//assertEquals("Smith", u.getLastname());
+		assertEquals("rookie@email.com", u.getEmail());
+		assertEquals(4, u.getUserID());
+		}
+	}
+	
+	@Test
+	public void testSearchByID() {
+		int searchID = 12; 
+		
+		List<User> testList = uc.searchForUsers(searchID, "", "", "", 0);
+		
+		if(testList.isEmpty()) {
+			System.out.println("Search failed for user with ID " + searchID);
+			fail();
+			
+		} else {
+			assertEquals(1, testList.size());
+			
+			User u = testList.get(0);
+			
+			assertEquals("Rodger", u.getFirstname());
+			assertEquals("Smith", u.getLastname());
+			assertEquals("Admin@google.com", u.getEmail()); 
+			
+		}
+	}
+	
+	@Test
+	public void testSearchByPositionID() {
+		int searchPosID = 1;
+		
+		List<User> testList = uc.searchForUsers(0, "", "", "", searchPosID);
+		
+		if(testList.isEmpty()) {
+			System.out.println("Search failed for user with position ID"+ searchPosID);
+			fail(); 
+		
+		} else {
+			User u = testList.get(0);
+			
+			assertEquals(5, u.getUserID());
+			assertEquals("theBoss@tesla.com", u.getEmail());
+			assertEquals("Elon", u.getFirstname());
+			assertEquals("Musk", u.getLastname());
+		}
+	}
+	
+	
 	@Test
 	public void testChangeEmail() {
 		String newEmail = "lelelel@tcp.com";
@@ -173,108 +285,4 @@ public class UserControllerTest {
 		
 		assertEquals("IT", user3.getPosition().getTitle()); 
 	}
-	
-	@Test
-	public void testSearchByFName() {
-		String searchFirstName = "Stan";
-		
-		List<User> testList = uc.searchForUsers(0, "", searchFirstName, "", 0);
-		
-		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with firstname" + searchFirstName);
-		} else {
-		assertEquals(1, testList.size());
-		
-		User u = testList.get(0);
-		
-		assertEquals("Smith", u.getLastname());
-		assertEquals("rookie@email.com", u.getEmail());
-		assertEquals(4, u.getUserID());
-		}
-	}
-	
-	@Test
-	public void testSearchByLName() {
-		String searchLastName = "Smith";
-		
-		List<User> testList = uc.searchForUsers(0, "", "", searchLastName, 0);
-		
-		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with lastname" + searchLastName);
-			
-		} else {
-		assertEquals(2, testList.size());
-		
-		User u = testList.get(0);
-		assertEquals("Rodger", u.getFirstname());
-		assertEquals("Admin@google.com", u.getEmail());
-		assertEquals(12, u.getUserID());
-		
-		User u2 = testList.get(1);
-		assertEquals("Stan", u.getFirstname());
-		assertEquals("rookie@email.com", u.getEmail());
-		assertEquals(4, u.getUserID());
-		}
-	}
-	
-	@Test
-	public void testSearchByFUllName() {
-		String firstname = "Stan";
-		String lastname = "Smith"; 
-		
-		List<User> testList = uc.searchForUsers(0, "", firstname, lastname, 0);
-		
-		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with first name " + firstname + " and last name " + lastname);
-		} else {
-		assertEquals(1, testList.size());
-		
-		User u = testList.get(0);
-		
-		//assertEquals("Smith", u.getLastname());
-		assertEquals("rookie@email.com", u.getEmail());
-		assertEquals(4, u.getUserID());
-		}
-	}
-	
-	@Test
-	public void testSearchByID() {
-		int searchID = 12; 
-		
-		List<User> testList = uc.searchForUsers(searchID, "", "", "", 0);
-		
-		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with ID " + searchID);
-		} else {
-			assertEquals(1, testList.size());
-			
-			User u = testList.get(0);
-			
-			assertEquals("Rodger", u.getFirstname());
-			assertEquals("Smith", u.getLastname());
-			assertEquals("Admin@google.com", u.getEmail()); 
-			
-		}
-	}
-	
-	@Test
-	public void testSearchByPositionID() {
-		int searchPosID = 1;
-		
-		List<User> testList = uc.searchForUsers(0, "", "", "", searchPosID);
-		
-		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with position ID"+ searchPosID);
-			fail(); 
-		} else {
-			User u = testList.get(0);
-			
-			assertEquals(5, u.getUserID());
-			assertEquals("theBoss@tesla.com", u.getEmail());
-			assertEquals("Elon", u.getFirstname());
-			assertEquals("Musk", u.getLastname());
-		}
-	}
-	
-	
 }
