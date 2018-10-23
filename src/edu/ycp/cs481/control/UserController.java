@@ -27,7 +27,7 @@ public class UserController {
 		return users;
 	}*/
 	
-	public static boolean authenticate(User u, String pswd) {
+	public boolean authenticate(User u, String pswd) {
 		boolean real = false;
 		if(u.getPassword().equals(pswd)){
 

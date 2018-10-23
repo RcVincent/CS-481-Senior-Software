@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
@@ -14,15 +15,17 @@ import edu.ycp.cs481.control.UserController;
 public class UserControllerTest {
 	private Position pos1, pos2, pos3, pos4;
 	private SOP sop1, sop2;
-	private User user1, user2; 
+	private User user1, user2, user3; 
 	private List<Position> positionList; 
 	private List<SOP> sopList;
+	private List<User> userList;
 	private UserController uc;
 	
 	@Before
 	public void setUp(){
 		positionList = new ArrayList<Position>(); 
 		sopList = new ArrayList<SOP>(); 
+		userList = new ArrayList<User>(); 
 		
 		pos1 = new Position(); 
 		pos1.setID(2);
@@ -46,6 +49,7 @@ public class UserControllerTest {
 		
 		user1 = new User();
 		user1.setEmail("Admin@google.com");
+		user1.setPassword("DiveOnIn");
 		user1.setFirstname("Rodger");
 		user1.setLastname("Smith");
 		user1.setUserID(12);
@@ -57,6 +61,18 @@ public class UserControllerTest {
 		user2.setLastname("Smith");
 		user2.setEmail("rookie@email.com");
 		user2.setAdminFlag(false);
+		user2.setPassword("bangBang");
+		user2.setPosition(pos3);
+		user2.setUserID(4);
+		
+		user3 = new User(); 
+		user3.setEmail("failTest@@gmail.com");
+		user3.setFirstname("");
+		user3.setLastname("");
+		user3.setAdminFlag(false);
+		user3.setPassword("");
+		user3.setUserID(-1);
+		user3.setPosition(pos4);
 		
 		positionList.add(pos1);
 		positionList.add(pos2);
@@ -86,11 +102,59 @@ public class UserControllerTest {
 		
 		
 		uc = new UserController();
+		
+		
 	}
 	
-	//@Test
+	@Test
 	public void testValidateEmail() {
-		// TODO:assertEquals(false, controller.validateEmail(u1.getEmail()));
+		assertEquals(true, uc.validateEmail(user1.getEmail()));
+		assertEquals(true, uc.validateEmail(user2.getEmail()));
+		assertEquals(false, uc.validateEmail(user3.getEmail()));
+	}
+	
+	
+	public void testvalidateLogin() {
+		String pass1 = "DiveOnIn";
+		String pass2 = "bangBang";
+		
+		boolean firstTest = uc.authenticate(user2, pass1);
+		assertFalse(firstTest);
+		
+		boolean secondTest = uc.authenticate(user1, pass2);
+		assertFalse(secondTest); 
+		
+		//set a login setup 
+		//if authenticate login = true
+		
+	}
+	
+	public void testChangeEmail() {
+		
+	}
+	
+	public void testChangePassword() {
+		
+	}
+	
+	public void testChangePosition() {
+		
+	}
+	
+	public void testSearchByFName() {
+		
+	}
+	
+	public void testSearchByLName() {
+		
+	}
+	
+	public void testSearchByFUllName() {
+		
+	}
+	
+	public void testSearchByID() {
+		
 	}
 	
 	

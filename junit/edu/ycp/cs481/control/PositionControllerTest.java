@@ -60,6 +60,9 @@ public class PositionControllerTest {
 		user2.setLastname("Smith");
 		user2.setEmail("rookie@email.com");
 		user2.setAdminFlag(false);
+		user2.setPassword("bangBang");
+		user2.setPosition(pos3);
+		user2.setUserID(4);
 		
 		positionList.add(pos1);
 		positionList.add(pos2);

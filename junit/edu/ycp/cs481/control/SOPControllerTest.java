@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
@@ -58,6 +59,9 @@ public class SOPControllerTest {
 		user2.setLastname("Smith");
 		user2.setEmail("rookie@email.com");
 		user2.setAdminFlag(false);
+		user2.setPassword("bangBang");
+		user2.setPosition(pos3);
+		user2.setUserID(4);
 		
 		positionList.add(pos1);
 		positionList.add(pos2);
@@ -86,5 +90,31 @@ public class SOPControllerTest {
 		sopList.add(sop2);
 	}
 	
+	public void TestChangeVersion() {
+		
+	}
 	
+	public void testChangePriority() {
+		
+	}
+	
+	public void testArchiveSOP() {
+		
+	}
+	
+	public void testSearchByID() {
+		
+	}
+	
+	public void testSearchByName() {
+		
+	}
+	
+	public void testSearchByPriority() {
+		
+	}
+
+	public void testSearchByAuthor() {
+		
+	}
 }
