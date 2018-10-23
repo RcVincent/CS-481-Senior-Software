@@ -40,52 +40,32 @@ public class LoginServlet extends HttpServlet{
 			errorMessage = "Please specify both email and password"; 
 			
 		} else {
-			ArrayList<User> users = null; 
-			//match password
-			
-			if(users != null && users.size() > 0) {
-				User u = users.get(0);
-				System.out.println(u.getEmail());
-				//Time to authenticate
-				if(uc.authenticate(loginUser, password) == true) {
-					HttpSession session = req.getSession(); 
-					session.setAttribute("email", loginUser.getEmail());
-					session.setAttribute("user_id", loginUser.getUserID());
-					session.setAttribute("admin_flag", loginUser.isAdminFlag());
-					session.setAttribute("first_name", loginUser.getFirstname());
-					session.setAttribute("last_name", loginUser.getLastname());
-					System.out.println("Session info");
-					System.out.println(req.getSession().getAttribute("email"));
-					System.out.println(req.getSession().getAttribute("user_id"));
-					System.out.println(req.getSession().getAttribute("first_name"));
-					System.out.println(req.getSession().getAttribute("last_name"));
-					System.out.println(req.getSession().getAttribute("admin_flag"));
-					
-					loginUser.setSessionid(req.getSession().getId());
-					
-					if(u.isAdminFlag()){
-						resp.sendRedirect(req.getContextPath() + "/index");
-					} else {
-						resp.sendRedirect(req.getContextPath() + "/MainPage");
-					}
-					
-				} else {
-					errorMessage = "Incorrect email or Password";
-					req.setAttribute("errorMessage", errorMessage);
-					req.getRequestDispatcher("/login.jsp").forward(req, resp);
-				}
-				
-			}
-			else {
-				errorMessage = "Incorrect email or password";
+			ArrayList<User> users =  uc.searchForUsers(-1, email, null, null, -1);
+			if(users == null || uc.authenticate(users.get(0), password)){
+				errorMessage = "Incorrect email or Password";
 				req.setAttribute("errorMessage", errorMessage);
-				req.getRequestDispatcher("/login.jsp").forward(req, resp);
-				System.out.println("  Invalid Login -- returning to /Login");
+				req.getRequestDispatcher("/login").forward(req, resp);
+			}else{
+				User u = users.get(0);
+				HttpSession session = req.getSession();
+				session.setAttribute("user_id", u.getUserID());
+				// Only did user_id because other data would be grabbed from the User object as needed?
+				// Not sure 100% on that, but wouldn't we just need a verified login and the rest we can grab as needed?
+				/*session.setAttribute("email", loginUser.getEmail());
+				session.setAttribute("user_id", loginUser.getUserID());
+				session.setAttribute("admin_flag", loginUser.isAdminFlag());
+				session.setAttribute("first_name", loginUser.getFirstname());
+				session.setAttribute("last_name", loginUser.getLastname());*/
+				u.setSessionid(session.getId());
 				
+				// TODO: In the future, all users would go to a "user home" and in it, we would only give the options
+				// that they can actually do
+				if(u.isAdminFlag()){
+					resp.sendRedirect(req.getContextPath() + "/index");
+				}else{
+					resp.sendRedirect(req.getContextPath() + "/MainPage");
+				}
 			}
-			
-			req.setAttribute("sessionid", loginUser.getSessionid());
-			req.getRequestDispatcher("/login.jsp").forward(req, resp);
-		}		
+		}	
 	}
 }

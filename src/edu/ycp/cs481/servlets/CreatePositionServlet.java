@@ -23,11 +23,11 @@ public class CreatePositionServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		
 		//get session info
-		System.out.println(session.getAttribute("email"));
+		System.out.println(session.getAttribute("user_id"));
 		
-		if (session.getAttribute("email") == null) {
+		if (session.getAttribute("user_id") == null) {
 			// user is not logged in, or the session expired
-			resp.sendRedirect(req.getContextPath() + "/Login");
+			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
