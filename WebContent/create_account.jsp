@@ -25,5 +25,7 @@
 		</tr>
 	</table>
 <input type="Submit" name="submit" value="Submit">
+<li><a href="login">login</a></li>
+<p>Want to head back to the index? <a href="index">Index</a></p>
 </form>
 </body></html>

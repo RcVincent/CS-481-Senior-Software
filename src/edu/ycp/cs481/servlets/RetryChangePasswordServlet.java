@@ -1,6 +1,8 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,13 +23,13 @@ public class RetryChangePasswordServlet extends HttpServlet{
 
 		//get session information so we can re rout a user or admin back to the login page
 		//will help implement a time out in the future 
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if (session.getAttribute("email")== null) {
 			// user is not logged in, or the session expired
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 
-		}
+		}*/
 		req.getRequestDispatcher("/_view/retrychangepassword.jsp").forward(req, resp);
 	}
 	
@@ -43,8 +45,8 @@ public class RetryChangePasswordServlet extends HttpServlet{
 		
 		String email = (String) session.getAttribute("email");
 		UserController uc = new UserController(); 
-		
-		User user = uc.findUserByEmail(email);
+		ArrayList<User> result = uc.searchForUsers(0, email, "", "", 0); 
+		User user = result.get(0);
 		
 		String oldPassword = (String) req.getParameter("oldPass"); 
 		String newPassword = (String) req.getParameter("newPass");

@@ -14,8 +14,11 @@
 			<td><input type="password" name="password" size="12" value="${password}" /></td>
 		</tr>
 	</table>
-<input type="Submit" name="submit" value="Submit">
+<td><input type="Submit" name="submit" value="Submit"> </td>
+<td><input type = "Submit" name = "Index" value = "Index" /> </td>
 </form>
-<p>Don't have an account? <a href="create_account">Create an Account</a>
+<p>Don't have an account? <a href="create_account">Create an Account</a></p>
+<p>Want to head back to the index? <a href="index">Index</a>
 </p>
+
 </body></html>

@@ -14,10 +14,10 @@
 		<h3><br>Re-Enter <br></h3>
 		<h3>New Email: <input type="email" name="newEmail2"></h3>
 				<td><input type = "Submit" name = "submit" value = "Submit" /> </td>
-				<td><input type = "Submit" name = "Index" value = "Index" /> </td>
+				
 				
 </form>
-
+<p>Want to head back to the index? <a href="index">Index</a></p>
 <p><b>Note:</b> The characters in a password field are masked (shown as asterisks or circles).</p>
 	</body>
 	

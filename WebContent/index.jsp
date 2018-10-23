@@ -10,10 +10,10 @@
 <fieldset>
 <legend>Testing Simple Pages</legend>
 <ul>
-  <li><a href="login">Login</a></li>
-  <li><a href="create_account">Create Account</a></li>
-  <li><a href="create_position"></a></li>
-  <li><a href="create_sop"></a><li> 
+  <li><a href="login">login</a></li>
+  <li><a href="create_account">create_Account</a></li>
+  <li><a href="create_position">create_position</a></li>
+  <li><a href="create_sop">create_sop</a><li> 
 </ul>
 </fieldset>
 <p/>

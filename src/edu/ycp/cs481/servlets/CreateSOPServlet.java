@@ -22,7 +22,7 @@ public class CreateSOPServlet extends HttpServlet{
 			throws ServletException, IOException {
 		System.out.println("Create SOP Servlet: doget");
 		
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			//user isnt logged in or the session expired 
 			resp.sendRedirect(req.getContextPath() + "/login");
@@ -31,7 +31,7 @@ public class CreateSOPServlet extends HttpServlet{
 		
 		if(session.getAttribute("admin_flag").equals("User") || session.getAttribute("admin_flag").equals("User")) {
 			resp.sendRedirect(req.getContextPath() + "/Mainpage");
-		}
+		}*/
 		
 		
 		
