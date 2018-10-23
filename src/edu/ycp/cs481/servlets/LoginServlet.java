@@ -41,11 +41,14 @@ public class LoginServlet extends HttpServlet{
 			
 		} else {
 			ArrayList<User> users =  uc.searchForUsers(-1, email, null, null, -1);
-			if(users == null || uc.authenticate(users.get(0), password)){
+			if(users == null || !uc.authenticate(users.get(0), password)){
 				errorMessage = "Incorrect email or Password";
+				req.setAttribute("email", null);
+				req.setAttribute("password", null);
 				req.setAttribute("errorMessage", errorMessage);
 				req.getRequestDispatcher("/login").forward(req, resp);
 			}else{
+				System.out.println("Successful Login");
 				User u = users.get(0);
 				HttpSession session = req.getSession();
 				session.setAttribute("user_id", u.getUserID());
