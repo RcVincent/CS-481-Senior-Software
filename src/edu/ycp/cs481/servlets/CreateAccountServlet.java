@@ -5,13 +5,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
-
-import java.util.ArrayList;
-
 
 @SuppressWarnings("serial")
 public class CreateAccountServlet extends HttpServlet{
@@ -19,14 +15,8 @@ public class CreateAccountServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Create Account Servlet: doGet");
 		
-		/*HttpSession session = req.getSession(); 
-		System.out.println(session.getAttribute("email")); 
-		if(session.getAttribute("email") == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}*/
+		// TODO: Check for manager/admin status
 		
-		//do the request 
 		req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
 	}
 	
@@ -35,37 +25,68 @@ public class CreateAccountServlet extends HttpServlet{
 		System.out.println("Create Account Servlet: doPost");
 		
 		User userProfile = new User();
-		UserController uc = new UserController(); 
+		UserController uc = new UserController();
 		
-		//set the information
-		String Email = (String) req.getParameter("email");
-		userProfile.setEmail(Email);
+		boolean goodUser = true;
 		
-		String Password = (String) req.getParameter("password");
-		userProfile.setPassword(Password);
+		// Get the information
+		String firstName = req.getParameter("firstName");
+		String lastName = req.getParameter("lastName");
+		String email = req.getParameter("email");
+		String emailConfirm = req.getParameter("emailConfirm");
+		String password = req.getParameter("password");
+		String passwordConfirm = req.getParameter("passwordConfirm");
+		System.out.println("First Name: " + firstName);
 		
-		String Firstname = (String) req.getParameter("first_name");
-		userProfile.setFirstname(Firstname);
-		
-		String Lastname = (String) req.getParameter("last_name");
-		userProfile.setLastname(Lastname);
-		
-		String isAdmin = (String) req.getParameter("admin_flag");
-		userProfile.setAdminFlag(Boolean.parseBoolean(isAdmin));
-		
-		//add to the DB
-		int id = uc.insertUserAndGetID(userProfile);
-		
-		System.out.println("User inserted with id" + id);
-		req.setAttribute("sessionid", userProfile);
-		
-		if(req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/Index");
+		if(firstName == null || firstName.equalsIgnoreCase("")){
+			goodUser = false;
+			req.setAttribute("firstNameError", "Please enter first name!");
 		}
 		
-		req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
+		if(lastName == null || lastName.equalsIgnoreCase("")){
+			goodUser = false;
+			req.setAttribute("lastNameError", "Please enter last name!");
+		}
+		
+		if(email == null || email.equalsIgnoreCase("")){
+			// TODO: Check that it's a valid email
+			goodUser = false;
+			req.setAttribute("emailError", "Please enter a valid email!");
+		}
+		
+		if(!email.equals(emailConfirm)){
+			goodUser = false;
+			req.setAttribute("emailConfirmError", "Emails don't match!");
+		}
+		
+		if(password == null || password.equalsIgnoreCase("")){
+			goodUser = false;
+			req.setAttribute("passwordError", "Password can't be blank!");
+		}
+		
+		if(!password.equals(passwordConfirm)){
+			goodUser = false;
+			req.setAttribute("passwordConfirmError", "Passwords don't match!");
+		}
+		
+		if(goodUser){
+			// TODO: Handling stuff for when Manager/Admin creates Account
+			
+			//add to the DB
+			int id = uc.insertUserAndGetID(userProfile);
+			
+			System.out.println("User inserted with id" + id);
+			req.setAttribute("sessionid", userProfile);
+			
+			resp.sendRedirect(req.getContextPath() + "/login");
+		}else{
+			req.setAttribute("firstName", firstName);
+			req.setAttribute("lastName", lastName);
+			req.setAttribute("email", email);
+			req.setAttribute("emailConfirm", emailConfirm);
+			req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
+		}
+		
 		
 	}
-	
-	
 }
