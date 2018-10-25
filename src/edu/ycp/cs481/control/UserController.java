@@ -1,6 +1,6 @@
 package edu.ycp.cs481.control;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
@@ -91,9 +91,13 @@ public class UserController {
   	//Implementing DB calls 
   	//************************************
     
-    public Integer insertUserAndGetID(User u) {
-    	return db.insertUser(u);
-    }
+    public Integer insertUser(String email, String password, String firstName, String lastName, boolean isAdmin, 
+			boolean isArchived, int positionID){
+		return db.insertAndGetID("User", "user_id", 
+				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
+				new String[]{email, password, firstName, lastName, String.valueOf(isAdmin), String.valueOf(isArchived),
+						String.valueOf(positionID)});
+	}
     
     public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
     	return db.searchForUsers(id, email, fname, lname, positionID);

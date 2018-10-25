@@ -401,13 +401,6 @@ public class Database {
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
 	
-	public Integer insertUser(User u){
-		return insertAndGetID("User", "user_id", 
-				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{u.getEmail(), u.getPassword(), u.getFirstname(), u.getLastname(), String.valueOf(u.isAdminFlag()),
-						String.valueOf(u.isArchiveFlag()), String.valueOf(2)}); // ID 2 is the default User position
-	}
-	
 	public Integer insertSOP(SOP s){
 		return insertAndGetID("SOP", "sop_id", 
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
