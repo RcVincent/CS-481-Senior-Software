@@ -285,4 +285,20 @@ public class UserControllerTest {
 		
 		assertEquals("IT", user3.getPosition().getTitle()); 
 	}
+	
+	/* TODO: Rework to use here
+	@Test
+	public void testInsertUser() {
+		for(User u: uList) {
+			db.insertUser(u);
+			queryUser = db.findAllUsers();
+			assertEquals(u.getEmail(), queryUser.get(queryUser.size()-1).getEmail());
+			assertEquals(u.getPassword(), queryUser.get(queryUser.size()-1).getPassword());
+			assertEquals(u.getFirstname(), queryUser.get(queryUser.size()-1).getFirstname());
+			assertEquals(u.getLastname(), queryUser.get(queryUser.size()-1).getLastname());
+			assertEquals(u.isAdminFlag(), queryUser.get(queryUser.size()-1).isAdminFlag());
+			assertEquals(u.isArchiveFlag(), queryUser.get(queryUser.size()-1).isArchiveFlag());
+			assertEquals(2, queryUser.get(queryUser.size()-1).getPosition().getID());
+		}
+	}*/
 }
