@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs481.control.UserController;
-import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
 public class CreateAccountServlet extends HttpServlet{
@@ -24,8 +23,7 @@ public class CreateAccountServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Create Account Servlet: doPost");
 		
-		User userProfile = new User();
-		UserController uc = new UserController();
+		UserController userControl = new UserController();
 		
 		boolean goodUser = true;
 		
@@ -36,7 +34,6 @@ public class CreateAccountServlet extends HttpServlet{
 		String emailConfirm = req.getParameter("emailConfirm");
 		String password = req.getParameter("password");
 		String passwordConfirm = req.getParameter("passwordConfirm");
-		System.out.println("First Name: " + firstName);
 		
 		if(firstName == null || firstName.equalsIgnoreCase("")){
 			goodUser = false;
@@ -72,11 +69,10 @@ public class CreateAccountServlet extends HttpServlet{
 		if(goodUser){
 			// TODO: Handling stuff for when Manager/Admin creates Account
 			
-			//add to the DB
-			int id = uc.insertUserAndGetID(userProfile);
+			// Insert into the database
+			int id = userControl.insertUser(email, password, firstName, lastName, false, false, 2);
 			
 			System.out.println("User inserted with id" + id);
-			req.setAttribute("sessionid", userProfile);
 			
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{

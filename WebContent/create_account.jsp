@@ -10,6 +10,18 @@
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">
+				<c:if test="${! empty firstNameError}">
+					<p class="alert alert-warning">${firstNameError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty lastNameError}">
+					<p class="alert alert-warning">${lastNameError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
 				<div class="form-group row">
 					<label for="firstName" class="control-label col-2">First Name:</label>
 					<input type="text" class="form-control col-10" id="firstName" name="firstName" value="${firstName}">
@@ -20,6 +32,18 @@
 					<label for="lastName" class="control-label col-2">Last Name:</label>
 					<input type="text" class="form-control col-10" id="lastName" name="lastName" value="${lastName}">
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty emailError}">
+					<p class="alert alert-warning">${emailError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty emailConfirmError}">
+					<p class="alert alert-warning">${emailConfirmError}</p>
+				</c:if>
 			</div>
 		</div>
 		<div class="row">
@@ -38,6 +62,18 @@
 		</div>
 		<div class="row">
 			<div class="col">
+				<c:if test="${! empty passwordError}">
+					<p class="alert alert-warning">${passwordError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty passwordConfirmError}">
+					<p class="alert alert-warning">${passwordConfirmError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
 				<div class="form-group row">
 					<label for="password" class="form-label col-2">Password:</label>
 					<input type="password" class="form-control col-10" id="password" name="password" value="${password}">
@@ -52,7 +88,7 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" class="btn btn-default">Submit</button>
+				<button type="submit" class="btn btn-info">Submit</button>
 			</div>
 		</div>
 	</form>
