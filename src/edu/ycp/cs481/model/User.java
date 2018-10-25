@@ -9,7 +9,8 @@ public class User {
 	private String Firstname, Lastname; 
 	private String sessionid;
 	private TrainingHistory t; 
-	/// Constructor(s)
+	
+	// Constructor(s)
 	public User() {
 		t = new TrainingHistory(); 
 		position = new Position(); 
@@ -23,7 +24,7 @@ public class User {
 		loggedin = false;
 	}
 	
-	/// Getters/Setters
+	// Getters/Setters
 	
 	public void setUserID(int UserID) {
 		this.UserID = UserID;	

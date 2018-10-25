@@ -4,7 +4,7 @@ package edu.ycp.cs481.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SOP{
+public class SOP implements Comparable<SOP> {
 	private String name;
 	private String description;
 	private int priority;
@@ -111,6 +111,11 @@ public class SOP{
 	
 	public void setComplete(boolean isComplete) {
 		this.isComplete = isComplete;
+	}
+	@Override
+	public int compareTo(SOP o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
 
