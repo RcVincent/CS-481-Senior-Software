@@ -1,15 +1,17 @@
 package edu.ycp.cs481.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class TrainingHistory {
 	private User user; 
-	private ArrayList<SOP> completedSOPs;
+	private List<SOP> completedSOPs;
 	private PriorityQueue<SOP> sopsToDo; 
 	
 	public TrainingHistory() {
-		// TODO Auto-generated constructor stub
+		completedSOPs = new ArrayList<SOP>(); 
+		sopsToDo = new PriorityQueue<SOP>(); 
 	}
 
 	public User getUser() {
@@ -20,7 +22,7 @@ public class TrainingHistory {
 		this.user = user;
 	}
 
-	public ArrayList<SOP> getCompletedSOPs() {
+	public List<SOP> getCompletedSOPs() {
 		return completedSOPs;
 	}
 
@@ -46,5 +48,15 @@ public class TrainingHistory {
 
 	public int getTrainingHistorySize() {
 		return completedSOPs.size() + sopsToDo.size();
+	}
+	
+	public void addAndSortCollection(List<SOP> s) {
+		sopsToDo.addAll(s);
+		for(SOP S: sopsToDo) {
+			if(S.isComplete()) {
+				sopsToDo.remove(S);
+				completedSOPs.add(S);
+			}
+		}
 	}
 }
