@@ -37,7 +37,7 @@ public class TrainingHistoryTest {
 		admin.setUserID(14);
 		admin.setFirstname("Guillermo");
 		admin.setLastname("Del-Toro");
-		admin.setPosition(adminP);
+		//admin.setPosition(adminP);
 		
 		user = new User();
 		user.setAdminFlag(false);
@@ -47,7 +47,7 @@ public class TrainingHistoryTest {
 		user.setFirstname("General");
 		user.setLastname("Zod");
 		user.setPassword("imAPrick");
-		user.setPosition(userP);
+		//user.setPosition(userP);
 		
 		manager = new User(); 
 		manager.setAdminFlag(false);
@@ -57,7 +57,7 @@ public class TrainingHistoryTest {
 		manager.setFirstname("Clay");
 		manager.setLastname("Marrow");
 		manager.setUserID(89);
-		manager.setPosition(managerP);
+		//manager.setPosition(managerP);
 		
 		userList.add(admin);
 		userList.add(user);
@@ -85,6 +85,9 @@ public class TrainingHistoryTest {
 		userP.setPriority(8);
 		userP.setRequirements(userReqs);
 		
+		admin.setPosition(adminP);
+		user.setPosition(userP);
+		manager.setPosition(managerP);
 		//create a set of bare-bones SOPs for basic population testing 
 		s1 = new SOP();
 		s1.setID(1);
@@ -169,68 +172,80 @@ public class TrainingHistoryTest {
 	@Test
 	public void testisPopulated() {
 		
+		//should return all 0s because we have done nothing to populate it. what this is doing is making 
+		//sure users are getting their appropriate histories 
+		
 		TrainingHistory adminHist = new TrainingHistory(); 
 		adminHist.getCompletedSOPs().addAll(AdminHist.getCompletedSOPs());
 		adminHist.getSopsToDo().addAll(AdminHist.getSopsToDo());
 		
 		
-		assertEquals(5, adminHist.getTrainingHistorySize());
-		assertEquals(5, userHist.getTrainingHistorySize());
-		assertEquals(5, managerHist.getTrainingHistorySize());
+		assertEquals(0, adminHist.getTrainingHistorySize());
+		assertEquals(0, userHist.getTrainingHistorySize());
+		assertEquals(0, managerHist.getTrainingHistorySize());
 		
 	}
 	
 	@Test
 	public void testPopulateThroughPosition() {
-		//doing it this way works 
+		//this test has three different ways of set up to find out which ones do and do not
+		//work so when we implement it in the servlets we know how to. 
 		List<SOP> reqs1 = new ArrayList<SOP>();
 		User u1 = admin; 
 		Position p1 = adminP; 
 		reqs1 = p1.getRequirements();
 		
-		//looks like the issue is in user  getPosition(); 
 		List<SOP> reqs2 = new ArrayList<SOP>();
 		User u2 = user; 
-		//Position p2 = user.getPosition(); 
-		Position p2 = userP;
+		Position p2 = user.getPosition(); 
 		reqs2 = p2.getRequirements();
 		
-		
-		//but this way doesnt work. why? 
-		//List<SOP> reqs2 = user.getPosition().getRequirements();
-		//List<SOP> reqs3 = manager.getPosition().getRequirements();
+		List<SOP> reqs3 = manager.getPosition().getRequirements();
 		
 		TrainingHistory adminHist = new TrainingHistory(); 
 		TrainingHistory Userhist = new TrainingHistory(); 
-		TrainingHistory Managerhist = new TrainingHistory(); 
-		
+	
 		 assertEquals(5, reqs1.size());
-		// assertEquals(5, reqs2.size());
-		// assertEquals(5, reqs3.size());
+		 assertEquals(5, reqs2.size());
+		 assertEquals(5, reqs3.size());
 		 
 		 adminHist.addAndSortCollection(reqs1);
 		 assertEquals(5, adminHist.getTrainingHistorySize());
 		 assertEquals(5, adminHist.getSopsToDo().size());
 		 
-		// Userhist.addAndSortCollection(reqs2);
-		// assertEquals(5, Userhist.getTrainingHistorySize());
-		// assertEquals(5, Userhist.getSopsToDo().size());
+		 Userhist.addAndSortCollection(reqs2);
+		 assertEquals(5, Userhist.getTrainingHistorySize());
+		 assertEquals(5, Userhist.getSopsToDo().size());
 		 
-		// Managerhist.addAndSortCollection(reqs3);
-		// assertEquals(5, Managerhist.getTrainingHistorySize());
-		// assertEquals(5, Managerhist.getSopsToDo().size());
+		 managerHist.addAndSortCollection(reqs3);
+		 assertEquals(5, managerHist.getTrainingHistorySize());
+		 assertEquals(5, managerHist.getSopsToDo().size());
 		 
 	}
 	
 	@Test
 	public void testPopulateThroughTheUser() {
+		//the test is that as long as the history is full
+		//you can pull the history from the users profile 
+		
 		TrainingHistory h1 = admin.getHistory(); 
 		TrainingHistory h2 = user.getHistory();
 		TrainingHistory h3 = manager.getHistory(); 
 		
+		assertEquals(0, h1.getTrainingHistorySize());
+		assertEquals(0, h2.getTrainingHistorySize());
+		assertEquals(0, h3.getTrainingHistorySize());
+		
+		//add the requirements 
+		AdminHist.addAndSortCollection(adminReqs);
+		userHist.addAndSortCollection(userReqs);
+		managerHist.addAndSortCollection(managerReqs);
+		
 		assertEquals(5, h1.getTrainingHistorySize());
 		assertEquals(5, h2.getTrainingHistorySize());
 		assertEquals(5, h3.getTrainingHistorySize());
+		
+		
 	}
 	
 	@Test
@@ -242,7 +257,6 @@ public class TrainingHistoryTest {
 		
 		r1.addAll(adminReqs);
 		r2.addAll(userReqs); 
-		r3.addAll(managerReqs);
 		
 		AdminHist.addAndSortCollection(r1);
 		assertEquals(5, AdminHist.getTrainingHistorySize());
@@ -252,7 +266,7 @@ public class TrainingHistoryTest {
 		assertEquals(5, userHist.getTrainingHistorySize());
 		assertEquals(5, userHist.getSopsToDo().size());
 		
-		managerHist.addAndSortCollection(r3);
+		managerHist.addAndSortCollection(managerReqs);
 		assertEquals(5, managerHist.getTrainingHistorySize());
 		assertEquals(5, managerHist.getSopsToDo().size());
 		
@@ -288,6 +302,36 @@ public class TrainingHistoryTest {
 	}
 	
 	public void TestViewHistory() {
+		
+	}
+	
+	@Test
+	public void completeSOPsandUpdateHist() {
+		//through whatever means, set half the SOPs to complete and make sure that the histories update 
+		s1.setComplete(true);
+		s4.setComplete(true);
+		s5.setComplete(true);
+		s8.setComplete(true);
+		s9.setComplete(true);
+		
+		AdminHist.addAndSortCollection(adminReqs);
+		userHist.addAndSortCollection(userReqs);
+		managerHist.addAndSortCollection(managerReqs);
+		
+		//test the admins history
+		assertEquals(5, AdminHist.getTrainingHistorySize());
+		assertEquals(3, AdminHist.getCompletedSOPs().size());
+		assertEquals(2, AdminHist.getSopsToDo().size());
+		
+		assertEquals(5, userHist.getTrainingHistorySize());
+		assertEquals(2, userHist.getCompletedSOPs().size());
+		assertEquals(3, userHist.getSopsToDo().size());
+		
+		assertEquals(5, managerHist.getTrainingHistorySize());
+		assertEquals(2, managerHist.getCompletedSOPs().size());
+		assertEquals(3, managerHist.getSopsToDo().size());
+		
+		
 		
 	}
 

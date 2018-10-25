@@ -1,6 +1,7 @@
 package edu.ycp.cs481.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -52,11 +53,28 @@ public class TrainingHistory {
 	
 	public void addAndSortCollection(List<SOP> s) {
 		sopsToDo.addAll(s);
-		for(SOP S: sopsToDo) {
+		/*for(SOP S: sopsToDo) {
 			if(S.isComplete()) {
-				sopsToDo.remove(S);
 				completedSOPs.add(S);
 			}
+		}*/
+		/*for (int i = 0; i < sopsToDo.size(); i++) {
+			if(sopsToDo.element().isComplete()) {
+				SOP S = sopsToDo.remove();
+				completedSOPs.add(S);
+				//i--;
+			}
+		}*/
+		
+		int count = 0; 
+		while(!sopsToDo.isEmpty() && count != sopsToDo.size()) {
+			SOP x = sopsToDo.iterator().next();
+			if(x.isComplete()) {
+				completedSOPs.add(x);
+				sopsToDo.remove(x);
+			}
+			count++; 
+	
 		}
 	}
 }
