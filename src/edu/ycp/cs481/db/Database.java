@@ -371,16 +371,18 @@ public class Database {
 					selectID = conn.createStatement();
 					String selectSQL = "select " + id_str + " from " + table + " where ";
 					for(int i = 0; i < args.length; i++){
-						selectSQL += args[i] + " = ";
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
-							selectSQL += values[i];
-						}else{
-							selectSQL += "'" + values[i] + "'";
-						}
-						if(i != args.length - 1){
-							selectSQL += " and ";
-						}else{
-							selectSQL += ";";
+						if(!values[i].startsWith("SHA")){
+							selectSQL += args[i] + " = ";
+							if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+								selectSQL += values[i];
+							}else{
+								selectSQL += "'" + values[i] + "'";
+							}
+							if(i != args.length - 1){
+								selectSQL += " and ";
+							}else{
+								selectSQL += ";";
+							}
 						}
 					}
 					id = selectID.executeQuery(selectSQL);
