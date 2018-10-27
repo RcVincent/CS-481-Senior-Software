@@ -305,7 +305,7 @@ public class Database {
 		for(User u: userList){
 			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
 			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getFirstname() +
+					"position_id)  values ('" + u.getEmail() + "', SHA('" + u.getPassword() + "'), '" + u.getFirstname() +
 					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
 					u.getPosition().getID() + ")";
 			currentInsert++;
@@ -384,11 +384,6 @@ public class Database {
 					}
 					id = selectID.executeQuery(selectSQL);
 					System.out.println("Pulled out " + id_str + " of just inserted " + table + "!");
-					
-					// Hash TODO
-					if(table.equalsIgnoreCase("User")) {
-						hashPassword(id_str, values[1]);
-					}
 					
 					id.next();
 					return id.getInt(1);
@@ -868,63 +863,6 @@ public class Database {
 					
 					resultSet = stmt2.executeQuery();
 					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-
-					if (!found) {
-						System.out.println("User with ID <" + user_id + "> was not found in the User table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	public User hashPassword(final String user_id, final String password) {
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET password = SHA(?) WHERE user_id = ? ");
-					
-					stmt.setString(1, password);
-					stmt.setString(2, user_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE user_id = ?");
-					
-					stmt2.setString(1, user_id);
-					
-					resultSet = stmt2.executeQuery();
 					User result = new User(); 
 					
 					Boolean found = false;
