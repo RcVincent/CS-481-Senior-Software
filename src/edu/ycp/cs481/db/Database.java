@@ -234,7 +234,7 @@ public class Database {
 		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
-				  "password VARCHAR(32) NOT NULL, " +
+				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
 				  "admin_flag TINYINT NOT NULL, " +
