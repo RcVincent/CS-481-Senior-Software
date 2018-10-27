@@ -353,7 +353,8 @@ public class Database {
 						}
 					}
 					for(int i = 0; i < values.length; i++){
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
+								values[i].startsWith("SHA")){
 							insertSQL += values[i];
 						}else{
 							insertSQL += "'" + values[i] + "'";
