@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><title>CS481 Project - Login</title></head>
+<head>
+	<title>CTM mkii - Login</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
 <body>
 <h1>Login</h1>
-<form  method="post">
-	<table>
-		<tr>
-			<td class="label">Email: </td>
-			<td><input type="text" name="email" size="12" value="${email}" /></td>
-		</tr>
-		<tr>
-			<td class="label">Password: </td>
-			<td><input type="password" name="password" size="12" value="${password}" /></td>
-		</tr>
-	</table>
-<td><input type="Submit" name="submit" value="Submit"> </td>
-<td><input type = "Submit" name = "Index" value = "Index" /> </td>
-</form>
-<p>Don't have an account? <a href="create_account">Create an Account</a></p>
-<p>Want to head back to the index? <a href="index">Index</a>
-</p>
-
+<div class="fluid-container">
+	<form  class="form-horizontal" method="post">
+		<div class="form-group row">
+					<label for="email" class="control-label col-2">Email:</label>
+					<input type="text" class="form-control col-10" id="email" name="email" value="${email}">
+		</div>
+		<div class="row">
+					<label for="password" class="control-label col-2">Password:</label>
+					<input type="password" class="form-control col-10" id="password" name="password" value="${password}">
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" class="btn btn-info">Submit</button>
+			</div>
+		</div>
+	</form>
+	<p>Don't have an account? <a href="create_account">Create an Account</a></p>
+</div>
 </body></html>

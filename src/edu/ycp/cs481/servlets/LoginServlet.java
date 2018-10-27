@@ -50,13 +50,6 @@ public class LoginServlet extends HttpServlet{
 				User u = users.get(0);
 				HttpSession session = req.getSession();
 				session.setAttribute("user_id", u.getUserID());
-				// Only did user_id because other data would be grabbed from the User object as needed?
-				// Not sure 100% on that, but wouldn't we just need a verified login and the rest we can grab as needed?
-				/*session.setAttribute("email", loginUser.getEmail());
-				session.setAttribute("user_id", loginUser.getUserID());
-				session.setAttribute("admin_flag", loginUser.isAdminFlag());
-				session.setAttribute("first_name", loginUser.getFirstname());
-				session.setAttribute("last_name", loginUser.getLastname());*/
 				u.setSessionid(session.getId());
 				
 				// TODO: In the future, all users would go to a "user home" and in it, we would only give the options
