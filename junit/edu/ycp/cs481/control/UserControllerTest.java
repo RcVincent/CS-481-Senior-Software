@@ -257,7 +257,7 @@ public class UserControllerTest {
 		assertEquals("rookie@email.com", user2.getEmail());
 		
 		if(uc.validateEmail(newEmail)) {
-			uc.changeUserEmail(oldEmail, newEmail, user2.getPassword());
+			uc.changeUserEmail(user2.getUserID(), oldEmail, newEmail);
 		}
 		
 		assertEquals("lelelel@tcp.com", user2.getEmail());
@@ -269,7 +269,7 @@ public class UserControllerTest {
 		String oldPass = user3.getPassword();
 		
 		assertEquals("", user3.getPassword()); 
-		uc.changeUserPassword(user3.getEmail(), oldPass, newPass);
+		uc.changeUserPassword(user3.getUserID(), newPass);
 		
 		assertEquals("Password4", user3.getPassword()); 
 		

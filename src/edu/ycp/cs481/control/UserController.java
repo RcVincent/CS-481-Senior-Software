@@ -122,12 +122,14 @@ public class UserController {
     }
     
     //will implement these later
-    public void changeUserEmail(String oldEmail, String newEmail, String pass) {
-    	db.changeUserEmail(oldEmail, newEmail, pass);
+    public void changeUserEmail(int userID, String oldEmail, String newEmail){
+    	db.executeUpdate("Change User Email", "update User set email = '" + newEmail + "' where "
+				+ "email = '" + oldEmail + "' and user_id = " + userID);
     }
     
-    public void changeUserPassword(String email, String oldPass, String newPass) {
-    	db.changeUserPassword(email, oldPass, newPass);
+    public void changeUserPassword(int userID, String newPass){
+    	db.executeUpdate("Change User Password", "update User set password = SHA('" + newPass + "') where "
+    			+ "user_id = " + userID);
     }
     
     public void ArchiveUser(int userID){
