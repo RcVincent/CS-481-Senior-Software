@@ -17,6 +17,7 @@ public class IndexServlet extends HttpServlet{
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			System.out.println("User_ID: " + session.getAttribute("user_id"));
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}
 	}
