@@ -127,8 +127,9 @@ public class UserController {
 				+ "email = '" + oldEmail + "' and user_id = " + userID);
     }
     
-    public void changeUserPassword(String email, String oldPass, String newPass) {
-    	db.changeUserPassword(email, oldPass, newPass);
+    public void changeUserPassword(int userID, String newPass){
+    	db.executeUpdate("Change User Password", "update User set password = SHA('" + newPass + "') where "
+    			+ "user_id = " + userID);
     }
     
     public void ArchiveUser(int userID){

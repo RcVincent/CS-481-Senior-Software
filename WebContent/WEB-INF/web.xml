@@ -46,33 +46,6 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>ChangePassword</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.ChangePasswordServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>ChangePassword</servlet-name>
-  	<url-pattern>/change_password</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>RetryChangePassword</servlet-name>	
-  	<servlet-class>edu.ycp.cs481.servlets.RetryChangePasswordServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>RetryChangePassword</servlet-name>
-  	<url-pattern>/retrychangepassword</url-pattern>
-  </servlet-mapping>
-  
-   <servlet>
-  	<servlet-name>RetryChangeEmail</servlet-name>	
-  	<servlet-class>edu.ycp.cs481.servlets.RetryChangeEmailServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>RetryChangeEmail</servlet-name>
-  	<url-pattern>/retrychangeemail</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
   	<servlet-name>CreateSOP</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.CreateSOPServlet</servlet-class>
   </servlet>
