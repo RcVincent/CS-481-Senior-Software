@@ -347,7 +347,7 @@ public class Database {
 					String insertSQL = "insert into " + table + " (";
 					for(int i = 0; i < args.length; i++){
 						if(i == args.length - 1){
-							insertSQL += args[i] + ") values (";
+							insertSQL += args[i] + ") select ";
 						}else{
 							insertSQL += args[i] + ", ";
 						}
@@ -360,11 +360,12 @@ public class Database {
 							insertSQL += "'" + values[i] + "'";
 						}
 						if(i == values.length - 1){
-							insertSQL += ");";
+							insertSQL += ";";
 						}else{
 							insertSQL += ", ";
 						}
 					}
+					System.out.println(insertSQL);
 					insert.executeUpdate(insertSQL);
 					System.out.println("Executed Insert of a " + table + "!");
 					
