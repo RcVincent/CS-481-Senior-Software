@@ -17,13 +17,14 @@ public class InitialData {
 	private User u1, u2;
 	private List<Position> pList;
 	private Position p1, p2, p3;
-	private List<SOP> sList;	
-	private SOP s1, s2;
+	private List<SOP> sList, p1reqs;	
+	private SOP s1, s2, p1req1, p1req2;
 	
 	public InitialData() {
 		uList = new ArrayList<User>();
 		pList = new ArrayList<Position>();
 		sList = new ArrayList<SOP>();
+		p1reqs = new ArrayList<SOP>();
 		p1 = new Position();
 		p1.setID(1);
 		p1.setTitle("Administrator");
@@ -79,6 +80,27 @@ public class InitialData {
 		s2.setRevision(1);
 		s2.setAuthorID(p1.getID());
 		s2.setArchiveFlag(false);
+		
+		p1req1 = new SOP();
+		p1req1.setID(3);
+		p1req1.setName("Requirement 1");
+		p1req1.setDescription("This is the first requirement");
+		p1req1.setPriority(1);
+		p1req1.setRevision(1);
+		p1req1.setAuthorID(p1.getID());
+		p1req1.setArchiveFlag(false);
+		
+		p1req2 = new SOP();
+		p1req2.setID(4);
+		p1req2.setName("Requirement 2");
+		p1req2.setDescription("This is the second requirement");
+		p1req2.setPriority(1);
+		p1req2.setRevision(1);
+		p1req2.setAuthorID(p1.getID());
+		p1req2.setArchiveFlag(false);
+		
+		p1reqs.add(p1req1);
+		p1reqs.add(p1req2);		
 		
 		sList.add(s2);
 		p2.setRequirements(sList);
