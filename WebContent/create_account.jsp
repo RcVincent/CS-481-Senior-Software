@@ -2,8 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<head><title>CTM mkii - Create Account</title>
-<link rel="stylesheet" href="css/bootstrap.css"></head>
+<head>
+	<title>CTM mkii - Create Account</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
 <body>
 <h1>Create Account</h1>
 <div class="container-fluid">
@@ -93,104 +95,5 @@
 		</div>
 	</form>
 </div>
-<!-- <form  method="post" class="fluid-container">
-	<div class="row">
-		<div class="col-sm">
-			
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty firstNameError }">
-				<p class="alert alert-warning">${firstNameError}</p>
-			</c:if>
-		</div>
-		<div class="col-sm">
-		
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty lastNameError }">
-				<p class="alert alert-warning">${lastNameError}</p>
-			</c:if>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			First Name:
-		</div>
-		<div class="col-sm">
-			<input type="text" name="firstName" value="${firstName}" />
-		</div>
-		<div class="col-sm">
-			Last Name:
-		</div>
-		<div class="col-sm">
-			<input type="text" name="lastName" value="${lastName}" />
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty emailError}">
-				<p class="alert alert-warning">${emailError}</p>
-			</c:if>
-		</div>
-		<div class="col-sm">
-			
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty emailConfirmError}">
-				<p class="alert alert-warning">${emailConfirmError}</p>
-			</c:if>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			Email:
-		</div>
-		<div class="col-sm">
-			<input type="text" name="email" value="${email}" />
-		</div>
-		<div class="col-sm">
-			Confirm Email:
-		</div>
-		<div class="col-sm">
-			<input type="text" name="emailConfirm" value="${emailConfirm}" />
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty passwordError}">
-				<p class="alert alert-warning">${passwordError}</p>
-			</c:if>
-		</div>
-		<div class="col-sm">
-			
-		</div>
-		<div class="col-sm">
-			<c:if test="${! empty passwordConfirmError}">
-				<p class="alert alert-warning">${passwordConfirmError}</p>
-			</c:if>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm">
-			Password:
-		</div>
-		<div class="col-sm">
-			<input type="password" class="well" name="password" value="${password}" />
-		</div>
-		<div class="col-sm">
-			Confirm Password:
-		</div>
-		<div class="col-sm">
-			<input type="password" name="passwordConfirm" value="${passwordConfirm}" />
-		</div>
-	</div>
-	<input type="submit" class="btn btn-info btn-lg" name="submit" value="Submit">
-</form>-->
 <p class="note">Already have an account? <a href="./login">Login</a></p>
 </body></html>

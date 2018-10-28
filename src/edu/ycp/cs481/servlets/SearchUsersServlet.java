@@ -12,16 +12,16 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 
+@SuppressWarnings("serial")
 public class SearchUsersServlet extends HttpServlet {
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-		
 		
 		req.getRequestDispatcher("/searchUsers.jsp").forward(req, resp);
 	}
