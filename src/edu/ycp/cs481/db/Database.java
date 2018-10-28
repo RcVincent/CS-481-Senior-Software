@@ -770,68 +770,6 @@ public class Database {
 		});
 	}
 	
-	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
-	public User changeUserEmail(final String oldEmail, final String newEmail, final String Pass) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET email = ? WHERE email = ? AND password = ? ");
-					
-					stmt.setString(1, newEmail);
-					stmt.setString(2, oldEmail);
-					stmt.setString(3, Pass);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE email = ? and password = ?");
-					
-					stmt2.setString(1, newEmail);
-					stmt2.setString(2, Pass);
-					
-					resultSet = stmt2.executeQuery();
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with email <" + newEmail + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
 	public void archiveUser(int userID){
 		executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
 	}

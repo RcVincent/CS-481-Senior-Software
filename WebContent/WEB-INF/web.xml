@@ -37,12 +37,12 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>ChangeEmail</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.ChangeEmailServlet</servlet-class>
+  	<servlet-name>AccountSettings</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.AccountSettingsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ChangeEmail</servlet-name>
-  	<url-pattern>/change_email</url-pattern>
+  	<servlet-name>AccountSettings</servlet-name>
+  	<url-pattern>/account_settings</url-pattern>
   </servlet-mapping>
   
   <servlet>
