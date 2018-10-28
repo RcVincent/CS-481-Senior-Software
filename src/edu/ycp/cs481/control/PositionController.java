@@ -1,5 +1,6 @@
 package edu.ycp.cs481.control;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs481.db.Database;
@@ -37,21 +38,8 @@ public class PositionController {
 	//Implementing the database methods 
 	//********************
 	
-	public Position getPositionByID(int positionID) {
-		return db.findPositionByID(positionID);
-	}
-	
-	public List<Position> getAllPositions() {
-		return db.findAllPositions();
-	}
-	
-	//this will be populated later 
-	public List<Position> getPositionByPriority(int priority) {
-		return db.getPositionByPriority(priority); 
-	}
-	
-	public List<Position> getPositionByName(String title) {
-		return db.getPositionByName(title);
+	public ArrayList<Position> searchForPosition(int id, String title, String desc, int priority) {
+		return db.searchForPositions(id, title, desc, priority);
 	}
 	
 	public Position getPositionByUser(int userID) {

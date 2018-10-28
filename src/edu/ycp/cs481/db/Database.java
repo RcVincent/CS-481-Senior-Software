@@ -82,7 +82,7 @@ public class Database {
 		@Override
 		public ArrayList<Position> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<Position> positions = new ArrayList<Position>();
-			do{
+			while(resultSet.next()){
 				Position p = new Position();
 				p.setID(resultSet.getInt(1));
 				p.setTitle(resultSet.getString(2));
@@ -90,7 +90,7 @@ public class Database {
 				p.setPriority(resultSet.getInt(4));
 				
 				positions.add(p);
-			}while(resultSet.next());
+			}
 			
 			return positions;
 		}
@@ -100,7 +100,8 @@ public class Database {
 		@Override
 		public ArrayList<User> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<User> users = new ArrayList<User>();
-			do{
+			
+			while(resultSet.next()){
 				User u = new User();
 				
 				u.setUserID(resultSet.getInt(1));
@@ -110,10 +111,10 @@ public class Database {
 				u.setLastname(resultSet.getString(5));
 				u.setAdminFlag(resultSet.getBoolean(6));
 				u.setArchiveFlag(resultSet.getBoolean(7));
-				u.setPosition(findPositionByID(resultSet.getInt(9)));
+				u.setPosition(searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				
 				users.add(u);
-			}while(resultSet.next());
+			}
 			
 			return users;
 		}
@@ -123,19 +124,20 @@ public class Database {
 		@Override
 		public ArrayList<SOP> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<SOP> sops = new ArrayList<SOP>();
-			do{
-				SOP s = new SOP();
-				
-				s.setID(resultSet.getInt(1));
-				s.setName(resultSet.getString(2));
-				s.setDescription(resultSet.getString(3));
-				s.setPriority(resultSet.getInt(4));
-				s.setRevision(resultSet.getInt(5));
-				s.setAuthorID(resultSet.getInt(6));
-				s.setArchiveFlag(resultSet.getBoolean(7));
-				
-				sops.add(s);
-			}while(resultSet.next());
+			
+			while(resultSet.next()){
+					SOP s = new SOP();
+					
+					s.setID(resultSet.getInt(1));
+					s.setName(resultSet.getString(2));
+					s.setDescription(resultSet.getString(3));
+					s.setPriority(resultSet.getInt(4));
+					s.setRevision(resultSet.getInt(5));
+					s.setAuthorID(resultSet.getInt(6));
+					s.setArchiveFlag(resultSet.getBoolean(7));
+					
+					sops.add(s);
+			}
 			
 			return sops;
 		}
@@ -158,7 +160,6 @@ public class Database {
 						System.out.println("Finished query " + name);
 					}
 					
-					resultSet.next();
 					return querExec.convertFromResultSet(resultSet);
 				}finally{
 					DBUtil.closeQuietly(resultSet);
@@ -233,7 +234,7 @@ public class Database {
 		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
-				  "password VARCHAR(32) NOT NULL, " +
+				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
 				  "admin_flag TINYINT NOT NULL, " +
@@ -286,9 +287,15 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
+		List<SOP> reqs;
+		int req_size = 0;
 		
-		int numInserts = posList.size() + userList.size() + sopList.size();
-		// TODO: Add PositionSOP connections to size
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			req_size += reqs.size();
+		}
+		
+		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
 		
 		String[] names = new String[numInserts];
 		String[] sqls = new String[numInserts];
@@ -304,7 +311,7 @@ public class Database {
 		for(User u: userList){
 			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
 			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getFirstname() +
+					"position_id)  values ('" + u.getEmail() + "', SHA('" + u.getPassword() + "'), '" + u.getFirstname() +
 					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
 					u.getPosition().getID() + ")";
 			currentInsert++;
@@ -318,13 +325,16 @@ public class Database {
 			currentInsert++;
 		}
 		
-		// TODO: Insert PositionSOP connections
-		/*
-			names[currentInsert] = "Insert SOP " + <sop_name> + " and Position " + <position_name> + " connection";
-			sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
-					" values (" + <pos_id> + ", " + <sop_id> + ")";
-			currentInsert++;
-		 */
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			
+			for(SOP s: reqs) {
+				names[currentInsert] = "Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection";
+				sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
+						" values (" + p.getID() + ", " + s.getID() + ")";
+				currentInsert++;
+			}
+		}
 		
 		executeUpdates(names, sqls);
 	}
@@ -346,39 +356,43 @@ public class Database {
 					String insertSQL = "insert into " + table + " (";
 					for(int i = 0; i < args.length; i++){
 						if(i == args.length - 1){
-							insertSQL += args[i] + ") values (";
+							insertSQL += args[i] + ") select ";
 						}else{
 							insertSQL += args[i] + ", ";
 						}
 					}
 					for(int i = 0; i < values.length; i++){
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
+								values[i].startsWith("SHA")){
 							insertSQL += values[i];
 						}else{
 							insertSQL += "'" + values[i] + "'";
 						}
 						if(i == values.length - 1){
-							insertSQL += ");";
+							insertSQL += ";";
 						}else{
 							insertSQL += ", ";
 						}
 					}
+					System.out.println(insertSQL);
 					insert.executeUpdate(insertSQL);
 					System.out.println("Executed Insert of a " + table + "!");
 					
 					selectID = conn.createStatement();
 					String selectSQL = "select " + id_str + " from " + table + " where ";
 					for(int i = 0; i < args.length; i++){
-						selectSQL += args[i] + " = ";
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
-							selectSQL += values[i];
-						}else{
-							selectSQL += "'" + values[i] + "'";
-						}
-						if(i != args.length - 1){
-							selectSQL += " and ";
-						}else{
-							selectSQL += ";";
+						if(!values[i].startsWith("SHA")){
+							selectSQL += args[i] + " = ";
+							if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+								selectSQL += values[i];
+							}else{
+								selectSQL += "'" + values[i] + "'";
+							}
+							if(i != args.length - 1){
+								selectSQL += " and ";
+							}else{
+								selectSQL += ";";
+							}
 						}
 					}
 					id = selectID.executeQuery(selectSQL);
@@ -396,15 +410,11 @@ public class Database {
 	}
 	
 	public Integer insertPosition(Position p){
+		// Insert into our junction table immediately
+		insertPosition_SOP(p);
+		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
-	}
-	
-	public Integer insertUser(User u){
-		return insertAndGetID("User", "user_id", 
-				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{u.getEmail(), u.getPassword(), u.getFirstname(), u.getLastname(), String.valueOf(u.isAdminFlag()),
-						String.valueOf(u.isArchiveFlag()), String.valueOf(2)}); // ID 2 is the default User position
 	}
 	
 	public Integer insertSOP(SOP s){
@@ -412,6 +422,17 @@ public class Database {
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
 				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
+	}
+	
+	public Integer insertPosition_SOP(Position p){
+		String[] reqs = new String[p.getRequirements().size()];
+		
+		for(int i = 0; i < p.getRequirements().size(); i++) {
+			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+		}
+		
+		return insertAndGetID("PositionSOP", "position_id", 
+				new String[]{"sop_id"}, reqs);
 	}
 	
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){

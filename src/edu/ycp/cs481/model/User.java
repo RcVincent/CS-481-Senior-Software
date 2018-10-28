@@ -8,9 +8,12 @@ public class User {
 	private boolean loggedin;
 	private String Firstname, Lastname; 
 	private String sessionid;
-	/// Constructor(s)
+	private TrainingHistory t; 
+	
+	// Constructor(s)
 	public User() {
-		
+		t = new TrainingHistory(); 
+		position = new Position(); 
 	}
 	
 	public User(int UserID, String Password, String Email, Position position) {
@@ -21,7 +24,7 @@ public class User {
 		loggedin = false;
 	}
 	
-	/// Getters/Setters
+	// Getters/Setters
 	
 	public void setUserID(int UserID) {
 		this.UserID = UserID;	
@@ -109,6 +112,14 @@ public class User {
 
 	public void setSessionid(String sessionid) {
 		this.sessionid = sessionid;
+	}
+
+	public TrainingHistory getHistory() {
+		return t;
+	}
+
+	public void setHistory(TrainingHistory t) {
+		this.t = t;
 	}
 
 }

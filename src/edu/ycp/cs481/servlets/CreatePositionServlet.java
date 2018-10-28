@@ -23,19 +23,19 @@ public class CreatePositionServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		
 		//get session info
-		System.out.println(session.getAttribute("email"));
+		System.out.println(session.getAttribute("user_id"));
 		
-		if (session.getAttribute("email") == null) {
+		if (session.getAttribute("user_id") == null) {
 			// user is not logged in, or the session expired
-			resp.sendRedirect(req.getContextPath() + "/Login");
+			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
-		if(session.getAttribute("isAdmin").equals("User") || 
+		/*if(session.getAttribute("isAdmin").equals("User") || 
 			session.getAttribute("isAdmin").equals("user")){
 			resp.sendRedirect(req.getContextPath() + "/MainPage");
 
-		}
+		}*/
 		
 		req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
 	}

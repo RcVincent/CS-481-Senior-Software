@@ -1,6 +1,8 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +18,11 @@ public class ChangeSOPPriorityServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		if(session.getAttribute("email") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}
+		}*/
 		req.getRequestDispatcher("/change_sopPriority.jsp").forward(req, resp);
 	}
 	
@@ -36,7 +38,8 @@ public class ChangeSOPPriorityServlet extends HttpServlet {
 		String sopID = req.getParameter("sopID");
 		int sid = Integer.parseInt(sopID);
 		
-		SOP s = sc.findSOPbyID(sid);
+		ArrayList<SOP> result = sc.searchForSOP(sid, "", "", 0, 0, 0);
+		SOP s = result.get(0);
 		
 		String newPriority = req.getParameter("newPriority");
 		int np = Integer.parseInt(newPriority); 

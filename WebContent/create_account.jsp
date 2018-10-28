@@ -1,29 +1,99 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
-<head><title>CS481 Project - Create Account</title></head>
+<head>
+	<title>CTM mkii - Create Account</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
 <body>
 <h1>Create Account</h1>
-<form  method="post">
-	<table>
-		<tr>
-			<td class="label">First Name: </td>
-			<td><input type="text" name="first_name" size="12" value="${first_name}" /></td>
-			<td class="label">Last Name: </td>
-			<td><input type="text" name="last_name" size="12" value="${last_name}" /></td>
-		</tr>
-		<tr>
-			<td class="label">Email: </td>
-			<td><input type="text" name="email" size="12" value="${email}" /></td>
-			<td class="label">Confirm Email: </td>
-			<td><input type="text" name="email_confirm" size="12" value="${email_confirm}" /></td>
-		</tr>
-		<tr>
-			<td class="label">Password: </td>
-			<td><input type="password" name="password" size="12" value="${password}" /></td>
-			<td class="label">Confirm Password: </td>
-			<td><input type="password" name="password_confirm" size="12" value="${password_confirm}" /></td>
-		</tr>
-	</table>
-<input type="Submit" name="submit" value="Submit">
-</form>
+<div class="container-fluid">
+	<form class="form-horizontal" method="post">
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty firstNameError}">
+					<p class="alert alert-warning">${firstNameError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty lastNameError}">
+					<p class="alert alert-warning">${lastNameError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="firstName" class="control-label col-2">First Name:</label>
+					<input type="text" class="form-control col-10" id="firstName" name="firstName" value="${firstName}">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group row">
+					<label for="lastName" class="control-label col-2">Last Name:</label>
+					<input type="text" class="form-control col-10" id="lastName" name="lastName" value="${lastName}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty emailError}">
+					<p class="alert alert-warning">${emailError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty emailConfirmError}">
+					<p class="alert alert-warning">${emailConfirmError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="email" class="form-label col-2">Email:</label>
+					<input type="email" class="form-control col-10" id="email" name="email" value="${email}">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group row">
+					<label for="emailConfirm" class="form-label col-2">Confirm Email:</label>
+					<input type="email" class="form-control col-10" id="emailConfirm" name="emailConfirm" value="${emailConfirm}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty passwordError}">
+					<p class="alert alert-warning">${passwordError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty passwordConfirmError}">
+					<p class="alert alert-warning">${passwordConfirmError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="password" class="form-label col-2">Password:</label>
+					<input type="password" class="form-control col-10" id="password" name="password" value="${password}">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group row">
+					<label for="passwordConfirm" class="form-label col-2">Confirm Password:</label>
+					<input type="password" class="form-control col-10" id="passwordConfirm" name="passwordConfirm" value="${passwordConfirm}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" class="btn btn-info">Submit</button>
+			</div>
+		</div>
+	</form>
+</div>
+<p class="note">Already have an account? <a href="./login">Login</a></p>
 </body></html>

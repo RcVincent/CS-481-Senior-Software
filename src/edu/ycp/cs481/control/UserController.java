@@ -1,14 +1,17 @@
 package edu.ycp.cs481.control;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 public class UserController {
 	User U = new User();
 	Database db = new Database(); 
+	String sha1;
 	
 	public UserController() {
 		
@@ -27,8 +30,11 @@ public class UserController {
 		return users;
 	}*/
 	
-	public static boolean authenticate(User u, String pswd) {
+	public boolean authenticate(User u, String pswd) {
 		boolean real = false;
+		
+		pswd = hashPassword(pswd);
+		
 		if(u.getPassword().equals(pswd)){
 
 			real = true;
@@ -57,6 +63,18 @@ public class UserController {
 
     }
     
+    public String hashPassword(String password) {
+    	try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-1");
+	        digest.reset();
+	        digest.update(password.getBytes("utf8"));
+	        sha1 = String.format("%040x", new BigInteger(1, digest.digest()));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+    	return sha1;
+    }
+    
     public boolean validateEmail(String entry) { // TODO: Make sure there's only one @
 		int valid = 0;
 		int atloc = 100;
@@ -81,7 +99,7 @@ public class UserController {
 		
 		else 
 			return false;
-}
+    }
     
     public void Archive(){
         U.setArchiveFlag(true);
@@ -91,29 +109,16 @@ public class UserController {
   	//Implementing DB calls 
   	//************************************
     
-    public Integer insertUserAndGetID(User u) {
-    	return db.insertUser(u);
-    }
+    public Integer insertUser(String email, String password, String firstName, String lastName, boolean isAdmin, 
+			boolean isArchived, int positionID){
+		return db.insertAndGetID("User", "user_id", 
+				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
+				new String[]{email, "SHA('"+ password + "')", firstName, lastName, String.valueOf(isAdmin), 
+						String.valueOf(isArchived), String.valueOf(positionID)});
+	}
     
-    public User insertUser(User u) {
-    	int id = db.insertUser(u);
-    	return db.getUserByID(id);
-    }
-    
-    public User FindUserByID(int userID) {
-    	return db.getUserByID(userID);
-    }
-    
-    public ArrayList<User> findUsersByFirstname(String fname) {
-    	return db.getUsersByFirstName(fname);
-    }
-    
-    public ArrayList<User> findUsersByLastname(String lname) {
-    	return db.getUsersByLastName(lname);
-    }
-    
-    public User findUserByEmail(String email) {
-    	return db.getUserByEmail(email);
+    public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
+    	return db.searchForUsers(id, email, fname, lname, positionID);
     }
     
     //will implement these later
@@ -123,10 +128,6 @@ public class UserController {
     
     public void changeUserPassword(String email, String oldPass, String newPass) {
     	db.changeUserPassword(email, oldPass, newPass);
-    }
-    
-    public List<User> findAllUsers() {
-    	return db.findAllUsers(); 
     }
     
     public void ArchiveUser(int userID){
@@ -140,11 +141,4 @@ public class UserController {
     public User changePosition(int userID, int positionID) {
     	return db.changePosition(userID, positionID);
     }
-    
-    public ArrayList<User> findUsersWithPosition(int positionID) {
-    	return db.findUsersWithPosition(positionID);
-    }
-    
-    
-    
 }

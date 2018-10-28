@@ -1,5 +1,6 @@
 package edu.ycp.cs481.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Position {
@@ -9,14 +10,14 @@ public class Position {
 	private boolean isValid; 
 	// Constructors
 	public Position() {
-		
+		Requirements = new ArrayList<SOP>();
 	}
 	
 	public Position(String Title, int ID, int Priority) {
 		this.Title = Title;
-		this.Description = Description;
 		this.ID = ID;
 		this.Priority = Priority;
+		Requirements = new ArrayList<SOP>();
 	}
 	
 	// Getters/Setters
