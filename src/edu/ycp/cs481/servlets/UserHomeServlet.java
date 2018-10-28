@@ -16,6 +16,8 @@ public class UserHomeServlet extends HttpServlet{
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			// TODO: Check for admin/privileges check
+			// Plan is to put attribute in so that user_home.jsp can check that for what to display and not display
 			req.getRequestDispatcher("/user_home.jsp").forward(req, resp);
 		}
 	}
