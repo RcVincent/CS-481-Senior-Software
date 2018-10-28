@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 public class UserController {
 	User U = new User();
 	Database db = new Database(); 
+	String sha1;
 	
 	public UserController() {
 		
@@ -29,6 +32,9 @@ public class UserController {
 	
 	public boolean authenticate(User u, String pswd) {
 		boolean real = false;
+		
+		pswd = hashPassword(pswd);
+		
 		if(u.getPassword().equals(pswd)){
 
 			real = true;
@@ -57,6 +63,18 @@ public class UserController {
 
     }
     
+    public String hashPassword(String password) {
+    	try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-1");
+	        digest.reset();
+	        digest.update(password.getBytes("utf8"));
+	        sha1 = String.format("%040x", new BigInteger(1, digest.digest()));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+    	return sha1;
+    }
+    
     public boolean validateEmail(String entry) { // TODO: Make sure there's only one @
 		int valid = 0;
 		int atloc = 100;
@@ -81,7 +99,7 @@ public class UserController {
 		
 		else 
 			return false;
-}
+    }
     
     public void Archive(){
         U.setArchiveFlag(true);
@@ -95,8 +113,8 @@ public class UserController {
 			boolean isArchived, int positionID){
 		return db.insertAndGetID("User", "user_id", 
 				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{email, "SHA('"+ password + "')", firstName, lastName, String.valueOf(isAdmin), 
-						String.valueOf(isArchived), String.valueOf(positionID)});
+				new String[]{email, "SHA("+ password + ")", firstName, lastName, String.valueOf(isAdmin), String.valueOf(isArchived),
+						String.valueOf(positionID)});
 	}
     
     public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
@@ -123,9 +141,4 @@ public class UserController {
     public User changePosition(int userID, int positionID) {
     	return db.changePosition(userID, positionID);
     }
-    
-    
-    
-    
-    
 }
