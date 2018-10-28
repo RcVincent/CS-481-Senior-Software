@@ -287,9 +287,15 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
+		List<SOP> reqs;
+		int req_size = 0;
 		
-		int numInserts = posList.size() + userList.size() + sopList.size();
-		// TODO: Add PositionSOP connections to size
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			req_size += reqs.size();
+		}
+		
+		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
 		
 		String[] names = new String[numInserts];
 		String[] sqls = new String[numInserts];
@@ -319,13 +325,16 @@ public class Database {
 			currentInsert++;
 		}
 		
-		// TODO: Insert PositionSOP connections
-		/*
-			names[currentInsert] = "Insert SOP " + <sop_name> + " and Position " + <position_name> + " connection";
-			sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
-					" values (" + <pos_id> + ", " + <sop_id> + ")";
-			currentInsert++;
-		 */
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			
+			for(SOP s: reqs) {
+				names[currentInsert] = "Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection";
+				sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
+						" values (" + p.getID() + ", " + s.getID() + ")";
+				currentInsert++;
+			}
+		}
 		
 		executeUpdates(names, sqls);
 	}
@@ -401,6 +410,9 @@ public class Database {
 	}
 	
 	public Integer insertPosition(Position p){
+		// Insert into our junction table immediately
+		insertPosition_SOP(p);
+		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
@@ -410,6 +422,17 @@ public class Database {
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
 				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
+	}
+	
+	public Integer insertPosition_SOP(Position p){
+		String[] reqs = new String[p.getRequirements().size()];
+		
+		for(int i = 0; i < p.getRequirements().size(); i++) {
+			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+		}
+		
+		return insertAndGetID("PositionSOP", "position_id", 
+				new String[]{"sop_id"}, reqs);
 	}
 	
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
