@@ -8,6 +8,16 @@
   	<servlet-name>Index</servlet-name>
   	<url-pattern>/index</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>UserHome</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.UserHomeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>UserHome</servlet-name>
+  	<url-pattern>/user_home</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
   	<servlet-name>Login</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.LoginServlet</servlet-class>
@@ -16,6 +26,7 @@
   	<servlet-name>Login</servlet-name>
   	<url-pattern>/login</url-pattern>
   </servlet-mapping>
+  
   <servlet>
   	<servlet-name>CreateAccount</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.CreateAccountServlet</servlet-class>
@@ -29,7 +40,6 @@
   	<servlet-name>ChangeEmail</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.ChangeEmailServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>ChangeEmail</servlet-name>
   	<url-pattern>/change_email</url-pattern>
@@ -39,7 +49,6 @@
   	<servlet-name>ChangePassword</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.ChangePasswordServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>ChangePassword</servlet-name>
   	<url-pattern>/change_password</url-pattern>
@@ -49,17 +58,15 @@
   	<servlet-name>RetryChangePassword</servlet-name>	
   	<servlet-class>edu.ycp.cs481.servlets.RetryChangePasswordServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>RetryChangePassword</servlet-name>
   	<url-pattern>/retrychangepassword</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+   <servlet>
   	<servlet-name>RetryChangeEmail</servlet-name>	
   	<servlet-class>edu.ycp.cs481.servlets.RetryChangeEmailServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>RetryChangeEmail</servlet-name>
   	<url-pattern>/retrychangeemail</url-pattern>
@@ -69,7 +76,6 @@
   	<servlet-name>CreateSOP</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.CreateSOPServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>CreateSOP</servlet-name>
   	<url-pattern>/create_sop</url-pattern>
@@ -79,7 +85,6 @@
   	<servlet-name>CreatePosition</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.CreatePositionServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>CreatePosition</servlet-name>
   	<url-pattern>/create_position</url-pattern>
@@ -89,7 +94,6 @@
   	<servlet-name>ChangePositionPriority</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.ChangePositionPriorityServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>ChangePositionPriority</servlet-name>
   	<url-pattern>/change_positionPriority</url-pattern>
@@ -99,7 +103,6 @@
   	<servlet-name>ChangeSOPPriority</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.ChangeSOPPriorityServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>ChangeSOPPriority</servlet-name>
   	<url-pattern>/change_sopPriority</url-pattern>

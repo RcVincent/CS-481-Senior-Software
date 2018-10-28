@@ -13,17 +13,16 @@ import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
-public class ChangeEmailServlet extends HttpServlet {
+public class ChangeEmailServlet extends HttpServlet{
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
-		/*HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		HttpSession session = req.getSession();
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}*/
-		
+		}
 		
 		req.getRequestDispatcher("/change_email.jsp").forward(req, resp);
 	}
