@@ -287,9 +287,15 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
+		List<SOP> reqs;
+		int req_size = 0;
 		
-		int numInserts = posList.size() + userList.size() + sopList.size();
-		// TODO: Add PositionSOP connections to size
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			req_size += reqs.size();
+		}
+		
+		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
 		
 		String[] names = new String[numInserts];
 		String[] sqls = new String[numInserts];
@@ -319,13 +325,16 @@ public class Database {
 			currentInsert++;
 		}
 		
-		// TODO: Insert PositionSOP connections
-		/*
-			names[currentInsert] = "Insert SOP " + <sop_name> + " and Position " + <position_name> + " connection";
-			sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
-					" values (" + <pos_id> + ", " + <sop_id> + ")";
-			currentInsert++;
-		 */
+		for(Position p: posList) {
+			reqs = p.getRequirements();
+			
+			for(SOP s: reqs) {
+				names[currentInsert] = "Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection";
+				sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
+						" values (" + p.getID() + ", " + s.getID() + ")";
+				currentInsert++;
+			}
+		}
 		
 		executeUpdates(names, sqls);
 	}
