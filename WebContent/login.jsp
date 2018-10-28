@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
 	<title>CTM mkii - Login</title>
@@ -8,6 +10,13 @@
 <h1>Login</h1>
 <div class="fluid-container">
 	<form  class="form-horizontal" method="post">
+		<c:if test="${! empty errorMessage}">
+			<div class="row">
+				<div class="col">
+					<p class="alert alert-warning">${errorMessage}</p>
+				</div>
+			</div>
+		</c:if>
 		<div class="form-group row">
 					<label for="email" class="control-label col-2">Email:</label>
 					<input type="text" class="form-control col-10" id="email" name="email" value="${email}">
@@ -22,6 +31,6 @@
 			</div>
 		</div>
 	</form>
-	<p>Don't have an account? <a href="create_account">Create an Account</a></p>
+	<p class="note">Don't have an account? <a href="./create_account">Create an Account</a></p>
 </div>
 </body></html>
