@@ -113,8 +113,8 @@ public class UserController {
 			boolean isArchived, int positionID){
 		return db.insertAndGetID("User", "user_id", 
 				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{email, "SHA("+ password + ")", firstName, lastName, String.valueOf(isAdmin), String.valueOf(isArchived),
-						String.valueOf(positionID)});
+				new String[]{email, "SHA('"+ password + "')", firstName, lastName, String.valueOf(isAdmin), 
+						String.valueOf(isArchived), String.valueOf(positionID)});
 	}
     
     public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
