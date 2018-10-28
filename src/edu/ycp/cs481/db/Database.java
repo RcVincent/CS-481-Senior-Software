@@ -410,6 +410,9 @@ public class Database {
 	}
 	
 	public Integer insertPosition(Position p){
+		// Insert into our junction table immediately
+		insertPosition_SOP(p);
+		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
@@ -419,6 +422,17 @@ public class Database {
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
 				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
+	}
+	
+	public Integer insertPosition_SOP(Position p){
+		String[] reqs = new String[p.getRequirements().size()];
+		
+		for(int i = 0; i < p.getRequirements().size(); i++) {
+			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+		}
+		
+		return insertAndGetID("PositionSOP", "position_id", 
+				new String[]{"sop_id"}, reqs);
 	}
 	
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
