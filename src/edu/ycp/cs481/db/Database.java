@@ -234,7 +234,7 @@ public class Database {
 		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
-				  "password VARCHAR(32) NOT NULL, " +
+				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
 				  "admin_flag TINYINT NOT NULL, " +
@@ -305,7 +305,7 @@ public class Database {
 		for(User u: userList){
 			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
 			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getFirstname() +
+					"position_id)  values ('" + u.getEmail() + "', SHA('" + u.getPassword() + "'), '" + u.getFirstname() +
 					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
 					u.getPosition().getID() + ")";
 			currentInsert++;
@@ -347,39 +347,43 @@ public class Database {
 					String insertSQL = "insert into " + table + " (";
 					for(int i = 0; i < args.length; i++){
 						if(i == args.length - 1){
-							insertSQL += args[i] + ") values (";
+							insertSQL += args[i] + ") select ";
 						}else{
 							insertSQL += args[i] + ", ";
 						}
 					}
 					for(int i = 0; i < values.length; i++){
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
+								values[i].startsWith("SHA")){
 							insertSQL += values[i];
 						}else{
 							insertSQL += "'" + values[i] + "'";
 						}
 						if(i == values.length - 1){
-							insertSQL += ");";
+							insertSQL += ";";
 						}else{
 							insertSQL += ", ";
 						}
 					}
+					System.out.println(insertSQL);
 					insert.executeUpdate(insertSQL);
 					System.out.println("Executed Insert of a " + table + "!");
 					
 					selectID = conn.createStatement();
 					String selectSQL = "select " + id_str + " from " + table + " where ";
 					for(int i = 0; i < args.length; i++){
-						selectSQL += args[i] + " = ";
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
-							selectSQL += values[i];
-						}else{
-							selectSQL += "'" + values[i] + "'";
-						}
-						if(i != args.length - 1){
-							selectSQL += " and ";
-						}else{
-							selectSQL += ";";
+						if(!values[i].startsWith("SHA")){
+							selectSQL += args[i] + " = ";
+							if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false")){
+								selectSQL += values[i];
+							}else{
+								selectSQL += "'" + values[i] + "'";
+							}
+							if(i != args.length - 1){
+								selectSQL += " and ";
+							}else{
+								selectSQL += ";";
+							}
 						}
 					}
 					id = selectID.executeQuery(selectSQL);
