@@ -4,9 +4,9 @@
 <html>
 	<head>
       <title> Create SOP </title>
-		<style type = "text/css">
 		
-		</style>
+		<link rel="stylesheet" href="css/bootstrap.css">
+		
 
 	<body>
 
