@@ -35,6 +35,7 @@
 </div>
 
 <script type="text/javascript">
+
 function setCookie(cname, cvalue, exhours) {
     var d = new Date();
     d.setTime(d.getTime() + (exhours*60*60*1000));
@@ -60,7 +61,7 @@ function getCookie(cname) {
 
 function checklogin(cname) {
     var user = getCookie("username");
-    if (loginStatus == true&&) {
+    if (loginStatus == true && user != "") {
         alert("Welcome again " + user);
         return true;
     } else {
@@ -68,7 +69,6 @@ function checklogin(cname) {
     }
 }
 
-if()
 
 </script>
 </body></html>
