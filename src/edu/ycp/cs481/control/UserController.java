@@ -7,11 +7,11 @@ import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import org.mindrot.jbcrypt.*;
 
 public class UserController {
 	User U = new User();
-	Database db = new Database(); 
-	String sha1;
+	Database db = new Database();
 	
 	public UserController() {
 		
@@ -31,16 +31,7 @@ public class UserController {
 	}*/
 	
 	public boolean authenticate(User u, String pswd) {
-		boolean real = false;
-		
-		pswd = hashPassword(pswd);
-		
-		if(u.getPassword().equals(pswd)){
-
-			real = true;
-		}
-
-		return real;
+        return BCrypt.checkpw(pswd, u.getPassword());
 	}
 	
     public void login(){
@@ -49,10 +40,6 @@ public class UserController {
     
     public void logout(){
     	U.setLoginStatus(false);
-    }
-    
-    public boolean Authenticate(){
-        return false;
     }
     
     public void addPosition(Position p){
@@ -64,15 +51,8 @@ public class UserController {
     }
     
     public String hashPassword(String password) {
-    	try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-1");
-	        digest.reset();
-	        digest.update(password.getBytes("utf8"));
-	        sha1 = String.format("%040x", new BigInteger(1, digest.digest()));
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-    	return sha1;
+    	System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
     
     public boolean validateEmail(String entry) { // TODO: Make sure there's only one @
@@ -111,9 +91,10 @@ public class UserController {
     
     public Integer insertUser(String email, String password, String firstName, String lastName, boolean isAdmin, 
 			boolean isArchived, int positionID){
+    	password = hashPassword(password);
 		return db.insertAndGetID("User", "user_id", 
 				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag", "position_id"}, 
-				new String[]{email, "SHA('"+ password + "')", firstName, lastName, String.valueOf(isAdmin), 
+				new String[]{email, password, firstName, lastName, String.valueOf(isAdmin), 
 						String.valueOf(isArchived), String.valueOf(positionID)});
 	}
     
