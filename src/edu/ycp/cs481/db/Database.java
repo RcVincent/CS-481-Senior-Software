@@ -13,6 +13,7 @@ import java.util.List;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.control.UserController;
 
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
@@ -311,7 +312,7 @@ public class Database {
 		for(User u: userList){
 			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
 			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', SHA('" + u.getPassword() + "'), '" + u.getFirstname() +
+					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + u.getFirstname() +
 					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
 					u.getPosition().getID() + ")";
 			currentInsert++;

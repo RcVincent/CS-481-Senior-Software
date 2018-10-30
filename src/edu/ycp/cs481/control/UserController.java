@@ -50,8 +50,7 @@ public class UserController {
 
     }
     
-    public String hashPassword(String password) {
-    	System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
+    public static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
     
