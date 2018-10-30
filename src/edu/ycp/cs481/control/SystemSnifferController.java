@@ -41,6 +41,5 @@ public class SystemSnifferController {
 		PriorityQueue q = t.getSopsToDo();
 		
 		
-		
 	}
 }
