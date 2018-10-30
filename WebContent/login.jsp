@@ -7,6 +7,8 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
+<script src="js/cookies.js"></script>
+
 <h1>Login</h1>
 <div class="fluid-container">
 	<form  class="form-horizontal" method="post">
@@ -27,48 +29,14 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" class="btn btn-info">Submit</button>
+				<button type="submit" 
+				onclick="setCookie(loginStatus,true,2)" 
+				onclick="setCookie(username,document.getElementById('password'),2)" 
+				class="btn btn-info">Submit</button>
 			</div>
 		</div>
 	</form>
 	<p class="note">Don't have an account? <a href="./create_account">Create an Account</a></p>
 </div>
 
-<script type="text/javascript">
-
-function setCookie(cname, cvalue, exhours) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exhours*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-function checklogin(cname) {
-    var user = getCookie("username");
-    if (loginStatus == true && user != "") {
-        alert("Welcome again " + user);
-        return true;
-    } else {
-       return false
-    }
-}
-
-
-</script>
 </body></html>
