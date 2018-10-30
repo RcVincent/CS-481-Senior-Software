@@ -10,8 +10,8 @@ import java.security.MessageDigest;
 import org.mindrot.jbcrypt.*;
 
 public class UserController {
-	User U = new User();
-	Database db = new Database();
+	private User U = new User();
+	private Database db = new Database();
 	
 	public UserController() {
 		

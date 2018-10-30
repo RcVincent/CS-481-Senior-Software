@@ -6,9 +6,9 @@ import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.SOP;
 
 public class SOPController {
-	SOP sop1 = new SOP("Testing purposes", "For testing", 4, 1, 123, 2, false); 
-	SOP sop2 = new SOP();
-	Database db = new Database(); 
+	private SOP sop1 = new SOP("Testing purposes", "For testing", 4, 1, 123, 2, false); 
+	private SOP sop2 = new SOP();
+	private Database db = new Database(); 
 	
 	
 	

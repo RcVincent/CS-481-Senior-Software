@@ -10,7 +10,7 @@ import edu.ycp.cs481.model.User;
 
 public class PositionController {
 	private Position p;
-	Database db = new Database(); 
+	private Database db = new Database(); 
 	
 	public PositionController() {
 		
@@ -28,11 +28,6 @@ public class PositionController {
 	   }
    }
 
-	public SOP getApplicantSOPs(User u) {
-		
-		// TODO: Return database query 
-		return new SOP(null, null, -1, -1, -1, -1, false);
-	}
 	
 	//********************
 	//Implementing the database methods 
@@ -62,7 +57,10 @@ public class PositionController {
 		db.deletePosition(positionID);
 	}
 	
-	
+	public ArrayList<SOP> getApplicantSOPs(int position_id) {
+		
+		return db.findSOPsByPosition(position_id);
+	}
 	
 	
 	
