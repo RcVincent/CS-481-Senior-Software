@@ -221,8 +221,8 @@ public class Database {
 	}
 	
 	public void createTables(){
-		String[] names = new String[4];
-		String[] sqls = new String[4];
+		String[] names = new String[5];
+		String[] sqls = new String[5];
 		
 		names[0] = "Create Position table";
 		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
@@ -279,6 +279,13 @@ public class Database {
 					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 					");";
+		
+		names[4] = "Create Permissions table";
+		sqls[4] = "CREATE TABLE IF NOT EXISTS Permissions (" +
+				 "perm_id INT NOT NULL AUTO_INCREMENT," +
+				 "description VARCHAR(255) NOT NULL," +
+				 "PRIMARY KEY (perm_id)," +
+				 "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);";
 		
 		executeUpdates(names, sqls);
 	}
