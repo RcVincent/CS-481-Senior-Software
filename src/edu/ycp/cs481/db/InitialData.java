@@ -19,12 +19,18 @@ public class InitialData {
 	private Position p1, p2, p3;
 	private List<SOP> sList, p1reqs;	
 	private SOP s1, s2, p1req1, p1req2;
+	private String[] perms, permNames;
+	private int[] permIds;
 	
 	public InitialData() {
 		uList = new ArrayList<User>();
 		pList = new ArrayList<Position>();
 		sList = new ArrayList<SOP>();
 		p1reqs = new ArrayList<SOP>();
+		perms = new String[2];
+		permNames = new String[2];			// start with 2, work our way up. We won't need that many.
+		
+		
 		p1 = new Position();
 		p1.setID(1);
 		p1.setTitle("Administrator");
@@ -115,6 +121,18 @@ public class InitialData {
 		pList.add(p1);
 		pList.add(p2);
 		pList.add(p3);
+		
+		permNames[0] = "Admin";
+		perms[0] = "User can view and modify any Position or SOP";
+
+		permNames[1] = "New User";
+		perms[1] = "User can view their Positions and SOPs";
+		
+		permIds = new int[pList.size()];
+		
+		permIds[0] = 1;
+		permIds[1] = 2;
+		permIds[2] = 2;
 	}
 
 
@@ -128,5 +146,17 @@ public class InitialData {
 	
 	public List<SOP> getInitialSOPs() {
 		return sList;
+	}
+	
+	public String[] getInitialPermissions() {
+		return perms;
+	}
+	
+	public String[] getInitialPermissionNames() {
+		return permNames;
+	}
+	
+	public int[] getInitialPermissionIDs() {
+		return permIds;
 	}
 }

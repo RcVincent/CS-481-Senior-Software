@@ -316,15 +316,21 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
-		List<SOP> reqs;
-		int req_size = 0;
+		List<SOP> reqs;					// Populated from initialdata position object's requirement field
+		String []perms = initData.getInitialPermissions();
+		String []permNames = initData.getInitialPermissionNames();
+		int []permIds = initData.getInitialPermissionIDs();
+		int id = 0;
 		
-		for(Position p: posList) {
+		int reqSize = 0;		
+		int permSize = perms.length;
+		
+		for(Position p: posList) {	
 			reqs = p.getRequirements();
-			req_size += reqs.size();
+			reqSize += reqs.size();
 		}
 		
-		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
+		int numInserts = (posList.size() * 2) + userList.size() + sopList.size() + reqSize + permSize;
 		
 		String[] names = new String[numInserts];
 		String[] sqls = new String[numInserts];
@@ -354,7 +360,7 @@ public class Database {
 			currentInsert++;
 		}
 		
-		for(Position p: posList) {
+		for(Position p: posList) {		// PositionSOP inserts
 			reqs = p.getRequirements();
 			
 			for(SOP s: reqs) {
@@ -363,6 +369,21 @@ public class Database {
 						" values (" + p.getID() + ", " + s.getID() + ")";
 				currentInsert++;
 			}
+		}
+		
+		for(int i = 0; i < permSize; i++) {
+			names[currentInsert] = "Insert Permission " + permNames[i];
+			sqls[currentInsert] = "insert into Permission (permission) " +
+			" values ('" + perms[i] + "')";
+			currentInsert++;
+		}
+		
+		for(Position p: posList) {
+			names[currentInsert] = "Insert Position " + p.getTitle() + " and Permission " + permNames[permIds[id] - 1];
+			sqls[currentInsert] = "insert into PositionPermission (position_id, perm_id) " +
+			" values (" + p.getID() + ", " + permIds[id] + ")";
+			id++;
+			currentInsert++;
 		}
 		
 		executeUpdates(names, sqls);
