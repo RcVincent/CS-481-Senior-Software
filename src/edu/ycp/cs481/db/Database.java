@@ -215,14 +215,14 @@ public class Database {
 	}
 	
 	public void createDatabase(){
-		//executeUpdate("Dropping old database..", "drop database cs481db");
+		//executeUpdate("Dropping old database..", "drop database if exists cs481db");
 		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
 		this.dbName = "cs481db";
 	}
 	
 	public void createTables(){
-		String[] names = new String[5];
-		String[] sqls = new String[5];
+		String[] names = new String[7];
+		String[] sqls = new String[7];
 		
 		names[0] = "Create Position table";
 		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
@@ -280,12 +280,28 @@ public class Database {
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 					");";
 		
-		names[4] = "Create Permissions table";
-		sqls[4] = "CREATE TABLE IF NOT EXISTS Permissions (" +
-				 "perm_id INT NOT NULL AUTO_INCREMENT," +
-				 "description VARCHAR(255) NOT NULL," +
-				 "PRIMARY KEY (perm_id)," +
-				 "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);";
+		names[4] = "Create Permission table";
+		sqls[4] = "CREATE TABLE IF NOT EXISTS Permission (" +
+				  "perm_id INT NOT NULL AUTO_INCREMENT," +
+				  "description VARCHAR(255) NOT NULL," +
+				  "PRIMARY KEY (perm_id)," +
+				  "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);";
+		
+		names[5] = "Create PositionPermission table";
+		sqls[5] =  "CREATE TABLE IF NOT EXISTS PositionPermission (" +
+				   "position_id INT NOT NULL, " +
+				   "perm_id INT NOT NULL, " +
+					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+					"CONSTRAINT FOREIGN KEY (perm_id) REFERENCES Permission (perm_id) " +
+					");";
+		
+		names[6] = "Create CompletedSOP table";
+		sqls[6] = "CREATE TABLE IF NOT EXISTS CompletedSOP (" +
+				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "sop_id INT NOT NULL," +
+				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
+				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+				  ");";		
 		
 		executeUpdates(names, sqls);
 	}
