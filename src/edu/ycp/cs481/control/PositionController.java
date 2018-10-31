@@ -49,8 +49,8 @@ public class PositionController {
 		return db.changePositionPriority(p, priority);
 	}
 	
-	public Integer insertPosition(Position p) {
-		return db.insertPosition(p);
+	public Integer insertPosition(Position p, int permission_id) {
+		return db.insertPosition(p, permission_id);
 	}
 	
 	public void removePosition(int positionID) {

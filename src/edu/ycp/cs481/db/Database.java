@@ -459,9 +459,10 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPosition(Position p){
+	public Integer insertPosition(Position p, int permission_id){
 		// Insert into our junction table immediately
 		insertPosition_SOP(p);
+		insertPosition_Permission(permission_id);
 		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
@@ -483,6 +484,65 @@ public class Database {
 		
 		return insertAndGetID("PositionSOP", "position_id", 
 				new String[]{"sop_id"}, reqs);
+	}
+	
+	// Called from insertPosition
+	public Integer insertPosition_Permission(int perm_id) {
+		//  TODO: Potential flaw if a number larger than our highest permission_id is passed
+		return insertAndGetID("PositionPermission", "position_id", 
+				new String[] {"perm_id"},
+				new String[] {String.valueOf(perm_id)});
+	}
+	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return executeTransaction(new Transaction<Integer>() {
+		@Override
+		public Integer execute(Connection conn) throws SQLException {
+			PreparedStatement stmt = null;
+			PreparedStatement stmt2 = null;
+			ResultSet resultSet = null;
+
+
+			try{
+				stmt = conn.prepareStatement(
+						"UPDATE PositionPermission SET perm_id = ? WHERE position_id = ? ");
+				
+				stmt.setInt(1, perm_id);
+				stmt.setInt(2, position_id);
+				stmt.executeUpdate();
+				
+				
+				stmt2 = conn.prepareStatement(
+						"SELECT * FROM PositionPermission WHERE position_id = ?");
+				
+				stmt2.setInt(1, position_id);
+				
+				resultSet = stmt2.executeQuery();
+				
+				int new_id = 0;
+				
+				Boolean found = false;
+				
+				while(resultSet.next()) {
+					found = true;
+					new_id = resultSet.getInt(2);
+				}
+
+				// check if the junction exists
+				if (!found) {
+					System.out.println("PositionPermission with ID "+ position_id +" was not found in the PositionPermission table");
+				}
+
+				return new_id;
+
+
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2); 
+			}
+		}
+	});
 	}
 	
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
