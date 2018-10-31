@@ -18,7 +18,7 @@ import edu.ycp.cs481.control.UserController;
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public String dbName = "cs481db";
+	public String dbName = "";
 	
 	static {
 		try {
@@ -215,12 +215,17 @@ public class Database {
 	}
 	
 	public void createDatabase(){
-		executeUpdate("Create CS481DB database", "create database if not exists cs481db");
+		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
+		this.dbName = "cs481db";
+	}
+	
+	public void dropDatabase() {
+		executeUpdate("Dropping old database..", "drop database if exists cs481db");
 	}
 	
 	public void createTables(){
-		String[] names = new String[4];
-		String[] sqls = new String[4];
+		String[] names = new String[7];
+		String[] sqls = new String[7];
 		
 		names[0] = "Create Position table";
 		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
@@ -277,6 +282,29 @@ public class Database {
 					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 					");";
+		
+		names[4] = "Create Permission table";
+		sqls[4] = "CREATE TABLE IF NOT EXISTS Permission (" +
+				  "perm_id INT NOT NULL AUTO_INCREMENT," +
+				  "permission VARCHAR(255) NOT NULL," +
+				  "PRIMARY KEY (perm_id)," +
+				  "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);";
+		
+		names[5] = "Create PositionPermission table";
+		sqls[5] =  "CREATE TABLE IF NOT EXISTS PositionPermission (" +
+				   "position_id INT NOT NULL, " +
+				   "perm_id INT NOT NULL, " +
+					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+					"CONSTRAINT FOREIGN KEY (perm_id) REFERENCES Permission (perm_id) " +
+					");";
+		
+		names[6] = "Create CompletedSOP table";
+		sqls[6] = "CREATE TABLE IF NOT EXISTS CompletedSOP (" +
+				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "sop_id INT NOT NULL," +
+				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
+				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+				  ");";		
 		
 		executeUpdates(names, sqls);
 	}
@@ -1186,6 +1214,7 @@ public class Database {
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
 		Database db = new Database();
+		db.dropDatabase();
 		db.createDatabase();
 		db.createTables();
 		db.loadInitialData();
