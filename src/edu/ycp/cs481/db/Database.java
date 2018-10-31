@@ -215,9 +215,12 @@ public class Database {
 	}
 	
 	public void createDatabase(){
-		//executeUpdate("Dropping old database..", "drop database if exists cs481db");
 		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
 		this.dbName = "cs481db";
+	}
+	
+	public void dropDatabase() {
+		executeUpdate("Dropping old database..", "drop database if exists cs481db");
 	}
 	
 	public void createTables(){
@@ -283,7 +286,7 @@ public class Database {
 		names[4] = "Create Permission table";
 		sqls[4] = "CREATE TABLE IF NOT EXISTS Permission (" +
 				  "perm_id INT NOT NULL AUTO_INCREMENT," +
-				  "description VARCHAR(255) NOT NULL," +
+				  "permission VARCHAR(255) NOT NULL," +
 				  "PRIMARY KEY (perm_id)," +
 				  "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);";
 		
@@ -1211,6 +1214,7 @@ public class Database {
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
 		Database db = new Database();
+		db.dropDatabase();
 		db.createDatabase();
 		db.createTables();
 		db.loadInitialData();
