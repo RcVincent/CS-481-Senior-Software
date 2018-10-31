@@ -18,7 +18,7 @@ import edu.ycp.cs481.control.UserController;
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public String dbName = "cs481db";
+	public String dbName = "";
 	
 	static {
 		try {
@@ -215,7 +215,9 @@ public class Database {
 	}
 	
 	public void createDatabase(){
-		executeUpdate("Create CS481DB database", "create database if not exists cs481db");
+		//executeUpdate("Dropping old database..", "drop database cs481db");
+		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
+		this.dbName = "cs481db";
 	}
 	
 	public void createTables(){
