@@ -459,10 +459,10 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPosition(Position p, int permission_id){
+	public Integer insertPosition(Position p){
 		// Insert into our junction table immediately
 		insertPosition_SOP(p);
-		insertPosition_Permission(permission_id);
+		insertPosition_Permission(2);
 		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
@@ -486,7 +486,7 @@ public class Database {
 				new String[]{"sop_id"}, reqs);
 	}
 	
-	// Called from insertPosition
+	// Called from insertPosition with default perm_id = 2
 	public Integer insertPosition_Permission(int perm_id) {
 		//  TODO: Potential flaw if a number larger than our highest permission_id is passed
 		return insertAndGetID("PositionPermission", "position_id", 

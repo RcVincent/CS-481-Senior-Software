@@ -49,12 +49,16 @@ public class PositionController {
 		return db.changePositionPriority(p, priority);
 	}
 	
-	public Integer insertPosition(Position p, int permission_id) {
-		return db.insertPosition(p, permission_id);
+	public Integer insertPosition(Position p) {
+		return db.insertPosition(p);
 	}
 	
 	public void removePosition(int positionID) {
 		db.deletePosition(positionID);
+	}
+	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return db.changePositionPermission(position_id, perm_id);
 	}
 	
 	public ArrayList<SOP> getApplicantSOPs(int position_id) {
