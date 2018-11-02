@@ -57,6 +57,10 @@ public class PositionController {
 		db.deletePosition(positionID);
 	}
 	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return db.changePositionPermission(position_id, perm_id);
+	}
+	
 	public ArrayList<SOP> getApplicantSOPs(int position_id) {
 		
 		return db.findSOPsByPosition(position_id);

@@ -224,8 +224,8 @@ public class Database {
 	}
 	
 	public void createTables(){
-		String[] names = new String[7];
-		String[] sqls = new String[7];
+		String[] names = new String[8];
+		String[] sqls = new String[8];
 		
 		names[0] = "Create Position table";
 		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
@@ -300,11 +300,19 @@ public class Database {
 		
 		names[6] = "Create CompletedSOP table";
 		sqls[6] = "CREATE TABLE IF NOT EXISTS CompletedSOP (" +
-				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "user_id INT NOT NULL," +
 				  "sop_id INT NOT NULL," +
 				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
 				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 				  ");";		
+		
+		names[7] = "Create Subordinate table";
+		sqls[7]  = "CREATE TABLE IF NOT EXISTS Subordinate (" +
+				   "manager_id INT NOT NULL, " +
+				   "subordinate_id INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
+				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
+				   ");";
 		
 		executeUpdates(names, sqls);
 	}
@@ -316,15 +324,21 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
-		List<SOP> reqs;
-		int req_size = 0;
+		List<SOP> reqs;					// Populated from initialdata position object's requirement field
+		String []perms = initData.getInitialPermissions();
+		String []permNames = initData.getInitialPermissionNames();
+		int []permIds = initData.getInitialPermissionIDs();
+		int id = 0;
 		
-		for(Position p: posList) {
+		int reqSize = 0;		
+		int permSize = perms.length;
+		
+		for(Position p: posList) {	
 			reqs = p.getRequirements();
-			req_size += reqs.size();
+			reqSize += reqs.size();
 		}
 		
-		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
+		int numInserts = (posList.size() * 2) + userList.size() + sopList.size() + reqSize + permSize;
 		
 		String[] names = new String[numInserts];
 		String[] sqls = new String[numInserts];
@@ -354,7 +368,7 @@ public class Database {
 			currentInsert++;
 		}
 		
-		for(Position p: posList) {
+		for(Position p: posList) {		// PositionSOP inserts
 			reqs = p.getRequirements();
 			
 			for(SOP s: reqs) {
@@ -363,6 +377,21 @@ public class Database {
 						" values (" + p.getID() + ", " + s.getID() + ")";
 				currentInsert++;
 			}
+		}
+		
+		for(int i = 0; i < permSize; i++) {
+			names[currentInsert] = "Insert Permission " + permNames[i];
+			sqls[currentInsert] = "insert into Permission (permission) " +
+			" values ('" + perms[i] + "')";
+			currentInsert++;
+		}
+		
+		for(Position p: posList) {
+			names[currentInsert] = "Insert Position " + p.getTitle() + " and Permission " + permNames[permIds[id] - 1];
+			sqls[currentInsert] = "insert into PositionPermission (position_id, perm_id) " +
+			" values (" + p.getID() + ", " + permIds[id] + ")";
+			id++;
+			currentInsert++;
 		}
 		
 		executeUpdates(names, sqls);
@@ -441,6 +470,7 @@ public class Database {
 	public Integer insertPosition(Position p){
 		// Insert into our junction table immediately
 		insertPosition_SOP(p);
+		insertPosition_Permission(2);
 		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
@@ -462,6 +492,71 @@ public class Database {
 		
 		return insertAndGetID("PositionSOP", "position_id", 
 				new String[]{"sop_id"}, reqs);
+	}
+	
+	// Called from insertPosition with default perm_id = 2
+	public Integer insertPosition_Permission(int perm_id) {
+		//  TODO: Potential flaw if a number larger than our highest permission_id is passed
+		return insertAndGetID("PositionPermission", "position_id", 
+				new String[] {"perm_id"},
+				new String[] {String.valueOf(perm_id)});
+	}
+	
+	public Integer insertCompletedSOP(int user_id, int sop_id) {
+		return insertAndGetID("CompletedSOP", "user_id", 
+				new String[] {"sop_id"},
+				new String[] {String.valueOf(sop_id)});
+	}
+	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return executeTransaction(new Transaction<Integer>() {
+		@Override
+		public Integer execute(Connection conn) throws SQLException {
+			PreparedStatement stmt = null;
+			PreparedStatement stmt2 = null;
+			ResultSet resultSet = null;
+
+
+			try{
+				stmt = conn.prepareStatement(
+						"UPDATE PositionPermission SET perm_id = ? WHERE position_id = ? ");
+				
+				stmt.setInt(1, perm_id);
+				stmt.setInt(2, position_id);
+				stmt.executeUpdate();
+				
+				
+				stmt2 = conn.prepareStatement(
+						"SELECT * FROM PositionPermission WHERE position_id = ?");
+				
+				stmt2.setInt(1, position_id);
+				
+				resultSet = stmt2.executeQuery();
+				
+				int new_id = 0;
+				
+				Boolean found = false;
+				
+				while(resultSet.next()) {
+					found = true;
+					new_id = resultSet.getInt(2);
+				}
+
+				// check if the junction exists
+				if (!found) {
+					System.out.println("PositionPermission with ID "+ position_id +" was not found in the PositionPermission table");
+				}
+
+				return new_id;
+
+
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2); 
+			}
+		}
+	});
 	}
 	
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
