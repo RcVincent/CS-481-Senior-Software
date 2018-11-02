@@ -494,6 +494,12 @@ public class Database {
 				new String[] {String.valueOf(perm_id)});
 	}
 	
+	public Integer insertCompletedSOP(int user_id, int sop_id) {
+		return insertAndGetID("CompletedSOP", "user_id", 
+				new String[] {"sop_id"},
+				new String[] {String.valueOf(sop_id)});
+	}
+	
 	public Integer changePositionPermission(int position_id, int perm_id) {
 		return executeTransaction(new Transaction<Integer>() {
 		@Override
