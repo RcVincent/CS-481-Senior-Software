@@ -224,8 +224,8 @@ public class Database {
 	}
 	
 	public void createTables(){
-		String[] names = new String[7];
-		String[] sqls = new String[7];
+		String[] names = new String[8];
+		String[] sqls = new String[8];
 		
 		names[0] = "Create Position table";
 		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
@@ -300,11 +300,19 @@ public class Database {
 		
 		names[6] = "Create CompletedSOP table";
 		sqls[6] = "CREATE TABLE IF NOT EXISTS CompletedSOP (" +
-				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "user_id INT NOT NULL," +
 				  "sop_id INT NOT NULL," +
 				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
 				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 				  ");";		
+		
+		names[7] = "Create Subordinate table";
+		sqls[7]  = "CREATE TABLE IF NOT EXISTS Subordinate (" +
+				   "manager_id INT NOT NULL, " +
+				   "subordinate_id INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
+				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
+				   ");";
 		
 		executeUpdates(names, sqls);
 	}
