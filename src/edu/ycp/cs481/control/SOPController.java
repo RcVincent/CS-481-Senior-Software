@@ -65,7 +65,7 @@ public class SOPController {
 	//Implementing DB calls 
 	//************************************
 	public ArrayList<SOP> searchForSOP(int sopID, String title, String description, int priority, int version, int authorID) {
-		return db.searchForSOPss(sopID, title, description, priority, version, authorID);
+		return db.searchForSOPs(sopID, title, description, priority, version, authorID);
 	}
 	
 	public void archiveSOP(int sopID){

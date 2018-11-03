@@ -179,8 +179,16 @@ public class Database {
 		return posResFormat;
 	}
 	
+	public String getPositionPieces(){
+		return positionPieces;
+	}
+	
 	public QueryResultFormat<ArrayList<SOP>> getSopResFormat(){
 		return sopResFormat;
+	}
+	
+	public String getSopPieces(){
+		return sopPieces;
 	}
 
 	private Connection connect() throws SQLException {
@@ -348,7 +356,7 @@ public class Database {
 		executeUpdates(names, sqls);
 	}
 	
-	private String formatInsertStatement(String table, String[] args, String[] values){
+	public String formatInsertStatement(String table, String[] args, String[] values){
 		String insertSQL = "insert into " + table + " (";
 		for(int i = 0; i < args.length; i++){
 			if(i == args.length - 1){
@@ -445,94 +453,7 @@ public class Database {
 				new String[]{"sop_id"}, reqs);
 	}
 	
-	public Position getPositionOfUser(int userID){
-		try{
-			ArrayList<Position> results = executeQuery("Get Position By User", "select " + positionPieces + 
-					" from Position, User where user_id = " + userID + " and Position.position_id = User.position_id", 
-					posResFormat);
-			if(results.size() == 0){
-				System.out.println("No positions found for User_id " + userID + "!");
-			}else if(results.size() > 1){
-				System.out.println("More than one position found for User_id " + userID + "! Returning null");
-			}else{
-				return results.get(0);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public ArrayList<Position> getPositionBySOPID(int SOPID){
-		try{
-			return executeQuery("Get Position by SOP ID", "select " + positionPieces + " from Position, PositionSOP where "
-					+ "PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", posResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the Position back again, perhaps to update?
-	public Position changePositionPriority(Position pos, int priority) {
-		return executeTransaction(new Transaction<Position>() {
-			@Override
-			public Position execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-	
-	
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE Position SET priority = ? WHERE position_id = ? ");
-					
-					stmt.setInt(1, priority);
-					stmt.setInt(2, pos.getID());
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM Position WHERE position_id = ?");
-					
-					stmt2.setInt(1, pos.getID());
-					
-					resultSet = stmt2.executeQuery();
-					
-					Position position = new Position(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-					}
-	
-					// check if the position exists
-					if (!found) {
-						System.out.println("Position with ID "+ pos.getID() +" was not found in the Position table");
-					}
-	
-					return position;
-	
-	
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	public void deletePosition(int position_id){
-		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
-	}
-	
-	public ArrayList<SOP> searchForSOPss(int sopID, String title, String description, int priority, int version, int authorID){
+	public ArrayList<SOP> searchForSOPs(int sopID, String title, String description, int priority, int version, int authorID){
 		try{
 			String name = "";
 			String sql = "select * from SOP";
@@ -620,12 +541,12 @@ public class Database {
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findAllSOPs(){
-		return searchForSOPss(-1, null, null, -1, -1, -1);
+		return searchForSOPs(-1, null, null, -1, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public SOP findSOPbyID(int sop_id){
-		ArrayList<SOP> result = searchForSOPss(sop_id, null, null, -1, -1, -1);
+		ArrayList<SOP> result = searchForSOPs(sop_id, null, null, -1, -1, -1);
 		if(result != null){
 			return result.get(0);
 		}else{
@@ -635,22 +556,22 @@ public class Database {
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByTitle(String title){
-		return searchForSOPss(-1, title, null, -1, -1, -1);
+		return searchForSOPs(-1, title, null, -1, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByPriority(int priority){
-		return searchForSOPss(-1, null, null, priority, -1, -1);
+		return searchForSOPs(-1, null, null, priority, -1, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByVersion(int version){
-		return searchForSOPss(-1, null, null, -1, version, -1);
+		return searchForSOPs(-1, null, null, -1, version, -1);
 	}
 	
 	@Deprecated // TODO: Remove, use searchForSOPss instead
 	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		return searchForSOPss(-1, null, null, -1, -1, authorID);
+		return searchForSOPs(-1, null, null, -1, -1, authorID);
 	}
 	
 	public void archiveSOP(int sop_id){
@@ -720,85 +641,15 @@ public class Database {
 		});
 	}
 	
-	public ArrayList<SOP> findSOPsByPosition(int position_id){
-		try{
-			return executeQuery("Get SOPs By Position", "select " + sopPieces + " from PositionSOP, SOP " + 
-					"where position_id = " + position_id, sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public void addSOPtoPosition(int positionID, int sopID){
 		executeUpdate("Insert Position " + positionID + " and SOP " + sopID + " connection", 
 				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
 	}
 	
-	/*
 	public void changeSOPPriority(SOP sop, int priority){
 		executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
 				"where sop_id = " + sop.getID());
 		sop.setPriority(priority);
-	}*/
-	
-	// TODO: Remove this to use about method? Not sure at the moment
-	public SOP changeSOPPriority(final int sop_id, final int priority) {
-		return executeTransaction(new Transaction<SOP>() {
-			@Override
-			public SOP execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE SOP SET priority = ? WHERE sop_id = ? ");
-					
-					stmt.setInt(1, priority);
-					stmt.setInt(2, sop_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE sop_id = ?");
-					
-					stmt2.setInt(1, sop_id);
-					
-					resultSet = stmt2.executeQuery();
-
-					SOP result = new SOP(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						
-						result.setID(resultSet.getInt(1));
-						result.setName(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-					}
-
-
-					if (!found) {
-						System.out.println("SOP with ID <" + sop_id + "> was not found in the SOP table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
 	}
 	
 	public static void cleanDB(){

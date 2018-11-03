@@ -2,7 +2,6 @@ package edu.ycp.cs481.control;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
@@ -10,23 +9,6 @@ import edu.ycp.cs481.model.SOP;
 
 public class PositionController{
 	private Database db = new Database();
-
-	public PositionController(){
-
-	}
-
-	public boolean validPosition(Position p){
-		if(p.getDescription() == "" || p.getDescription() == " " || p.getTitle() == "" | p.getTitle() == " "
-				|| p.getID() <= 0 || p.getPriority() <= 0){
-			return false;
-		}else{
-			return true;
-		}
-	}
-
-	// ********************
-	// Implementing the database methods
-	// ********************
 
 	public Integer insertPosition(Position p){
 		return db.insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"},
@@ -37,20 +19,20 @@ public class PositionController{
 		try{
 			String name = "";
 			String sql = "select * from Position";
-			if(positionID == -1 && (title == null || title.equalsIgnoreCase("")) && 
-					(description == null || description.equalsIgnoreCase("")) && priority == -1){
+			if(positionID == -1 && (title == null || title.equalsIgnoreCase(""))
+					&& (description == null || description.equalsIgnoreCase("")) && priority == -1){
 				name = "Get All Positions";
 			}else{
 				name = "Get Position with ";
 				sql += " where ";
 				boolean prevSet = false;
-				
+
 				if(positionID != -1){
 					name += "id of " + positionID;
 					sql += "position_id = " + positionID;
 					prevSet = true;
 				}
-				
+
 				if(title != null && !title.equalsIgnoreCase("")){
 					if(prevSet){
 						name += " and ";
@@ -60,8 +42,9 @@ public class PositionController{
 					sql += "title = '" + title + "'";
 					prevSet = true;
 				}
-				
-				// TODO: Likely edit description (and possibly title) to search for partial? Not sure if this does that.
+
+				// TODO: Likely edit description (and possibly title) to search for partial? Not
+				// sure if this does that.
 				if(description != null && !description.equalsIgnoreCase("")){
 					if(prevSet){
 						name += " and ";
@@ -71,7 +54,7 @@ public class PositionController{
 					sql += "description = '" + description + "'";
 					prevSet = true;
 				}
-				
+
 				if(priority != -1){
 					if(prevSet){
 						name += " and ";
@@ -99,24 +82,52 @@ public class PositionController{
 	}
 
 	public Position getPositionByUser(int userID){
-		return db.getPositionOfUser(userID);
+		try{
+			ArrayList<Position> results = db.executeQuery("Get Position By User", "select " + db.getPositionPieces() + 
+					" from Position, User where user_id = " + userID + " and Position.position_id = User.position_id", 
+					db.getPosResFormat());
+			if(results.size() == 0){
+				System.out.println("No positions found for User_id " + userID + "!");
+			}else if(results.size() > 1){
+				System.out.println("More than one position found for User_id " + userID + "! Returning null");
+			}else{
+				return results.get(0);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public List<Position> getPositionBySOPId(int sopID){
-		return db.getPositionBySOPID(sopID);
+	public ArrayList<Position> getPositionBySOPID(int SOPID){
+		try{
+			return db.executeQuery("Get Position by SOP ID", "select " + db.getPositionPieces() + " from Position, PositionSOP "
+					+ "where PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", 
+					db.getPosResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public Position changePositionPriority(Position p, int priority){
-		return db.changePositionPriority(p, priority);
+	public void changePositionPriority(Position pos, int priority){
+		db.executeUpdate("Change Position " + pos.getTitle() + " to priority " + priority, 
+				"update Position set priority = " + priority + " where position_id = " + pos.getID());
+		pos.setPriority(priority);
 	}
 
 	public void removePosition(int positionID){
-		db.deletePosition(positionID);
+		db.executeUpdate("Delete Position with ID " + positionID, "delete from Position where position_id = " + positionID);
 	}
 
-	public ArrayList<SOP> getApplicantSOPs(int position_id){
-
-		return db.findSOPsByPosition(position_id);
+	public ArrayList<SOP> findSOPsOfPosition(int positionID){
+		try{
+			return db.executeQuery("Get SOPs By Position", "select " + db.getSopPieces() + " from PositionSOP, SOP " + 
+					"where position_id = " + positionID, db.getSopResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
