@@ -468,10 +468,6 @@ public class Database {
 	}
 	
 	public Integer insertPosition(Position p){
-		// Insert into our junction table immediately
-		insertPosition_SOP(p);
-		insertPosition_Permission(2);
-		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
@@ -483,29 +479,42 @@ public class Database {
 						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
 	}
 	
-	public Integer insertPosition_SOP(Position p){
-		String[] reqs = new String[p.getRequirements().size()];
-		
-		for(int i = 0; i < p.getRequirements().size(); i++) {
-			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
-		}
-		
+	public Integer insertPositionSOP(int position_id, int sop_id){		
 		return insertAndGetID("PositionSOP", "position_id", 
-				new String[]{"sop_id"}, reqs);
+				new String[]{"position_id" ,"sop_id"}, 
+				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
 	}
 	
 	// Called from insertPosition with default perm_id = 2
-	public Integer insertPosition_Permission(int perm_id) {
-		//  TODO: Potential flaw if a number larger than our highest permission_id is passed
+	public Integer insertPositionPermission(int position_id, int perm_id) {
+		//  TODO: Potential flaw if a number larger than our highest permission_id is passed, set a check
+		if(perm_id > 5) {
+			System.out.println("Your permission id is too high!");
+			return 0;
+		}
+		
 		return insertAndGetID("PositionPermission", "position_id", 
-				new String[] {"perm_id"},
-				new String[] {String.valueOf(perm_id)});
+				new String[] {"position_id", "perm_id"},
+				new String[] {String.valueOf(position_id), String.valueOf(perm_id)});
 	}
 	
 	public Integer insertCompletedSOP(int user_id, int sop_id) {
 		return insertAndGetID("CompletedSOP", "user_id", 
-				new String[] {"sop_id"},
-				new String[] {String.valueOf(sop_id)});
+				new String[] {"user_id", "sop_id"},
+				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
+	}
+	
+	// InsertSubordinate
+	public Integer addSubordinate(int manager_id, int subordinate_id) {
+		return insertAndGetID("Subordinate", "manager_id",
+				new String[] {"manager_id", "subordinate_id"},
+				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
+	}
+	
+	// DeleteSubordinate
+	public void removeSubordinate(int manager_id, int subordinate_id) {
+		executeUpdate("Remove subordinate Position with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+	    manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
 	public Integer changePositionPermission(int position_id, int perm_id) {
