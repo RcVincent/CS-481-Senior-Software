@@ -468,10 +468,6 @@ public class Database {
 	}
 	
 	public Integer insertPosition(Position p){
-		// Insert into our junction table immediately
-		insertPosition_SOP(p);
-		insertPosition_Permission(2);
-		
 		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
@@ -485,20 +481,23 @@ public class Database {
 	
 	public Integer insertPosition_SOP(Position p){
 		String[] reqs = new String[p.getRequirements().size()];
+		int id = 0;
 		
 		for(int i = 0; i < p.getRequirements().size(); i++) {
 			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+			id = insertAndGetID("PositionSOP", "position_id", 
+					new String[]{"position_id" ,"sop_id"}, 
+					new String[] {String.valueOf(p.getID()) ,reqs[i]});
 		}
 		
-		return insertAndGetID("PositionSOP", "position_id", 
-				new String[]{"sop_id"}, reqs);
+		return id;
 	}
 	
 	// Called from insertPosition with default perm_id = 2
 	public Integer insertPosition_Permission(int perm_id) {
 		//  TODO: Potential flaw if a number larger than our highest permission_id is passed
 		return insertAndGetID("PositionPermission", "position_id", 
-				new String[] {"perm_id"},
+				new String[] {"position_id", "perm_id"},
 				new String[] {String.valueOf(perm_id)});
 	}
 	
@@ -506,6 +505,17 @@ public class Database {
 		return insertAndGetID("CompletedSOP", "user_id", 
 				new String[] {"sop_id"},
 				new String[] {String.valueOf(sop_id)});
+	}
+	
+	// InsertSubordinate
+	public Integer addSubordinate(int manager_id, int subordinate_id) {
+		return insertAndGetID("Subordinate", "manager_id",
+				new String[] {""},
+				new String[] {});
+	}
+	
+	public Integer removeSubordinate() {
+		return 1;
 	}
 	
 	public Integer changePositionPermission(int position_id, int perm_id) {
