@@ -195,7 +195,10 @@ public class UserController {
     	db.unarchiveUser(userID);
     }
     
-    public User changePosition(int userID, int positionID) {
-    	return db.changePosition(userID, positionID);
+    public void changePosition(User user, int positionID) {
+    	db.executeUpdate("Change User " + user.getFirstname() + " " + user.getLastname() + " Position to id " + 
+    			positionID, "update User set position_id = " + positionID + " where user_id = " + user.getUserID());
+    	PositionController pc = new PositionController();
+    	user.setPosition(pc.getPositionByUser(user.getUserID()));
     }
 }

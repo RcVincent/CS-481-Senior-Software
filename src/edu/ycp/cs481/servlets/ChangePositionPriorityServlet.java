@@ -38,7 +38,7 @@ public class ChangePositionPriorityServlet extends HttpServlet {
 		String positionID = req.getParameter("PositionID");
 		int id = Integer.parseInt(positionID);
 		
-		ArrayList<Position> result = pc.searchForPosition(id, "", "", 0);
+		ArrayList<Position> result = pc.searchForPositions(id, "", "", 0);
 		Position p = result.get(0);
 	
 		String NewPriority = req.getParameter("newPriority");

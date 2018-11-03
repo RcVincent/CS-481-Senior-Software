@@ -1,15 +1,14 @@
 package edu.ycp.cs481.control;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
-import edu.ycp.cs481.model.User;
 
 public class PositionController{
-	private Position p;
 	private Database db = new Database();
 
 	public PositionController(){
@@ -34,8 +33,69 @@ public class PositionController{
 				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
 	}
 
-	public ArrayList<Position> searchForPosition(int id, String title, String desc, int priority){
-		return db.searchForPositions(id, title, desc, priority);
+	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
+		try{
+			String name = "";
+			String sql = "select * from Position";
+			if(positionID == -1 && (title == null || title.equalsIgnoreCase("")) && 
+					(description == null || description.equalsIgnoreCase("")) && priority == -1){
+				name = "Get All Positions";
+			}else{
+				name = "Get Position with ";
+				sql += " where ";
+				boolean prevSet = false;
+				
+				if(positionID != -1){
+					name += "id of " + positionID;
+					sql += "position_id = " + positionID;
+					prevSet = true;
+				}
+				
+				if(title != null && !title.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "title of " + title;
+					sql += "title = '" + title + "'";
+					prevSet = true;
+				}
+				
+				// TODO: Likely edit description (and possibly title) to search for partial? Not sure if this does that.
+				if(description != null && !description.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "description of " + description;
+					sql += "description = '" + description + "'";
+					prevSet = true;
+				}
+				
+				if(priority != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "priority " + priority;
+					sql += "priority = " + priority;
+					prevSet = true;
+				}
+			}
+			ArrayList<Position> results = db.executeQuery(name, sql, db.getPosResFormat());
+			if(positionID != -1){
+				if(results.size() == 0){
+					System.out.println("No Position found with ID " + positionID);
+				}else if(results.size() > 1){
+					System.out.println("Multiple Positions found with ID " + positionID + "! Returning null");
+					return null;
+				}
+			}
+			return results;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public Position getPositionByUser(int userID){

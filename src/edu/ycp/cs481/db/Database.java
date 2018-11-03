@@ -13,6 +13,7 @@ import java.util.List;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.UserController;
 
 public class Database {
@@ -112,7 +113,8 @@ public class Database {
 				u.setLastname(resultSet.getString(5));
 				u.setAdminFlag(resultSet.getBoolean(6));
 				u.setArchiveFlag(resultSet.getBoolean(7));
-				u.setPosition(searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
+				PositionController pc = new PositionController();
+				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				
 				users.add(u);
 			}
@@ -443,96 +445,6 @@ public class Database {
 				new String[]{"sop_id"}, reqs);
 	}
 	
-	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
-		try{
-			String name = "";
-			String sql = "select * from Position";
-			if(positionID == -1 && (title == null || title.equalsIgnoreCase("")) && 
-					(description == null || description.equalsIgnoreCase("")) && priority == -1){
-				name = "Get All Positions";
-			}else{
-				name = "Get Position with ";
-				sql += " where ";
-				boolean prevSet = false;
-				
-				if(positionID != -1){
-					name += "id of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
-				}
-				
-				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
-				}
-				
-				// TODO: Likely edit description (and possibly title) to search for partial? Not sure if this does that.
-				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
-				}
-				
-				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
-				}
-			}
-			ArrayList<Position> results = executeQuery(name, sql, posResFormat);
-			if(positionID != -1){
-				if(results.size() == 0){
-					System.out.println("No Position found with ID " + positionID);
-				}else if(results.size() > 1){
-					System.out.println("Multiple Positions found with ID " + positionID + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> findAllPositions(){
-		return searchForPositions(-1, null, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public Position findPositionByID(int position_id){
-		ArrayList<Position> result = searchForPositions(position_id, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> getPositionByName(String title){
-		return searchForPositions(-1, title, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> getPositionByPriority(int priority){
-		return searchForPositions(-1, null, null, priority);
-	}
-	
 	public Position getPositionOfUser(int userID){
 		try{
 			ArrayList<Position> results = executeQuery("Get Position By User", "select " + positionPieces + 
@@ -626,66 +538,6 @@ public class Database {
 	
 	public void unarchiveUser(int userID){
 		executeUpdate("Unarchive User with ID " + userID, "update User set archive_flag = false where user_id = " + userID);
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
-	// Also this currently updates the Position in a weird way (doing a sub-transaction within the greater one)
-	public User changePosition(final int user_id, final int position_id) {
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET position_id = ? WHERE user_id = ? ");
-					
-					stmt.setInt(1, position_id);
-					stmt.setInt(2, user_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE user_id = ?");
-					
-					stmt2.setInt(1, user_id);
-					
-					resultSet = stmt2.executeQuery();
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-
-					if (!found) {
-						System.out.println("User with ID <" + user_id + "> was not found in the User table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
 	}
 	
 	public ArrayList<SOP> searchForSOPss(int sopID, String title, String description, int priority, int version, int authorID){

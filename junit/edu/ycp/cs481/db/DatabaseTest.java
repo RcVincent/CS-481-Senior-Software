@@ -83,7 +83,7 @@ public class DatabaseTest {
 			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
 			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
 		}
-	}*/
+	}
 	
 	@Test
 	public void testFindAllPositions() {
@@ -95,7 +95,7 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getDescription(), new InitialData().getInitialPositions().get(i).getDescription());
 			assertEquals(queryPos.get(i).getPriority(), new InitialData().getInitialPositions().get(i).getPriority());
 		}
-	}
+	}*/
 	
 	@Test
 	public void testFindAllSOPs() { 
@@ -108,17 +108,6 @@ public class DatabaseTest {
 			assertEquals(querySOP.get(i).getRevision(), new InitialData().getInitialSOPs().get(i).getRevision());
 			assertEquals(querySOP.get(i).getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
 			assertEquals(querySOP.get(i).getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
-		}
-	}
-	
-	@Test
-	public void testFindPositionByID() {
-		queryPos = db.findAllPositions();
-		
-		for(Position p : queryPos) {
-			assertEquals(p.getTitle(), db.findPositionByID(p.getID()).getTitle());
-			assertEquals(p.getDescription(), db.findPositionByID(p.getID()).getDescription());
-			assertEquals(p.getPriority(), db.findPositionByID(p.getID()).getPriority());
 		}
 	}
 	
@@ -194,37 +183,17 @@ public class DatabaseTest {
 		querySOP = db.findAllSOPs();
 	}*/
 	
-	@Test
-	public void testGetPositionByName() {
-		queryPos = db.findAllPositions();
-		
-		for(int i = 0; i < p_size; i++) {
-			assertEquals(queryPos.get(i).getTitle(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getTitle());
-			assertEquals(queryPos.get(i).getDescription(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getDescription());
-			assertEquals(queryPos.get(i).getPriority(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getPriority());
-		}
-	}
 	
-	@Test
-	public void testGetPositionByPriority() {
-		queryPos = db.findAllPositions();
-		
-		assertEquals(queryPos.get(0).getTitle(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getTitle());
-		assertEquals(queryPos.get(0).getDescription(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getDescription());
-		assertEquals(queryPos.get(0).getPriority(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getPriority());
-
-	}
 	
-	@Test //TODO: After PositionSOP is implemented
+	/*@Test //TODO: After PositionSOP is implemented
 	public void testGetPositionBySOPID() {
 		queryPos = db.findAllPositions();
 		querySOP = db.findAllSOPs();
-		/*
 		assertEquals(queryPos.get(0).getID(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getID());
 		assertEquals(queryPos.get(0).getTitle(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getTitle());
 		assertEquals(queryPos.get(0).getDescription(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());*/
-	}
+		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());
+	}*/
 	
 	// TODO: Move this, does it go in PositionController or UserController Test?
 	/*
@@ -239,16 +208,6 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getPriority(), db.getPositionOfUser(queryUser.get(i).getUserID()).getPriority());
 		}
 	}*/
-	
-	@Test
-	public void testDeletePosition() {
-		db.deletePosition(3);
-		queryPos = db.findAllPositions();
-
-		assertNotEquals(queryPos.get(2).getID(), pList.get(2).getID());
-		assertNotEquals(queryPos.get(2).getDescription(), pList.get(2).getDescription());
-		assertNotEquals(queryPos.get(2).getTitle(), pList.get(2).getTitle());
-	}
 	
 	@Test // TODO: this breaks testInsertPosition and testFindAllPositions //
 	public void testChangePositionPriority() {

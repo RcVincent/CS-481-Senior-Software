@@ -359,7 +359,7 @@ public class UserControllerTest {
 		
 		assertEquals(4, oldP.getID());
 		int newPositionID = 3;
-		uc.changePosition(user3.getUserID(), newPositionID);
+		uc.changePosition(user3, newPositionID);
 		
 		assertEquals("IT", user3.getPosition().getTitle()); 
 	}
