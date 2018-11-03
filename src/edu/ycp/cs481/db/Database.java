@@ -18,7 +18,7 @@ import edu.ycp.cs481.control.UserController;
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public String dbName = "";
+	public static String dbName = "cs481db";
 	
 	static {
 		try {
@@ -513,7 +513,7 @@ public class Database {
 	
 	// DeleteSubordinate
 	public void removeSubordinate(int manager_id, int subordinate_id) {
-		executeUpdate("Remove subordinate Position with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+		executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
 	    manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
@@ -1318,6 +1318,7 @@ public class Database {
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
 		Database db = new Database();
+		dbName = "";
 		db.dropDatabase();
 		db.createDatabase();
 		db.createTables();
