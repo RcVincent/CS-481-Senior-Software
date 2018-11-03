@@ -57,18 +57,6 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testInsertPosition() {
-		
-		for(Position p: pList) {
-			db.insertPosition(p);
-			queryPos = db.findAllPositions();
-			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
-			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
-			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
-		}
-	}
-	
-	@Test
 	public void testInsertSOP() {
 		for(SOP s: sList) {
 			db.insertSOP(s);

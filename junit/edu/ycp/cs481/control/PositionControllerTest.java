@@ -91,6 +91,19 @@ public class PositionControllerTest {
 		sopList.add(sop2);
 	}
 	
+	// TODO: Rework this for PositionController
+	/*@Test
+	public void testInsertPosition() {
+		
+		for(Position p: pList) {
+			db.insertPosition(p);
+			queryPos = db.findAllPositions();
+			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
+			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
+			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
+		}
+	}*/
+	
 	//@Test
 	public void testGetApplicantsSOP() {
 		List<SOP> testList = new ArrayList<SOP>(); 

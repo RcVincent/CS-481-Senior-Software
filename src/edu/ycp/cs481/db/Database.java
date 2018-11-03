@@ -425,14 +425,6 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPosition(Position p){
-		// Insert into our junction table immediately
-		insertPosition_SOP(p);
-		
-		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
-				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
-	}
-	
 	public Integer insertSOP(SOP s){
 		return insertAndGetID("SOP", "sop_id", 
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
