@@ -511,8 +511,10 @@ public class Database {
 				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
 	}
 	
-	public Integer removeSubordinate(int manager_id, int subordinate_id) {
-		return 1;
+	// DeleteSubordinate
+	public void removeSubordinate(int manager_id, int subordinate_id) {
+		executeUpdate("Remove subordinate Position with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+	    manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
 	public Integer changePositionPermission(int position_id, int perm_id) {
