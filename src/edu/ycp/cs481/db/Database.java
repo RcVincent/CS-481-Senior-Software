@@ -346,6 +346,35 @@ public class Database {
 		executeUpdates(names, sqls);
 	}
 	
+	private String formatInsertStatement(String table, String[] args, String[] values){
+		String insertSQL = "insert into " + table + " (";
+		for(int i = 0; i < args.length; i++){
+			if(i == args.length - 1){
+				insertSQL += args[i] + ") select ";
+			}else{
+				insertSQL += args[i] + ", ";
+			}
+		}
+		for(int i = 0; i < values.length; i++){
+			if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
+					values[i].startsWith("SHA")){
+				insertSQL += values[i];
+			}else{
+				insertSQL += "'" + values[i] + "'";
+			}
+			if(i == values.length - 1){
+				insertSQL += ";";
+			}else{
+				insertSQL += ", ";
+			}
+		}
+		return insertSQL;
+	}
+	
+	public void insert(String table, String[] args, String[] values){
+		executeUpdate("Insert a " + table, formatInsertStatement(table, args, values));
+	}
+	
 	public Integer insertAndGetID(String table, String id_str, String[] args, String[] values){
 		return executeTransaction(new Transaction<Integer>(){
 			@Override
@@ -360,28 +389,8 @@ public class Database {
 				
 				try{
 					insert = conn.createStatement();
-					String insertSQL = "insert into " + table + " (";
-					for(int i = 0; i < args.length; i++){
-						if(i == args.length - 1){
-							insertSQL += args[i] + ") select ";
-						}else{
-							insertSQL += args[i] + ", ";
-						}
-					}
-					for(int i = 0; i < values.length; i++){
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
-								values[i].startsWith("SHA")){
-							insertSQL += values[i];
-						}else{
-							insertSQL += "'" + values[i] + "'";
-						}
-						if(i == values.length - 1){
-							insertSQL += ";";
-						}else{
-							insertSQL += ", ";
-						}
-					}
-					System.out.println(insertSQL);
+					
+					String insertSQL = formatInsertStatement(table, args, values);
 					insert.executeUpdate(insertSQL);
 					System.out.println("Executed Insert of a " + table + "!");
 					
