@@ -83,8 +83,8 @@ public class PositionController{
 
 	public Position getPositionByUser(int userID){
 		try{
-			ArrayList<Position> results = db.executeQuery("Get Position By User", "select " + db.getPositionPieces() + 
-					" from Position, User where user_id = " + userID + " and Position.position_id = User.position_id", 
+			ArrayList<Position> results = db.executeQuery("Get Position By User", "select " + db.getPositionPieces()
+					+ " from Position, User where user_id = " + userID + " and Position.position_id = User.position_id",
 					db.getPosResFormat());
 			if(results.size() == 0){
 				System.out.println("No positions found for User_id " + userID + "!");
@@ -101,8 +101,9 @@ public class PositionController{
 
 	public ArrayList<Position> getPositionBySOPID(int SOPID){
 		try{
-			return db.executeQuery("Get Position by SOP ID", "select " + db.getPositionPieces() + " from Position, PositionSOP "
-					+ "where PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", 
+			return db.executeQuery("Get Position by SOP ID",
+					"select " + db.getPositionPieces() + " from Position, PositionSOP " + "where PositionSOP.sop_id = "
+							+ SOPID + " and Position.position_id = PositionSOP.position_id",
 					db.getPosResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -111,23 +112,28 @@ public class PositionController{
 	}
 
 	public void changePositionPriority(Position pos, int priority){
-		db.executeUpdate("Change Position " + pos.getTitle() + " to priority " + priority, 
+		db.executeUpdate("Change Position " + pos.getTitle() + " to priority " + priority,
 				"update Position set priority = " + priority + " where position_id = " + pos.getID());
 		pos.setPriority(priority);
 	}
 
 	public void removePosition(int positionID){
-		db.executeUpdate("Delete Position with ID " + positionID, "delete from Position where position_id = " + positionID);
+		db.executeUpdate("Delete Position with ID " + positionID,
+				"delete from Position where position_id = " + positionID);
 	}
 
 	public ArrayList<SOP> findSOPsOfPosition(int positionID){
 		try{
-			return db.executeQuery("Get SOPs By Position", "select " + db.getSopPieces() + " from PositionSOP, SOP " + 
-					"where position_id = " + positionID, db.getSopResFormat());
+			return db.executeQuery("Get SOPs By Position",
+					"select " + db.getSopPieces() + " from PositionSOP, SOP " + "where position_id = " + positionID,
+					db.getSopResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	public Integer changePositionPermission(int position_id, int perm_id){
+		return db.changePositionPermission(position_id, perm_id);
+	}
 }

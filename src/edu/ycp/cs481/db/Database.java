@@ -19,7 +19,7 @@ import edu.ycp.cs481.control.UserController;
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public String dbName = "";
+	public static String dbName = "cs481db";
 	
 	static {
 		try {
@@ -243,9 +243,12 @@ public class Database {
 	}
 	
 	public void createDatabase(){
-		//executeUpdate("Dropping old database..", "drop database cs481db");
 		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
 		this.dbName = "cs481db";
+	}
+	
+	public void dropDatabase() {
+		executeUpdate("Dropping old database..", "drop database if exists cs481db");
 	}
 	
 	public void createTables(){
@@ -308,6 +311,37 @@ public class Database {
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
 					");");
 		
+		names.add("Create Permission table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Permission (" +
+				  "perm_id INT NOT NULL AUTO_INCREMENT," +
+				  "permission VARCHAR(255) NOT NULL," +
+				  "PRIMARY KEY (perm_id)," +
+				  "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);");
+		
+		names.add("Create PositionPermission table");
+		sqls.add("CREATE TABLE IF NOT EXISTS PositionPermission (" +
+				   "position_id INT NOT NULL, " +
+				   "perm_id INT NOT NULL, " +
+					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+					"CONSTRAINT FOREIGN KEY (perm_id) REFERENCES Permission (perm_id) " +
+					");");
+		
+		names.add("Create CompletedSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS CompletedSOP (" +
+				  "user_id INT NOT NULL," +
+				  "sop_id INT NOT NULL," +
+				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
+				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+				  ");");		
+		
+		names.add("Create Subordinate table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Subordinate (" +
+				   "manager_id INT NOT NULL, " +
+				   "subordinate_id INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
+				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
+				   ");");
+		
 		executeUpdates(names, sqls);
 	}
 	
@@ -318,6 +352,10 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
+		String[] perms = initData.getInitialPermissions();
+		String[] permNames = initData.getInitialPermissionNames();
+		int[] permIds = initData.getInitialPermissionIDs();
+		int id = 0;
 		
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<String> sqls = new ArrayList<String>();
@@ -351,6 +389,19 @@ public class Database {
 				sqls.add("insert into PositionSOP (position_id, sop_id) " + 
 						" values (" + p.getID() + ", " + s.getID() + ")");
 			}
+		}
+		
+		for(int i = 0; i < perms.length; i++) {
+			names.add("Insert Permission " + permNames[i]);
+			sqls.add("insert into Permission (permission) " +
+			" values ('" + perms[i] + "')");
+		}
+		
+		for(Position p: posList) {
+			names.add("Insert Position " + p.getTitle() + " and Permission " + permNames[permIds[id] - 1]);
+			sqls.add("insert into PositionPermission (position_id, perm_id) " +
+			" values (" + p.getID() + ", " + permIds[id] + ")");
+			id++;
 		}
 		
 		executeUpdates(names, sqls);
@@ -435,15 +486,93 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPosition_SOP(Position p){
-		String[] reqs = new String[p.getRequirements().size()];
-		
-		for(int i = 0; i < p.getRequirements().size(); i++) {
-			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+	public Integer insertPositionSOP(int position_id, int sop_id){		
+		return insertAndGetID("PositionSOP", "position_id", 
+				new String[]{"position_id" ,"sop_id"}, 
+				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
+	}
+	
+	// Called from insertPosition with default perm_id = 2
+	public Integer insertPositionPermission(int position_id, int perm_id) {
+		//  TODO: Potential flaw if a number larger than our highest permission_id is passed, set a check
+		if(perm_id > 5) {
+			System.out.println("Your permission id is too high!");
+			return 0;
 		}
 		
-		return insertAndGetID("PositionSOP", "position_id", 
-				new String[]{"sop_id"}, reqs);
+		return insertAndGetID("PositionPermission", "position_id", 
+				new String[] {"position_id", "perm_id"},
+				new String[] {String.valueOf(position_id), String.valueOf(perm_id)});
+	}
+	
+	public Integer insertCompletedSOP(int user_id, int sop_id) {
+		return insertAndGetID("CompletedSOP", "user_id", 
+				new String[] {"user_id", "sop_id"},
+				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
+	}
+	
+	// InsertSubordinate
+	public Integer addSubordinate(int manager_id, int subordinate_id) {
+		return insertAndGetID("Subordinate", "manager_id",
+				new String[] {"manager_id", "subordinate_id"},
+				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
+	}
+	
+	// DeleteSubordinate
+	public void removeSubordinate(int manager_id, int subordinate_id) {
+		executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+	    manager_id + " and subordinate_id = " + subordinate_id);
+	}
+	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return executeTransaction(new Transaction<Integer>() {
+		@Override
+		public Integer execute(Connection conn) throws SQLException {
+			PreparedStatement stmt = null;
+			PreparedStatement stmt2 = null;
+			ResultSet resultSet = null;
+
+
+			try{
+				stmt = conn.prepareStatement(
+						"UPDATE PositionPermission SET perm_id = ? WHERE position_id = ? ");
+				
+				stmt.setInt(1, perm_id);
+				stmt.setInt(2, position_id);
+				stmt.executeUpdate();
+				
+				
+				stmt2 = conn.prepareStatement(
+						"SELECT * FROM PositionPermission WHERE position_id = ?");
+				
+				stmt2.setInt(1, position_id);
+				
+				resultSet = stmt2.executeQuery();
+				
+				int new_id = 0;
+				
+				Boolean found = false;
+				
+				while(resultSet.next()) {
+					found = true;
+					new_id = resultSet.getInt(2);
+				}
+
+				// check if the junction exists
+				if (!found) {
+					System.out.println("PositionPermission with ID "+ position_id +" was not found in the PositionPermission table");
+				}
+
+				return new_id;
+
+
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2); 
+			}
+		}
+	});
 	}
 	
 	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
@@ -627,6 +756,8 @@ public class Database {
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
 		Database db = new Database();
+		dbName = "";
+		db.dropDatabase();
 		db.createDatabase();
 		db.createTables();
 		db.loadInitialData();
