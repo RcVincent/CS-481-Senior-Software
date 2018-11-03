@@ -435,13 +435,6 @@ public class Database {
 		});
 	}
 	
-	public Integer insertSOP(SOP s){
-		return insertAndGetID("SOP", "sop_id", 
-				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
-				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
-						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
-	}
-	
 	public Integer insertPosition_SOP(Position p){
 		String[] reqs = new String[p.getRequirements().size()];
 		
@@ -451,135 +444,6 @@ public class Database {
 		
 		return insertAndGetID("PositionSOP", "position_id", 
 				new String[]{"sop_id"}, reqs);
-	}
-	
-	public ArrayList<SOP> searchForSOPs(int sopID, String title, String description, int priority, int version, int authorID){
-		try{
-			String name = "";
-			String sql = "select * from SOP";
-			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
-					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
-					authorID == -1){
-				name = "Get All SOPs";
-			}else{
-				name = "Get SOP with ";
-				sql += " where ";
-				boolean prevSet = false;
-				
-				if(sopID != -1){
-					name += "id of " + sopID;
-					sql += "sop_id = " + sopID;
-					prevSet = true;
-				}
-				
-				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
-				}
-				
-				// TODO: Likely need to change to search partial descriptions
-				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
-				}
-				
-				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
-				}
-				
-				if(version != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "version " + version;
-					sql += "version = " + version;
-					prevSet = true;
-				}
-				
-				if(authorID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "author_id of" + authorID;
-					sql += "author_id = " + authorID;
-					prevSet = true;
-				}
-			}
-			ArrayList<SOP> results = executeQuery(name, sql, sopResFormat);
-			if(sopID != -1){
-				if(results.size() == 0){
-					System.out.println("No SOP found with ID " + sopID);
-				}else if(results.size() > 1){
-					System.out.println("Multiple SOPs found with ID " + sopID + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findAllSOPs(){
-		return searchForSOPs(-1, null, null, -1, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public SOP findSOPbyID(int sop_id){
-		ArrayList<SOP> result = searchForSOPs(sop_id, null, null, -1, -1, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByTitle(String title){
-		return searchForSOPs(-1, title, null, -1, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByPriority(int priority){
-		return searchForSOPs(-1, null, null, priority, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByVersion(int version){
-		return searchForSOPs(-1, null, null, -1, version, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		return searchForSOPs(-1, null, null, -1, -1, authorID);
-	}
-	
-	public void archiveSOP(int sop_id){
-		executeUpdate("Archive SOP with ID " + sop_id, "update SOP set archive_flag = true where sop_id = " + sop_id);
-	}
-	
-	public void unarchiveSOP(int sop_id){
-		executeUpdate("Unarchive SOP with ID " + sop_id, "update SOP set archive_flag = false where sop_id = " + sop_id);
 	}
 	
 	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
@@ -644,12 +508,6 @@ public class Database {
 	public void addSOPtoPosition(int positionID, int sopID){
 		executeUpdate("Insert Position " + positionID + " and SOP " + sopID + " connection", 
 				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
-	}
-	
-	public void changeSOPPriority(SOP sop, int priority){
-		executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
-				"where sop_id = " + sop.getID());
-		sop.setPriority(priority);
 	}
 	
 	public static void cleanDB(){

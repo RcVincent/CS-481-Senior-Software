@@ -56,20 +56,6 @@ public class DatabaseTest {
 		
 	}
 	
-	@Test
-	public void testInsertSOP() {
-		for(SOP s: sList) {
-			db.insertSOP(s);
-			querySOP = db.findAllSOPs();
-			assertEquals(s.getName(), querySOP.get(querySOP.size()-1).getName());
-			assertEquals(s.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
-			assertEquals(s.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
-			assertEquals(s.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
-			assertEquals(s.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
-			assertEquals(s.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());
-		}
-	}
-	
 	/// Testing for our initial data, to ensure that all of our inserts were parsed correctly \\\
    ///																						   \\\
 	// TODO: Test initial data is in correctly? (Commented out stuff as moved to controllers)
@@ -95,7 +81,7 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getDescription(), new InitialData().getInitialPositions().get(i).getDescription());
 			assertEquals(queryPos.get(i).getPriority(), new InitialData().getInitialPositions().get(i).getPriority());
 		}
-	}*/
+	}
 	
 	@Test
 	public void testFindAllSOPs() { 
@@ -109,74 +95,9 @@ public class DatabaseTest {
 			assertEquals(querySOP.get(i).getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
 			assertEquals(querySOP.get(i).getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
 		}
-	}
+	}*/
 	
-	@Test
-	public void testFindSOPByID() {
-		querySOP = db.findAllSOPs();
-		
-		for(SOP s : querySOP) {
-			assertEquals(s.getName(), db.findSOPbyID(s.getID()).getName());
-			assertEquals(s.getDescription(), db.findSOPbyID(s.getID()).getDescription());
-			assertEquals(s.getPriority(), db.findSOPbyID(s.getID()).getPriority());
-			assertEquals(s.getRevision(), db.findSOPbyID(s.getID()).getRevision());
-			assertEquals(s.getAuthorID(), db.findSOPbyID(s.getID()).getAuthorID());
-			assertEquals(s.getArchiveFlag(), db.findSOPbyID(s.getID()).getArchiveFlag());
-		}
-	}
 	
-	@Test
-	public void testfindSOPsByAuthorID() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByTitle() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getArchiveFlag());
-	}
-	
-	@Test // TODO: Implement after PositionSOP
-	public void testFindSOPbyPosition() {
-		querySOP = db.findAllSOPs();
-	}
-	
-	@Test
-	public void testfindSOPsByPriority() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByVersion() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
-	}
 	
 	/*@Test // TODO: Implement after PositionSOP
 	public void testFindSOPthruPosition() {
@@ -208,34 +129,4 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getPriority(), db.getPositionOfUser(queryUser.get(i).getUserID()).getPriority());
 		}
 	}*/
-	
-	@Test // TODO: this breaks testInsertPosition and testFindAllPositions //
-	public void testChangePositionPriority() {
-		/*queryPos = db.findAllPositions();
-		int insert_id = db.insertPosition(queryPos.get(0));
-		
-		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
-		assertEquals(2, changedPriority.getPriority());
-		*/
-	}
-	
-	@Test
-	public void testArchiveSOP() {
-		
-	}
-	
-	@Test
-	public void testRevertSOP() {
-		
-	}
-	
-	@Test
-	public void testAddSOPtoPosition() {
-		
-	}
-	
-	@Test
-	public void testChangeSOPPriority() {
-		
-	}
 }

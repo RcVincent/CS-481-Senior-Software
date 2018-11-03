@@ -209,5 +209,19 @@ public class PositionControllerTest {
 		assertEquals(3, testPos.getPriority()); 
 	}
 	
-	
+	/* TODO: Implement these here?
+	@Test // TODO: this breaks testInsertPosition and testFindAllPositions
+	public void testChangePositionPriority() {
+		queryPos = db.findAllPositions();
+		int insert_id = db.insertPosition(queryPos.get(0));
+		
+		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
+		assertEquals(2, changedPriority.getPriority());
+	}
+
+	@Test
+	public void testAddSOPtoPosition() {
+		
+	}
+	 */
 }

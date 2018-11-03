@@ -68,7 +68,7 @@ public class SearchSOPServlet extends HttpServlet {
 		} else {
 			authorID = Integer.parseInt(authorid);
 		}
-		ArrayList<SOP> result = sc.searchForSOP(sopID, title, desc, priority, revision, authorID);
+		ArrayList<SOP> result = sc.searchForSOPs(sopID, title, desc, priority, revision, authorID);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");
