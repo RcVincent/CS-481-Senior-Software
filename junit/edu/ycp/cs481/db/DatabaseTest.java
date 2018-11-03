@@ -84,7 +84,8 @@ public class DatabaseTest {
 	
 	/// Testing for our initial data, to ensure that all of our inserts were parsed correctly \\\
    ///																						   \\\
-	@Test
+	// TODO: Test initial data is in correctly? (Commented out stuff as moved to controllers)
+	/*@Test
 	public void testFindAllUsers() {
 		queryUser = db.findAllUsers();
 		
@@ -94,7 +95,7 @@ public class DatabaseTest {
 			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
 			assertEquals(queryUser.get(i).getUserID(), new InitialData().getInitialUsers().get(i).getUserID());
 		}
-	}
+	}*/
 	
 	@Test
 	public void testFindAllPositions() {
@@ -206,21 +207,6 @@ public class DatabaseTest {
 	}*/
 	
 	@Test
-	public void testFindUserByPosition() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPosition().getID());
-		}
-	}
-	
-	@Test
 	public void testGetPositionByName() {
 		queryPos = db.findAllPositions();
 		
@@ -252,6 +238,8 @@ public class DatabaseTest {
 		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());*/
 	}
 	
+	// TODO: Move this, does it go in PositionController or UserController Test?
+	/*
 	@Test
 	public void testGetPositionByUser() {
 		queryPos = db.findAllPositions();
@@ -262,67 +250,7 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getDescription(), db.getPositionOfUser(queryUser.get(i).getUserID()).getDescription());
 			assertEquals(queryPos.get(i).getPriority(), db.getPositionOfUser(queryUser.get(i).getUserID()).getPriority());
 		}
-	}
-	
-	@Test
-	public void testGetUserByEmail() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUserByEmail(u.getEmail()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByEmail(u.getEmail()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByEmail(u.getEmail()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByEmail(u.getEmail()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByEmail(u.getEmail()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByEmail(u.getEmail()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByEmail(u.getEmail()).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByFirstname() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUsersByFirstName(u.getFirstname()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.getUsersByFirstName(u.getFirstname()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.getUsersByFirstName(u.getFirstname()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.getUsersByFirstName(u.getFirstname()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUsersByFirstName(u.getFirstname()).get(0).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByLastname() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUsersByLastName(u.getLastname()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.getUsersByLastName(u.getLastname()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.getUsersByLastName(u.getLastname()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.getUsersByLastName(u.getLastname()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUsersByLastName(u.getLastname()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUsersByLastName(u.getLastname()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUsersByLastName(u.getLastname()).get(0).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByID() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUserByID(u.getUserID()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByID(u.getUserID()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByID(u.getUserID()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByID(u.getUserID()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByID(u.getUserID()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByID(u.getUserID()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByID(u.getUserID()).getPosition().getID());
-		}
-	}
+	}*/
 	
 	@Test
 	public void testDeletePosition() {

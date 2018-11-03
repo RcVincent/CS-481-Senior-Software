@@ -168,6 +168,18 @@ public class Database {
 			}
 		});
 	}
+	
+	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
+		return userResFormat;
+	}
+	
+	public QueryResultFormat<ArrayList<Position>> getPosResFormat(){
+		return posResFormat;
+	}
+	
+	public QueryResultFormat<ArrayList<SOP>> getSopResFormat(){
+		return sopResFormat;
+	}
 
 	private Connection connect() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName +"?user=root&password=password");
@@ -180,24 +192,24 @@ public class Database {
 	/*
 	 * This method is used in executing a list of updates to the database (e.g. create tables, update data, etc.)
 	 */
-	public boolean executeUpdates(String[] names, String[] sqls){
+	public boolean executeUpdates(ArrayList<String> names, ArrayList<String> sqls){
 		return executeTransaction(new Transaction<Boolean>(){
 			@Override
 			public Boolean execute(Connection conn) throws SQLException{
 				ArrayList<Statement> stmts = new ArrayList<Statement>();
 				try{
 					boolean hasNames = names != null;
-					if(hasNames && names.length != sqls.length){
+					if(hasNames && names.size() != sqls.size()){
 						throw new IllegalArgumentException("Must have all sql statements named or pass null names array!");
 					}
-					for(int i = 0; i < sqls.length; i++){
+					for(int i = 0; i < sqls.size(); i++){
 						if(hasNames){
-							System.out.println("Starting " + names[i]);
+							System.out.println("Starting " + names.get(i));
 						}
 						stmts.add(conn.createStatement());
-						stmts.get(i).executeUpdate(sqls[i]);
+						stmts.get(i).executeUpdate(sqls.get(i));
 						if(hasNames){
-							System.out.println("Finished " + names[i]);
+							System.out.println("Finished " + names.get(i));
 						}
 					}
 					return true;
@@ -211,7 +223,13 @@ public class Database {
 	}
 	
 	public boolean executeUpdate(String name, String sql){
-		return executeUpdates(new String[]{name}, new String[]{sql});
+		ArrayList<String> names = new ArrayList<String>();
+		names.add(name);
+		
+		ArrayList<String> sqls = new ArrayList<String>();
+		sqls.add(sql);
+		
+		return executeUpdates(names, sqls);
 	}
 	
 	public void createDatabase(){
@@ -221,20 +239,20 @@ public class Database {
 	}
 	
 	public void createTables(){
-		String[] names = new String[4];
-		String[] sqls = new String[4];
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> sqls = new ArrayList<String>();
 		
-		names[0] = "Create Position table";
-		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
+		names.add("Create Position table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Position (" +
 				 "position_id INT NOT NULL AUTO_INCREMENT," +
 				 "title VARCHAR(80) NOT NULL," +
 				 "description VARCHAR(255) NOT NULL," +
 				 "priority INT NOT NULL," +
 				 "PRIMARY KEY (position_id)," +
-				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
+				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);");
 		
-		names[1] = "Create Users table";
-		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
+		names.add("Create Users table");
+		sqls.add("CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
 				  "password VARCHAR(80) NOT NULL, " +
@@ -251,10 +269,10 @@ public class Database {
 				  "FOREIGN KEY (position_id) " +
 				  "REFERENCES Position (position_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);";
+				  "ON UPDATE NO ACTION);");
 		
-		names[2] = "Create SOP table";
-		sqls[2] = "CREATE TABLE IF NOT EXISTS SOP (" +
+		names.add("Create SOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS SOP (" +
 				  "sop_id INT NOT NULL AUTO_INCREMENT, " +
 				  "title VARCHAR(80) NOT NULL, " +
 				  "description VARCHAR(255) NOT NULL, " +
@@ -270,15 +288,15 @@ public class Database {
 				  "FOREIGN KEY (author_id) " +
 				  "REFERENCES User (user_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);";
+				  "ON UPDATE NO ACTION);");
 		
-		names[3] = "Create PositionSOP table";
-		sqls[3] = "CREATE TABLE IF NOT EXISTS PositionSOP (" +
+		names.add("Create PositionSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS PositionSOP (" +
 					"position_id INT NOT NULL, " +
 					"sop_id INT NOT NULL, " +
 					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
-					");";
+					");");
 		
 		executeUpdates(names, sqls);
 	}
@@ -290,52 +308,38 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
-		List<SOP> reqs;
-		int req_size = 0;
 		
-		for(Position p: posList) {
-			reqs = p.getRequirements();
-			req_size += reqs.size();
-		}
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> sqls = new ArrayList<String>();
 		
-		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
-		
-		String[] names = new String[numInserts];
-		String[] sqls = new String[numInserts];
-		
-		int currentInsert = 0;
 		for(Position p: posList){
-			names[currentInsert] = "Insert Position " + p.getTitle();
-			sqls[currentInsert] = "insert into Position (title, description, priority) " +
-					"values ('" + p.getTitle() + "', '" + p.getDescription() + "', " + p.getPriority() + ")";
-			currentInsert++;
+			names.add("Insert Position " + p.getTitle());
+			sqls.add("insert into Position (title, description, priority) " +
+					"values ('" + p.getTitle() + "', '" + p.getDescription() + "', " + p.getPriority() + ")");
 		}
 		
 		for(User u: userList){
-			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
-			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + u.getFirstname() +
-					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
-					u.getPosition().getID() + ")";
-			currentInsert++;
+			names.add("Insert User " + u.getFirstname() + " " + u.getLastname());
+			sqls.add("insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
+					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + 
+					u.getFirstname() + "', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
+					u.getPosition().getID() + ")");
 		}
 		
 		for(SOP s: sopList){
-			names[currentInsert] = "Insert SOP " + s.getName();
-			sqls[currentInsert] = "insert into SOP (title, description, priority, version, author_id, archive_flag)" +
+			names.add("Insert SOP " + s.getName());
+			sqls.add("insert into SOP (title, description, priority, version, author_id, archive_flag)" +
 					" values ('" + s.getName() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
-					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")";
-			currentInsert++;
+					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")");
 		}
 		
-		for(Position p: posList) {
-			reqs = p.getRequirements();
+		for(Position p: posList){
+			List<SOP> reqs = p.getRequirements();
 			
-			for(SOP s: reqs) {
-				names[currentInsert] = "Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection";
-				sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
-						" values (" + p.getID() + ", " + s.getID() + ")";
-				currentInsert++;
+			for(SOP s: reqs){
+				names.add("Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection");
+				sqls.add("insert into PositionSOP (position_id, sop_id) " + 
+						" values (" + p.getID() + ", " + s.getID() + ")");
 			}
 		}
 		
@@ -613,125 +617,6 @@ public class Database {
 	
 	public void deletePosition(int position_id){
 		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
-	}
-	
-	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
-		try{
-			String name = "";
-			String sql = "select * from User";
-			if(userID == -1 && (email == null || email.equalsIgnoreCase("")) && 
-					(firstName == null || firstName.equalsIgnoreCase("")) && 
-					(lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
-				name = "Get All Users";
-			}else{
-				name = "Get User with ";
-				sql += " where ";
-				boolean prevSet = false;
-				
-				if(userID != -1){
-					name += "id of " + userID;
-					sql += "user_id = " + userID;
-					prevSet = true;
-				}
-				
-				// TODO: Likely change strings for searching by partial?
-				if(email != null && !email.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "email of " + email;
-					sql += "email = '" + email + "'";
-					prevSet = true;
-				}
-				
-				if(firstName != null && !firstName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "first name of " + firstName;
-					sql += "first_name = '" + firstName + "'";
-					prevSet = true;
-				}
-				
-				if(lastName != null && !lastName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "last name of " + lastName;
-					sql += "last_name = '" + lastName + "'";
-					prevSet = true;
-				}
-				
-				if(positionID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "position ID of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
-				}
-			}
-			ArrayList<User> results = executeQuery(name, sql, userResFormat);
-			if(results.size() == 0 && userID != -1){
-				System.out.println("No User found with ID " + userID);
-			}else if(results.size() > 1){
-				if(userID != -1){
-					System.out.println("Multiple Users found with ID " + userID + "! Returning null");
-					return null;
-				}else if(email != null && !email.equalsIgnoreCase("")){
-					System.out.println("Multiple Users found with email " + email + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> findAllUsers(){
-		return searchForUsers(-1, null, null, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public User getUserByID(int ID){
-		ArrayList<User> result = searchForUsers(ID, null, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public User getUserByEmail(String email){
-		ArrayList<User> result = searchForUsers(-1, email, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> getUsersByFirstName(String firstName){
-		return searchForUsers(-1, null, firstName, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> getUsersByLastName(String lastName){
-		return searchForUsers(-1, null, null, lastName, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> findUsersWithPosition(int position_id){
-		return searchForUsers(-1, null, null, null, position_id);
 	}
 	
 	public void archiveUser(int userID){

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
-import java.math.BigInteger;
-import java.security.MessageDigest;
+import java.sql.SQLException;
+
 import org.mindrot.jbcrypt.*;
 
 public class UserController {
@@ -97,9 +97,84 @@ public class UserController {
 						String.valueOf(isArchived), String.valueOf(positionID)});
 	}
     
-    public ArrayList<User> searchForUsers(int id, String email, String fname, String lname, int positionID) {
-    	return db.searchForUsers(id, email, fname, lname, positionID);
-    }
+    public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
+		try{
+			String name = "";
+			String sql = "select * from User";
+			if(userID == -1 && (email == null || email.equalsIgnoreCase("")) && 
+					(firstName == null || firstName.equalsIgnoreCase("")) && 
+					(lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
+				name = "Get All Users";
+			}else{
+				name = "Get User with ";
+				sql += " where ";
+				boolean prevSet = false;
+				
+				if(userID != -1){
+					name += "id of " + userID;
+					sql += "user_id = " + userID;
+					prevSet = true;
+				}
+				
+				// TODO: Likely change strings for searching by partial?
+				if(email != null && !email.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "email of " + email;
+					sql += "email = '" + email + "'";
+					prevSet = true;
+				}
+				
+				if(firstName != null && !firstName.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "first name of " + firstName;
+					sql += "first_name = '" + firstName + "'";
+					prevSet = true;
+				}
+				
+				if(lastName != null && !lastName.equalsIgnoreCase("")){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "last name of " + lastName;
+					sql += "last_name = '" + lastName + "'";
+					prevSet = true;
+				}
+				
+				if(positionID != -1){
+					if(prevSet){
+						name += " and ";
+						sql += " and ";
+					}
+					name += "position ID of " + positionID;
+					sql += "position_id = " + positionID;
+					prevSet = true;
+				}
+			}
+			ArrayList<User> results = db.executeQuery(name, sql, db.getUserResFormat());
+			if(results.size() == 0 && userID != -1){
+				System.out.println("No User found with ID " + userID);
+			}else if(results.size() > 1){
+				if(userID != -1){
+					System.out.println("Multiple Users found with ID " + userID + "! Returning null");
+					return null;
+				}else if(email != null && !email.equalsIgnoreCase("")){
+					System.out.println("Multiple Users found with email " + email + "! Returning null");
+					return null;
+				}
+			}
+			return results;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
     
     //will implement these later
     public void changeUserEmail(int userID, String oldEmail, String newEmail){
