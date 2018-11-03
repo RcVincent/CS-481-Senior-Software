@@ -220,27 +220,7 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testChangeUserPassword() {
-		
-	}
-	
-	@Test
-	public void testChangeUserEmail() {
-		
-	}
-	
-	@Test
-	public void testArchiveUser() {
-		
-	}
-	
-	@Test
 	public void testArchiveSOP() {
-		
-	}
-	
-	@Test
-	public void testChangePosition() {
 		
 	}
 	

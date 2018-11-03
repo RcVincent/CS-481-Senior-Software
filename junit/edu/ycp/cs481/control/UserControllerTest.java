@@ -379,4 +379,26 @@ public class UserControllerTest {
 			assertEquals(2, queryUser.get(queryUser.size()-1).getPosition().getID());
 		}
 	}*/
+	
+	/* TODO: Implement these here?
+	@Test
+	public void testChangeUserPassword() {
+		
+	}
+	
+	@Test
+	public void testChangeUserEmail() {
+		
+	}
+	
+	@Test
+	public void testArchiveUser() {
+		
+	}
+	
+	@Test
+	public void testChangePosition() {
+		
+	}
+	 */
 }

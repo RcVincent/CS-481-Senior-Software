@@ -532,14 +532,6 @@ public class Database {
 		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
 	}
 	
-	public void archiveUser(int userID){
-		executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
-	}
-	
-	public void unarchiveUser(int userID){
-		executeUpdate("Unarchive User with ID " + userID, "update User set archive_flag = false where user_id = " + userID);
-	}
-	
 	public ArrayList<SOP> searchForSOPss(int sopID, String title, String description, int priority, int version, int authorID){
 		try{
 			String name = "";
