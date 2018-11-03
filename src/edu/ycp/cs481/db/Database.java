@@ -513,7 +513,7 @@ public class Database {
 	
 	// DeleteSubordinate
 	public void removeSubordinate(int manager_id, int subordinate_id) {
-		executeUpdate("Remove subordinate Position with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+		executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
 	    manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
