@@ -79,19 +79,20 @@ public class CreateSOPServlet extends HttpServlet{
 		//set the version, id, author id, 
 		
 		//test the sop we just made
-		List<SOP> test = sc.searchForSOP(-1, sopTitle, Version, authorID, authorID, authorID); 
+		List<SOP> test = sc.searchForSOPs(-1, sopTitle, Version, authorID, authorID, authorID); 
 		
 		if(test.isEmpty()) {
 			errorMessage = "There was no SOP with name" + sopTitle + "added to the database";
 			return; 
 		}else {
 			SOP testSOP = test.get(0); 
+			/* TODO: Rework?
 			if(!sc.validSOP(testSOP)) {
 				errorMessage = "There is an invalid field in the sop, please try again"; 
 			}
 			else {
 				successMessage = "Succcessfully created SOP!";
-			}
+			}*/
 		}
 		
 		req.setAttribute("errorMessage", errorMessage);

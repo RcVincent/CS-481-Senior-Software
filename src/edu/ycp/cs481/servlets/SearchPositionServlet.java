@@ -54,7 +54,7 @@ public class SearchPositionServlet extends HttpServlet{
 			prio = Integer.parseInt(priority); 
 		}
 		
-		ArrayList<Position> result = pc.searchForPosition(searchID, title, desc, prio);
+		ArrayList<Position> result = pc.searchForPositions(searchID, title, desc, prio);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");

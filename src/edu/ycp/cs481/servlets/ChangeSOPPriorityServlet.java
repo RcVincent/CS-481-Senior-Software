@@ -38,7 +38,7 @@ public class ChangeSOPPriorityServlet extends HttpServlet {
 		String sopID = req.getParameter("sopID");
 		int sid = Integer.parseInt(sopID);
 		
-		ArrayList<SOP> result = sc.searchForSOP(sid, "", "", 0, 0, 0);
+		ArrayList<SOP> result = sc.searchForSOPs(sid, "", "", 0, 0, 0);
 		SOP s = result.get(0);
 		
 		String newPriority = req.getParameter("newPriority");
@@ -49,7 +49,7 @@ public class ChangeSOPPriorityServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/changesoppriority");
 		} 
 		else {
-			sc.changeSOPPirority(sid, np);
+			sc.changeSOPPriority(s, np);
 			System.out.println("SOP priority sucessfully changed");
 		}
 		

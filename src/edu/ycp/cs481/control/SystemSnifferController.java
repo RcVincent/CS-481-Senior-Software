@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 
@@ -18,7 +17,7 @@ public class SystemSnifferController {
 
 	//private User u; 
 	//private Position p;
-	private Database db = new Database(); 
+	private PositionController pc = new PositionController(); 
 	private TrainingHistory t; 
 	
 	public SystemSnifferController() {
@@ -30,11 +29,11 @@ public class SystemSnifferController {
 	
 	//the DB calls the training histories will need
 	public void PopulateHistoryThroughUser(User u) {
-		t.addAndSortCollection(db.findSOPsByPosition(u.getPosition().getID()));
+		t.addAndSortCollection(pc.findSOPsOfPosition(u.getPosition().getID()));
 	}
 	
 	public void PopulateHistoryThroughPosition(int pos_id) {
-		t.addAndSortCollection(db.findSOPsByPosition(pos_id));
+		t.addAndSortCollection(pc.findSOPsOfPosition(pos_id));
 	}
 	
 	public void sortListByPriority(int priority) {

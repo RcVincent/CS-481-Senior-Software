@@ -96,11 +96,27 @@ public class SOPControllerTest {
 		
 	}
 	
+	// TODO: Rework for here?
+	/*@Test
+	public void testInsertSOP() {
+		for(SOP s: sList) {
+			db.insertSOP(s);
+			querySOP = db.findAllSOPs();
+			assertEquals(s.getName(), querySOP.get(querySOP.size()-1).getName());
+			assertEquals(s.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
+			assertEquals(s.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
+			assertEquals(s.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
+			assertEquals(s.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
+			assertEquals(s.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());
+		}
+	}*/
+	
+	// TODO: Rework these for searchForSOPs now?
 	@Test
 	public void testSearchByID() {
 		int searchID = 1;
 		
-		List<SOP> testList = sc.searchForSOP(searchID, "", "", 0, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(searchID, "", "", 0, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with id "+ searchID + " failed."); 
@@ -118,7 +134,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByName() {
 		String searchName = "Logout";
-		List<SOP> testList = sc.searchForSOP(0, searchName, "", 0, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(0, searchName, "", 0, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with name "+searchName+ "failed."); 
@@ -136,7 +152,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByPriority() {
 		int searchPrio = 7; 
-		List<SOP> testList = sc.searchForSOP(0, "", "", searchPrio, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(0, "", "", searchPrio, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with "+ searchPrio+ "failed."); 
@@ -165,7 +181,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByAuthor() {
 		int searchAuthorID = 12; 
-		List<SOP> testList = sc.searchForSOP(0, "", "", 0, 0, searchAuthorID);
+		List<SOP> testList = sc.searchForSOPs(0, "", "", 0, 0, searchAuthorID);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with author id "+ searchAuthorID + "failed."); 
@@ -187,6 +203,76 @@ public class SOPControllerTest {
 			assertEquals(2, s2.getID()); 
 		}
 	}
+	
+	// TODO: Rework these for movement from Database?
+	/*
+	@Test
+	public void testFindSOPByID() {
+		querySOP = db.findAllSOPs();
+		
+		for(SOP s : querySOP) {
+			assertEquals(s.getName(), db.findSOPbyID(s.getID()).getName());
+			assertEquals(s.getDescription(), db.findSOPbyID(s.getID()).getDescription());
+			assertEquals(s.getPriority(), db.findSOPbyID(s.getID()).getPriority());
+			assertEquals(s.getRevision(), db.findSOPbyID(s.getID()).getRevision());
+			assertEquals(s.getAuthorID(), db.findSOPbyID(s.getID()).getAuthorID());
+			assertEquals(s.getArchiveFlag(), db.findSOPbyID(s.getID()).getArchiveFlag());
+		}
+	}
+	
+	@Test
+	public void testfindSOPsByAuthorID() {
+		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
+	}
+	
+	@Test
+	public void testfindSOPsByTitle() {
+		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getArchiveFlag());
+	}
+	
+	@Test // TODO: Implement after PositionSOP
+	public void testFindSOPbyPosition() {
+		querySOP = db.findAllSOPs();
+	}
+	
+	@Test
+	public void testfindSOPsByPriority() {
+		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
+	}
+	
+	@Test
+	public void testfindSOPsByVersion() {
+		querySOP = db.findAllSOPs();
+		
+		assertEquals(querySOP.get(0).getName(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getName());
+		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getDescription());
+		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getPriority());
+		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getRevision());
+		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
+		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
+	}
+	 */
 	
 	@Test
 	public void TestChangeVersion() {
@@ -210,7 +296,7 @@ public class SOPControllerTest {
 		
 		assertEquals(1, sop2.getPriority());
 		
-		sc.changeSOPPirority(2, newPriority);
+		sc.changeSOPPriority(sop2, newPriority);
 		
 		if(sop2.getPriority() == 7) {
 			System.out.println("Changing the priority of the sop failed");
@@ -219,4 +305,21 @@ public class SOPControllerTest {
 			assertEquals(8, sop2.getPriority()); 
 		}
 	}
+	
+	/* TODO: Implement these here?
+	@Test
+	public void testArchiveSOP() {
+		
+	}
+	
+	@Test
+	public void testRevertSOP() {
+		
+	}
+	
+	@Test
+	public void testChangeSOPPriority() {
+		
+	}
+	 */
 }
