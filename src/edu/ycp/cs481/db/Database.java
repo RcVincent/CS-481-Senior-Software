@@ -486,35 +486,31 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPositionSOP(int position_id, int sop_id){		
-		return insertAndGetID("PositionSOP", "position_id", 
-				new String[]{"position_id" ,"sop_id"}, 
+	public void insertPositionSOP(int position_id, int sop_id){		
+		insert("PositionSOP", new String[]{"position_id" ,"sop_id"}, 
 				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
 	}
 	
 	// Called from insertPosition with default perm_id = 2
-	public Integer insertPositionPermission(int position_id, int perm_id) {
+	public void insertPositionPermission(int position_id, int perm_id){
 		//  TODO: Potential flaw if a number larger than our highest permission_id is passed, set a check
 		if(perm_id > 5) {
 			System.out.println("Your permission id is too high!");
-			return 0;
+			return;
 		}
 		
-		return insertAndGetID("PositionPermission", "position_id", 
-				new String[] {"position_id", "perm_id"},
+		insert("PositionPermission", new String[] {"position_id", "perm_id"},
 				new String[] {String.valueOf(position_id), String.valueOf(perm_id)});
 	}
 	
-	public Integer insertCompletedSOP(int user_id, int sop_id) {
-		return insertAndGetID("CompletedSOP", "user_id", 
-				new String[] {"user_id", "sop_id"},
+	public void insertCompletedSOP(int user_id, int sop_id) {
+		insert("CompletedSOP", new String[] {"user_id", "sop_id"},
 				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
 	}
 	
 	// InsertSubordinate
-	public Integer addSubordinate(int manager_id, int subordinate_id) {
-		return insertAndGetID("Subordinate", "manager_id",
-				new String[] {"manager_id", "subordinate_id"},
+	public void addSubordinate(int manager_id, int subordinate_id) {
+		insert("Subordinate", new String[] {"manager_id", "subordinate_id"},
 				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
 	}
 	
