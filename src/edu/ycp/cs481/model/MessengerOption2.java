@@ -18,8 +18,8 @@ public class MessengerOption2 {
 
       // Sender's email ID needs to be mentioned
       String from = "rvincent@ycp.edu";//change accordingly
-      final String username = "";//change accordingly
-      final String password = "";//change accordingly
+      final String username = "rvincent";//change accordingly
+      final String password = "Cdcs1994bkk";//change accordingly
 
       // Assuming you are sending email through relay.jangosmtp.net
       String host = "smtp.gmail.com";

@@ -10,10 +10,10 @@ public class MessengerOption3 {
 
    public static void main(String [] args) {    
       // Recipient's email ID needs to be mentioned.
-      String to = "abcd@gmail.com";
+      String to = "rvincent@ycp.edu";
 
       // Sender's email ID needs to be mentioned
-      String from = "web@gmail.com";
+      String from = "vinsanity642@gmail.com";
 
       // Assuming you are sending email from localhost
       String host = "localhost";
