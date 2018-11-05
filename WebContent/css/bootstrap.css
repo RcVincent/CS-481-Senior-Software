@@ -9027,44 +9027,4 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
-.black_btn {
-	background-color:#000000;
-}
-.act-settings-btn {
-    min-width: 433px;
-    max-width: 433px;
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-bottom:5px;
-}
-.create-btns {
-    margin-top: 10px;
-    margin-bottom:5px;
-}
-.search-btns {
-    margin-top: 10px;
-    margin-bottom:5px;
-}
-.left-side-btn {
-	margin-left: 10px;
-}
-.middle-btn {
-	margin-left: 5px;
-}
-.right-side-btn {
-    min-width: 400px;
-    max-width: 400px;
-	margin-right: 10px;
-}
-.pwdr_btn {
-	background-color:#91C484;
-	color:black;
-}
-.bbyblu_btn {
-	background-color:#89CFF0;
-}
-.300_btn_w {
-    min-width: 300px;
-    max-width: 300px;
-}
 /*# sourceMappingURL=bootstrap.css.map */

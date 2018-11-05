@@ -10,32 +10,46 @@
 <h1>Home</h1>
 <div class="fluid-container">
 	<div class="row">
-		<div class="col">
-			<div class="text-center">
-				<a href="account_settings" class="btn btn-info act-settings-btn" role="button">Account Settings</a>
-			</div>
+		<div class="col-10">
+		
+		</div>
+		<div class="col-2">
+			<form method="post">
+				<button type="submit" name="logout" class="btn btn-info" value="logout">Logout</button>
+			</form>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			<a href="create_account" class="btn btn-info btn-block create-btns left-side-btn" role="button">Create Account</a>
+		
+		</div>
+		<div class="col text-center">
+				<a href="account_settings" class="btn btn-info btn-block" role="button">Account Settings</a>
 		</div>
 		<div class="col">
-			<a href="create_position" class="btn btn-info btn-block create-btns middle-btn" role="button">Create Position</a>
+		
 		</div>
-		<div class="col">
-			<a href="create_sop" class="btn btn-info create-btns right-side-btn" role="button">Create SOP</a>
+	</div>
+	<div class="row">
+		<div class="col text-center">
+			<a href="create_account" class="btn btn-info btn-block" role="button">Create Account</a>
+		</div>
+		<div class="col text-center">
+			<a href="create_position" class="btn btn-info btn-block" role="button">Create Position</a>
+		</div>
+		<div class="col text-center">
+			<a href="create_sop" class="btn btn-info btn-block" role="button">Create SOP</a>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			<a href="search_users" class="btn btn-info btn-block search-btns left-side-btn" role="button">Search Users</a>
+			<a href="search_users" class="btn btn-info btn-block" role="button">Search Users</a>
 		</div>
 		<div class="col">
-			<a href="search_positions" class="btn btn-info btn-block search-btns middle-btn" role="button">Search Positions</a>
+			<a href="search_positions" class="btn btn-info btn-block" role="button">Search Positions</a>
 		</div>
 		<div class="col">
-			<a href="search_sops" class="btn btn-info btn-block search-btns right-side-btn" role="button">Search SOPs</a>
+			<a href="search_sops" class="btn btn-info btn-block" role="button">Search SOPs</a>
 		</div>
 	</div>
 </div>

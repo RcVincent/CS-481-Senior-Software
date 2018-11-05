@@ -2,6 +2,9 @@ package edu.ycp.cs481.control;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.User;
 import java.sql.SQLException;
@@ -158,5 +161,9 @@ public class UserController{
 				"update User set position_id = " + positionID + " where user_id = " + user.getUserID());
 		PositionController pc = new PositionController();
 		user.setPosition(pc.getPositionByUser(user.getUserID()));
+	}
+	
+	public static void logout(HttpServletRequest req){
+		req.getSession().removeAttribute("user_id");
 	}
 }

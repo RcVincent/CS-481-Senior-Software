@@ -520,6 +520,18 @@ public class Database {
 	    manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
+	public void addPositionPermission(Position pos, String perm){
+		executeUpdate("Set Position " + pos.getTitle() + " to have Permission " + perm, 
+				"insert into PositionPermission (position_id, perm_id) select " + pos.getID() + 
+				", perm_id from Permissions where permission = '" + perm + "'");
+	}
+	
+	// TODO: Work this out
+	public void removePositionPermission(Position pos, String perm){
+		executeUpdate("Remove Permission " + perm + " from Position " + pos.getTitle(),
+				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = Any(");
+	}
+	
 	public Integer changePositionPermission(int position_id, int perm_id) {
 		return executeTransaction(new Transaction<Integer>() {
 		@Override
