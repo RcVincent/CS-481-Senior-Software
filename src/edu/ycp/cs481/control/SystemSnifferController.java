@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import edu.ycp.cs481.model.Position;
@@ -27,6 +28,30 @@ public class SystemSnifferController {
 		t = u.getHistory();
 	}
 	
+	
+	public boolean validateSOPs() {
+		//List<SOP> testList = new ArrayList<SOP>(); 
+		
+		Iterator<SOP> i = t.getSopsToDo().iterator();
+		while(i.hasNext()) {
+			if(!i.next().isComplete()) {
+				System.out.println("There is an incomplete SOP. SOP id is" + i.next().getID());
+				//send a message to user and their manager 
+				return false;  
+			}
+			else {
+				System.out.println("There is nothing in the priority queue that is incomplete");
+				//send message to manager
+				//i.remove();
+				t.getCompletedSOPs().add(i.next());
+			}
+		}
+		
+		//if the method has run this far, its successful
+		return true;
+		
+		
+	}
 	//the DB calls the training histories will need
 	public void PopulateHistoryThroughUser(User u) {
 		t.addAndSortCollection(pc.findSOPsOfPosition(u.getPosition().getID()));
@@ -36,9 +61,4 @@ public class SystemSnifferController {
 		t.addAndSortCollection(pc.findSOPsOfPosition(pos_id));
 	}
 	
-	public void sortListByPriority(int priority) {
-		PriorityQueue q = t.getSopsToDo();
-		
-		
-	}
 }
