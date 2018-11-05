@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs481.control.UserController;
+
 @SuppressWarnings("serial")
 public class UserHomeServlet extends HttpServlet{
 	@Override
@@ -25,5 +27,10 @@ public class UserHomeServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("User Home Servlet: doPost");
+		
+		if(req.getParameter("logout").equalsIgnoreCase("logout")){
+			UserController.logout(req);
+			resp.sendRedirect(req.getContextPath() + "/login");
+		}
 	}
 }
