@@ -111,7 +111,7 @@ public class Database {
 				u.setPassword(resultSet.getString(3));
 				u.setFirstname(resultSet.getString(4));
 				u.setLastname(resultSet.getString(5));
-				u.setAdminFlag(resultSet.getBoolean(6));
+				u.setLockedOut(resultSet.getBoolean(6));
 				u.setArchiveFlag(resultSet.getBoolean(7));
 				PositionController pc = new PositionController();
 				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
@@ -300,7 +300,7 @@ public class Database {
 				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
-				  "admin_flag TINYINT NOT NULL, " +
+				  "locked_out TINYINT NOT NULL, " +
 				  "archive_flag TINYINT NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 				  "position_id INT NOT NULL, " +
@@ -397,9 +397,9 @@ public class Database {
 		
 		for(User u: userList){
 			names.add("Insert User " + u.getFirstname() + " " + u.getLastname());
-			sqls.add("insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
+			sqls.add("insert into User (email, password, first_name, last_name, locked_out, archive_flag, " +
 					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + 
-					u.getFirstname() + "', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
+					u.getFirstname() + "', '" + u.getLastname() + "', " + u.isLockedOut() + ", " + u.isArchiveFlag() + ", " + 
 					u.getPosition().getID() + ")");
 		}
 		

@@ -136,4 +136,9 @@ public class PositionController{
 	public Integer changePositionPermission(int position_id, int perm_id){
 		return db.changePositionPermission(position_id, perm_id);
 	}
+	
+	public boolean hasRequirement(int positionID, int sopID) {
+		// TODO:
+		return false;
+	}
 }

@@ -27,8 +27,8 @@ public class InitialData {
 		pList = new ArrayList<Position>();
 		sList = new ArrayList<SOP>();
 		p1reqs = new ArrayList<SOP>();
-		perms = new String[2];
-		permNames = new String[2];			// start with 2, work our way up. We won't need that many.
+		perms = new String[5];
+		permNames = new String[5];			// start with 2, work our way up. We won't need that many.
 		
 		
 		p1 = new Position();
@@ -55,7 +55,7 @@ public class InitialData {
 		u1.setPassword("yes");
 		u1.setFirstname("Carl");
 		u1.setLastname("Sagan");
-		u1.setAdminFlag(true);
+		u1.setLockedOut(false);
 		u1.setArchiveFlag(false);
 		u1.setPosition(p1);
 		
@@ -65,7 +65,7 @@ public class InitialData {
 		u2.setPassword("no");
 		u2.setFirstname("Billiam");
 		u2.setLastname("Nye");
-		u2.setAdminFlag(false);
+		u2.setLockedOut(false);
 		u2.setArchiveFlag(false);
 		u2.setPosition(p2);
 		
@@ -123,16 +123,26 @@ public class InitialData {
 		pList.add(p3);
 		
 		permNames[0] = "Admin";
-		perms[0] = "User can view and modify any Position or SOP";
+		perms[0] = "User can view and modify any Position, SOP, or User";
+		
+		permNames[1] = "Create Position/SOP";
+		perms[1] = "User can create new Positions and SOPs";
 
-		permNames[1] = "New User";
-		perms[1] = "User can view their Positions and SOPs";
+		permNames[2] = "Search Position/SOP/User";
+		perms[2] = "User can search for other Positions, SOPs, Users";
+		
+		permNames[3] = "View Position/SOP";
+		perms[3] = "User can view their Position and SOPs";
+		
+		permNames[4] = "Locked out";
+		perms[4] = "User is unable to access the system";
+		
 		
 		permIds = new int[pList.size()];
 		
 		permIds[0] = 1;
-		permIds[1] = 2;
-		permIds[2] = 2;
+		permIds[1] = 4;
+		permIds[2] = 4;
 	}
 
 

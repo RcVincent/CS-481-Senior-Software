@@ -52,13 +52,13 @@ public class SOPControllerTest {
 		user1.setLastname("Smith");
 		user1.setUserID(12);
 		user1.setPosition(pos1);
-		user1.setAdminFlag(true);
+		//user1.setAdminFlag(true);
 		
 		user2 = new User();
 		user2.setFirstname("Stan");
 		user2.setLastname("Smith");
 		user2.setEmail("rookie@email.com");
-		user2.setAdminFlag(false);
+		//user2.setAdminFlag(false);
 		user2.setPassword("bangBang");
 		user2.setPosition(pos3);
 		user2.setUserID(4);
