@@ -8,7 +8,8 @@
 		<link rel="stylesheet" href="css/bootstrap.css">
 		
 
-	<body>
+	<script src="./js/cookies.js"></script>
+	<body onload="checkCookie()">
 
 	<h1 style="text-align: center;"><span style="text-decoration: underline;">Create SOP</span></h1>
   

@@ -2,10 +2,11 @@
 <html>
 <head><title>CTM mkii - Index</title>
 </head>
-<body>
+<script src="./js/cookies.js"></script>
+<body onload="checkCookie()">
+
 <fieldset>
 <legend>Testing Simple Pages</legend>
-<h4>Login Status: NOT LOGGED IN</h4>
 <ul>
   <li><a href="login">Login</a></li>
   <li><a href="create_account">Create Account</a></li>
@@ -24,7 +25,5 @@
 </ul>
 
 </fieldset>
-<script type="text/javascript">
-</script>
 </body>
 </html>

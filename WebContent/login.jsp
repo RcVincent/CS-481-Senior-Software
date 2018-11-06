@@ -6,13 +6,15 @@
 	<title>CTM mkii - Login</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
-<body>
-<script src="js/cookies.js"></script>
+<script src="./js/cookies.js"></script>
+<body onload="checkCookieLogin()">
+
 
 <h1>Login</h1>
 <div class="fluid-container">
-	<form  class="form-horizontal" method="post">
-		<c:if test="${! empty errorMessage}">
+	
+	<form  class="form-horizontal" method="post" onsubmit="setCookie('username',document.getElementById('email').value,5)">
+		<c:if test="${!empty errorMessage}">
 			<div class="row">
 				<div class="col">
 					<p class="alert alert-warning">${errorMessage}</p>
@@ -21,18 +23,15 @@
 		</c:if>
 		<div class="form-group row">
 					<label for="email" class="control-label col-2">Email:</label>
-					<input type="text" class="form-control col-10" id="email" name="email" value="${email}">
+					<input type="text" class="form-control col-6" id="email" name="email" value="${email}">
 		</div>
 		<div class="row">
 					<label for="password" class="control-label col-2">Password:</label>
-					<input type="password" class="form-control col-10" id="password" name="password" value="${password}">
+					<input type="password" class="form-control col-6" id="password" name="password" value="${password}">
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" 
-				onclick="setCookie(loginStatus,true,2)" 
-				onclick="setCookie(username,document.getElementById('password'),2)" 
-				class="btn btn-info">Submit</button>
+				<button type="submit" class="btn btn-info">Submit</button>
 			</div>
 		</div>
 	</form>

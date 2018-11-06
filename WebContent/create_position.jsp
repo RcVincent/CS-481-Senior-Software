@@ -9,7 +9,8 @@
 		
 	</head>
 
-	<body>
+	<script src="./js/cookies.js"></script>
+	<body onload="checkCookie()">
 
 	<form action="${pageContext.servletContext.contextPath}/create_position" method="post">
 	Position Name: <input type="text" name="positionName"><br>

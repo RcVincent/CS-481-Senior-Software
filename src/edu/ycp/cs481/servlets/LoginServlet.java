@@ -43,8 +43,10 @@ public class LoginServlet extends HttpServlet{
 			}
 		}
 		if(errorMessage != null){
+			System.out.println("LoginServlet doPost ERROR:"+errorMessage);
 			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+			
 		}else{
 			User u = user.get(0);
 			HttpSession session = req.getSession();
@@ -59,5 +61,6 @@ public class LoginServlet extends HttpServlet{
 				resp.sendRedirect(req.getContextPath() + "/MainPage");
 			}
 		}	
+		
 	}
 }
