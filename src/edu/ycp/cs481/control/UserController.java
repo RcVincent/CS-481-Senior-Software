@@ -148,12 +148,12 @@ public class UserController{
 	}
 	
 	public boolean userHasPermission(User u, int permissionID) {
-		/*try{
+		try{
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.getPosition().getID() + 
 															"and permission_id = " + permissionID;
-			ArrayList<boolean> results = db.executeQuery(name, sql, db.getUserResFormat());
-			if(results.size() == 0){
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
 				System.out.println("This user doesn't have this permission");
 				return false;
 			}
@@ -161,17 +161,17 @@ public class UserController{
 				return true;
 		}catch(SQLException e){
 			e.printStackTrace();
-		} */
+		} 
 		return false;
 	}
 	
 	public boolean managerHasSubordinate(int managerID, int userID) {
-		/*try{
+		try{
 			String name = "";
 			String sql = "select * from Subordinate where manager_id = " + managerID + 
 												 "and subordinate_id = " + userID;
-			ArrayList<boolean> results = db.executeQuery(name, sql, db.getUserResFormat());
-			if(results.size() == 0){
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
 				System.out.println("This employee doesn't report to this manager");
 				return false;
 			}
@@ -179,7 +179,7 @@ public class UserController{
 				return true;
 		}catch(SQLException e){
 			e.printStackTrace();
-		} */
+		} 
 		return false;
 	}
 
