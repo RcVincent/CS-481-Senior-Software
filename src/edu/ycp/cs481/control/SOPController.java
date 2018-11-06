@@ -120,4 +120,9 @@ public class SOPController{
 				"where sop_id = " + sop.getID());
 		sop.setPriority(priority);
 	}
+	
+	//search for the sop and add it to the users position requirements or their training history
+	public void assignNewSOP(int userID, int sopID) {
+		
+	}
 }

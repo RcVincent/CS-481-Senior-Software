@@ -21,19 +21,36 @@ public class Messenger {
 			return new PasswordAuthentication(username, password);
 			}
 		  });
+	
 		try {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("rvincent@ycp.edu"));
 			message.setRecipients(Message.RecipientType.TO,
-			InternetAddress.parse("vinsanity642@gmail.com"));
-			message.setSubject("Testing Subject");
-			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!"
-				+ "Visit http://chillyfacts.com");
+			InternetAddress.parse(setRecipient("")));
+			message.setSubject("Dear User");
+			message.setText(setMessage("Testing Getter"));
 			Transport.send(message);
-			System.out.println("Done");
+			System.out.println("Message Sent");
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public static String setRecipient(String name) {
+		InternetAddress i = new InternetAddress(); 
+		i.setAddress(name);
+		return i.getAddress();
+	}
+	
+	public static String setMessage(String text) {
+		return text; 
+	}
+	
+	public static InternetAddress setSender(String name) {
+		InternetAddress i = new InternetAddress(); 
+		i.setAddress(name);
+		return i;
+	}
+	
+	
 }

@@ -17,7 +17,8 @@ public class TrainingHistoryTest {
 	private List<SOP> adminReqs, userReqs, managerReqs; 
 	private List<User> userList; 
 	
-	public TrainingHistoryTest() {
+	@Before
+	public void SetUp() {
 		userList = new ArrayList<User>(); 
 		
 		AdminHist = new TrainingHistory(); 

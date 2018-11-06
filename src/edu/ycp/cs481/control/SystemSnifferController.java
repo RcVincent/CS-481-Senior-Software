@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import edu.ycp.cs481.model.Messenger;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 
@@ -41,7 +42,7 @@ public class SystemSnifferController {
 			}
 			else {
 				System.out.println("There is nothing in the priority queue that is incomplete");
-				//send message to manager
+				Messenger m = new Messenger(); 
 				//i.remove();
 				t.getCompletedSOPs().add(i.next());
 			}
