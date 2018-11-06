@@ -147,8 +147,22 @@ public class UserController{
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
-	public void userHasPermission(int userID, int permissionID) {
-		
+	public boolean userHasPermission(User u, int permissionID) {
+		/*try{
+			String name = "";
+			String sql = "select * from PositionPermission where position_id = " + u.getPosition().getID() + 
+															"and permission_id = " + permissionID;
+			ArrayList<boolean> results = db.executeQuery(name, sql, db.getUserResFormat());
+			if(results.size() == 0){
+				System.out.println("This user doesn't have this permission");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} */
+		return false;
 	}
 
 	public void archiveUser(int userID){
