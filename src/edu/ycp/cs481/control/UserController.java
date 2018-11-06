@@ -144,7 +144,7 @@ public class UserController{
 
 	public void changeUserPassword(int userID, String newPass){
 		db.executeUpdate("Change User Password",
-				"update User set password = '" + newPass + "' where " + "user_id = " + userID);
+				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
 	public void userHasPermission(int userID, int permissionID) {
