@@ -164,6 +164,24 @@ public class UserController{
 		} */
 		return false;
 	}
+	
+	public boolean managerHasSubordinate(int managerID, int userID) {
+		/*try{
+			String name = "";
+			String sql = "select * from Subordinate where manager_id = " + managerID + 
+												 "and subordinate_id = " + userID;
+			ArrayList<boolean> results = db.executeQuery(name, sql, db.getUserResFormat());
+			if(results.size() == 0){
+				System.out.println("This employee doesn't report to this manager");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} */
+		return false;
+	}
 
 	public void archiveUser(int userID){
 		db.executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
