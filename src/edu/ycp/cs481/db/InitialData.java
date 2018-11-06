@@ -55,7 +55,7 @@ public class InitialData {
 		u1.setPassword("yes");
 		u1.setFirstname("Carl");
 		u1.setLastname("Sagan");
-		u1.setAdminFlag(true);
+		u1.setLockedOut(false);
 		u1.setArchiveFlag(false);
 		u1.setPosition(p1);
 		
@@ -65,7 +65,7 @@ public class InitialData {
 		u2.setPassword("no");
 		u2.setFirstname("Billiam");
 		u2.setLastname("Nye");
-		u2.setAdminFlag(false);
+		u2.setLockedOut(false);
 		u2.setArchiveFlag(false);
 		u2.setPosition(p2);
 		

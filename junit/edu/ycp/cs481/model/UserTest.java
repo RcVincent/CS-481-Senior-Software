@@ -33,7 +33,7 @@ public class UserTest {
 		user1.setUserID(902685223);
 		user1.setEmail("gmailsucks@bing.com");
 		user1.setPassword("Pass");
-		user1.setAdminFlag(false); 
+		//user1.setAdminFlag(false); 
 		user1.setArchiveFlag(false);
 
 		p1 = new Position(); 
@@ -49,7 +49,7 @@ public class UserTest {
 		user2.setUserID(901678905);
 		user2.setEmail("bingSucks@gmail.com");
 		user2.setPassword("Yeet");
-		user2.setAdminFlag(false); 
+		//user2.setAdminFlag(false); 
 		user2.setArchiveFlag(false);
 
 		p2 = new Position(); 
@@ -64,7 +64,7 @@ public class UserTest {
 		user3.setUserID(901678509);
 		user3.setEmail("IamADegenerate@ycp.edu");
 		user3.setPassword("No");
-		user3.setAdminFlag(false);
+		//user3.setAdminFlag(false);
 		user3.setArchiveFlag(true);
 
 		p3 = new Position(); 
@@ -81,7 +81,7 @@ public class UserTest {
 		user4.setEmail(""); 
 		user4.setPassword("lelelele");
 		user4.setArchiveFlag(false);
-		user4.setAdminFlag(false);
+		//user4.setAdminFlag(false);
 
 		user4.setPosition(p2);
 		userlist.add(user4); 
@@ -90,7 +90,7 @@ public class UserTest {
 		user5.setUserID(900174502);
 		user5.setEmail("yayayaya@mrc.org");
 		user5.setPassword("");
-		user5.setAdminFlag(false);
+		//user5.setAdminFlag(false);
 		user5.setArchiveFlag(false);
 
 		user5.setPosition(p2);
@@ -107,7 +107,7 @@ public class UserTest {
 		user7 = new User(); 
 		user7.setUserID(899245663);
 		user7.setEmail("kbdack@hot.com");
-		user7.setAdminFlag(false);
+		//user7.setAdminFlag(false);
 		user7.setArchiveFlag(false);
 
 		user7.setPosition(null);
@@ -122,7 +122,7 @@ public class UserTest {
 		admin1.setEmail("admin@email.com");
 		admin1.setPassword("LetmeIn");
 		admin1.setArchiveFlag(false);
-		admin1.setAdminFlag(true);
+		//admin1.setAdminFlag(true);
 
 		a1 = new Position(); 
 		a1.setID(1);
@@ -137,7 +137,7 @@ public class UserTest {
 		admin2.setEmail("admin2@email.com");
 		admin2.setPassword("Now");
 		admin2.setArchiveFlag(false);
-		admin2.setAdminFlag(true);
+		//admin2.setAdminFlag(true);
 
 		a2 = new Position();
 		a2.setID(2);
@@ -152,7 +152,7 @@ public class UserTest {
 		admin3.setEmail("");
 		admin3.setPassword("OpenUP");
 		admin3.setArchiveFlag(false);
-		admin3.setAdminFlag(true);
+		//admin3.setAdminFlag(true);
 
 		admin3.setPosition(null);
 		userlist.add(admin3); 
@@ -256,7 +256,7 @@ public class UserTest {
 			if(u.isArchiveFlag() == false) {
 
 				//if the email is empty its invalid, invalidate that user and remove them from the user list. Also send their manager an email. 
-				if(u.getEmail() == "" || u.getEmail() == " " && !u.isAdminFlag()) {
+				if(u.getEmail() == "" || u.getEmail() == " "/* && !u.isAdminFlag()*/) {
 					u.setValidUser(false);
 					System.out.println("There is an invalid user in the list: " + u.getEmail());
 					userlist.remove(u);
@@ -469,7 +469,7 @@ public class UserTest {
 		List<User> testlist = new ArrayList<User>(); 
 
 		testlist.addAll(userlist);
-
+		/*
 		//sort through the user list to find the admins 
 		for(User u: testlist) {
 			//if archived immediately stop, there is no reason to search the list anymore
@@ -498,7 +498,7 @@ public class UserTest {
 					}
 				}
 			}
-		}
+		}*/
 
 		assertEquals(1, failedAdminList.size());
 		assertEquals(2, adminList.size()); 
