@@ -147,8 +147,41 @@ public class UserController{
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
-	public void userHasPermission(int userID, int permissionID) {
-		
+	public boolean userHasPermission(int userID, int permissionID) {
+		try{
+			ArrayList<User> u = searchForUsers(userID, null, null, null, -1);
+			String name = "";
+			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
+															" and perm_id = " + permissionID;
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This user doesn't have this permission");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
+	public boolean managerHasSubordinate(int managerID, int userID) {
+		try{
+			String name = "";
+			String sql = "select * from Subordinate where manager_id = " + managerID + 
+												 " and subordinate_id = " + userID;
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This employee doesn't report to this manager");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
 	}
 
 	public void archiveUser(int userID){

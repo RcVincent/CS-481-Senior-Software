@@ -401,4 +401,14 @@ public class UserControllerTest {
 		
 	}
 	 */
+	
+	@Test 
+	public void testUserHasPermission() {
+		assertEquals(true, uc.userHasPermission(1, 1));
+	}
+	
+	@Test
+	public void testManagerHasSubordinate() {
+		
+	}
 }

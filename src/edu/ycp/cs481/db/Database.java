@@ -171,6 +171,35 @@ public class Database {
 		});
 	}
 	
+	public Boolean executeCheck(String name, String sql) throws SQLException{
+		return executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				Statement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					if(name != null){
+						System.out.println("Doing query " + name);
+					}
+					stmt = conn.createStatement();
+					resultSet = stmt.executeQuery(sql);
+					if(name != null){
+						System.out.println("Finished query " + name);
+					}
+					
+					if(resultSet.next())
+						return true;
+					else
+						return false;
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+			
+		});
+	}
+	
 	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
 		return userResFormat;
 	}
