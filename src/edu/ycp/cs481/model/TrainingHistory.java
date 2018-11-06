@@ -14,7 +14,6 @@ public class TrainingHistory {
 	public TrainingHistory() {
 		completedSOPs = new ArrayList<SOP>(); 
 		sopsToDo = new PriorityQueue<SOP>(new SOPComparator()); 
-		
 	}
 
 	public User getUser() {
@@ -55,13 +54,6 @@ public class TrainingHistory {
 	
 	public void addAndSortCollection(List<SOP> s) {
 		sopsToDo.addAll(s);
-		/*for (int i = 0; i < sopsToDo.size(); i++) {
-			if(sopsToDo.element().isComplete()) {
-				SOP S = sopsToDo.remove();
-				completedSOPs.add(S);
-				//i--;
-			}
-		}*/
 		
 		int count = 0; 
 		while(!sopsToDo.isEmpty() && count != sopsToDo.size()) {
