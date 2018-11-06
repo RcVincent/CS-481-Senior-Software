@@ -184,6 +184,42 @@ public class UserController{
 		return false;
 	}
 
+	public boolean SOPisCompleted(int userID, int sopID) {
+		try{
+			String name = "";
+			String sql = "select * from CompletedSOP where user_id = " + userID + 
+												 " and sop_id = " + sopID;
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This employee hasn't finished this SOP");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
+	public boolean isLockedOut(int userID) {
+		try{
+			String name = "";
+			String sql = "select * from User where user_id = " + userID + 
+												 " and locked_out = 1";
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This employee is not locked out");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
 	public void archiveUser(int userID){
 		db.executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
 	}
