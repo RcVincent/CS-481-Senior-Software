@@ -53,13 +53,13 @@ public class PositionControllerTest {
 		user1.setLastname("Smith");
 		user1.setUserID(12);
 		user1.setPosition(pos1);
-		user1.setAdminFlag(true);
+		//user1.setAdminFlag(true);
 		
 		user2 = new User();
 		user2.setFirstname("Stan");
 		user2.setLastname("Smith");
 		user2.setEmail("rookie@email.com");
-		user2.setAdminFlag(false);
+		//user2.setAdminFlag(false);
 		user2.setPassword("bangBang");
 		user2.setPosition(pos3);
 		user2.setUserID(4);
@@ -91,6 +91,19 @@ public class PositionControllerTest {
 		sopList.add(sop2);
 	}
 	
+	// TODO: Rework this for PositionController
+	/*@Test
+	public void testInsertPosition() {
+		
+		for(Position p: pList) {
+			db.insertPosition(p);
+			queryPos = db.findAllPositions();
+			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
+			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
+			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
+		}
+	}*/
+	
 	//@Test
 	public void testGetApplicantsSOP() {
 		List<SOP> testList = new ArrayList<SOP>(); 
@@ -100,11 +113,12 @@ public class PositionControllerTest {
 		
 	}
 	
+	// TODO: Potentially rework these for searchForPositions?
 	@Test
 	public void testGetPositionByID() {
 		List<Position> testList = new ArrayList<Position>(); 
 		int searchID = 2;
-		testList = poscontrol.searchForPosition(searchID, "", "", 0);
+		testList = poscontrol.searchForPositions(searchID, "", "", 0);
 		
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
@@ -117,7 +131,7 @@ public class PositionControllerTest {
 	public void testSearchByName() {
 		List<Position> testList = new ArrayList<Position>();
 		String searchName = "CEO";
-		testList = poscontrol.searchForPosition(0, searchName, "", 0);
+		testList = poscontrol.searchForPositions(0, searchName, "", 0);
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
 		assertEquals(1, p.getPriority());
@@ -128,7 +142,7 @@ public class PositionControllerTest {
 	public void testSearchByPriority() {
 		List<Position> testList = new ArrayList<Position>();
 		int priority = 1; 
-		testList = poscontrol.searchForPosition(0, "", "", priority);
+		testList = poscontrol.searchForPositions(0, "", "", priority);
 		assertEquals(2, testList.size());
 		
 		Position p1 = testList.get(0);
@@ -140,6 +154,51 @@ public class PositionControllerTest {
 		assertEquals(1, p2.getPriority()); 
 	}
 	
+	// TODO: Potentially use these in testing searchForPositions?
+	/*
+	@Test
+	public void testFindPositionByID() {
+		queryPos = db.findAllPositions();
+		
+		for(Position p : queryPos) {
+			assertEquals(p.getTitle(), db.findPositionByID(p.getID()).getTitle());
+			assertEquals(p.getDescription(), db.findPositionByID(p.getID()).getDescription());
+			assertEquals(p.getPriority(), db.findPositionByID(p.getID()).getPriority());
+		}
+	}
+	
+	@Test
+	public void testGetPositionByName() {
+		queryPos = db.findAllPositions();
+		
+		for(int i = 0; i < p_size; i++) {
+			assertEquals(queryPos.get(i).getTitle(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getTitle());
+			assertEquals(queryPos.get(i).getDescription(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getDescription());
+			assertEquals(queryPos.get(i).getPriority(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getPriority());
+		}
+	}
+	
+	@Test
+	public void testGetPositionByPriority() {
+		queryPos = db.findAllPositions();
+		
+		assertEquals(queryPos.get(0).getTitle(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getTitle());
+		assertEquals(queryPos.get(0).getDescription(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getDescription());
+		assertEquals(queryPos.get(0).getPriority(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getPriority());
+
+	}
+	
+	@Test
+	public void testDeletePosition() {
+		db.deletePosition(3);
+		queryPos = db.findAllPositions();
+
+		assertNotEquals(queryPos.get(2).getID(), pList.get(2).getID());
+		assertNotEquals(queryPos.get(2).getDescription(), pList.get(2).getDescription());
+		assertNotEquals(queryPos.get(2).getTitle(), pList.get(2).getTitle());
+	}
+	 */
+	
 	@Test
 	public void testChangePriority() {
 		int newPrio = 3; 
@@ -150,5 +209,19 @@ public class PositionControllerTest {
 		assertEquals(3, testPos.getPriority()); 
 	}
 	
-	
+	/* TODO: Implement these here?
+	@Test // TODO: this breaks testInsertPosition and testFindAllPositions
+	public void testChangePositionPriority() {
+		queryPos = db.findAllPositions();
+		int insert_id = db.insertPosition(queryPos.get(0));
+		
+		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
+		assertEquals(2, changedPriority.getPriority());
+	}
+
+	@Test
+	public void testAddSOPtoPosition() {
+		
+	}
+	 */
 }

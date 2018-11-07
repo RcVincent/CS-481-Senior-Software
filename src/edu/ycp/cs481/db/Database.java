@@ -13,11 +13,13 @@ import java.util.List;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.control.UserController;
 
 public class Database {
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public String dbName = "cs481db";
+	public static String dbName = "cs481db";
 	
 	static {
 		try {
@@ -109,9 +111,10 @@ public class Database {
 				u.setPassword(resultSet.getString(3));
 				u.setFirstname(resultSet.getString(4));
 				u.setLastname(resultSet.getString(5));
-				u.setAdminFlag(resultSet.getBoolean(6));
+				u.setLockedOut(resultSet.getBoolean(6));
 				u.setArchiveFlag(resultSet.getBoolean(7));
-				u.setPosition(searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
+				PositionController pc = new PositionController();
+				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				
 				users.add(u);
 			}
@@ -167,6 +170,55 @@ public class Database {
 			}
 		});
 	}
+	
+	public Boolean executeCheck(String name, String sql) throws SQLException{
+		return executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException{
+				Statement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					if(name != null){
+						System.out.println("Doing query " + name);
+					}
+					stmt = conn.createStatement();
+					resultSet = stmt.executeQuery(sql);
+					if(name != null){
+						System.out.println("Finished query " + name);
+					}
+					
+					if(resultSet.next())
+						return true;
+					else
+						return false;
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+			
+		});
+	}
+	
+	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
+		return userResFormat;
+	}
+	
+	public QueryResultFormat<ArrayList<Position>> getPosResFormat(){
+		return posResFormat;
+	}
+	
+	public String getPositionPieces(){
+		return positionPieces;
+	}
+	
+	public QueryResultFormat<ArrayList<SOP>> getSopResFormat(){
+		return sopResFormat;
+	}
+	
+	public String getSopPieces(){
+		return sopPieces;
+	}
 
 	private Connection connect() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName +"?user=root&password=password");
@@ -179,24 +231,24 @@ public class Database {
 	/*
 	 * This method is used in executing a list of updates to the database (e.g. create tables, update data, etc.)
 	 */
-	public boolean executeUpdates(String[] names, String[] sqls){
+	public boolean executeUpdates(ArrayList<String> names, ArrayList<String> sqls){
 		return executeTransaction(new Transaction<Boolean>(){
 			@Override
 			public Boolean execute(Connection conn) throws SQLException{
 				ArrayList<Statement> stmts = new ArrayList<Statement>();
 				try{
 					boolean hasNames = names != null;
-					if(hasNames && names.length != sqls.length){
+					if(hasNames && names.size() != sqls.size()){
 						throw new IllegalArgumentException("Must have all sql statements named or pass null names array!");
 					}
-					for(int i = 0; i < sqls.length; i++){
+					for(int i = 0; i < sqls.size(); i++){
 						if(hasNames){
-							System.out.println("Starting " + names[i]);
+							System.out.println("Starting " + names.get(i));
 						}
 						stmts.add(conn.createStatement());
-						stmts.get(i).executeUpdate(sqls[i]);
+						stmts.get(i).executeUpdate(sqls.get(i));
 						if(hasNames){
-							System.out.println("Finished " + names[i]);
+							System.out.println("Finished " + names.get(i));
 						}
 					}
 					return true;
@@ -210,34 +262,45 @@ public class Database {
 	}
 	
 	public boolean executeUpdate(String name, String sql){
-		return executeUpdates(new String[]{name}, new String[]{sql});
+		ArrayList<String> names = new ArrayList<String>();
+		names.add(name);
+		
+		ArrayList<String> sqls = new ArrayList<String>();
+		sqls.add(sql);
+		
+		return executeUpdates(names, sqls);
 	}
 	
 	public void createDatabase(){
-		executeUpdate("Create CS481DB database", "create database if not exists cs481db");
+		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
+		this.dbName = "cs481db";
+	}
+	
+	public void dropDatabase() {
+		executeUpdate("Dropping old database..", "drop database if exists cs481db");
 	}
 	
 	public void createTables(){
-		String[] names = new String[4];
-		String[] sqls = new String[4];
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> sqls = new ArrayList<String>();
 		
-		names[0] = "Create Position table";
-		sqls[0] = "CREATE TABLE IF NOT EXISTS Position (" +
+		names.add("Create Position table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Position (" +
 				 "position_id INT NOT NULL AUTO_INCREMENT," +
 				 "title VARCHAR(80) NOT NULL," +
 				 "description VARCHAR(255) NOT NULL," +
 				 "priority INT NOT NULL," +
 				 "PRIMARY KEY (position_id)," +
-				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);";
+				 "UNIQUE INDEX position_id_UNIQUE (position_id ASC) VISIBLE);");
 		
-		names[1] = "Create Users table";
-		sqls[1] = "CREATE TABLE IF NOT EXISTS User (" +
+		names.add("Create Users table");
+		sqls.add("CREATE TABLE IF NOT EXISTS User (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
 				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
-				  "admin_flag TINYINT NOT NULL, " +
+				  "locked_out TINYINT NOT NULL, " +
 				  "archive_flag TINYINT NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 				  "position_id INT NOT NULL, " +
@@ -248,10 +311,10 @@ public class Database {
 				  "FOREIGN KEY (position_id) " +
 				  "REFERENCES Position (position_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);";
+				  "ON UPDATE NO ACTION);");
 		
-		names[2] = "Create SOP table";
-		sqls[2] = "CREATE TABLE IF NOT EXISTS SOP (" +
+		names.add("Create SOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS SOP (" +
 				  "sop_id INT NOT NULL AUTO_INCREMENT, " +
 				  "title VARCHAR(80) NOT NULL, " +
 				  "description VARCHAR(255) NOT NULL, " +
@@ -267,15 +330,46 @@ public class Database {
 				  "FOREIGN KEY (author_id) " +
 				  "REFERENCES User (user_id) " +
 				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);";
+				  "ON UPDATE NO ACTION);");
 		
-		names[3] = "Create PositionSOP table";
-		sqls[3] = "CREATE TABLE IF NOT EXISTS PositionSOP (" +
+		names.add("Create PositionSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS PositionSOP (" +
 					"position_id INT NOT NULL, " +
 					"sop_id INT NOT NULL, " +
 					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
 					"CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
-					");";
+					");");
+		
+		names.add("Create Permission table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Permission (" +
+				  "perm_id INT NOT NULL AUTO_INCREMENT," +
+				  "permission VARCHAR(255) NOT NULL," +
+				  "PRIMARY KEY (perm_id)," +
+				  "UNIQUE INDEX perm_id_UNIQUE (perm_id ASC) VISIBLE);");
+		
+		names.add("Create PositionPermission table");
+		sqls.add("CREATE TABLE IF NOT EXISTS PositionPermission (" +
+				   "position_id INT NOT NULL, " +
+				   "perm_id INT NOT NULL, " +
+					"CONSTRAINT FOREIGN KEY (position_id) REFERENCES Position (position_id), " + 
+					"CONSTRAINT FOREIGN KEY (perm_id) REFERENCES Permission (perm_id) " +
+					");");
+		
+		names.add("Create CompletedSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS CompletedSOP (" +
+				  "user_id INT NOT NULL," +
+				  "sop_id INT NOT NULL," +
+				  "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " + 
+				  "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+				  ");");		
+		
+		names.add("Create Subordinate table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Subordinate (" +
+				   "manager_id INT NOT NULL, " +
+				   "subordinate_id INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
+				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
+				   ");");
 		
 		executeUpdates(names, sqls);
 	}
@@ -287,56 +381,88 @@ public class Database {
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
-		List<SOP> reqs;
-		int req_size = 0;
+		String[] perms = initData.getInitialPermissions();
+		String[] permNames = initData.getInitialPermissionNames();
+		int[] permIds = initData.getInitialPermissionIDs();
+		int id = 0;
 		
-		for(Position p: posList) {
-			reqs = p.getRequirements();
-			req_size += reqs.size();
-		}
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> sqls = new ArrayList<String>();
 		
-		int numInserts = posList.size() + userList.size() + sopList.size() + req_size;
-		
-		String[] names = new String[numInserts];
-		String[] sqls = new String[numInserts];
-		
-		int currentInsert = 0;
 		for(Position p: posList){
-			names[currentInsert] = "Insert Position " + p.getTitle();
-			sqls[currentInsert] = "insert into Position (title, description, priority) " +
-					"values ('" + p.getTitle() + "', '" + p.getDescription() + "', " + p.getPriority() + ")";
-			currentInsert++;
+			names.add("Insert Position " + p.getTitle());
+			sqls.add("insert into Position (title, description, priority) " +
+					"values ('" + p.getTitle() + "', '" + p.getDescription() + "', " + p.getPriority() + ")");
 		}
 		
 		for(User u: userList){
-			names[currentInsert] = "Insert User " + u.getFirstname() + " " + u.getLastname();
-			sqls[currentInsert] = "insert into User (email, password, first_name, last_name, admin_flag, archive_flag, " +
-					"position_id)  values ('" + u.getEmail() + "', SHA('" + u.getPassword() + "'), '" + u.getFirstname() +
-					"', '" + u.getLastname() + "', " + u.isAdminFlag() + ", " + u.isArchiveFlag() + ", " + 
-					u.getPosition().getID() + ")";
-			currentInsert++;
+			names.add("Insert User " + u.getFirstname() + " " + u.getLastname());
+			sqls.add("insert into User (email, password, first_name, last_name, locked_out, archive_flag, " +
+					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + 
+					u.getFirstname() + "', '" + u.getLastname() + "', " + u.isLockedOut() + ", " + u.isArchiveFlag() + ", " + 
+					u.getPosition().getID() + ")");
 		}
 		
 		for(SOP s: sopList){
-			names[currentInsert] = "Insert SOP " + s.getName();
-			sqls[currentInsert] = "insert into SOP (title, description, priority, version, author_id, archive_flag)" +
+			names.add("Insert SOP " + s.getName());
+			sqls.add("insert into SOP (title, description, priority, version, author_id, archive_flag)" +
 					" values ('" + s.getName() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
-					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")";
-			currentInsert++;
+					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")");
 		}
 		
-		for(Position p: posList) {
-			reqs = p.getRequirements();
+		for(Position p: posList){
+			List<SOP> reqs = p.getRequirements();
 			
-			for(SOP s: reqs) {
-				names[currentInsert] = "Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection";
-				sqls[currentInsert] = "insert into PositionSOP (position_id, sop_id) " + 
-						" values (" + p.getID() + ", " + s.getID() + ")";
-				currentInsert++;
+			for(SOP s: reqs){
+				names.add("Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection");
+				sqls.add("insert into PositionSOP (position_id, sop_id) " + 
+						" values (" + p.getID() + ", " + s.getID() + ")");
 			}
 		}
 		
+		for(int i = 0; i < perms.length; i++) {
+			names.add("Insert Permission " + permNames[i]);
+			sqls.add("insert into Permission (permission) " +
+			" values ('" + perms[i] + "')");
+		}
+		
+		for(Position p: posList) {
+			names.add("Insert Position " + p.getTitle() + " and Permission " + permNames[permIds[id] - 1]);
+			sqls.add("insert into PositionPermission (position_id, perm_id) " +
+			" values (" + p.getID() + ", " + permIds[id] + ")");
+			id++;
+		}
+		
 		executeUpdates(names, sqls);
+	}
+	
+	public String formatInsertStatement(String table, String[] args, String[] values){
+		String insertSQL = "insert into " + table + " (";
+		for(int i = 0; i < args.length; i++){
+			if(i == args.length - 1){
+				insertSQL += args[i] + ") select ";
+			}else{
+				insertSQL += args[i] + ", ";
+			}
+		}
+		for(int i = 0; i < values.length; i++){
+			if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
+					values[i].startsWith("SHA")){
+				insertSQL += values[i];
+			}else{
+				insertSQL += "'" + values[i] + "'";
+			}
+			if(i == values.length - 1){
+				insertSQL += ";";
+			}else{
+				insertSQL += ", ";
+			}
+		}
+		return insertSQL;
+	}
+	
+	public void insert(String table, String[] args, String[] values){
+		executeUpdate("Insert a " + table, formatInsertStatement(table, args, values));
 	}
 	
 	public Integer insertAndGetID(String table, String id_str, String[] args, String[] values){
@@ -353,28 +479,8 @@ public class Database {
 				
 				try{
 					insert = conn.createStatement();
-					String insertSQL = "insert into " + table + " (";
-					for(int i = 0; i < args.length; i++){
-						if(i == args.length - 1){
-							insertSQL += args[i] + ") select ";
-						}else{
-							insertSQL += args[i] + ", ";
-						}
-					}
-					for(int i = 0; i < values.length; i++){
-						if(values[i].equalsIgnoreCase("true") || values[i].equalsIgnoreCase("false") ||
-								values[i].startsWith("SHA")){
-							insertSQL += values[i];
-						}else{
-							insertSQL += "'" + values[i] + "'";
-						}
-						if(i == values.length - 1){
-							insertSQL += ";";
-						}else{
-							insertSQL += ", ";
-						}
-					}
-					System.out.println(insertSQL);
+					
+					String insertSQL = formatInsertStatement(table, args, values);
 					insert.executeUpdate(insertSQL);
 					System.out.println("Executed Insert of a " + table + "!");
 					
@@ -409,647 +515,101 @@ public class Database {
 		});
 	}
 	
-	public Integer insertPosition(Position p){
-		// Insert into our junction table immediately
-		insertPosition_SOP(p);
-		
-		return insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"}, 
-				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
+	public void insertPositionSOP(int position_id, int sop_id){		
+		insert("PositionSOP", new String[]{"position_id" ,"sop_id"}, 
+				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
 	}
 	
-	public Integer insertSOP(SOP s){
-		return insertAndGetID("SOP", "sop_id", 
-				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
-				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
-						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
-	}
-	
-	public Integer insertPosition_SOP(Position p){
-		String[] reqs = new String[p.getRequirements().size()];
-		
-		for(int i = 0; i < p.getRequirements().size(); i++) {
-			reqs[i] = String.valueOf(p.getRequirements().get(i).getID());
+	// Called from insertPosition with default perm_id = 2
+	public void insertPositionPermission(int position_id, int perm_id){
+		//  TODO: Potential flaw if a number larger than our highest permission_id is passed, set a check
+		if(perm_id > 5) {
+			System.out.println("Your permission id is too high!");
+			return;
 		}
 		
-		return insertAndGetID("PositionSOP", "position_id", 
-				new String[]{"sop_id"}, reqs);
+		insert("PositionPermission", new String[] {"position_id", "perm_id"},
+				new String[] {String.valueOf(position_id), String.valueOf(perm_id)});
 	}
 	
-	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
-		try{
-			String name = "";
-			String sql = "select * from Position";
-			if(positionID == -1 && (title == null || title.equalsIgnoreCase("")) && 
-					(description == null || description.equalsIgnoreCase("")) && priority == -1){
-				name = "Get All Positions";
-			}else{
-				name = "Get Position with ";
-				sql += " where ";
-				boolean prevSet = false;
+	public void insertCompletedSOP(int user_id, int sop_id) {
+		insert("CompletedSOP", new String[] {"user_id", "sop_id"},
+				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
+	}
+	
+	// InsertSubordinate
+	public void addSubordinate(int manager_id, int subordinate_id) {
+		insert("Subordinate", new String[] {"manager_id", "subordinate_id"},
+				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
+	}
+	
+	// DeleteSubordinate
+	public void removeSubordinate(int manager_id, int subordinate_id) {
+		executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+	    manager_id + " and subordinate_id = " + subordinate_id);
+	}
+	
+	public void addPositionPermission(Position pos, String perm){
+		executeUpdate("Set Position " + pos.getTitle() + " to have Permission " + perm, 
+				"insert into PositionPermission (position_id, perm_id) select " + pos.getID() + 
+				", perm_id from Permissions where permission = '" + perm + "'");
+	}
+	
+	// TODO: Work this out
+	public void removePositionPermission(Position pos, String perm){
+		executeUpdate("Remove Permission " + perm + " from Position " + pos.getTitle(),
+				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = Any(");
+	}
+	
+	public Integer changePositionPermission(int position_id, int perm_id) {
+		return executeTransaction(new Transaction<Integer>() {
+		@Override
+		public Integer execute(Connection conn) throws SQLException {
+			PreparedStatement stmt = null;
+			PreparedStatement stmt2 = null;
+			ResultSet resultSet = null;
+
+
+			try{
+				stmt = conn.prepareStatement(
+						"UPDATE PositionPermission SET perm_id = ? WHERE position_id = ? ");
 				
-				if(positionID != -1){
-					name += "id of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
-				}
+				stmt.setInt(1, perm_id);
+				stmt.setInt(2, position_id);
+				stmt.executeUpdate();
 				
-				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
-				}
 				
-				// TODO: Likely edit description (and possibly title) to search for partial? Not sure if this does that.
-				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
-				}
+				stmt2 = conn.prepareStatement(
+						"SELECT * FROM PositionPermission WHERE position_id = ?");
 				
-				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
+				stmt2.setInt(1, position_id);
+				
+				resultSet = stmt2.executeQuery();
+				
+				int new_id = 0;
+				
+				Boolean found = false;
+				
+				while(resultSet.next()) {
+					found = true;
+					new_id = resultSet.getInt(2);
 				}
+
+				// check if the junction exists
+				if (!found) {
+					System.out.println("PositionPermission with ID "+ position_id +" was not found in the PositionPermission table");
+				}
+
+				return new_id;
+
+
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(stmt2); 
 			}
-			ArrayList<Position> results = executeQuery(name, sql, posResFormat);
-			if(positionID != -1){
-				if(results.size() == 0){
-					System.out.println("No Position found with ID " + positionID);
-				}else if(results.size() > 1){
-					System.out.println("Multiple Positions found with ID " + positionID + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
 		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> findAllPositions(){
-		return searchForPositions(-1, null, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public Position findPositionByID(int position_id){
-		ArrayList<Position> result = searchForPositions(position_id, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> getPositionByName(String title){
-		return searchForPositions(-1, title, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForPositions instead
-	public ArrayList<Position> getPositionByPriority(int priority){
-		return searchForPositions(-1, null, null, priority);
-	}
-	
-	public Position getPositionOfUser(int userID){
-		try{
-			ArrayList<Position> results = executeQuery("Get Position By User", "select " + positionPieces + 
-					" from Position, User where user_id = " + userID + " and Position.position_id = User.position_id", 
-					posResFormat);
-			if(results.size() == 0){
-				System.out.println("No positions found for User_id " + userID + "!");
-			}else if(results.size() > 1){
-				System.out.println("More than one position found for User_id " + userID + "! Returning null");
-			}else{
-				return results.get(0);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public ArrayList<Position> getPositionBySOPID(int SOPID){
-		try{
-			return executeQuery("Get Position by SOP ID", "select " + positionPieces + " from Position, PositionSOP where "
-					+ "PositionSOP.sop_id = " + SOPID + " and Position.position_id = PositionSOP.position_id", posResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the Position back again, perhaps to update?
-	public Position changePositionPriority(Position pos, int priority) {
-		return executeTransaction(new Transaction<Position>() {
-			@Override
-			public Position execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-	
-	
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE Position SET priority = ? WHERE position_id = ? ");
-					
-					stmt.setInt(1, priority);
-					stmt.setInt(2, pos.getID());
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM Position WHERE position_id = ?");
-					
-					stmt2.setInt(1, pos.getID());
-					
-					resultSet = stmt2.executeQuery();
-					
-					Position position = new Position(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						position.setID(resultSet.getInt(1));
-						position.setTitle(resultSet.getString(2));
-						position.setDescription(resultSet.getString(3));
-						position.setPriority(resultSet.getInt(4));
-					}
-	
-					// check if the position exists
-					if (!found) {
-						System.out.println("Position with ID "+ pos.getID() +" was not found in the Position table");
-					}
-	
-					return position;
-	
-	
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	public void deletePosition(int position_id){
-		executeUpdate("Delete Position with ID " + position_id, "delete from Position where position_id = " + position_id);
-	}
-	
-	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
-		try{
-			String name = "";
-			String sql = "select * from User";
-			if(userID == -1 && (email == null || email.equalsIgnoreCase("")) && 
-					(firstName == null || firstName.equalsIgnoreCase("")) && 
-					(lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
-				name = "Get All Users";
-			}else{
-				name = "Get User with ";
-				sql += " where ";
-				boolean prevSet = false;
-				
-				if(userID != -1){
-					name += "id of " + userID;
-					sql += "user_id = " + userID;
-					prevSet = true;
-				}
-				
-				// TODO: Likely change strings for searching by partial?
-				if(email != null && !email.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "email of " + email;
-					sql += "email = '" + email + "'";
-					prevSet = true;
-				}
-				
-				if(firstName != null && !firstName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "first name of " + firstName;
-					sql += "first_name = '" + firstName + "'";
-					prevSet = true;
-				}
-				
-				if(lastName != null && !lastName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "last name of " + lastName;
-					sql += "last_name = '" + lastName + "'";
-					prevSet = true;
-				}
-				
-				if(positionID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "position ID of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
-				}
-			}
-			ArrayList<User> results = executeQuery(name, sql, userResFormat);
-			if(results.size() == 0 && userID != -1){
-				System.out.println("No User found with ID " + userID);
-			}else if(results.size() > 1){
-				if(userID != -1){
-					System.out.println("Multiple Users found with ID " + userID + "! Returning null");
-					return null;
-				}else if(email != null && !email.equalsIgnoreCase("")){
-					System.out.println("Multiple Users found with email " + email + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> findAllUsers(){
-		return searchForUsers(-1, null, null, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public User getUserByID(int ID){
-		ArrayList<User> result = searchForUsers(ID, null, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public User getUserByEmail(String email){
-		ArrayList<User> result = searchForUsers(-1, email, null, null, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> getUsersByFirstName(String firstName){
-		return searchForUsers(-1, null, firstName, null, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> getUsersByLastName(String lastName){
-		return searchForUsers(-1, null, null, lastName, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForUsers instead
-	public ArrayList<User> findUsersWithPosition(int position_id){
-		return searchForUsers(-1, null, null, null, position_id);
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
-	public User changeUserPassword(final String email, final String oldPass, final String newPass) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET password = ? WHERE email = ? AND password = ? ");
-					
-					stmt.setString(1, newPass);
-					stmt.setString(2, email);
-					stmt.setString(3, oldPass);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE email = ? and password = ?");
-					
-					stmt2.setString(1, email);
-					stmt2.setString(2, newPass);
-					
-					resultSet = stmt2.executeQuery();
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with email <" + email + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
-	public User changeUserEmail(final String oldEmail, final String newEmail, final String Pass) {
-
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET email = ? WHERE email = ? AND password = ? ");
-					
-					stmt.setString(1, newEmail);
-					stmt.setString(2, oldEmail);
-					stmt.setString(3, Pass);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE email = ? and password = ?");
-					
-					stmt2.setString(1, newEmail);
-					stmt2.setString(2, Pass);
-					
-					resultSet = stmt2.executeQuery();
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-					// check if the title was found
-					if (!found) {
-						System.out.println("User with email <" + newEmail + "> was not found in the Users table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	public void archiveUser(int userID){
-		executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
-	}
-	
-	public void unarchiveUser(int userID){
-		executeUpdate("Unarchive User with ID " + userID, "update User set archive_flag = false where user_id = " + userID);
-	}
-	
-	// TODO: Change this to use Execute Update? Not sure why it gets the User back again, perhaps to update?
-	// Also this currently updates the Position in a weird way (doing a sub-transaction within the greater one)
-	public User changePosition(final int user_id, final int position_id) {
-		return executeTransaction(new Transaction<User>() {
-			@Override
-			public User execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE User SET position_id = ? WHERE user_id = ? ");
-					
-					stmt.setInt(1, position_id);
-					stmt.setInt(2, user_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM User WHERE user_id = ?");
-					
-					stmt2.setInt(1, user_id);
-					
-					resultSet = stmt2.executeQuery();
-					//if anything is found, return it in a list format
-					User result = new User(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setUserID(resultSet.getInt(1));
-						result.setEmail(resultSet.getString(2));
-						result.setPassword(resultSet.getString(3));
-						result.setFirstname(resultSet.getString(4));
-						result.setLastname(resultSet.getString(5));
-						result.setAdminFlag(resultSet.getBoolean(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-						result.setPosition(findPositionByID(resultSet.getInt(9)));
-					}
-
-
-					if (!found) {
-						System.out.println("User with ID <" + user_id + "> was not found in the User table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
-	}
-	
-	public ArrayList<SOP> searchForSOPss(int sopID, String title, String description, int priority, int version, int authorID){
-		try{
-			String name = "";
-			String sql = "select * from SOP";
-			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
-					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
-					authorID == -1){
-				name = "Get All SOPs";
-			}else{
-				name = "Get SOP with ";
-				sql += " where ";
-				boolean prevSet = false;
-				
-				if(sopID != -1){
-					name += "id of " + sopID;
-					sql += "sop_id = " + sopID;
-					prevSet = true;
-				}
-				
-				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
-				}
-				
-				// TODO: Likely need to change to search partial descriptions
-				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
-				}
-				
-				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
-				}
-				
-				if(version != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "version " + version;
-					sql += "version = " + version;
-					prevSet = true;
-				}
-				
-				if(authorID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "author_id of" + authorID;
-					sql += "author_id = " + authorID;
-					prevSet = true;
-				}
-			}
-			ArrayList<SOP> results = executeQuery(name, sql, sopResFormat);
-			if(sopID != -1){
-				if(results.size() == 0){
-					System.out.println("No SOP found with ID " + sopID);
-				}else if(results.size() > 1){
-					System.out.println("Multiple SOPs found with ID " + sopID + "! Returning null");
-					return null;
-				}
-			}
-			return results;
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findAllSOPs(){
-		return searchForSOPss(-1, null, null, -1, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public SOP findSOPbyID(int sop_id){
-		ArrayList<SOP> result = searchForSOPss(sop_id, null, null, -1, -1, -1);
-		if(result != null){
-			return result.get(0);
-		}else{
-			return null;
-		}
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByTitle(String title){
-		return searchForSOPss(-1, title, null, -1, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByPriority(int priority){
-		return searchForSOPss(-1, null, null, priority, -1, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByVersion(int version){
-		return searchForSOPss(-1, null, null, -1, version, -1);
-	}
-	
-	@Deprecated // TODO: Remove, use searchForSOPss instead
-	public ArrayList<SOP> findSOPsByAuthorID(int authorID){
-		return searchForSOPss(-1, null, null, -1, -1, authorID);
-	}
-	
-	public void archiveSOP(int sop_id){
-		executeUpdate("Archive SOP with ID " + sop_id, "update SOP set archive_flag = true where sop_id = " + sop_id);
-	}
-	
-	public void unarchiveSOP(int sop_id){
-		executeUpdate("Unarchive SOP with ID " + sop_id, "update SOP set archive_flag = false where sop_id = " + sop_id);
+	});
 	}
 	
 	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
@@ -1111,85 +671,9 @@ public class Database {
 		});
 	}
 	
-	public ArrayList<SOP> findSOPsByPosition(int position_id){
-		try{
-			return executeQuery("Get SOPs By Position", "select " + sopPieces + " from PositionSOP, SOP " + 
-					"where position_id = " + position_id, sopResFormat);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public void addSOPtoPosition(int positionID, int sopID){
 		executeUpdate("Insert Position " + positionID + " and SOP " + sopID + " connection", 
 				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
-	}
-	
-	/*
-	public void changeSOPPriority(SOP sop, int priority){
-		executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
-				"where sop_id = " + sop.getID());
-		sop.setPriority(priority);
-	}*/
-	
-	// TODO: Remove this to use about method? Not sure at the moment
-	public SOP changeSOPPriority(final int sop_id, final int priority) {
-		return executeTransaction(new Transaction<SOP>() {
-			@Override
-			public SOP execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE SOP SET priority = ? WHERE sop_id = ? ");
-					
-					stmt.setInt(1, priority);
-					stmt.setInt(2, sop_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE sop_id = ?");
-					
-					stmt2.setInt(1, sop_id);
-					
-					resultSet = stmt2.executeQuery();
-
-					SOP result = new SOP(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						
-						result.setID(resultSet.getInt(1));
-						result.setName(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
-					}
-
-
-					if (!found) {
-						System.out.println("SOP with ID <" + sop_id + "> was not found in the SOP table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
-				}
-			}
-		});
 	}
 	
 	public static void cleanDB(){
@@ -1309,6 +793,8 @@ public class Database {
 	//main method to generate the DB
 	public static void main(String[] args) throws IOException{
 		Database db = new Database();
+		dbName = "";
+		db.dropDatabase();
 		db.createDatabase();
 		db.createTables();
 		db.loadInitialData();

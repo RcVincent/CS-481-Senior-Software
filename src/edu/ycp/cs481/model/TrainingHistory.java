@@ -1,6 +1,7 @@
 package edu.ycp.cs481.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -12,7 +13,7 @@ public class TrainingHistory {
 	
 	public TrainingHistory() {
 		completedSOPs = new ArrayList<SOP>(); 
-		sopsToDo = new PriorityQueue<SOP>(); 
+		sopsToDo = new PriorityQueue<SOP>(new SOPComparator()); 
 	}
 
 	public User getUser() {
@@ -53,18 +54,6 @@ public class TrainingHistory {
 	
 	public void addAndSortCollection(List<SOP> s) {
 		sopsToDo.addAll(s);
-		/*for(SOP S: sopsToDo) {
-			if(S.isComplete()) {
-				completedSOPs.add(S);
-			}
-		}*/
-		/*for (int i = 0; i < sopsToDo.size(); i++) {
-			if(sopsToDo.element().isComplete()) {
-				SOP S = sopsToDo.remove();
-				completedSOPs.add(S);
-				//i--;
-			}
-		}*/
 		
 		int count = 0; 
 		while(!sopsToDo.isEmpty() && count != sopsToDo.size()) {
@@ -76,5 +65,20 @@ public class TrainingHistory {
 			count++; 
 	
 		}
+	}
+	
+	
+	public class SOPComparator implements Comparator<SOP>{
+
+		public int compare(SOP o1, SOP o2) {
+			if(o1.getPriority() < o2.getPriority()) {
+				return 1; 
+			}
+			else if(o1.getPriority() > o2.getPriority()) {
+				return -1; 
+			}
+			return 0; 
+		}
+
 	}
 }

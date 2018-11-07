@@ -4,7 +4,7 @@ public class User {
 	private int UserID;
 	private String Password, Email;
 	private Position position; 
-	private boolean AdminFlag, ArchiveFlag, validUser; 
+	private boolean lockedOut, ArchiveFlag, validUser; 
 	private boolean loggedin;
 	private String Firstname, Lastname; 
 	private String sessionid;
@@ -66,12 +66,12 @@ public class User {
 		ArchiveFlag = archiveFlag;
 	}
 
-	public boolean isAdminFlag() {
-		return AdminFlag;
+	public boolean isLockedOut() {
+		return lockedOut;
 	}
 
-	public void setAdminFlag(boolean adminFlag) {
-		AdminFlag = adminFlag;
+	public void setLockedOut(boolean lockedOut) {
+		this.lockedOut = lockedOut;
 	}
 
 	public boolean isValidUser() {

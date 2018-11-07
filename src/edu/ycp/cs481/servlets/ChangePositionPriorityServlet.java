@@ -17,11 +17,11 @@ public class ChangePositionPriorityServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
-		/*HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		HttpSession session = req.getSession();
+		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
-		}*/
+		}
 		
 		req.getRequestDispatcher("/change_positionPriority.jsp").forward(req, resp);
 	}
@@ -38,7 +38,7 @@ public class ChangePositionPriorityServlet extends HttpServlet {
 		String positionID = req.getParameter("PositionID");
 		int id = Integer.parseInt(positionID);
 		
-		ArrayList<Position> result = pc.searchForPosition(id, "", "", 0);
+		ArrayList<Position> result = pc.searchForPositions(id, "", "", 0);
 		Position p = result.get(0);
 	
 		String NewPriority = req.getParameter("newPriority");

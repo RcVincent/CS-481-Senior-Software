@@ -56,35 +56,10 @@ public class DatabaseTest {
 		
 	}
 	
-	@Test
-	public void testInsertPosition() {
-		
-		for(Position p: pList) {
-			db.insertPosition(p);
-			queryPos = db.findAllPositions();
-			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
-			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
-			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
-		}
-	}
-	
-	@Test
-	public void testInsertSOP() {
-		for(SOP s: sList) {
-			db.insertSOP(s);
-			querySOP = db.findAllSOPs();
-			assertEquals(s.getName(), querySOP.get(querySOP.size()-1).getName());
-			assertEquals(s.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
-			assertEquals(s.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
-			assertEquals(s.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
-			assertEquals(s.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
-			assertEquals(s.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());
-		}
-	}
-	
 	/// Testing for our initial data, to ensure that all of our inserts were parsed correctly \\\
    ///																						   \\\
-	@Test
+	// TODO: Test initial data is in correctly? (Commented out stuff as moved to controllers)
+	/*@Test
 	public void testFindAllUsers() {
 		queryUser = db.findAllUsers();
 		
@@ -120,138 +95,29 @@ public class DatabaseTest {
 			assertEquals(querySOP.get(i).getAuthorID(), new InitialData().getInitialSOPs().get(i).getAuthorID());
 			assertEquals(querySOP.get(i).getArchiveFlag(), new InitialData().getInitialSOPs().get(i).getArchiveFlag());
 		}
-	}
+	}*/
 	
-	@Test
-	public void testFindPositionByID() {
-		queryPos = db.findAllPositions();
-		
-		for(Position p : queryPos) {
-			assertEquals(p.getTitle(), db.findPositionByID(p.getID()).getTitle());
-			assertEquals(p.getDescription(), db.findPositionByID(p.getID()).getDescription());
-			assertEquals(p.getPriority(), db.findPositionByID(p.getID()).getPriority());
-		}
-	}
 	
-	@Test
-	public void testFindSOPByID() {
-		querySOP = db.findAllSOPs();
-		
-		for(SOP s : querySOP) {
-			assertEquals(s.getName(), db.findSOPbyID(s.getID()).getName());
-			assertEquals(s.getDescription(), db.findSOPbyID(s.getID()).getDescription());
-			assertEquals(s.getPriority(), db.findSOPbyID(s.getID()).getPriority());
-			assertEquals(s.getRevision(), db.findSOPbyID(s.getID()).getRevision());
-			assertEquals(s.getAuthorID(), db.findSOPbyID(s.getID()).getAuthorID());
-			assertEquals(s.getArchiveFlag(), db.findSOPbyID(s.getID()).getArchiveFlag());
-		}
-	}
-	
-	@Test
-	public void testfindSOPsByAuthorID() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByTitle() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getArchiveFlag());
-	}
-	
-	@Test // TODO: Implement after PositionSOP
-	public void testFindSOPbyPosition() {
-		querySOP = db.findAllSOPs();
-	}
-	
-	@Test
-	public void testfindSOPsByPriority() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByVersion() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
-	}
 	
 	/*@Test // TODO: Implement after PositionSOP
 	public void testFindSOPthruPosition() {
 		querySOP = db.findAllSOPs();
 	}*/
 	
-	@Test
-	public void testFindUserByPosition() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.findUsersWithPosition(u.getPosition().getID()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.findUsersWithPosition(u.getPosition().getID()).get(0).getPosition().getID());
-		}
-	}
 	
-	@Test
-	public void testGetPositionByName() {
-		queryPos = db.findAllPositions();
-		
-		for(int i = 0; i < p_size; i++) {
-			assertEquals(queryPos.get(i).getTitle(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getTitle());
-			assertEquals(queryPos.get(i).getDescription(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getDescription());
-			assertEquals(queryPos.get(i).getPriority(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getPriority());
-		}
-	}
 	
-	@Test
-	public void testGetPositionByPriority() {
-		queryPos = db.findAllPositions();
-		
-		assertEquals(queryPos.get(0).getTitle(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getTitle());
-		assertEquals(queryPos.get(0).getDescription(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getDescription());
-		assertEquals(queryPos.get(0).getPriority(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getPriority());
-
-	}
-	
-	@Test //TODO: After PositionSOP is implemented
+	/*@Test //TODO: After PositionSOP is implemented
 	public void testGetPositionBySOPID() {
 		queryPos = db.findAllPositions();
 		querySOP = db.findAllSOPs();
-		/*
 		assertEquals(queryPos.get(0).getID(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getID());
 		assertEquals(queryPos.get(0).getTitle(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getTitle());
 		assertEquals(queryPos.get(0).getDescription(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());*/
-	}
+		assertEquals(queryPos.get(0).getPriority(), db.getPositionBySOPID(querySOP.get(0).getID()).get(0).getPriority());
+	}*/
 	
+	// TODO: Move this, does it go in PositionController or UserController Test?
+	/*
 	@Test
 	public void testGetPositionByUser() {
 		queryPos = db.findAllPositions();
@@ -262,125 +128,5 @@ public class DatabaseTest {
 			assertEquals(queryPos.get(i).getDescription(), db.getPositionOfUser(queryUser.get(i).getUserID()).getDescription());
 			assertEquals(queryPos.get(i).getPriority(), db.getPositionOfUser(queryUser.get(i).getUserID()).getPriority());
 		}
-	}
-	
-	@Test
-	public void testGetUserByEmail() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUserByEmail(u.getEmail()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByEmail(u.getEmail()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByEmail(u.getEmail()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByEmail(u.getEmail()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByEmail(u.getEmail()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByEmail(u.getEmail()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByEmail(u.getEmail()).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByFirstname() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUsersByFirstName(u.getFirstname()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.getUsersByFirstName(u.getFirstname()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.getUsersByFirstName(u.getFirstname()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.getUsersByFirstName(u.getFirstname()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUsersByFirstName(u.getFirstname()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUsersByFirstName(u.getFirstname()).get(0).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByLastname() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUsersByLastName(u.getLastname()).get(0).getEmail());
-			assertEquals(u.getPassword(), db.getUsersByLastName(u.getLastname()).get(0).getPassword());
-			assertEquals(u.getFirstname(), db.getUsersByLastName(u.getLastname()).get(0).getFirstname());
-			assertEquals(u.getLastname(), db.getUsersByLastName(u.getLastname()).get(0).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUsersByLastName(u.getLastname()).get(0).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUsersByLastName(u.getLastname()).get(0).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUsersByLastName(u.getLastname()).get(0).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testGetUserByID() {
-		queryUser = db.findAllUsers();
-		
-		for(User u: queryUser) {
-			assertEquals(u.getEmail(), db.getUserByID(u.getUserID()).getEmail());
-			assertEquals(u.getPassword(), db.getUserByID(u.getUserID()).getPassword());
-			assertEquals(u.getFirstname(), db.getUserByID(u.getUserID()).getFirstname());
-			assertEquals(u.getLastname(), db.getUserByID(u.getUserID()).getLastname());
-			assertEquals(u.isAdminFlag(), db.getUserByID(u.getUserID()).isAdminFlag());
-			assertEquals(u.isArchiveFlag(), db.getUserByID(u.getUserID()).isArchiveFlag());
-			assertEquals(u.getPosition().getID(), db.getUserByID(u.getUserID()).getPosition().getID());
-		}
-	}
-	
-	@Test
-	public void testDeletePosition() {
-		db.deletePosition(3);
-		queryPos = db.findAllPositions();
-
-		assertNotEquals(queryPos.get(2).getID(), pList.get(2).getID());
-		assertNotEquals(queryPos.get(2).getDescription(), pList.get(2).getDescription());
-		assertNotEquals(queryPos.get(2).getTitle(), pList.get(2).getTitle());
-	}
-	
-	@Test // TODO: this breaks testInsertPosition and testFindAllPositions //
-	public void testChangePositionPriority() {
-		/*queryPos = db.findAllPositions();
-		int insert_id = db.insertPosition(queryPos.get(0));
-		
-		Position changedPriority = db.changePositionPriority(queryPos.get(insert_id - 1).getID(), 2);
-		assertEquals(2, changedPriority.getPriority());
-		*/
-	}
-	
-	@Test
-	public void testChangeUserPassword() {
-		
-	}
-	
-	@Test
-	public void testChangeUserEmail() {
-		
-	}
-	
-	@Test
-	public void testArchiveUser() {
-		
-	}
-	
-	@Test
-	public void testArchiveSOP() {
-		
-	}
-	
-	@Test
-	public void testChangePosition() {
-		
-	}
-	
-	@Test
-	public void testRevertSOP() {
-		
-	}
-	
-	@Test
-	public void testAddSOPtoPosition() {
-		
-	}
-	
-	@Test
-	public void testChangeSOPPriority() {
-		
-	}
+	}*/
 }

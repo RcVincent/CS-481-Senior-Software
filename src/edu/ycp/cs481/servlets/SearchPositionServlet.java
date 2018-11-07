@@ -18,7 +18,7 @@ public class SearchPositionServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -54,7 +54,7 @@ public class SearchPositionServlet extends HttpServlet{
 			prio = Integer.parseInt(priority); 
 		}
 		
-		ArrayList<Position> result = pc.searchForPosition(searchID, title, desc, prio);
+		ArrayList<Position> result = pc.searchForPositions(searchID, title, desc, prio);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");

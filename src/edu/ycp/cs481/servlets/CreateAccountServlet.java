@@ -1,12 +1,15 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
 public class CreateAccountServlet extends HttpServlet{
@@ -49,6 +52,12 @@ public class CreateAccountServlet extends HttpServlet{
 			// TODO: Check that it's a valid email
 			goodUser = false;
 			req.setAttribute("emailError", "Please enter a valid email!");
+		}else{
+			ArrayList<User> users = userControl.searchForUsers(-1, email, null, null, -1);
+			if(users != null && users.size() > 0){
+				goodUser = false;
+				req.setAttribute("emailError", "Email is already taken");
+			}
 		}
 		
 		if(!email.equals(emailConfirm)){

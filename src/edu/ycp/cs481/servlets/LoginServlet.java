@@ -51,15 +51,7 @@ public class LoginServlet extends HttpServlet{
 			User u = user.get(0);
 			HttpSession session = req.getSession();
 			session.setAttribute("user_id", u.getUserID());
-			u.setSessionid(session.getId());
-			
-			// TODO: In the future, all users would go to a "user home" and in it, we would only give the options
-			// that they can actually do
-			if(u.isAdminFlag()){
-				resp.sendRedirect(req.getContextPath() + "/index");
-			}else{
-				resp.sendRedirect(req.getContextPath() + "/MainPage");
-			}
+			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}	
 		
 	}

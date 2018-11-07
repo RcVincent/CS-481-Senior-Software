@@ -17,7 +17,8 @@ public class TrainingHistoryTest {
 	private List<SOP> adminReqs, userReqs, managerReqs; 
 	private List<User> userList; 
 	
-	public TrainingHistoryTest() {
+	@Before
+	public void SetUp() {
 		userList = new ArrayList<User>(); 
 		
 		AdminHist = new TrainingHistory(); 
@@ -30,7 +31,7 @@ public class TrainingHistoryTest {
 		
 		//create 3 new users for testing two valid one non valid 
 		admin = new User(); 
-		admin.setAdminFlag(true);
+		//admin.setAdminFlag(true);
 		admin.setArchiveFlag(false);
 		admin.setEmail("oscarWinner@gmail.com");
 		admin.setPassword("legendary");
@@ -40,7 +41,7 @@ public class TrainingHistoryTest {
 		//admin.setPosition(adminP);
 		
 		user = new User();
-		user.setAdminFlag(false);
+		//user.setAdminFlag(false);
 		user.setArchiveFlag(true);
 		user.setUserID(33);
 		user.setEmail("zod@krypton.com");
@@ -50,7 +51,7 @@ public class TrainingHistoryTest {
 		//user.setPosition(userP);
 		
 		manager = new User(); 
-		manager.setAdminFlag(false);
+		//manager.setAdminFlag(false);
 		manager.setArchiveFlag(false);
 		manager.setEmail("headOfTheClub@SOA.com");
 		manager.setPassword("weRunGuns");
