@@ -38,11 +38,15 @@ public class SystemSnifferController {
 			if(!i.next().isComplete()) {
 				System.out.println("There is an incomplete SOP. SOP id is" + i.next().getID());
 				//send a message to user and their manager 
+				String recipient = t.getUser().getEmail();
+				String message = "You have an SOP that is not completed. Please rectify this.";
+				Messenger m = new Messenger(recipient, message); 
+				
 				return false;  
 			}
 			else {
 				System.out.println("There is nothing in the priority queue that is incomplete");
-				Messenger m = new Messenger(); 
+
 				//i.remove();
 				t.getCompletedSOPs().add(i.next());
 			}

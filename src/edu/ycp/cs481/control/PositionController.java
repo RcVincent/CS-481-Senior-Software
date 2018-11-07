@@ -10,9 +10,9 @@ import edu.ycp.cs481.model.SOP;
 public class PositionController{
 	private Database db = new Database();
 
-	public Integer insertPosition(Position p){
+	public Integer insertPosition(String positionTitle, String description, int priority){
 		return db.insertAndGetID("Position", "position_id", new String[]{"title", "description", "priority"},
-				new String[]{p.getTitle(), p.getDescription(), String.valueOf(p.getPriority())});
+				new String[]{positionTitle, description, String.valueOf(priority)});
 	}
 
 	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){

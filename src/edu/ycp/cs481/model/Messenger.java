@@ -7,6 +7,11 @@ import javax.mail.internet.*;
 
 //send_email_gmail
 public class Messenger {
+	
+	public Messenger(String recipient, String message) {
+		 
+	}	
+	
 	public static void main(String[] args) {
 		final String username = "rvincent@ycp.edu";
 		final String password = "Cdcs1994bkk";

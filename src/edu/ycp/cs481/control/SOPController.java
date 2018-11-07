@@ -10,11 +10,11 @@ import edu.ycp.cs481.model.SOP;
 public class SOPController{
 	private Database db = new Database();
 
-	public Integer insertSOP(SOP s){
+	public Integer insertSOP(String title, String description, int priority, int version, int authorID,  boolean isArchived){
 		return db.insertAndGetID("SOP", "sop_id", 
 				new String[]{"title", "description", "priority", "version", "author_id", "archive_flag"}, 
-				new String[]{s.getName(), s.getDescription(), String.valueOf(s.getPriority()), String.valueOf(s.getRevision()), 
-						String.valueOf(s.getAuthorID()), String.valueOf(s.getArchiveFlag())});
+				new String[]{title, description, String.valueOf(priority), String.valueOf(version), 
+						String.valueOf(authorID), String.valueOf(isArchived)});
 	}
 	
 	public ArrayList<SOP> searchForSOPs(int sopID, String title, String description, int priority, int version, int authorID){

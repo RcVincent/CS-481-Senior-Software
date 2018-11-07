@@ -115,12 +115,12 @@ public class UserControllerTest {
 		
 	}
 	
-	@Test
+	/*@Test
 	public void testValidateEmail() {
 		assertEquals(true, uc.validateEmail(user1.getEmail()));
 		assertEquals(true, uc.validateEmail(user2.getEmail()));
 		assertEquals(false, uc.validateEmail(user3.getEmail()));
-	}
+	}*/
 	
 	@Test
 	public void testvalidateLogin() {
@@ -334,9 +334,9 @@ public class UserControllerTest {
 		String oldEmail = user2.getEmail();
 		assertEquals("rookie@email.com", user2.getEmail());
 		
-		if(uc.validateEmail(newEmail)) {
+		/*if(uc.validateEmail(newEmail)) {
 			uc.changeUserEmail(user2.getUserID(), oldEmail, newEmail);
-		}
+		}*/
 		
 		assertEquals("lelelel@tcp.com", user2.getEmail());
 	}
