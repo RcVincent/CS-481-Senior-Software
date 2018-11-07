@@ -22,24 +22,6 @@ public class CreatePositionServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.out.println("Create Position: doget");
-<<<<<<< HEAD
-		//HttpSession session = req.getSession();
-		
-		//get session info
-		//System.out.println(session.getAttribute("user_id"));
-		
-		//if (session.getAttribute("user_id") == null) {
-			// user is not logged in, or the session expired
-		//	resp.sendRedirect(req.getContextPath() + "/login");
-		//	return;
-		//}
-		
-		/*if(session.getAttribute("isAdmin").equals("User") || 
-			session.getAttribute("isAdmin").equals("user")){
-			resp.sendRedirect(req.getContextPath() + "/MainPage");
-
-		}*/
-=======
 		
 		HttpSession session = req.getSession();
 		if (session.getAttribute("user_id") == null) {
@@ -48,7 +30,7 @@ public class CreatePositionServlet extends HttpServlet {
 		} else {
 			req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
 		}	
->>>>>>> master
+
 		
 	}
 	

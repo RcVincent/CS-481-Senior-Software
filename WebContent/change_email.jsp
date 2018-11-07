@@ -17,13 +17,8 @@
 				
 				
 </form>
-<<<<<<< HEAD
 
-</body>
-=======
 <p>Want to head back to the index? <a href="index">Index</a></p>
 <p><b>Note:</b> The characters in a password field are masked (shown as asterisks or circles).</p>
 	</body>
->>>>>>> master
-	
 </html>	

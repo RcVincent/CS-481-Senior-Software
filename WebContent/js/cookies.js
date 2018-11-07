@@ -1,7 +1,7 @@
 
 function setCookie(cname,cvalue,exhours) {
     var d = new Date();
-    d.setTime(d.getTime() + (exhours*60*60*1000));
+    d.setTime(d.getTime() + (exhours*24*60*60*1000));
     var expires = "expires=" + d.toGMTString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
@@ -37,7 +37,7 @@ function checkCookieLogin() {
     var user=getCookie("username");
     if (user != "") {
         alert("Your currently logged in as " + user);
-        window.location.href="index.jsp";
+        window.location.href="index";
     } 
     else {
         

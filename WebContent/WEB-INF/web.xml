@@ -40,42 +40,10 @@
   	<servlet-name>AccountSettings</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.AccountSettingsServlet</servlet-class>
   </servlet>
-  <servlet-mapping>
-<<<<<<< HEAD
-  	<servlet-name>ChangeEmail</servlet-name>
-  	<url-pattern>/change_email</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>ChangePassword</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.ChangePasswordServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>ChangePassword</servlet-name>
-  	<url-pattern>/change_password</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>RetryChangePassword</servlet-name>	
-  	<servlet-class>edu.ycp.cs481.servlets.RetryChangePasswordServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>RetryChangePassword</servlet-name>
-  	<url-pattern>/retry_change_password</url-pattern>
-  </servlet-mapping>
-  
-    <servlet>
-  	<servlet-name>RetryChangeEmail</servlet-name>	
-  	<servlet-class>edu.ycp.cs481.servlets.RetryChangeEmailServlet</servlet-class>
-  </servlet>
   
   <servlet-mapping>
-  	<servlet-name>RetryChangeEmail</servlet-name>
-  	<url-pattern>/retry_changeemail</url-pattern>
-=======
   	<servlet-name>AccountSettings</servlet-name>
   	<url-pattern>/account_settings</url-pattern>
->>>>>>> master
   </servlet-mapping>
   
   <servlet>

@@ -13,22 +13,11 @@
 <h1>Login</h1>
 
 
-<!--  Setting up the session data we don't have this time through php
-<?php 
-$SESSION["email"];
-$SESSION["userID"];
-$SESSION["password"];
-$SESSION["firstname"];
-$SESSION["lastname"];
-$SESSION["sessionid"];
-?>
--->
-
 
 
 <div class="fluid-container">
 	
-	<form  class="form-horizontal" method="post" onsubmit="setCookie('username',document.getElementById('email').value,5)">
+	<form  class="form-horizontal" method="post" onsubmit="setCookie('username',document.getElementById('email').value,2)">
 		<c:if test="${!empty errorMessage}">
 			<div class="row">
 				<div class="col">
@@ -48,9 +37,6 @@ $SESSION["sessionid"];
 			<div class="col">
 				<button type="submit" class="btn btn-info">Submit</button>
 				
-				
-				<!--  <input type="hidden" name="email" value="user.getEmail">	-->		
-				<!--  <input type="hidden" name="sessionid" value="sessionid.getSessionid"> -> -->
 			</div>
 		</div>
 	</form>

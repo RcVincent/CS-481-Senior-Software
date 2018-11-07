@@ -6,7 +6,8 @@
 	<title>CTM mkii - Account Settings</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
-<body>
+<script src="./js/cookies.js"></script>
+<body onload="checkCookie()">
 <h1>Account Settings</h1>
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">

@@ -3,9 +3,7 @@
 <html>
 	<head>
       <title>Create Position</title>
-		<style type = "text/css">
-		
-		</style>
+		<link rel="stylesheet" href="css/bootstrap.css">
 		
 	</head>
 

@@ -6,7 +6,8 @@
 	<title>CTM mkii - User Home</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
-<body>
+<script src="./js/cookies.js"></script>
+<body onload="checkCookie()">
 <h1>Home</h1>
 <div class="fluid-container">
 	<div class="row">
