@@ -18,12 +18,12 @@ public class ChangeSOPPriorityServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
-		/*HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		HttpSession session = req.getSession();
+		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}*/
-		req.getRequestDispatcher("/change_sopPriority.jsp").forward(req, resp);
+		} else {
+			req.getRequestDispatcher("/change_sopPriority.jsp").forward(req, resp);
+		}
 	}
 	
 	@Override

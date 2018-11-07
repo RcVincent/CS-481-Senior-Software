@@ -71,7 +71,7 @@ public class CreateSOPServlet extends HttpServlet{
 			req.setAttribute("priorityError", "Please enter a valid priority");
 		} else {
 			priority = Integer.parseInt(Priority);
-			if(priority <= 0) {
+			if(priority <= 0 || priority > 10) {
 				goodSOP = false;
 				req.setAttribute("conversionErr", "There was an error parsing from string to integer");
 			}

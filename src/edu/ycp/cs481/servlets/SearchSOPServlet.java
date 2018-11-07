@@ -17,7 +17,7 @@ public class SearchSOPServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
-		if(session.getAttribute("email") == null) {
+		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
