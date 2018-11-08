@@ -56,10 +56,17 @@
 		</div>
 	</div>
 </div>
-<canvas id="canvas" width="250" height="250"
-	style="background-color:white">
-	
-</canvas>
+<div class="row align-items-center ">
+
+	<div class="col-md-3 offset-md-4">
+		<canvas id="canvas" width="250" height="250"
+			style="background-color:white">
+		</canvas>
+	</div>
+	<div class="col">
+			<button class="btn btn-success" id=punchButton>Clock in</button>
+	</div>
+</div>
 </body>
 <script>
 	var canvas = document.getElementById("canvas");
@@ -68,5 +75,6 @@
 	ctx.translate(radius, radius);
 	radius = radius * 0.90
 	setInterval(drawClock, 1000);
+	//if user is clocked in use document.getElementById("punchButton").innerHTML="Clock out";
 </script>
 </html>
