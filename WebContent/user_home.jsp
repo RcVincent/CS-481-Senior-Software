@@ -9,50 +9,54 @@
 <script src="./js/cookies.js"></script>
 <script src="./js/clock.js"></script>
 <body onload="checkCookie()">
-<h1>Home</h1>
+
 	
 <div class="fluid-container">
+	<div class="header" style="background-color:#A0B8C4; padding:6px;">
+		<h1>Home</h1>
+		<div class="row">
+			<div class="col-10">
+		
+			</div>
+			<div class="col-2">
+				<form method="post">
+					<button type="submit" name="logout" class="btn btn-danger" value="logout">Logout</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 	<div class="row">
-		<div class="col-10">
+		<div class="col">
 		
 		</div>
-		<div class="col-2">
-			<form method="post">
-				<button type="submit" name="logout" class="btn btn-info" value="logout">Logout</button>
-			</form>
+		<div class="col text-center">
+				<a href="account_settings" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Account Settings</a>
+		</div>
+		<div class="col">
+		
+		</div>
+	</div>
+	<div class="row">
+		<div class="col text-center">
+			<a href="create_account" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Create Account</a>
+		</div>
+		<div class="col text-center">
+			<a href="create_position" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Create Position</a>
+		</div>
+		<div class="col text-center">
+			<a href="create_sop" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Create SOP</a>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-		
-		</div>
-		<div class="col text-center">
-				<a href="account_settings" class="btn btn-info btn-block" role="button">Account Settings</a>
+			<a href="search_users" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Search Users</a>
 		</div>
 		<div class="col">
-		
-		</div>
-	</div>
-	<div class="row">
-		<div class="col text-center">
-			<a href="create_account" class="btn btn-info btn-block" role="button">Create Account</a>
-		</div>
-		<div class="col text-center">
-			<a href="create_position" class="btn btn-info btn-block" role="button">Create Position</a>
-		</div>
-		<div class="col text-center">
-			<a href="create_sop" class="btn btn-info btn-block" role="button">Create SOP</a>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col">
-			<a href="search_users" class="btn btn-info btn-block" role="button">Search Users</a>
+			<a href="search_positions" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Search Positions</a>
 		</div>
 		<div class="col">
-			<a href="search_positions" class="btn btn-info btn-block" role="button">Search Positions</a>
-		</div>
-		<div class="col">
-			<a href="search_sops" class="btn btn-info btn-block" role="button">Search SOPs</a>
+			<a href="search_sops" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Search SOPs</a>
 		</div>
 	</div>
 </div>

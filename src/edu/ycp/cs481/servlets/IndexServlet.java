@@ -15,14 +15,18 @@ public class IndexServlet extends HttpServlet{
 		
 		/*
 		HttpSession session = req.getSession();
+		/*
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-		}else{
+		}
+		else{
 			System.out.println("User_ID: " + session.getAttribute("user_id"));
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}
 		*/
+
 		resp.sendRedirect(req.getContextPath() + "/user_home");
+
 	}
 	
 	@Override
