@@ -212,6 +212,12 @@ public class UserController{
 		user.setPosition(pc.getPositionByUser(user.getUserID()));
 	}
 	
+	public void changeEmployeeID(int userID, int employeeID) {
+		db.executeUpdate(
+				"Change User " + userID + "'s employee_id to " + employeeID,
+				"update User set employee_id = " + employeeID + " where user_id = " + userID);
+	}
+	
 	public static void logout(HttpServletRequest req){
 		req.getSession().removeAttribute("user_id");
 	}

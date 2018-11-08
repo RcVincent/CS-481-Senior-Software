@@ -304,6 +304,7 @@ public class Database {
 				  "archive_flag TINYINT NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
 				  "position_id INT NOT NULL, " +
+				  "employee_id INT NOT NULL DEFAULT 0, " +
 				  "PRIMARY KEY (user_id), " +
 				  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
 				  "INDEX fk_User_Position_idx (position_id ASC) VISIBLE, " +
