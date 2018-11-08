@@ -17,6 +17,8 @@ import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.UserController;
 
 public class Database {
+	public String userPieces = "User.user_id, User.email, User.password, User.first_name, User.last_name,"
+							+ " User.locked_out, User.archive_flag, User.create_time, User.position_id, User.employee_id";
 	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
 	public static String dbName = "cs481db";
@@ -202,6 +204,10 @@ public class Database {
 	
 	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
 		return userResFormat;
+	}
+	
+	public String getUserPieces() {
+		return userPieces;
 	}
 	
 	public QueryResultFormat<ArrayList<Position>> getPosResFormat(){

@@ -169,6 +169,17 @@ public class UserController{
 		} 
 		return false;
 	}
+	
+	public ArrayList<User> listSubordinates(int managerID) {
+		try{
+			return db.executeQuery("Get Subordinates of Manager",
+					"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + managerID,
+					db.getUserResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public boolean SOPisCompleted(int userID, int sopID) {
 		try{
