@@ -15,13 +15,16 @@ public class UserHomeServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("User Home Servlet: doGet");
 		HttpSession session = req.getSession();
+		/*
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
 			// TODO: Check for admin/privileges check
 			// Plan is to put attribute in so that user_home.jsp can check that for what to display and not display
-			req.getRequestDispatcher("/user_home.jsp").forward(req, resp);
+			
 		}
+		*/
+		req.getRequestDispatcher("/user_home.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -32,5 +35,12 @@ public class UserHomeServlet extends HttpServlet{
 			UserController.logout(req);
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}
+		
+		/*
+		 if(req.getParameter("clock").equalsIgnoreCase("in")){
+		 	user.clockIn();} 
+		  if(req.getParameter("clock").equalsIgnoreCase("out")){
+		 	user.clockOut();} 
+		 */
 	}
 }

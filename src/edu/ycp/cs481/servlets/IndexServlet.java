@@ -13,6 +13,7 @@ public class IndexServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Index Servlet: doGet");
 		
+		/*
 		HttpSession session = req.getSession();
 		/*
 		if(session.getAttribute("user_id") == null){
@@ -23,6 +24,9 @@ public class IndexServlet extends HttpServlet{
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}
 		*/
+
+		resp.sendRedirect(req.getContextPath() + "/user_home");
+
 	}
 	
 	@Override

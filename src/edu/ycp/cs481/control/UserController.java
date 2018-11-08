@@ -215,4 +215,27 @@ public class UserController{
 	public static void logout(HttpServletRequest req){
 		req.getSession().removeAttribute("user_id");
 	}
+	
+	public void clockIn(Integer hours,Integer min){
+		//db call to put a clock in time in the database
+		String h = hours.toString();
+		String m = min.toString();
+		if(hours<10) {h="0"+h;}
+		if(min<10) {m="0"+m;}
+		System.out.println("CLOCKED IN: "+h+":"+m);
+	}
+	
+	public String clockOut(){
+		int shifthour=0;
+		int shiftmin=0;
+		int totalhour=0;
+		int totalmin=0;
+		//db method pulling 
+		return "Your last shift was "+ shifthour +" hours and "+ shiftmin + "minutes. "
+				+ "Your total hours are"+ totalhour +" hours and "+ totalmin + "minutes.";
+	}
+	
+	public String RemoveHours(int userID){
+		return"";
+	}
 }

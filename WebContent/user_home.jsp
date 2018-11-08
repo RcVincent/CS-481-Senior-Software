@@ -7,8 +7,10 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <script src="./js/cookies.js"></script>
+<script src="./js/clock.js"></script>
 <body onload="checkCookie()">
 <h1>Home</h1>
+	
 <div class="fluid-container">
 	<div class="row">
 		<div class="col-10">
@@ -54,5 +56,17 @@
 		</div>
 	</div>
 </div>
+<canvas id="canvas" width="250" height="250"
+	style="background-color:white">
+	
+</canvas>
 </body>
+<script>
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var radius = canvas.height / 2;
+	ctx.translate(radius, radius);
+	radius = radius * 0.90
+	setInterval(drawClock, 1000);
+</script>
 </html>
