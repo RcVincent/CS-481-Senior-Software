@@ -53,7 +53,7 @@ public class CreateAccountServlet extends HttpServlet{
 			goodUser = false;
 			req.setAttribute("emailError", "Please enter a valid email!");
 		}else{
-			ArrayList<User> users = userControl.searchForUsers(-1, email, null, null, -1);
+			ArrayList<User> users = userControl.searchForUsers(-1, email, null, null, -1, -1);
 			if(users != null && users.size() > 0){
 				goodUser = false;
 				req.setAttribute("emailError", "Email is already taken");

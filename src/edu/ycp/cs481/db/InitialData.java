@@ -27,8 +27,8 @@ public class InitialData {
 		pList = new ArrayList<Position>();
 		sList = new ArrayList<SOP>();
 		p1reqs = new ArrayList<SOP>();
-		perms = new String[5];
-		permNames = new String[5];			// start with 2, work our way up. We won't need that many.
+		perms = new String[6];
+		permNames = new String[6];			// start with 2, work our way up. We won't need that many.
 		
 		
 		p1 = new Position();
@@ -122,21 +122,23 @@ public class InitialData {
 		pList.add(p2);
 		pList.add(p3);
 		
-		permNames[0] = "Admin";
-		perms[0] = "User can view and modify any Position, SOP, or User";
+		permNames[0] = "All";
+		perms[0] = "all";
 		
-		permNames[1] = "Create Position/SOP";
-		perms[1] = "User can create new Positions and SOPs";
+		permNames[1] = "Create Position";
+		perms[1] = "createPosition";
 
-		permNames[2] = "Search Position/SOP/User";
-		perms[2] = "User can search for other Positions, SOPs, Users";
+		permNames[2] = "Create SOP";
+		perms[2] = "createSOP";
 		
-		permNames[3] = "View Position/SOP";
-		perms[3] = "User can view their Position and SOPs";
+		permNames[3] = "Create User";
+		perms[3] = "createUser";
 		
-		permNames[4] = "Locked out";
-		perms[4] = "User is unable to access the system";
+		permNames[4] = "Have Subordinates";
+		perms[4] = "haveSubordinates";
 		
+		permNames[5] = "Search Users";
+		perms[5] = "searchUsers";
 		
 		permIds = new int[pList.size()];
 		

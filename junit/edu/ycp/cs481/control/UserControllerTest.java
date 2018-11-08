@@ -144,7 +144,7 @@ public class UserControllerTest {
 	public void testSearchByFName() {
 		String searchFirstName = "Stan";
 		
-		List<User> testList = uc.searchForUsers(0, "", searchFirstName, "", 0);
+		List<User> testList = uc.searchForUsers(0, "", searchFirstName, "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with firstname" + searchFirstName);
@@ -165,7 +165,7 @@ public class UserControllerTest {
 	public void testSearchByLName() {
 		String searchLastName = "Smith";
 		
-		List<User> testList = uc.searchForUsers(0, "", "", searchLastName, 0);
+		List<User> testList = uc.searchForUsers(0, "", "", searchLastName, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with lastname" + searchLastName);
@@ -191,7 +191,7 @@ public class UserControllerTest {
 		String firstname = "Stan";
 		String lastname = "Smith"; 
 		
-		List<User> testList = uc.searchForUsers(0, "", firstname, lastname, 0);
+		List<User> testList = uc.searchForUsers(0, "", firstname, lastname, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with first name " + firstname + " and last name " + lastname);
@@ -212,7 +212,7 @@ public class UserControllerTest {
 	public void testSearchByID() {
 		int searchID = 12; 
 		
-		List<User> testList = uc.searchForUsers(searchID, "", "", "", 0);
+		List<User> testList = uc.searchForUsers(searchID, "", "", "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with ID " + searchID);
@@ -234,7 +234,7 @@ public class UserControllerTest {
 	public void testSearchByPositionID() {
 		int searchPosID = 1;
 		
-		List<User> testList = uc.searchForUsers(0, "", "", "", searchPosID);
+		List<User> testList = uc.searchForUsers(0, "", "", "", searchPosID, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with position ID"+ searchPosID);

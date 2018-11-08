@@ -34,7 +34,7 @@ public class UserController{
 						String.valueOf(positionID)});
 	}
 
-	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
+	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID, int employeeID){
 		try{
 			String name = "";
 			String sql = "select * from User";
@@ -93,6 +93,16 @@ public class UserController{
 					sql += "position_id = " + positionID;
 					prevSet = true;
 				}
+				
+				if(employeeID != -1) {
+					if(prevSet) {
+						name += " and ";
+						sql += " and "; 
+					}
+					name += "employee ID of " + employeeID;
+					sql += "employee_id = " + employeeID;
+					prevSet = true;
+				}
 			}
 			ArrayList<User> results = db.executeQuery(name, sql, db.getUserResFormat());
 			if(results.size() == 0 && userID != -1){
@@ -125,7 +135,7 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, int permissionID) {
 		try{
-			ArrayList<User> u = searchForUsers(userID, null, null, null, -1);
+			ArrayList<User> u = searchForUsers(userID, null, null, null, -1, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + permissionID;
@@ -158,6 +168,17 @@ public class UserController{
 			e.printStackTrace();
 		} 
 		return false;
+	}
+	
+	public ArrayList<User> listSubordinates(int managerID) {
+		try{
+			return db.executeQuery("Get Subordinates of Manager",
+					"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + managerID,
+					db.getUserResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public boolean SOPisCompleted(int userID, int sopID) {
@@ -210,6 +231,12 @@ public class UserController{
 				"update User set position_id = " + positionID + " where user_id = " + user.getUserID());
 		PositionController pc = new PositionController();
 		user.setPosition(pc.getPositionByUser(user.getUserID()));
+	}
+	
+	public void changeEmployeeID(int userID, int employeeID) {
+		db.executeUpdate(
+				"Change User " + userID + "'s employee_id to " + employeeID,
+				"update User set employee_id = " + employeeID + " where user_id = " + userID);
 	}
 	
 	public static void logout(HttpServletRequest req){

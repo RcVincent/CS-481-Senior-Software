@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet{
 		if(email == null || password == null || email.equals("") || password.equals("")) {
 			errorMessage = "Please specify both email and password"; 
 		}else{
-			user = uc.searchForUsers(-1, email, null, null, -1);
+			user = uc.searchForUsers(-1, email, null, null, -1, -1);
 			if(user == null || user.size() == 0 || !uc.authenticate(user.get(0), password)){
 				errorMessage = "Incorrect email or password";
 			}

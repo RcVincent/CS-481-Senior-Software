@@ -137,8 +137,20 @@ public class PositionController{
 		return db.changePositionPermission(position_id, perm_id);
 	}
 	
-	public boolean hasRequirement(int positionID, int sopID) {
-		// TODO:
+	public boolean hasRequirement(int positionID) {
+		try{
+			String name = "";
+			String sql = "select * from PositionSOP where position_id = " + positionID;
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This Position has no requirements");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
 		return false;
 	}
 }

@@ -59,8 +59,8 @@ public class SearchUsersServlet extends HttpServlet {
 		else {
 			posSearchID = Integer.parseInt(pID);
 		}
-		
-		ArrayList<User> result = uc.searchForUsers(searchID, email, fname, lname, posSearchID);
+		//TODO: Factor this for employee_id?
+		ArrayList<User> result = uc.searchForUsers(searchID, email, fname, lname, posSearchID, -1);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");
