@@ -24,7 +24,7 @@ public class AccountSettingsServlet extends HttpServlet{
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
 			UserController uc = new UserController();
-			ArrayList<User> user = uc.searchForUsers((int) session.getAttribute("user_id"), null, null, null, -1);
+			ArrayList<User> user = uc.searchForUsers((int) session.getAttribute("user_id"), null, null, null, -1, -1);
 			session.setAttribute("email", user.get(0).getEmail());
 			req.getRequestDispatcher("/account_settings.jsp").forward(req, resp);
 		}
@@ -38,7 +38,7 @@ public class AccountSettingsServlet extends HttpServlet{
 		String action = req.getParameter("doStuff");
 		
 		UserController uc = new UserController();
-		ArrayList<User> users = uc.searchForUsers((int) session.getAttribute("user_id"), null, null, null, -1);
+		ArrayList<User> users = uc.searchForUsers((int) session.getAttribute("user_id"), null, null, null, -1, -1);
 		User user = users.get(0);
 		
 		if(action.equalsIgnoreCase("changeEmail")){

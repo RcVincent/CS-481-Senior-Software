@@ -34,7 +34,7 @@ public class UserController{
 						String.valueOf(positionID)});
 	}
 
-	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID){
+	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID, int employeeID){
 		try{
 			String name = "";
 			String sql = "select * from User";
@@ -93,6 +93,16 @@ public class UserController{
 					sql += "position_id = " + positionID;
 					prevSet = true;
 				}
+				
+				if(employeeID != -1) {
+					if(prevSet) {
+						name += " and ";
+						sql += " and "; 
+					}
+					name += "employee ID of " + employeeID;
+					sql += "employee_id = " + employeeID;
+					prevSet = true;
+				}
 			}
 			ArrayList<User> results = db.executeQuery(name, sql, db.getUserResFormat());
 			if(results.size() == 0 && userID != -1){
@@ -125,7 +135,7 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, int permissionID) {
 		try{
-			ArrayList<User> u = searchForUsers(userID, null, null, null, -1);
+			ArrayList<User> u = searchForUsers(userID, null, null, null, -1, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + permissionID;
