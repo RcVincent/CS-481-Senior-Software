@@ -27,7 +27,7 @@ function drawFace(ctx, radius) {
   var grad;
   ctx.beginPath();
   ctx.arc(0, 0, radius, 0, 2*Math.PI);
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = '#A0B8C4';
   ctx.fill();
   grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
   grad.addColorStop(0, '#17a2b8');
@@ -47,7 +47,7 @@ function drawFace(ctx, radius) {
 function drawNumbers(ctx, radius) {
   var ang;
   var num;
-  ctx.font = radius*0.15 + "px arial";
+  ctx.font = "bold "+radius*0.18 + "px arial";
   ctx.textBaseline="middle";
   ctx.textAlign="center";
   for(num = 1; num < 13; num++){
@@ -84,7 +84,7 @@ function drawTime(ctx, radius){
 function drawHand(ctx, pos, length, width) {
     ctx.beginPath();
     ctx.lineWidth = width;
-    ctx.lineCap = "round";
+    ctx.lineCap = "square";
     ctx.moveTo(0,0);
     ctx.rotate(pos);
     ctx.lineTo(0, -length);

@@ -13,8 +13,6 @@
 <h1>Login</h1>
 
 
-
-
 <div class="fluid-container">
 	
 	<form  class="form-horizontal" method="post" onsubmit="setCookie('username',document.getElementById('email').value,2)">
