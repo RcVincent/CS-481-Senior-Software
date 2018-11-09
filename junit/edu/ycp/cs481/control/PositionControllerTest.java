@@ -91,20 +91,8 @@ public class PositionControllerTest {
 		sopList.add(sop2);
 	}
 	
-	// TODO: Rework this for PositionController
-	/*@Test
-	public void testInsertPosition() {
-		
-		for(Position p: pList) {
-			db.insertPosition(p);
-			queryPos = db.findAllPositions();
-			assertEquals(p.getTitle(), queryPos.get(queryPos.size()-1).getTitle());
-			assertEquals(p.getDescription(), queryPos.get(queryPos.size()-1).getDescription());
-			assertEquals(p.getPriority(), queryPos.get(queryPos.size()-1).getPriority());
-		}
-	}*/
 	
-	//@Test
+	@Test
 	public void testGetApplicantsSOP() {
 		List<SOP> testList = new ArrayList<SOP>(); 
 		
@@ -156,50 +144,6 @@ public class PositionControllerTest {
 		assertEquals(1, p2.getPriority()); 
 	}
 	
-	// TODO: Potentially use these in testing searchForPositions?
-	/*
-	@Test
-	public void testFindPositionByID() {
-		queryPos = db.findAllPositions();
-		
-		for(Position p : queryPos) {
-			assertEquals(p.getTitle(), db.findPositionByID(p.getID()).getTitle());
-			assertEquals(p.getDescription(), db.findPositionByID(p.getID()).getDescription());
-			assertEquals(p.getPriority(), db.findPositionByID(p.getID()).getPriority());
-		}
-	}
-	
-	@Test
-	public void testGetPositionByName() {
-		queryPos = db.findAllPositions();
-		
-		for(int i = 0; i < p_size; i++) {
-			assertEquals(queryPos.get(i).getTitle(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getTitle());
-			assertEquals(queryPos.get(i).getDescription(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getDescription());
-			assertEquals(queryPos.get(i).getPriority(), db.getPositionByName(queryPos.get(i).getTitle()).get(0).getPriority());
-		}
-	}
-	
-	@Test
-	public void testGetPositionByPriority() {
-		queryPos = db.findAllPositions();
-		
-		assertEquals(queryPos.get(0).getTitle(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getTitle());
-		assertEquals(queryPos.get(0).getDescription(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getDescription());
-		assertEquals(queryPos.get(0).getPriority(), db.getPositionByPriority(queryPos.get(0).getPriority()).get(0).getPriority());
-
-	}
-	
-	@Test
-	public void testDeletePosition() {
-		db.deletePosition(3);
-		queryPos = db.findAllPositions();
-
-		assertNotEquals(queryPos.get(2).getID(), pList.get(2).getID());
-		assertNotEquals(queryPos.get(2).getDescription(), pList.get(2).getDescription());
-		assertNotEquals(queryPos.get(2).getTitle(), pList.get(2).getTitle());
-	}
-	 */
 	
 	@Test
 	public void testChangePriority() {

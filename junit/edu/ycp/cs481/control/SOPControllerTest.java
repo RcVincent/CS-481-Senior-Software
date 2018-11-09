@@ -204,77 +204,6 @@ public class SOPControllerTest {
 		}
 	}
 	
-	// TODO: Rework these for movement from Database?
-	//TODO: yes we need to rework these 
-	/*
-	@Test
-	public void testFindSOPByID() {
-		querySOP = db.findAllSOPs();
-		
-		for(SOP s : querySOP) {
-			assertEquals(s.getName(), db.findSOPbyID(s.getID()).getName());
-			assertEquals(s.getDescription(), db.findSOPbyID(s.getID()).getDescription());
-			assertEquals(s.getPriority(), db.findSOPbyID(s.getID()).getPriority());
-			assertEquals(s.getRevision(), db.findSOPbyID(s.getID()).getRevision());
-			assertEquals(s.getAuthorID(), db.findSOPbyID(s.getID()).getAuthorID());
-			assertEquals(s.getArchiveFlag(), db.findSOPbyID(s.getID()).getArchiveFlag());
-		}
-	}
-	
-	@Test
-	public void testfindSOPsByAuthorID() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByAuthorID(querySOP.get(0).getID()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByTitle() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByTitle(querySOP.get(0).getName()).get(0).getArchiveFlag());
-	}
-	
-	@Test // TODO: Implement after PositionSOP
-	public void testFindSOPbyPosition() {
-		querySOP = db.findAllSOPs();
-	}
-	
-	@Test
-	public void testfindSOPsByPriority() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByPriority(querySOP.get(0).getPriority()).get(0).getArchiveFlag());
-	}
-	
-	@Test
-	public void testfindSOPsByVersion() {
-		querySOP = db.findAllSOPs();
-		
-		assertEquals(querySOP.get(0).getName(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getName());
-		assertEquals(querySOP.get(0).getDescription(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getDescription());
-		assertEquals(querySOP.get(0).getPriority(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getPriority());
-		assertEquals(querySOP.get(0).getRevision(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getRevision());
-		assertEquals(querySOP.get(0).getAuthorID(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getAuthorID());
-		assertEquals(querySOP.get(0).getArchiveFlag(), db.findSOPsByVersion(querySOP.get(0).getRevision()).get(0).getArchiveFlag());
-	}
-	 */
-	
 	@Test
 	public void TestChangeVersion() {
 		int newVersion = 2; 
@@ -308,20 +237,4 @@ public class SOPControllerTest {
 		}
 	}
 	
-	/* TODO: Implement these here?
-	@Test
-	public void testArchiveSOP() {
-		
-	}
-	
-	@Test
-	public void testRevertSOP() {
-		
-	}
-	
-	@Test
-	public void testChangeSOPPriority() {
-		
-	}
-	 */
 }

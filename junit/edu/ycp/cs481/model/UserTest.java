@@ -462,48 +462,8 @@ public class UserTest {
 		
 		assertFalse(test2.isValid());
 	}
-	@Test
-	public void testFindAdmins() {
-		List<User> adminList = new ArrayList<User>(); 
-		List<User> failedAdminList = new ArrayList<User>(); 
-		List<User> testlist = new ArrayList<User>(); 
-
-		testlist.addAll(userlist);
-		/*
-		//sort through the user list to find the admins 
-		for(User u: testlist) {
-			//if archived immediately stop, there is no reason to search the list anymore
-			if(u.isArchiveFlag() == false) {
-				//if the user is an admin 
-				if(u.isAdminFlag()) { 
-					//make sure the email is 
-					if(u.getEmail()== "" || u.getEmail() == " ") {
-						failedAdminList.add(u); 
-						adminList.remove(u);
-						System.out.println("There was an invalid admin and they have been removed");
-					}
-					else {
-						adminList.add(u);
-					}
-				}
-				else {
-					//if the user was invalid, notify and remove them from the user list 
-					System.out.println("This user is marked as archived. Please search the archive list for this information");
-					userlist.remove(u);
-
-					//if the user does not already exist in the archive, add them to it 
-					if(!archivelist.contains(u)) {
-						archivelist.add(u);
-
-					}
-				}
-			}
-		}*/
-
-		assertEquals(1, failedAdminList.size());
-		assertEquals(2, adminList.size()); 
-		assertEquals(6, archivelist.size());
-	}
+	
+	//testing finding admins has been removed from here and will be implemented in the user controller 
 }
 
 
