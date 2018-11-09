@@ -16,7 +16,7 @@
 		<h1>Home</h1>
 		<div class="row">
 			<div class="col-10">
-		
+			
 			</div>
 			<div class="col-2">
 				<form method="post">
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 	</div>
-	
+<div style="padding:4px;margin:8px;">
 	<div class="row">
 		<div class="col">
 		
@@ -59,8 +59,9 @@
 			<a href="search_sops" class="btn btn-info btn-block" role="button" style="padding:4px;margin:2px;">Search SOPs</a>
 		</div>
 	</div>
+</div>	
 </div>
-<div class="row align-items-center ">
+<div class="row align-items-center " style="padding:4px;margin:6px;">
 
 	<div class="col-md-3 offset-md-4">
 		<canvas id="canvas" width="250" height="250"
