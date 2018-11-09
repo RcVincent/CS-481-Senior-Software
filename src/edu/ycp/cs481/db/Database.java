@@ -8,8 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import edu.ycp.cs481.model.ClockTime;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
@@ -148,6 +150,47 @@ public class Database {
 		}
 	};
 	
+	public QueryResultFormat<ArrayList<ClockTime>> timeResFormat = new QueryResultFormat<ArrayList<ClockTime>>(){
+		@Override
+		public ArrayList<ClockTime> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<ClockTime> times = new ArrayList<ClockTime>();
+			while(resultSet.next()){
+				Date date = resultSet.getTimestamp(1);
+				boolean in = resultSet.getBoolean(2);
+				times.add(new ClockTime(date, in));
+			}
+			return times;
+		}
+	};
+	
+	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
+		return userResFormat;
+	}
+	
+	public String getUserPieces() {
+		return userPieces;
+	}
+	
+	public QueryResultFormat<ArrayList<Position>> getPosResFormat(){
+		return posResFormat;
+	}
+	
+	public String getPositionPieces(){
+		return positionPieces;
+	}
+	
+	public QueryResultFormat<ArrayList<SOP>> getSopResFormat(){
+		return sopResFormat;
+	}
+	
+	public String getSopPieces(){
+		return sopPieces;
+	}
+	
+	public QueryResultFormat<ArrayList<ClockTime>> getTimeResFormat(){
+		return timeResFormat;
+	}
+	
 	public<ResultType> ResultType executeQuery(String name, String sql, QueryResultFormat<ResultType> querExec) throws SQLException{
 		return executeTransaction(new Transaction<ResultType>(){
 			@Override
@@ -200,30 +243,6 @@ public class Database {
 			}
 			
 		});
-	}
-	
-	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
-		return userResFormat;
-	}
-	
-	public String getUserPieces() {
-		return userPieces;
-	}
-	
-	public QueryResultFormat<ArrayList<Position>> getPosResFormat(){
-		return posResFormat;
-	}
-	
-	public String getPositionPieces(){
-		return positionPieces;
-	}
-	
-	public QueryResultFormat<ArrayList<SOP>> getSopResFormat(){
-		return sopResFormat;
-	}
-	
-	public String getSopPieces(){
-		return sopPieces;
 	}
 
 	private Connection connect() throws SQLException {
@@ -279,7 +298,7 @@ public class Database {
 	
 	public void createDatabase(){
 		executeUpdate("Creating CS481DB database", "create database if not exists cs481db");
-		this.dbName = "cs481db";
+		dbName = "cs481db";
 	}
 	
 	public void dropDatabase() {
