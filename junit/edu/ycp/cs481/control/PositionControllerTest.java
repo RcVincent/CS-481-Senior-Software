@@ -131,13 +131,15 @@ public class PositionControllerTest {
 	public void testSearchByName() {
 		List<Position> testList = new ArrayList<Position>();
 		String searchName = "CEO";
-		testList = poscontrol.searchForPositions(0, searchName, "", 0);
+		testList = poscontrol.searchForPositions(-1, searchName, "", -1);
+		
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
 		assertEquals(1, p.getPriority());
 		assertEquals(1, p.getID()); 
 	}
 	
+	//should probably re work this test to fit our new search scheme
 	@Test
 	public void testSearchByPriority() {
 		List<Position> testList = new ArrayList<Position>();
