@@ -13,8 +13,8 @@ public class Messenger {
 	}	
 	
 	public static void main(String[] args) {
-		final String username = "rvincent@ycp.edu";
-		final String password = "Cdcs1994bkk";
+		final String username = "";
+		final String password = "";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
