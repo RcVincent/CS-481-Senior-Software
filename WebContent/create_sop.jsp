@@ -1,31 +1,77 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
- 
 <html>
-	<head>
-      <title> Create SOP </title>
-		<style type = "text/css">
+<head>
+	<title>CTM mkii - Create SOP</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body>
+<h1>Create SOP</h1>
+<div class="container-fluid">
+	<form class="form-horizontal" method="post">
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty titleError}">
+					<p class="alert alert-warning">${titleError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty descriptionError}">
+					<p class="alert alert-warning">${descriptionError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="title" class="control-label col-2">SOP Title:</label>
+					<input type="text" class="form-control col-10" id="title" name="title" value="${title}">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group row">
+					<label for="description" class="control-label col-2">SOP Description:</label>
+					<textarea rows = "4" cols = "50" name = "description">
+					Enter SOP purpose here... </textarea><br>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<c:if test="${! empty priorityError}">
+					<p class="alert alert-warning">${priorityError}</p>
+				</c:if>
+			</div>
+			<div class="col">
+				<c:if test="${! empty versionError}">
+					<p class="alert alert-warning">${versionError}</p>
+				</c:if>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="priority" class="form-label col-2">Priority (1-10):</label>
+					<input type="priority" class="form-control col-10" id="priority" name="priority" value="${priority}">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group row">
+					<label for="emailConfirm" class="form-label col-2">Version:</label>
+					<input type="revision" class="form-control col-10" id="revision" name="revision" value="${revision}">
+				</div>
+			</div>
+		</div>
 		
-		</style>
-
-	<body>
-
-	<h1 style="text-align: center;"><span style="text-decoration: underline;">Create SOP</span></h1>
-  
-	<form action="${pageContext.servletContext.contextPath}/create_sop" method="post">
-	SOP Title: <input type="text" name="title"><br>
-	SOP Purpose: <textarea rows="4" cols="50" name="description" >
-	Enter SOP Purpose here...</textarea><br>
-	Priority (1-10): <input type="text" name="priority"><br>
-	Revision Number : <input type="text" name="revision"><br>
-
-	<form action="/action_page.php">
-	Select Files Associated with SOP: <input type="file" name="files" multiple>
-	<input type="submit">
-	<td><input type = "Submit" name = "index" value = "Index" /> </td>
+		<div class="row">
+			<div class="col">
+				<button type="submit" class="btn btn-info">Submit</button>
+			</div>
+		</div>
 	</form>
-	
-	</form>
-	<p>Want to head back to the index? <a href="index">Index</a>
-	</body>
-</html>		
+</div>
+<p class="note">Already have an account? <a href="./login">Login</a></p>
+<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
+
+</body></html>
