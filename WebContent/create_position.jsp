@@ -20,5 +20,6 @@
 
 	</form>
 	<li><a href="login">login</a></li>
+	<li><a href="index">Home</a></li>
 	</body>
 </html>		

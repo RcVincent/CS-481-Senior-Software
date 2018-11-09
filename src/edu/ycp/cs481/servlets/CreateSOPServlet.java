@@ -118,7 +118,6 @@ public class CreateSOPServlet extends HttpServlet{
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		
-		req.getRequestDispatcher("/create_sop.jsp").forward(req, resp);
 	}
 	
 }
