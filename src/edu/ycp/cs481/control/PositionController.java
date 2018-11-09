@@ -121,7 +121,24 @@ public class PositionController{
 		db.executeUpdate("Delete Position with ID " + positionID,
 				"delete from Position where position_id = " + positionID);
 	}
-
+	
+	public void addPositionPermission(Position pos, String perm){
+		db.executeUpdate("Set Position " + pos.getTitle() + " to have Permission " + perm, 
+				"insert into PositionPermission (position_id, perm_id) select " + pos.getID() + 
+				", perm_id from Permissions where permission = '" + perm + "'");
+	}
+	
+	// TODO: Work this out
+	public void removePositionPermission(Position pos, String perm){
+		db.executeUpdate("Remove Permission " + perm + " from Position " + pos.getTitle(),
+				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = Any(");
+	}
+	
+	public void insertPositionSOP(int position_id, int sop_id){		
+		db.insert("PositionSOP", new String[]{"position_id" ,"sop_id"}, 
+				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
+	}
+	
 	public ArrayList<SOP> findSOPsOfPosition(int positionID){
 		try{
 			return db.executeQuery("Get SOPs By Position",
@@ -131,10 +148,6 @@ public class PositionController{
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public Integer changePositionPermission(int position_id, int perm_id){
-		return db.changePositionPermission(position_id, perm_id);
 	}
 	
 	public boolean hasRequirement(int positionID) {

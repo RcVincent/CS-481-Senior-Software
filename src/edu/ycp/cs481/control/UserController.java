@@ -3,7 +3,6 @@ package edu.ycp.cs481.control;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.User;
@@ -241,5 +240,17 @@ public class UserController{
 	
 	public static void logout(HttpServletRequest req){
 		req.getSession().removeAttribute("user_id");
+	}
+	
+	// InsertSubordinate
+	public void addSubordinate(int manager_id, int subordinate_id){
+		db.insert("Subordinate", new String[] {"manager_id", "subordinate_id"},
+				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
+	}
+	
+	// DeleteSubordinate
+	public void removeSubordinate(int manager_id, int subordinate_id){
+		db.executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
+				manager_id + " and subordinate_id = " + subordinate_id);
 	}
 }

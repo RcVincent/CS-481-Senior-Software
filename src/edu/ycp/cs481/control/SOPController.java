@@ -2,7 +2,6 @@ package edu.ycp.cs481.control;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.SOP;
@@ -121,8 +120,8 @@ public class SOPController{
 		sop.setPriority(priority);
 	}
 	
-	//search for the sop and add it to the users position requirements or their training history
-	public void assignNewSOP(int userID, int sopID) {
-		
+	public void insertCompletedSOP(int user_id, int sop_id){
+		db.insert("CompletedSOP", new String[] {"user_id", "sop_id"},
+				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
 	}
 }

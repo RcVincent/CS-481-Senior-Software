@@ -541,103 +541,6 @@ public class Database {
 		});
 	}
 	
-	public void insertPositionSOP(int position_id, int sop_id){		
-		insert("PositionSOP", new String[]{"position_id" ,"sop_id"}, 
-				new String[] {String.valueOf(position_id) , String.valueOf(sop_id)});
-	}
-	
-	// Called from insertPosition with default perm_id = 2
-	public void insertPositionPermission(int position_id, int perm_id){
-		//  TODO: Potential flaw if a number larger than our highest permission_id is passed, set a check
-		if(perm_id > 5) {
-			System.out.println("Your permission id is too high!");
-			return;
-		}
-		
-		insert("PositionPermission", new String[] {"position_id", "perm_id"},
-				new String[] {String.valueOf(position_id), String.valueOf(perm_id)});
-	}
-	
-	public void insertCompletedSOP(int user_id, int sop_id) {
-		insert("CompletedSOP", new String[] {"user_id", "sop_id"},
-				new String[] {String.valueOf(user_id), String.valueOf(sop_id)});
-	}
-	
-	// InsertSubordinate
-	public void addSubordinate(int manager_id, int subordinate_id) {
-		insert("Subordinate", new String[] {"manager_id", "subordinate_id"},
-				new String[] {String.valueOf(manager_id), String.valueOf(subordinate_id)});
-	}
-	
-	// DeleteSubordinate
-	public void removeSubordinate(int manager_id, int subordinate_id) {
-		executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
-	    manager_id + " and subordinate_id = " + subordinate_id);
-	}
-	
-	public void addPositionPermission(Position pos, String perm){
-		executeUpdate("Set Position " + pos.getTitle() + " to have Permission " + perm, 
-				"insert into PositionPermission (position_id, perm_id) select " + pos.getID() + 
-				", perm_id from Permissions where permission = '" + perm + "'");
-	}
-	
-	// TODO: Work this out
-	public void removePositionPermission(Position pos, String perm){
-		executeUpdate("Remove Permission " + perm + " from Position " + pos.getTitle(),
-				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = Any(");
-	}
-	
-	public Integer changePositionPermission(int position_id, int perm_id) {
-		return executeTransaction(new Transaction<Integer>() {
-		@Override
-		public Integer execute(Connection conn) throws SQLException {
-			PreparedStatement stmt = null;
-			PreparedStatement stmt2 = null;
-			ResultSet resultSet = null;
-
-
-			try{
-				stmt = conn.prepareStatement(
-						"UPDATE PositionPermission SET perm_id = ? WHERE position_id = ? ");
-				
-				stmt.setInt(1, perm_id);
-				stmt.setInt(2, position_id);
-				stmt.executeUpdate();
-				
-				
-				stmt2 = conn.prepareStatement(
-						"SELECT * FROM PositionPermission WHERE position_id = ?");
-				
-				stmt2.setInt(1, position_id);
-				
-				resultSet = stmt2.executeQuery();
-				
-				int new_id = 0;
-				
-				Boolean found = false;
-				
-				while(resultSet.next()) {
-					found = true;
-					new_id = resultSet.getInt(2);
-				}
-
-				// check if the junction exists
-				if (!found) {
-					System.out.println("PositionPermission with ID "+ position_id +" was not found in the PositionPermission table");
-				}
-
-				return new_id;
-
-
-			} finally {
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(stmt2); 
-			}
-		}
-	});
-	}
-	
 	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
 	// unarchiving the old one?
 	public SOP revertSOP(final int sop_id, final int revision) {
@@ -695,11 +598,6 @@ public class Database {
 				}
 			}
 		});
-	}
-	
-	public void addSOPtoPosition(int positionID, int sopID){
-		executeUpdate("Insert Position " + positionID + " and SOP " + sopID + " connection", 
-				"insert into PositionSOP (position_id, sop_id) values (" + positionID + ", " + sopID + ")");
 	}
 	
 	public static void cleanDB(){
