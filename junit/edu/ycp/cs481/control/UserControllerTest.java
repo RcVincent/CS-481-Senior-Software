@@ -50,14 +50,14 @@ public class UserControllerTest {
 		user1 = new User();
 		user1.setEmail("Admin@google.com");
 		user1.setPassword("DiveOnIn");
-		user1.setFirstname("Rodger");
-		user1.setLastname("Smith");
+		user1.setFirstName("Rodger");
+		user1.setLastName("Smith");
 		user1.setUserID(12);
 		user1.setPosition(pos1);
 		
 		user2 = new User();
-		user2.setFirstname("Stan");
-		user2.setLastname("Smith");
+		user2.setFirstName("Stan");
+		user2.setLastName("Smith");
 		user2.setEmail("rookie@email.com");
 		user2.setPassword("bangBang");
 		user2.setPosition(pos3);
@@ -65,8 +65,8 @@ public class UserControllerTest {
 		
 		user3 = new User(); 
 		user3.setEmail("failTest@@gmail.com");
-		user3.setFirstname("");
-		user3.setLastname("");
+		user3.setFirstName("");
+		user3.setLastName("");
 		user3.setPassword("");
 		user3.setUserID(-1);
 		user3.setPosition(pos4);
@@ -74,8 +74,8 @@ public class UserControllerTest {
 		user4 = new User(); 
 		user4.setEmail("theBoss@tesla.com");
 		user4.setPassword("POWER");
-		user4.setFirstname("Elon");
-		user4.setLastname("Musk");
+		user4.setFirstName("Elon");
+		user4.setLastName("Musk");
 		user4.setUserID(5);
 		user4.setPosition(pos2);
 		
@@ -138,7 +138,7 @@ public class UserControllerTest {
 		List<User> testList = uc.searchForUsers(0, "", searchFirstName, "", 0, -1);
 		
 		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with firstname" + searchFirstName);
+			System.out.println("Search failed for user with FirstName" + searchFirstName);
 			//fail();
 			
 		} else {
@@ -146,7 +146,7 @@ public class UserControllerTest {
 		
 		User u = testList.get(0);
 		
-		assertEquals("Smith", u.getLastname());
+		assertEquals("Smith", u.getLastName());
 		assertEquals("rookie@email.com", u.getEmail());
 		assertEquals(4, u.getUserID());
 		}
@@ -159,19 +159,19 @@ public class UserControllerTest {
 		List<User> testList = uc.searchForUsers(0, "", "", searchLastName, 0, -1);
 		
 		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with lastname" + searchLastName);
+			System.out.println("Search failed for user with LastName" + searchLastName);
 			//fail();
 			
 		} else {
 		assertEquals(2, testList.size());
 		
 		User u = testList.get(0);
-		assertEquals("Rodger", u.getFirstname());
+		assertEquals("Rodger", u.getFirstName());
 		assertEquals("Admin@google.com", u.getEmail());
 		assertEquals(12, u.getUserID());
 		
 		User u2 = testList.get(1);
-		assertEquals("Stan", u.getFirstname());
+		assertEquals("Stan", u.getFirstName());
 		assertEquals("rookie@email.com", u.getEmail());
 		assertEquals(4, u.getUserID());
 		}
@@ -179,13 +179,13 @@ public class UserControllerTest {
 	
 	@Test
 	public void testSearchByFUllName() {
-		String firstname = "Stan";
-		String lastname = "Smith"; 
+		String FirstName = "Stan";
+		String LastName = "Smith"; 
 		
-		List<User> testList = uc.searchForUsers(0, "", firstname, lastname, 0, -1);
+		List<User> testList = uc.searchForUsers(0, "", FirstName, LastName, 0, -1);
 		
 		if(testList.isEmpty()) {
-			System.out.println("Search failed for user with first name " + firstname + " and last name " + lastname);
+			System.out.println("Search failed for user with first name " + FirstName + " and last name " + LastName);
 			//fail(); 
 			
 		} else {
@@ -193,7 +193,7 @@ public class UserControllerTest {
 		
 		User u = testList.get(0);
 		
-		//assertEquals("Smith", u.getLastname());
+		//assertEquals("Smith", u.getLastName());
 		assertEquals("rookie@email.com", u.getEmail());
 		assertEquals(4, u.getUserID());
 		}
@@ -214,8 +214,8 @@ public class UserControllerTest {
 			
 			User u = testList.get(0);
 			
-			assertEquals("Rodger", u.getFirstname());
-			assertEquals("Smith", u.getLastname());
+			assertEquals("Rodger", u.getFirstName());
+			assertEquals("Smith", u.getLastName());
 			assertEquals("Admin@google.com", u.getEmail()); 
 			
 		}
@@ -236,8 +236,8 @@ public class UserControllerTest {
 			
 			assertEquals(5, u.getUserID());
 			assertEquals("theBoss@tesla.com", u.getEmail());
-			assertEquals("Elon", u.getFirstname());
-			assertEquals("Musk", u.getLastname());
+			assertEquals("Elon", u.getFirstName());
+			assertEquals("Musk", u.getLastName());
 		}
 	}
 	

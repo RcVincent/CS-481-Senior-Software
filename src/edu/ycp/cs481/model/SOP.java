@@ -4,7 +4,7 @@ package edu.ycp.cs481.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SOP implements Comparable<SOP> {
+public class SOP{
 	private String name;
 	private String description;
 	private int priority;
@@ -12,23 +12,9 @@ public class SOP implements Comparable<SOP> {
 	// Assuming Author refers to a User, authorID would be their userID then.
 	private int authorID;
 	private int revision; 
-	private boolean archiveFlag;
+	private boolean archived;
 	private List<Position> positionsAffected = new ArrayList<Position>(); 
 	private boolean isComplete;
-	
-	public SOP() {
-		//empty constructor incase we want one 
-		
-	}
-	public SOP(String name, String description, int priority, int ID, int authorID, int revision, boolean archiveFlag){
-		this.name = name;
-		this.description = description;
-		this.priority = priority;
-		this.ID = ID;
-		this.authorID = authorID;
-		this.revision = revision;
-		this.archiveFlag = archiveFlag;
-	}
 	
   public ArrayList<Position> showPositionsAffected(int id) {
 		ArrayList<Position> positions = new ArrayList<Position>();
@@ -97,12 +83,12 @@ public class SOP implements Comparable<SOP> {
 		this.revision = revision;
 	}
 	
-	public boolean getArchiveFlag() {
-		return archiveFlag;
+	public boolean isArchived(){
+		return archived;
 	}
 	
-	public void setArchiveFlag(boolean archiveFlag) {
-		this.archiveFlag = archiveFlag;
+	public void setArchived(boolean archived){
+		this.archived = archived;
 	}
 	
 	public boolean isComplete() {
@@ -111,11 +97,6 @@ public class SOP implements Comparable<SOP> {
 	
 	public void setComplete(boolean isComplete) {
 		this.isComplete = isComplete;
-	}
-	@Override
-	public int compareTo(SOP o) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }
 

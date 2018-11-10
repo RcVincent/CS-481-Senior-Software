@@ -39,12 +39,59 @@ public class PositionTest {
 		List<SOP> p7Reqs = new ArrayList<SOP>();
 		List<SOP> p8Reqs = new ArrayList<SOP>();
 		
-		req1 = new SOP("Test 1", "For testing", 1, 1, 12, 7, false); 
-		req2 = new SOP("Test 2", "For testing", 2, 2, 12, 6, false); 
-		req3 = new SOP("Test 3", "For testing", 3, 3, 0, 1, false);
-		req4 = new SOP(null, null, 0, 0, 0, 0, false);
-		req5 = new SOP("", "testing", 1, 5, 23, 4, false); 
-		req6 = new SOP("Test 6", " ", 4, 6, 0, 0, false);
+		req1 = new SOP(); 
+		req1.setName("Test 1");
+		req1.setDescription("For testing");
+		req1.setPriority(1);
+		req1.setID(1);
+		req1.setAuthorID(12);
+		req1.setRevision(7);
+		req1.setArchived(false);
+		
+		req2 = new SOP(); 
+		req2.setName("Test 2");
+		req2.setDescription("For testing");
+		req2.setPriority(2);
+		req2.setID(2);
+		req2.setAuthorID(12);
+		req2.setRevision(6);
+		req2.setArchived(false);
+		
+		req3 = new SOP(); 
+		req3.setName("Test 3");
+		req3.setDescription("For testing");
+		req3.setPriority(3);
+		req3.setID(3);
+		req3.setAuthorID(0);
+		req3.setRevision(1);
+		req3.setArchived(false);
+		
+		req4 = new SOP(); 
+		req4.setName(null);
+		req4.setDescription(null);
+		req4.setPriority(0);
+		req4.setID(0);
+		req4.setAuthorID(0);
+		req4.setRevision(0);
+		req4.setArchived(false);
+		
+		req5 = new SOP(); 
+		req5.setName("");
+		req5.setDescription("testing");
+		req5.setPriority(1);
+		req5.setID(5);
+		req5.setAuthorID(23);
+		req5.setRevision(4);
+		req5.setArchived(false);
+		
+		req6 = new SOP(); 
+		req6.setName("Test 6");
+		req6.setDescription(" ");
+		req6.setPriority(4);
+		req6.setID(6);
+		req6.setAuthorID(0);
+		req6.setRevision(0);
+		req6.setArchived(false);
 		
 		p1Reqs.add(req1);
 		p1Reqs.add(req2);

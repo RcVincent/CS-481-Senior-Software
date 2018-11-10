@@ -53,20 +53,20 @@ public class InitialData {
 		u1.setUserID(1);
 		u1.setEmail("CEO@Google.com");
 		u1.setPassword("yes");
-		u1.setFirstname("Carl");
-		u1.setLastname("Sagan");
+		u1.setFirstName("Carl");
+		u1.setLastName("Sagan");
 		u1.setLockedOut(false);
-		u1.setArchiveFlag(false);
+		u1.setArchived(false);
 		u1.setPosition(p1);
 		
 		u2 = new User();
 		u2.setUserID(2);
 		u2.setEmail("Worker@Google.com");
 		u2.setPassword("no");
-		u2.setFirstname("Billiam");
-		u2.setLastname("Nye");
+		u2.setFirstName("Billiam");
+		u2.setLastName("Nye");
 		u2.setLockedOut(false);
-		u2.setArchiveFlag(false);
+		u2.setArchived(false);
 		u2.setPosition(p2);
 		
 		s1 = new SOP();
@@ -76,7 +76,7 @@ public class InitialData {
 		s1.setPriority(1);
 		s1.setRevision(1);
 		s1.setAuthorID(p1.getID());
-		s1.setArchiveFlag(false);
+		s1.setArchived(false);
 		
 		s2 = new SOP();
 		s2.setID(2);
@@ -85,7 +85,7 @@ public class InitialData {
 		s2.setPriority(1);
 		s2.setRevision(1);
 		s2.setAuthorID(p1.getID());
-		s2.setArchiveFlag(false);
+		s2.setArchived(false);
 		
 		p1req1 = new SOP();
 		p1req1.setID(3);
@@ -94,7 +94,7 @@ public class InitialData {
 		p1req1.setPriority(1);
 		p1req1.setRevision(1);
 		p1req1.setAuthorID(p1.getID());
-		p1req1.setArchiveFlag(false);
+		p1req1.setArchived(false);
 		
 		p1req2 = new SOP();
 		p1req2.setID(4);
@@ -103,7 +103,7 @@ public class InitialData {
 		p1req2.setPriority(1);
 		p1req2.setRevision(1);
 		p1req2.setAuthorID(p1.getID());
-		p1req2.setArchiveFlag(false);
+		p1req2.setArchived(false);
 		
 		p1reqs.add(p1req1);
 		p1reqs.add(p1req2);		

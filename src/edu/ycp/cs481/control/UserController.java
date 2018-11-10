@@ -23,13 +23,13 @@ public class UserController{
 	
 
 
-	public Integer insertUser(String email, String password, String firstName, String lastName, boolean isAdmin,
+	public Integer insertUser(String email, String password, String firstName, String lastName, boolean lockedOut,
 			boolean isArchived, int positionID){
 		password = hashPassword(password);
 		return db.insertAndGetID("User", "user_id",
-				new String[]{"email", "password", "first_name", "last_name", "admin_flag", "archive_flag",
+				new String[]{"email", "password", "first_name", "last_name", "locked_out", "archive_flag",
 						"position_id"},
-				new String[]{email, password, firstName, lastName, String.valueOf(isAdmin), String.valueOf(isArchived),
+				new String[]{email, password, firstName, lastName, String.valueOf(lockedOut), String.valueOf(isArchived),
 						String.valueOf(positionID)});
 	}
 
@@ -226,7 +226,7 @@ public class UserController{
 
 	public void changePosition(User user, int positionID){
 		db.executeUpdate(
-				"Change User " + user.getFirstname() + " " + user.getLastname() + " Position to id " + positionID,
+				"Change User " + user.getFirstName() + " " + user.getLastName() + " Position to id " + positionID,
 				"update User set position_id = " + positionID + " where user_id = " + user.getUserID());
 		PositionController pc = new PositionController();
 		user.setPosition(pc.getPositionByUser(user.getUserID()));
