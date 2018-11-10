@@ -13,8 +13,8 @@ public class Messenger {
 	}	
 	
 	public static void main(String[] args) {
-		final String username = "";
-		final String password = "";
+		final String username = "mailTester481@gmail.com";
+		final String password = "cS4B1SrS0ft!";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -29,7 +29,7 @@ public class Messenger {
 	
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("rvincent@ycp.edu"));
+			message.setFrom(new InternetAddress("mailTester481@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 			InternetAddress.parse(setRecipient("")));
 			message.setSubject("Dear User");
