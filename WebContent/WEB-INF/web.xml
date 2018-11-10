@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   
-  
   <servlet>
   	<servlet-name>UserHome</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.UserHomeServlet</servlet-class>
@@ -21,15 +20,6 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>CreateAccount</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.CreateAccountServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>CreateAccount</servlet-name>
-  	<url-pattern>/create_account</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
   	<servlet-name>AccountSettings</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.AccountSettingsServlet</servlet-class>
   </servlet>
@@ -39,12 +29,12 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>CreateSOP</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.CreateSOPServlet</servlet-class>
+  	<servlet-name>CreateAccount</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.CreateAccountServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>CreateSOP</servlet-name>
-  	<url-pattern>/create_sop</url-pattern>
+  	<servlet-name>CreateAccount</servlet-name>
+  	<url-pattern>/create_account</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -57,21 +47,66 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>ChangePositionPriority</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.ChangePositionPriorityServlet</servlet-class>
+  	<servlet-name>CreateSOP</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.CreateSOPServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ChangePositionPriority</servlet-name>
-  	<url-pattern>/change_positionPriority</url-pattern>
+  	<servlet-name>CreateSOP</servlet-name>
+  	<url-pattern>/create_sop</url-pattern>
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>ChangeSOPPriority</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.ChangeSOPPriorityServlet</servlet-class>
+  	<servlet-name>SearchUsers</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.SearchUsersServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ChangeSOPPriority</servlet-name>
-  	<url-pattern>/change_sopPriority</url-pattern>
+  	<servlet-name>SearchUsers</servlet-name>
+  	<url-pattern>/search_users</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>SearchPositions</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.SearchPositionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SearchPositions</servlet-name>
+  	<url-pattern>/search_positions</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>SearchSOPs</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.SearchSOPsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SearchSOPs</servlet-name>
+  	<url-pattern>/search_sops</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>EditUser</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.EditUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>EditUser</servlet-name>
+  	<url-pattern>/edit_user</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>EditPosition</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.EditPositionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>EditPosition</servlet-name>
+  	<url-pattern>/edit_position</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>EditSOP</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.EditSOPServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>EditSOP</servlet-name>
+  	<url-pattern>/edit_sop</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

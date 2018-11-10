@@ -1,4 +1,5 @@
 package edu.ycp.cs481.servlets;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs481.control.SOPController;
-import edu.ycp.cs481.model.SOP;
+import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.model.Position;
 
 @SuppressWarnings("serial")
-public class SearchSOPServlet extends HttpServlet {
+public class SearchPositionsServlet extends HttpServlet{
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -23,58 +24,42 @@ public class SearchSOPServlet extends HttpServlet {
 		}
 		
 		
-		req.getRequestDispatcher("/searchSOPs.jsp").forward(req, resp);
+		req.getRequestDispatcher("/searchPositions.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
 		if(req.getParameter("index") != null) {
 			System.out.println("returning to index");
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		
-		SOPController sc = new SOPController(); 
+		PositionController pc = new PositionController();
 		
-		String id = req.getParameter("sopID"); 
+		String id = req.getParameter("positionID"); 
 		String title = req.getParameter("title");
 		String desc = req.getParameter("description"); 
-		String prio = req.getParameter("priority");
-		String version = req.getParameter("version");
-		String authorid = req.getParameter("authorID"); 
+		String priority = req.getParameter("priority"); 
 		
-		int sopID, priority, revision, authorID; 
-		
+		int searchID, prio;
 		if(id == null || id == "" || id == " ") {
-			sopID = -1; 
-		}else {
-			sopID = Integer.parseInt(id);
+			searchID = 2; 
+		} else {
+			searchID = Integer.parseInt(id); 
 		}
 		
-		if(prio == null || prio == "" || prio == " ") {
-			priority = 0; 
+		if(priority == null || priority == "" || priority == " ") {
+			prio = 0;
 		} else {
-			priority = Integer.parseInt(prio);
+			prio = Integer.parseInt(priority); 
 		}
 		
-		if(version == null || version == "" || version == " ") {
-			revision = 0; 
-		} else {
-			revision = Integer.parseInt(version);
-		}
-		
-		if(authorid == null || authorid == "" || authorid == " ") {
-			authorID = 0;
-		} else {
-			authorID = Integer.parseInt(authorid);
-		}
-		ArrayList<SOP> result = sc.searchForSOPs(sopID, title, desc, priority, revision, authorID);
+		ArrayList<Position> result = pc.searchForPositions(searchID, title, desc, prio);
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		
-		req.getRequestDispatcher("/searchSOPs.jsp").forward(req, resp);
-		
+		req.getRequestDispatcher("/searchPositions.jsp").forward(req, resp);
 	}
 }

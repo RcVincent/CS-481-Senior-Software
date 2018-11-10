@@ -13,7 +13,7 @@ import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.model.SOP;
 
 @SuppressWarnings("serial")
-public class ChangeSOPPriorityServlet extends HttpServlet {
+public class EditSOPServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

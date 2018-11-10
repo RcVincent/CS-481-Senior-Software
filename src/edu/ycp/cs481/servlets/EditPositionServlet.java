@@ -13,7 +13,7 @@ import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.control.PositionController;
 
 @SuppressWarnings("serial")
-public class ChangePositionPriorityServlet extends HttpServlet {
+public class EditPositionServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
