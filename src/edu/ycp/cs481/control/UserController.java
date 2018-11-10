@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.ycp.cs481.db.Database;
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
 import java.sql.SQLException;
 
@@ -132,12 +133,12 @@ public class UserController{
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
-	public boolean userHasPermission(int userID, int permissionID) {
+	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
 			ArrayList<User> u = searchForUsers(userID, null, null, null, -1, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
-															" and perm_id = " + permissionID;
+															" and perm_id = " + perm.getID();
 			boolean results = db.executeCheck(name, sql);
 			if(results == false){
 				System.out.println("This user doesn't have this permission");
@@ -232,7 +233,7 @@ public class UserController{
 		user.setPosition(pc.getPositionByUser(user.getUserID()));
 	}
 	
-	public void changeEmployeeID(int userID, int employeeID) {
+	public void changeEmployeeID(int userID, int employeeID){
 		db.executeUpdate(
 				"Change User " + userID + "'s employee_id to " + employeeID,
 				"update User set employee_id = " + employeeID + " where user_id = " + userID);

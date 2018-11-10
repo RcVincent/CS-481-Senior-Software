@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
@@ -284,8 +285,7 @@ public class UserControllerTest {
 	
 	@Test 
 	public void testUserHasPermission() {
-		assertEquals(true, uc.userHasPermission(1, 1));
-		//assertEquals(true, uc.userHasPermission(4, 2));
+		assertEquals(true, uc.userHasPermission(1, EnumPermission.ALL));
 	}
 	
 	//@Test

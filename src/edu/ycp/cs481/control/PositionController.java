@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import edu.ycp.cs481.db.Database;
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 
@@ -122,16 +123,15 @@ public class PositionController{
 				"delete from Position where position_id = " + positionID);
 	}
 	
-	public void addPositionPermission(Position pos, String perm){
-		db.executeUpdate("Set Position " + pos.getTitle() + " to have Permission " + perm, 
-				"insert into PositionPermission (position_id, perm_id) select " + pos.getID() + 
-				", perm_id from Permissions where permission = '" + perm + "'");
+	public void addPositionPermission(Position pos, EnumPermission perm){
+		db.insert("PositionPermission", new String[]{"position_id", "permission_id"}, 
+				new String[]{String.valueOf(pos.getID()), String.valueOf(perm.getID())});
 	}
 	
 	// TODO: Work this out
-	public void removePositionPermission(Position pos, String perm){
-		db.executeUpdate("Remove Permission " + perm + " from Position " + pos.getTitle(),
-				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = Any(");
+	public void removePositionPermission(Position pos, EnumPermission perm){
+		db.executeUpdate("Remove Permission " + perm.getPerm() + " from Position " + pos.getTitle(),
+				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = " + perm.getID());
 	}
 	
 	public void insertPositionSOP(int position_id, int sop_id){		
