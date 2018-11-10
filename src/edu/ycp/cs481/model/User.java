@@ -1,125 +1,85 @@
 package edu.ycp.cs481.model;
 
-public class User {
-	private int UserID;
-	private String Password, Email;
-	private Position position; 
-	private boolean lockedOut, ArchiveFlag, validUser; 
-	private boolean loggedin;
-	private String Firstname, Lastname; 
-	private String sessionid;
-	private TrainingHistory t; 
-	
-	// Constructor(s)
-	public User() {
-		t = new TrainingHistory(); 
-		position = new Position(); 
-	}
-	
-	public User(int UserID, String Password, String Email, Position position) {
-		this.UserID = UserID;
-		this.Password = Password;
-		this.Email = Email;
-		this.position = position;
-		loggedin = false;
-	}
+public class User{
+	private int userID;
+	private String email, password;
+	private String firstName, lastName;
+	private Position position;
+	private boolean lockedOut, archived;
+	// TODO: MOVE TO CONTROLLER
+	private TrainingHistory history = new TrainingHistory();
 	
 	// Getters/Setters
-	
-	public void setUserID(int UserID) {
-		this.UserID = UserID;	
+	public int getUserID(){
+		return userID;	
 	}
 	
-	public int getUserID() {
-		return this.UserID;	
+	public void setUserID(int userID){
+		this.userID = userID;
+	}
+	
+	public String getEmail(){
+		return email;
+	}
+	
+	public void setEmail(String email){
+		this.email = email;
+	}
+	
+	public String getPassword(){
+		return password;
 	}
 
-	public void setPassword(String Password) {
-		this.Password = Password;	
+	public void setPassword(String password){
+		this.password = password;
 	}
 	
-	public String getPassword() {
-		return this.Password;	
+	public String getFirstName(){
+		return firstName;
+	}
+
+	public void setFirstName(String firstName){
+		this.firstName = firstName;
+	}
+
+	public String getLastName(){
+		return lastName;
+	}
+
+	public void setLastName(String lastName){
+		this.lastName = lastName;
 	}
 	
-	public void setEmail(String Email) {
-		this.Email = Email;	
-	}
-	
-	public String getEmail() {
-		return this.Email;	
-	}
-	
-	public Position getPosition() {
+	public Position getPosition(){
 		return position;
 	}
 
-	public void setPosition(Position p) {
-		this.position = p;
+	public void setPosition(Position position){
+		this.position = position;
 	}
 
-	public boolean isArchiveFlag() {
-		return ArchiveFlag;
+	public boolean isArchived(){
+		return archived;
 	}
 
-	public void setArchiveFlag(boolean archiveFlag) {
-		ArchiveFlag = archiveFlag;
+	public void setArchived(boolean archived){
+		this.archived = archived;
 	}
 
-	public boolean isLockedOut() {
+	public boolean isLockedOut(){
 		return lockedOut;
 	}
 
-	public void setLockedOut(boolean lockedOut) {
+	public void setLockedOut(boolean lockedOut){
 		this.lockedOut = lockedOut;
 	}
-
-	public boolean isValidUser() {
-		return validUser;
+	
+	// TODO: MOVE THESE TO A CONTROLLER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public TrainingHistory getHistory(){
+		return history;
 	}
-
-	public void setValidUser(boolean validUser) {
-		this.validUser = validUser;
+	
+	public void setHistory(TrainingHistory history){
+		this.history = history;
 	}
-
-	public boolean getLoginStatus() {
-		return loggedin;
-	}
-
-	public void setLoginStatus(boolean l) {
-		loggedin = l;
-	}
-
-	public String getFirstname() {
-		return Firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		Firstname = firstname;
-	}
-
-	public String getLastname() {
-		return Lastname;
-	}
-
-	public void setLastname(String lastname) {
-		Lastname = lastname;
-	}
-
-	public String getSessionid() {
-		return sessionid;
-	}
-
-	public void setSessionid(String sessionid) {
-		this.sessionid = sessionid;
-	}
-
-	public TrainingHistory getHistory() {
-		return t;
-	}
-
-	public void setHistory(TrainingHistory t) {
-		this.t = t;
-	}
-
 }

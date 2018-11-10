@@ -32,31 +32,31 @@ public class TrainingHistoryTest {
 		//create 3 new users for testing two valid one non valid 
 		admin = new User(); 
 		//admin.setAdminFlag(true);
-		admin.setArchiveFlag(false);
+		admin.setArchived(false);
 		admin.setEmail("oscarWinner@gmail.com");
 		admin.setPassword("legendary");
 		admin.setUserID(14);
-		admin.setFirstname("Guillermo");
-		admin.setLastname("Del-Toro");
+		admin.setFirstName("Guillermo");
+		admin.setLastName("Del-Toro");
 		//admin.setPosition(adminP);
 		
 		user = new User();
 		//user.setAdminFlag(false);
-		user.setArchiveFlag(true);
+		user.setArchived(true);
 		user.setUserID(33);
 		user.setEmail("zod@krypton.com");
-		user.setFirstname("General");
-		user.setLastname("Zod");
+		user.setFirstName("General");
+		user.setLastName("Zod");
 		user.setPassword("imAPrick");
 		//user.setPosition(userP);
 		
 		manager = new User(); 
 		//manager.setAdminFlag(false);
-		manager.setArchiveFlag(false);
+		manager.setArchived(false);
 		manager.setEmail("headOfTheClub@SOA.com");
 		manager.setPassword("weRunGuns");
-		manager.setFirstname("Clay");
-		manager.setLastname("Marrow");
+		manager.setFirstName("Clay");
+		manager.setLastName("Marrow");
 		manager.setUserID(89);
 		//manager.setPosition(managerP);
 		

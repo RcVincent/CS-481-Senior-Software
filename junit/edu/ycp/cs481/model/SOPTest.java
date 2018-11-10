@@ -2,35 +2,24 @@ package edu.ycp.cs481.model;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.ycp.cs481.model.SOP;
 
 public class SOPTest{
-	private SOP sop, invalidSOP1, invalidSOP2, invalidSOP3, invalidSOP4, invalidSOP5;
-	private List<SOP> invalidList;
+	private SOP sop;
 	
 	@Before
 	public void setup(){
-		sop = new SOP("How to Avoid Sexual Harassment", "A how-to guide for men on avoiding sexually harassing women in "
-				+ "the workplace environment.", 1, 5, 70, 2, false);
-		
-		invalidSOP1 = new SOP(" ", "A book about nothing", 2, 4, 66, 6, false); 
-		invalidSOP2 = new SOP("A test", " ", 3, 5, 89, 7, false);
-		invalidSOP3 = new SOP("Another test", "A very silly test to be honest", 0, 2, 99, 1, false);
-		invalidSOP4 = new SOP("A third test", "This is getting silly", 4, 0, 98, 3, false);
-		invalidSOP5 = new SOP("A final test", "Finally over", 5, 4, 124, 0, false); 
-		
-		invalidList = new ArrayList<SOP>();
-		invalidList.add(invalidSOP1);
-		invalidList.add(invalidSOP2);
-		invalidList.add(invalidSOP3);
-		invalidList.add(invalidSOP4);
-		invalidList.add(invalidSOP5);
+		sop = new SOP();
+		sop.setName("How to Avoid Sexual Harassment");
+		sop.setDescription("A how-to guide for men on avoiding sexually harassing women in the workplace environment.");
+		sop.setPriority(1);
+		sop.setID(5);
+		sop.setAuthorID(70);
+		sop.setRevision(2);
+		sop.setComplete(false);
 	}
 	
 	@Test
@@ -57,6 +46,11 @@ public class SOPTest{
 	@Test
 	public void testGetAuthorID(){
 		assertEquals(70, sop.getAuthorID());
+	}
+	
+	@Test
+	public void testGetRevision(){
+		assertEquals(2, sop.getRevision());
 	}
 	
 	@Test
@@ -132,46 +126,6 @@ public class SOPTest{
 		//test the new revision 
 		assertEquals(4, sop.getRevision());
 		
-	}
-	
-	@Test
-	public void TestInvalidSOP() {
-		List<SOP> failedList = new ArrayList<SOP>(); 
-		List<SOP> testList = new ArrayList<SOP>(); 
-		
-		testList.addAll(invalidList);
-		
-		//sort through the failed list 
-		for(SOP s: invalidList) {
-			if(s.getName() == "" || s.getName() == " ") {
-				System.out.println("SOPID: "+ s.getID() + "has an invalid name, removing it from the active system until it is fixed");
-				testList.remove(s);
-				failedList.add(s);
-			}
-			else if(s.getDescription() == "" || s.getDescription() == " ") {
-				System.out.println("SOP Name:" + s.getName() + "has an invalid description, removing it from active system until fixed");
-				testList.remove(s);
-				failedList.add(s);
-			}
-			else if(s.getID() <= 0 ) {
-				System.out.println("SOP Name:" + s.getName() + "has an invalid ID, removing it from active system until fixed");
-				testList.remove(s);
-				failedList.add(s);
-			}
-			else if(s.getPriority() <= 0) {
-				System.out.println("SOP Name:" + s.getName() + "has an invalid description, removing it from active system until fixed");
-				testList.remove(s);
-				failedList.add(s);
-			}
-			else if (s.getRevision() <= 0){
-				System.out.println("SOP Name:" + s.getName() + "has an invalid revision, removing it from active system until fixed");
-				testList.remove(s);
-				failedList.add(s);
-			}
-		}
-		
-		assertEquals(0, testList.size());
-		assertEquals(5, failedList.size());
 	}
 }
 

@@ -48,15 +48,15 @@ public class SOPControllerTest {
 		
 		user1 = new User();
 		user1.setEmail("Admin@google.com");
-		user1.setFirstname("Rodger");
-		user1.setLastname("Smith");
+		user1.setFirstName("Rodger");
+		user1.setLastName("Smith");
 		user1.setUserID(12);
 		user1.setPosition(pos1);
 		//user1.setAdminFlag(true);
 		
 		user2 = new User();
-		user2.setFirstname("Stan");
-		user2.setLastname("Smith");
+		user2.setFirstName("Stan");
+		user2.setLastName("Smith");
 		user2.setEmail("rookie@email.com");
 		//user2.setAdminFlag(false);
 		user2.setPassword("bangBang");

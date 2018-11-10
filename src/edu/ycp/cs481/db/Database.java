@@ -113,10 +113,10 @@ public class Database {
 				u.setUserID(resultSet.getInt(1));
 				u.setEmail(resultSet.getString(2));
 				u.setPassword(resultSet.getString(3));
-				u.setFirstname(resultSet.getString(4));
-				u.setLastname(resultSet.getString(5));
+				u.setFirstName(resultSet.getString(4));
+				u.setLastName(resultSet.getString(5));
 				u.setLockedOut(resultSet.getBoolean(6));
-				u.setArchiveFlag(resultSet.getBoolean(7));
+				u.setArchived(resultSet.getBoolean(7));
 				PositionController pc = new PositionController();
 				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				
@@ -141,7 +141,7 @@ public class Database {
 					s.setPriority(resultSet.getInt(4));
 					s.setRevision(resultSet.getInt(5));
 					s.setAuthorID(resultSet.getInt(6));
-					s.setArchiveFlag(resultSet.getBoolean(7));
+					s.setArchived(resultSet.getBoolean(7));
 					
 					sops.add(s);
 			}
@@ -422,10 +422,10 @@ public class Database {
 		}
 		
 		for(User u: userList){
-			names.add("Insert User " + u.getFirstname() + " " + u.getLastname());
+			names.add("Insert User " + u.getFirstName() + " " + u.getLastName());
 			sqls.add("insert into User (email, password, first_name, last_name, locked_out, archive_flag, " +
 					"position_id)  values ('" + u.getEmail() + "', '" + UserController.hashPassword(u.getPassword()) + "', '" + 
-					u.getFirstname() + "', '" + u.getLastname() + "', " + u.isLockedOut() + ", " + u.isArchiveFlag() + ", " + 
+					u.getFirstName() + "', '" + u.getLastName() + "', " + u.isLockedOut() + ", " + u.isArchived() + ", " + 
 					u.getPosition().getID() + ")");
 		}
 		
@@ -433,7 +433,7 @@ public class Database {
 			names.add("Insert SOP " + s.getName());
 			sqls.add("insert into SOP (title, description, priority, version, author_id, archive_flag)" +
 					" values ('" + s.getName() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
-					s.getRevision() + ", " + s.getAuthorID() + ", " + s.getArchiveFlag() + ")");
+					s.getRevision() + ", " + s.getAuthorID() + ", " + s.isArchived() + ")");
 		}
 		
 		for(Position p: posList){
@@ -580,7 +580,7 @@ public class Database {
 						result.setPriority(resultSet.getInt(4));
 						result.setRevision(resultSet.getInt(5));
 						result.setAuthorID(resultSet.getInt(6));
-						result.setArchiveFlag(resultSet.getBoolean(7));
+						result.setArchived(resultSet.getBoolean(7));
 					}
 
 
