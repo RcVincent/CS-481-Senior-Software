@@ -23,13 +23,9 @@ public class CreateSOPServlet extends HttpServlet{
 		System.out.println("Create SOP Servlet: doget");
 		
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
-			//user isnt logged in or the session expired 
-			resp.sendRedirect(req.getContextPath() + "/login");
-		} else {
-			//TODO: Check for admin/privileges check
+		
 			req.getRequestDispatcher("/create_sop.jsp").forward(req, resp);
-		}
+		
 		
 		
 	}

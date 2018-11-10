@@ -9,6 +9,10 @@
   	<servlet-name>UserHome</servlet-name>
   	<url-pattern>/user_home</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UserHome</servlet-name>
+  	<url-pattern>/index</url-pattern>
+  </servlet-mapping>
   
   <servlet>
   	<servlet-name>Login</servlet-name>
@@ -74,6 +78,6 @@
   </servlet-mapping>
   
   <welcome-file-list>
-  	<welcome-file>user_home</welcome-file>
+  	<welcome-file>login</welcome-file>
   </welcome-file-list>
 </web-app>

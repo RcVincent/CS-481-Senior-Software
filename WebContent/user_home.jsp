@@ -20,7 +20,7 @@
 			</div>
 			<div class="col-2">
 				<form method="post">
-					<button type="submit" name="logout" class="btn btn-danger" value="logout">Logout</button>
+					<button type="submit" name="logout" class="btn btn-danger" value="logout" onclick="logout()">Logout</button>
 				</form>
 			</div>
 		</div>

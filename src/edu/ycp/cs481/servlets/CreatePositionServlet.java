@@ -24,12 +24,9 @@ public class CreatePositionServlet extends HttpServlet {
 		System.out.println("Create Position: doget");
 		
 		HttpSession session = req.getSession();
-		if (session.getAttribute("user_id") == null) {
-			// user is not logged in, or the session expired
-			resp.sendRedirect(req.getContextPath() + "/login");
-		} else {
+		
 			req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
-		}	
+		
 
 		
 	}

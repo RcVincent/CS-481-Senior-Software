@@ -18,10 +18,6 @@ public class ChangePositionPriorityServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}
 		
 		req.getRequestDispatcher("/change_positionPriority.jsp").forward(req, resp);
 	}

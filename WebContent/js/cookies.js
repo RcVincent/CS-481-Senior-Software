@@ -1,7 +1,7 @@
 
-function setCookie(cname,cvalue,exhours) {
+function setCookie(cname,cvalue,exdays) {
     var d = new Date();
-    d.setTime(d.getTime() + (exhours*24*60*60*1000));
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires=" + d.toGMTString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
@@ -33,11 +33,21 @@ function checkCookie() {
     }
 }
 
+
+function logout() {
+    var user=getCookie("username");
+    	setCookie("username","",9999);
+        alert(user+" has been logged out.");
+        window.location.href="login.jsp";
+}
+
+
+
 function checkCookieLogin() {
     var user=getCookie("username");
     if (user != "") {
         alert("Your currently logged in as " + user);
-        window.location.href="index";
+        window.location.href="user_home";
     } 
     else {
         
