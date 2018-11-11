@@ -7,7 +7,6 @@ public class User{
 	private Position position;
 	private boolean lockedOut, archived;
 	// TODO: MOVE TO CONTROLLER
-	private TrainingHistory history = new TrainingHistory();
 	
 	// Getters/Setters
 	public int getUserID(){
@@ -74,12 +73,4 @@ public class User{
 		this.lockedOut = lockedOut;
 	}
 	
-	// TODO: MOVE THESE TO A CONTROLLER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public TrainingHistory getHistory(){
-		return history;
-	}
-	
-	public void setHistory(TrainingHistory history){
-		this.history = history;
-	}
 }

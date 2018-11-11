@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import edu.ycp.cs481.model.TrainingHistory;
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.Position;
@@ -16,7 +15,7 @@ public class SystemSnifferTest {
 	
 	private SystemSnifferController s; 
 	private User admin, user, manager;
-	private TrainingHistory AdminHist, userHist, managerHist;
+	
 	private SOP s1, s2, s3, s4, s5, s6, s7, s8, s9, s10; 
 	private Position adminP, userP, managerP; 
 	private List<SOP> adminReqs, userReqs, managerReqs; 
@@ -25,10 +24,7 @@ public class SystemSnifferTest {
 	@Before 
 	public void setUp() {
 		userList = new ArrayList<User>(); 
-		
-		AdminHist = new TrainingHistory(); 
-		userHist = new TrainingHistory();
-		managerHist = new TrainingHistory(); 
+		 
 		
 		adminReqs = new ArrayList<SOP>(); 
 		userReqs = new ArrayList<SOP>(); 
@@ -157,20 +153,6 @@ public class SystemSnifferTest {
 		managerReqs.add(s8);
 		managerReqs.add(s9);
 		
-		//add the sop requitement lists to their positions 
-		adminP.setRequirements(adminReqs);
-		managerP.setRequirements(managerReqs);
-		userP.setRequirements(userReqs);
-		
-		//set the training history users 
-		AdminHist.setUser(admin);
-		userHist.setUser(user);
-		managerHist.setUser(manager);
-		
-		//set the users training histories 
-		admin.setHistory(AdminHist);
-		user.setHistory(userHist);
-		manager.setHistory(managerHist);
 	
 	}
 	
