@@ -8,6 +8,7 @@ public class Position {
 	private int ID, Priority;
 	private List<SOP> Requirements;
 	private boolean isValid; 
+	private List<SOP> completedSOPs, IncompleteSOPs;
 	// Constructors
 	public Position() {
 		Requirements = new ArrayList<SOP>();
@@ -67,6 +68,22 @@ public class Position {
 
 	public void setValid(boolean isValid) {
 		this.isValid = isValid;
+	}
+
+	public List<SOP> getCompletedSOPs() {
+		return completedSOPs;
+	}
+
+	public void setCompletedSOPs(List<SOP> completedSOPs) {
+		this.completedSOPs = completedSOPs;
+	}
+
+	public List<SOP> getIncompleteSOPs() {
+		return IncompleteSOPs;
+	}
+
+	public void setIncompleteSOPs(List<SOP> incompleteSOPs) {
+		IncompleteSOPs = incompleteSOPs;
 	}
 
 }

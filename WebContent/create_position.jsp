@@ -61,7 +61,6 @@
 		</div>
 	</form>
 </div>
-<p class="note">Already have an account? <a href="./login">Login</a></p>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
 
 </body></html>	
