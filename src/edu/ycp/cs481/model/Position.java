@@ -70,20 +70,28 @@ public class Position {
 		this.isValid = isValid;
 	}
 
-	public List<SOP> getCompletedSOPs() {
+	public List<SOP> getCompletedSOPs(Position p) {
+		completedSOPs = new ArrayList<SOP>(); 
+		for(SOP s: p.getRequirements()) {
+			if(s.isComplete()) {
+				completedSOPs.add(s);
+			}
+		}
+		
 		return completedSOPs;
 	}
 
-	public void setCompletedSOPs(List<SOP> completedSOPs) {
-		this.completedSOPs = completedSOPs;
-	}
-
-	public List<SOP> getIncompleteSOPs() {
+	public List<SOP> getIncompleteSOPs(Position p) {
+		IncompleteSOPs = new ArrayList<SOP>(); 
+		for(SOP s: p.getRequirements()) {
+			if(!s.isComplete()) {
+				IncompleteSOPs.add(s);
+			}
+		}
+		
 		return IncompleteSOPs;
 	}
 
-	public void setIncompleteSOPs(List<SOP> incompleteSOPs) {
-		IncompleteSOPs = incompleteSOPs;
-	}
+	
 
 }
