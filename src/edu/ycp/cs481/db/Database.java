@@ -19,16 +19,16 @@ import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.UserController;
 
 public class Database {
-	public String userPieces = "User.user_id, User.email, User.password, User.first_name, User.last_name,"
-							+ " User.locked_out, User.archive_flag, User.create_time, User.position_id, User.employee_id";
-	public String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
-	public String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
-	public static String dbName = "cs481db";
+	private String userPieces = "User.user_id, User.employee_id, User.email, User.password, User.first_name, User.last_name,"
+							+ " User.locked_out, User.archive_flag, User.position_id";
+	private String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
+	private String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, SOP.archive_flag";
+	private static String dbName = "cs481db";
 	
-	static {
-		try {
+	static{
+		try{
 			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new IllegalStateException("Could not load JDBC driver");
 		}
 	}
@@ -111,12 +111,13 @@ public class Database {
 				User u = new User();
 				
 				u.setUserID(resultSet.getInt(1));
-				u.setEmail(resultSet.getString(2));
-				u.setPassword(resultSet.getString(3));
-				u.setFirstName(resultSet.getString(4));
-				u.setLastName(resultSet.getString(5));
-				u.setLockedOut(resultSet.getBoolean(6));
-				u.setArchived(resultSet.getBoolean(7));
+				u.setEmployeeID(resultSet.getInt(2));
+				u.setEmail(resultSet.getString(3));
+				u.setPassword(resultSet.getString(4));
+				u.setFirstName(resultSet.getString(5));
+				u.setLastName(resultSet.getString(6));
+				u.setLockedOut(resultSet.getBoolean(7));
+				u.setArchived(resultSet.getBoolean(8));
 				PositionController pc = new PositionController();
 				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
 				

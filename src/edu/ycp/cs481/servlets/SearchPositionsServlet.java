@@ -24,7 +24,7 @@ public class SearchPositionsServlet extends HttpServlet{
 		}
 		
 		
-		req.getRequestDispatcher("/searchPositions.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_positions.jsp").forward(req, resp);
 	}
 
 	@Override
@@ -60,6 +60,6 @@ public class SearchPositionsServlet extends HttpServlet{
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		
-		req.getRequestDispatcher("/searchPositions.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_positions.jsp").forward(req, resp);
 	}
 }

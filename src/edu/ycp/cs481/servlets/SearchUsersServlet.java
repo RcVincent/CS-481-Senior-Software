@@ -23,49 +23,35 @@ public class SearchUsersServlet extends HttpServlet {
 			return;
 		}
 		
-		req.getRequestDispatcher("/searchUsers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 	}
 	
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		String idStr = req.getParameter("userID");
+		String eIDStr = req.getParameter("employeeID");
+		String posIDStr = req.getParameter("positionID");
 		
-		if(req.getParameter("index") != null) {
-			System.out.println("returning to index");
-			resp.sendRedirect(req.getContextPath() + "/index");
+		int userID = idStr.equalsIgnoreCase("")?-1:Integer.parseInt(idStr);
+		int employeeID = eIDStr.equalsIgnoreCase("")?-1:Integer.parseInt(eIDStr);
+		String email = req.getParameter("email");
+		String firstName = req.getParameter("firstName");
+		String lastName = req.getParameter("lastName");
+		int positionID = posIDStr.equalsIgnoreCase("")?-1:Integer.parseInt(posIDStr);
+		
+		UserController uc = new UserController();
+		ArrayList<User> users = uc.searchForUsers(userID, employeeID, email, firstName, lastName, positionID);
+		
+		for(int i = 0; i < users.size(); i++){
+			req.setAttribute("userID" + i, users.get(i).getUserID());
+			req.setAttribute("employeeID" + i, users.get(i).getEmployeeID());
+			req.setAttribute("email" + i, users.get(i).getEmail());
+			req.setAttribute("firstName" + i, users.get(i).getFirstName());
+			req.setAttribute("lastName" + i, users.get(i).getLastName());
+			req.setAttribute("posTitle" + i, users.get(i).getPosition().getTitle());
 		}
 		
-		UserController uc = new UserController(); 
-		
-		String email = (String) req.getParameter("email");
-		String fname = (String) req.getParameter("firstname"); 
-		String lname = (String) req.getParameter("lastname");
-		String id = (String) req.getParameter("userID");
-		String pID = (String) req.getParameter("positionID");
-		int searchID;
-		int posSearchID; 
-		
-		if(id == null || id == "" || id == " ") {
-			searchID = -1; 
-		}
-		
-		else {
-			searchID = Integer.parseInt(id);
-		}
-		
-		if(pID == null || pID == "" || pID == " ") {
-			posSearchID = 2;
-		}
-		else {
-			posSearchID = Integer.parseInt(pID);
-		}
-		//TODO: Factor this for employee_id?
-		ArrayList<User> result = uc.searchForUsers(searchID, email, fname, lname, posSearchID, -1);
-		
-		if(req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/index");
-		}
-		
-		req.getRequestDispatcher("/searchUsers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 	}
 }

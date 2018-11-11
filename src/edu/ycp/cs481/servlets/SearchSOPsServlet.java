@@ -23,7 +23,7 @@ public class SearchSOPsServlet extends HttpServlet {
 		}
 		
 		
-		req.getRequestDispatcher("/searchSOPs.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_sops.jsp").forward(req, resp);
 	}
 
 	@Override

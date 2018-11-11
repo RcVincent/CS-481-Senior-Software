@@ -34,10 +34,11 @@ public class UserController{
 						String.valueOf(positionID)});
 	}
 
-	public ArrayList<User> searchForUsers(int userID, String email, String firstName, String lastName, int positionID, int employeeID){
+	public ArrayList<User> searchForUsers(int userID, int employeeID, String email, String firstName, String lastName, 
+			int positionID){
 		try{
 			String name = "";
-			String sql = "select * from User";
+			String sql = "select " + db.getUserPieces() + " from User";
 			if(userID == -1 && (email == null || email.equalsIgnoreCase(""))
 					&& (firstName == null || firstName.equalsIgnoreCase(""))
 					&& (lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
@@ -50,6 +51,16 @@ public class UserController{
 				if(userID != -1){
 					name += "id of " + userID;
 					sql += "user_id = " + userID;
+					prevSet = true;
+				}
+				
+				if(employeeID != -1) {
+					if(prevSet) {
+						name += " and ";
+						sql += " and "; 
+					}
+					name += "employee ID of " + employeeID;
+					sql += "employee_id = " + employeeID;
 					prevSet = true;
 				}
 
@@ -93,16 +104,6 @@ public class UserController{
 					sql += "position_id = " + positionID;
 					prevSet = true;
 				}
-				
-				if(employeeID != -1) {
-					if(prevSet) {
-						name += " and ";
-						sql += " and "; 
-					}
-					name += "employee ID of " + employeeID;
-					sql += "employee_id = " + employeeID;
-					prevSet = true;
-				}
 			}
 			ArrayList<User> results = db.executeQuery(name, sql, db.getUserResFormat());
 			if(results.size() == 0 && userID != -1){
@@ -135,7 +136,7 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
-			ArrayList<User> u = searchForUsers(userID, null, null, null, -1, -1);
+			ArrayList<User> u = searchForUsers(userID, -1, null, null, null, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
