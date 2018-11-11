@@ -8,7 +8,6 @@ public class Position {
 	private int ID, Priority;
 	private List<SOP> Requirements;
 	private boolean isValid; 
-	private List<SOP> completedSOPs, IncompleteSOPs;
 	// Constructors
 	public Position() {
 		Requirements = new ArrayList<SOP>();
@@ -71,7 +70,7 @@ public class Position {
 	}
 
 	public List<SOP> getCompletedSOPs(Position p) {
-		completedSOPs = new ArrayList<SOP>(); 
+		List<SOP> completedSOPs = new ArrayList<SOP>(); 
 		for(SOP s: p.getRequirements()) {
 			if(s.isComplete()) {
 				completedSOPs.add(s);
@@ -82,7 +81,7 @@ public class Position {
 	}
 
 	public List<SOP> getIncompleteSOPs(Position p) {
-		IncompleteSOPs = new ArrayList<SOP>(); 
+		List<SOP> IncompleteSOPs = new ArrayList<SOP>(); 
 		for(SOP s: p.getRequirements()) {
 			if(!s.isComplete()) {
 				IncompleteSOPs.add(s);
