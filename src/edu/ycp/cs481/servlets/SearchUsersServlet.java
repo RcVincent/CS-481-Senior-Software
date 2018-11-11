@@ -44,12 +44,12 @@ public class SearchUsersServlet extends HttpServlet {
 		ArrayList<User> users = uc.searchForUsers(userID, employeeID, email, firstName, lastName, positionID);
 		
 		for(int i = 0; i < users.size(); i++){
-			req.setAttribute("userID" + i, users.get(i).getUserID());
-			req.setAttribute("employeeID" + i, users.get(i).getEmployeeID());
-			req.setAttribute("email" + i, users.get(i).getEmail());
-			req.setAttribute("firstName" + i, users.get(i).getFirstName());
-			req.setAttribute("lastName" + i, users.get(i).getLastName());
-			req.setAttribute("posTitle" + i, users.get(i).getPosition().getTitle());
+			req.setAttribute("userID" + (i+1), users.get(i).getUserID());
+			req.setAttribute("employeeID" + (i+1), users.get(i).getEmployeeID());
+			req.setAttribute("email" + (i+1), users.get(i).getEmail());
+			req.setAttribute("firstName" + (i+1), users.get(i).getFirstName());
+			req.setAttribute("lastName" + (i+1), users.get(i).getLastName());
+			req.setAttribute("posTitle" + (i+1), users.get(i).getPosition().getTitle());
 		}
 		
 		req.getRequestDispatcher("/search_users.jsp").forward(req, resp);

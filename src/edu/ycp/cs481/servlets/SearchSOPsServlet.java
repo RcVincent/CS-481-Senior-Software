@@ -17,13 +17,11 @@ public class SearchSOPsServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
+		}else{
+			req.getRequestDispatcher("/search_sops.jsp").forward(req, resp);
 		}
-		
-		
-		req.getRequestDispatcher("/search_sops.jsp").forward(req, resp);
 	}
 
 	@Override
@@ -36,45 +34,28 @@ public class SearchSOPsServlet extends HttpServlet {
 		
 		SOPController sc = new SOPController(); 
 		
-		String id = req.getParameter("sopID"); 
+		String idStr = req.getParameter("sopID");
+		int id = idStr.equalsIgnoreCase("")?-1:Integer.parseInt(idStr);
 		String title = req.getParameter("title");
-		String desc = req.getParameter("description"); 
-		String prio = req.getParameter("priority");
-		String version = req.getParameter("version");
-		String authorid = req.getParameter("authorID"); 
+		String description = req.getParameter("description");
+		String priorityStr = req.getParameter("priority");
+		int priority = priorityStr.equalsIgnoreCase("")?-1:Integer.parseInt(priorityStr);
+		String versionStr = req.getParameter("version");
+		int version = versionStr.equalsIgnoreCase("")?-1:Integer.parseInt(versionStr);
+		String authorIDStr = req.getParameter("authorID");
+		int authorID = authorIDStr.equalsIgnoreCase("")?-1:Integer.parseInt(authorIDStr);
 		
-		int sopID, priority, revision, authorID; 
-		
-		if(id == null || id == "" || id == " ") {
-			sopID = -1; 
-		}else {
-			sopID = Integer.parseInt(id);
+		ArrayList<SOP> sops = sc.searchForSOPs(id, title, description, priority, version, authorID);
+		for(int i = 0; i < sops.size(); i++){
+			req.setAttribute("sopID" + (i+1), sops.get(i).getID());
+			req.setAttribute("title" + (i+1), sops.get(i).getName());
+			req.setAttribute("description" + (i+1), sops.get(i).getDescription());
+			req.setAttribute("priority" + (i+1), sops.get(i).getPriority());
+			req.setAttribute("version" + (i+1), sops.get(i).getRevision());
+			req.setAttribute("authorID" + (i+1), sops.get(i).getAuthorID());
 		}
 		
-		if(prio == null || prio == "" || prio == " ") {
-			priority = 0; 
-		} else {
-			priority = Integer.parseInt(prio);
-		}
-		
-		if(version == null || version == "" || version == " ") {
-			revision = 0; 
-		} else {
-			revision = Integer.parseInt(version);
-		}
-		
-		if(authorid == null || authorid == "" || authorid == " ") {
-			authorID = 0;
-		} else {
-			authorID = Integer.parseInt(authorid);
-		}
-		ArrayList<SOP> result = sc.searchForSOPs(sopID, title, desc, priority, revision, authorID);
-		
-		if(req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/index");
-		}
-		
-		req.getRequestDispatcher("/searchSOPs.jsp").forward(req, resp);
+		req.getRequestDispatcher("/search_sops.jsp").forward(req, resp);
 		
 	}
 }
