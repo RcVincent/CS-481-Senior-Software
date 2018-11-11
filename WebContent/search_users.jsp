@@ -36,21 +36,22 @@
 			</div>
 		</div>
 	</form>
-	<c:if test="${!empty userID1}">
-		<div class="row">
-			<div class="col-3">
-				<p><b>UID / EID</b></p>
-			</div>
-			<div class="col-3">
-				<p><b>Email</b></p>
-			</div>
-			<div class="col-3">
-				<p><b>Name</b></p>
-			</div>
-			<div class="col-3">
-				<p><b>Position Title</b></p>
-			</div>
+	<div class="row">
+		<div class="col-3">
+			<p><b>UID / EID</b></p>
 		</div>
+		<div class="col-3">
+			<p><b>Email</b></p>
+		</div>
+		<div class="col-3">
+			<p><b>Name</b></p>
+		</div>
+		<div class="col-3">
+			<p><b>Position Title</b></p>
+		</div>
+	</div>
+	<!-- TODO: Find a better way -->
+	<c:if test="${!empty userID1}">
 		<div class="row">
 			<div class="col-3">
 				<p>${userID1} / ${employeeID1}</p>
@@ -63,6 +64,150 @@
 			</div>
 			<div class="col-3">
 				<p>${posTitle1}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID2}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID2} / ${employeeID2}</p>
+			</div>
+			<div class="col-3">
+				<p>${email2}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName2} ${lastName2}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle2}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID3}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID3} / ${employeeID3}</p>
+			</div>
+			<div class="col-3">
+				<p>${email3}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName3} ${lastName3}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle3}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID4}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID4} / ${employeeID4}</p>
+			</div>
+			<div class="col-3">
+				<p>${email4}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName4} ${lastName4}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle4}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID5}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID5} / ${employeeID5}</p>
+			</div>
+			<div class="col-3">
+				<p>${email5}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName5} ${lastName5}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle5}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID6}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID6} / ${employeeID6}</p>
+			</div>
+			<div class="col-3">
+				<p>${email6}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName6} ${lastName6}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle6}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID7}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID7} / ${employeeID7}</p>
+			</div>
+			<div class="col-3">
+				<p>${email7}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName7} ${lastName7}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle7}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID8}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID8} / ${employeeID8}</p>
+			</div>
+			<div class="col-3">
+				<p>${email8}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName8} ${lastName8}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle8}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID9}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID9} / ${employeeID9}</p>
+			</div>
+			<div class="col-3">
+				<p>${email9}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName9} ${lastName9}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle9}</p>
+			</div>
+		</div>
+	</c:if>
+	<c:if test="${!empty userID10}">
+		<div class="row">
+			<div class="col-3">
+				<p>${userID10} / ${employeeID10}</p>
+			</div>
+			<div class="col-3">
+				<p>${email10}</p>
+			</div>
+			<div class="col-3">
+				<p>${firstName10} ${lastName10}</p>
+			</div>
+			<div class="col-3">
+				<p>${posTitle10}</p>
 			</div>
 		</div>
 	</c:if>

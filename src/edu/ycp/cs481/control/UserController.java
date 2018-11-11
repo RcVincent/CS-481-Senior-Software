@@ -39,7 +39,7 @@ public class UserController{
 		try{
 			String name = "";
 			String sql = "select " + db.getUserPieces() + " from User";
-			if(userID == -1 && (email == null || email.equalsIgnoreCase(""))
+			if(userID == -1 && employeeID == -1 && (email == null || email.equalsIgnoreCase(""))
 					&& (firstName == null || firstName.equalsIgnoreCase(""))
 					&& (lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
 				name = "Get All Users";
