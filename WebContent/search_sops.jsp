@@ -3,33 +3,33 @@
 
 <html>
 <head>
-	<title>CTM mkii - Search Users</title>
+	<title>CTM mkii - Search SOPs</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<h1>Search Users</h1>
+<h1>Search SOPs</h1>
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">
 		<div class="form-group row">
 			<div class="fieldset col-3">
-				<input type="number" class="form-control" id="userID" name="userID" value="${userID}" placeholder="User ID">
+				<input type="number" class="form-control" id="sopID" name="sopID" value="${sopID}" placeholder="SOP ID">
 			</div>
 			<div class="fieldset col-3">
-				<input type="number" class="form-control" id="employeeID" name="employeeID" value="${employeeID}" placeholder="Employee ID">
+				<input type="text" class="form-control" id="title" name="title" value="${title}" placeholder="Title">
 			</div>
 			<div class="fieldset col-3">
-				<input type="text" class="form-control" id="email" name="email" value="${email}" placeholder="Email">
+				<input type="text" class="form-control" id="description" name="description" value="${description}" placeholder="Description">
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="fieldset col-3">
-				<input type="text" class="form-control" id="firstName" name="firstName" value="${firstName}" placeholder="First Name">
+				<input type="number" class="form-control" id="priority" name="priority" value="${priority}" placeholder="Priority">
 			</div>
 			<div class="fieldset col-3">
-				<input type="text" class="form-control" id="lastName" name="lastName" value="${lastName}" placeholder="Last Name">
+				<input type="number" class="form-control" id="version" name="version" value="${version}" placeholder="Version">
 			</div>
 			<div class="fieldset col-3">
-				<input type="number" class="form-control" id="positionID" name="positionID" value="${positionID}" placeholder="Position ID">
+				<input type="number" class="form-control" id="authorID" name="authorID" value="${authorID}" placeholder="Author ID">
 			</div>
 			<div class="fieldset col-3">
 				<button type="submit" class="btn btn-info">Search</button>
@@ -38,176 +38,176 @@
 	</form>
 	<div class="row">
 		<div class="col-3">
-			<p><b>UID / EID</b></p>
+			<p><b>SOP ID / Version / Author ID</b></p>
 		</div>
 		<div class="col-3">
-			<p><b>Email</b></p>
+			<p><b>Title</b></p>
 		</div>
 		<div class="col-3">
-			<p><b>Name</b></p>
+			<p><b>Description</b></p>
 		</div>
 		<div class="col-3">
-			<p><b>Position Title</b></p>
+			<p><b>Priority</b></p>
 		</div>
 	</div>
 	<!-- TODO: Find a better way -->
-	<c:if test="${!empty userID1}">
+	<c:if test="${!empty sopID1}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID1} / ${employeeID1}</p>
+				<p>${sopID1} / ${version1} / ${authorID1}</p>
 			</div>
 			<div class="col-3">
-				<p>${email1}</p>
+				<p>${title1}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName1} ${lastName1}</p>
+				<p>${description1}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle1}</p>
+				<p>${priority1}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID2}">
+	<c:if test="${!empty sopID2}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID2} / ${employeeID2}</p>
+				<p>${sopID2} / ${version2} / ${authorID2}</p>
 			</div>
 			<div class="col-3">
-				<p>${email2}</p>
+				<p>${title2}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName2} ${lastName2}</p>
+				<p>${description2}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle2}</p>
+				<p>${priority2}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID3}">
+	<c:if test="${!empty sopID3}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID3} / ${employeeID3}</p>
+				<p>${sopID3} / ${version3} / ${authorID3}</p>
 			</div>
 			<div class="col-3">
-				<p>${email3}</p>
+				<p>${title3}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName3} ${lastName3}</p>
+				<p>${description3}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle3}</p>
+				<p>${priority3}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID4}">
+	<c:if test="${!empty sopID4}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID4} / ${employeeID4}</p>
+				<p>${sopID4} / ${version4} / ${authorID4}</p>
 			</div>
 			<div class="col-3">
-				<p>${email4}</p>
+				<p>${title4}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName4} ${lastName4}</p>
+				<p>${description4}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle4}</p>
+				<p>${priority4}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID5}">
+	<c:if test="${!empty sopID5}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID5} / ${employeeID5}</p>
+				<p>${sopID5} / ${version5} / ${authorID5}</p>
 			</div>
 			<div class="col-3">
-				<p>${email5}</p>
+				<p>${title5}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName5} ${lastName5}</p>
+				<p>${description5}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle5}</p>
+				<p>${priority5}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID6}">
+	<c:if test="${!empty sopID6}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID6} / ${employeeID6}</p>
+				<p>${sopID6} / ${version6} / ${authorID6}</p>
 			</div>
 			<div class="col-3">
-				<p>${email6}</p>
+				<p>${title6}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName6} ${lastName6}</p>
+				<p>${description6}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle6}</p>
+				<p>${priority6}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID7}">
+	<c:if test="${!empty sopID7}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID7} / ${employeeID7}</p>
+				<p>${sopID7} / ${version7} / ${authorID7}</p>
 			</div>
 			<div class="col-3">
-				<p>${email7}</p>
+				<p>${title7}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName7} ${lastName7}</p>
+				<p>${description7}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle7}</p>
+				<p>${priority7}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID8}">
+	<c:if test="${!empty sopID8}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID8} / ${employeeID8}</p>
+				<p>${sopID8} / ${version8} / ${authorID8}</p>
 			</div>
 			<div class="col-3">
-				<p>${email8}</p>
+				<p>${title8}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName8} ${lastName8}</p>
+				<p>${description8}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle8}</p>
+				<p>${priority8}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID9}">
+	<c:if test="${!empty sopID9}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID9} / ${employeeID9}</p>
+				<p>${sopID9} / ${version9} / ${authorID9}</p>
 			</div>
 			<div class="col-3">
-				<p>${email9}</p>
+				<p>${title9}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName9} ${lastName9}</p>
+				<p>${description9}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle9}</p>
+				<p>${priority9}</p>
 			</div>
 		</div>
 	</c:if>
-	<c:if test="${!empty userID10}">
+	<c:if test="${!empty sopID10}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID10} / ${employeeID10}</p>
+				<p>${sopID10} / ${version10} / ${authorID10}</p>
 			</div>
 			<div class="col-3">
-				<p>${email10}</p>
+				<p>${title10}</p>
 			</div>
 			<div class="col-3">
-				<p>${firstName10} ${lastName10}</p>
+				<p>${description10}</p>
 			</div>
 			<div class="col-3">
-				<p>${posTitle10}</p>
+				<p>${priority10}</p>
 			</div>
 		</div>
 	</c:if>

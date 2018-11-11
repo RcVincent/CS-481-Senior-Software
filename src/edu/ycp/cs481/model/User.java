@@ -1,7 +1,7 @@
 package edu.ycp.cs481.model;
 
 public class User{
-	private int userID;
+	private int userID, employeeID;
 	private String email, password;
 	private String firstName, lastName;
 	private Position position;
@@ -15,6 +15,14 @@ public class User{
 	
 	public void setUserID(int userID){
 		this.userID = userID;
+	}
+	
+	public int getEmployeeID(){
+		return employeeID;
+	}
+	
+	public void setEmployeeID(int employeeID){
+		this.employeeID = employeeID;
 	}
 	
 	public String getEmail(){
