@@ -359,5 +359,24 @@ public class PositionTest {
 		assertEquals(2, failList.size());
 	}
 	
+	@Test
+	public void testGetIncompleteSOPs() {
+		List<SOP> testList = new ArrayList<SOP>();
+		
+		testList = p1.getIncompleteSOPs(p1);
+		
+		assertEquals(2, testList.size()); 
+	}
+	
+	@Test
+	public void testGetCompleteSOPs() {
+		req2.setComplete(true);
+		req3.setComplete(true);
+		
+		List<SOP> testList = new ArrayList<SOP>(); 
+		testList = p2.getCompletedSOPs(p2);
+		
+		assertEquals(2, testList.size()); 
+	}
 	
 }
