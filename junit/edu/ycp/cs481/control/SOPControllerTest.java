@@ -116,7 +116,7 @@ public class SOPControllerTest {
 	public void testSearchByID() {
 		int searchID = 1;
 		
-		List<SOP> testList = sc.searchForSOPs(searchID, "", "", 0, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(searchID, false, "", false, "", 0, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with id "+ searchID + " failed."); 
@@ -134,7 +134,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByName() {
 		String searchName = "Logout";
-		List<SOP> testList = sc.searchForSOPs(0, searchName, "", 0, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(0, false, searchName, false, "", 0, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with name "+searchName+ "failed."); 
@@ -152,7 +152,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByPriority() {
 		int searchPrio = 7; 
-		List<SOP> testList = sc.searchForSOPs(0, "", "", searchPrio, 0, 0);
+		List<SOP> testList = sc.searchForSOPs(0, false, "", false, "", searchPrio, 0, 0);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with "+ searchPrio+ "failed."); 
@@ -181,7 +181,7 @@ public class SOPControllerTest {
 	@Test
 	public void testSearchByAuthor() {
 		int searchAuthorID = 12; 
-		List<SOP> testList = sc.searchForSOPs(0, "", "", 0, 0, searchAuthorID);
+		List<SOP> testList = sc.searchForSOPs(0, false, "", false, "", 0, 0, searchAuthorID);
 		
 		if(testList.isEmpty()) {
 			System.out.println("The search for sop with author id "+ searchAuthorID + "failed."); 

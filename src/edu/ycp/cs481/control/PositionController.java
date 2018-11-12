@@ -16,57 +16,40 @@ public class PositionController{
 				new String[]{positionTitle, description, String.valueOf(priority)});
 	}
 
-	public ArrayList<Position> searchForPositions(int positionID, String title, String description, int priority){
+	public ArrayList<Position> searchForPositions(int positionID, boolean titlePartial, String title, 
+			boolean descPartial, String description, int priority){
 		try{
-			String name = "";
-			String sql = "select * from Position";
+			StringBuilder name = new StringBuilder("");
+			StringBuilder sql = new StringBuilder("select * from Position");
 			if(positionID == -1 && (title == null || title.equalsIgnoreCase(""))
 					&& (description == null || description.equalsIgnoreCase("")) && priority == -1){
-				name = "Get All Positions";
+				name.append("Get All Positions");
 			}else{
-				name = "Get Position with ";
-				sql += " where ";
-				boolean prevSet = false;
+				name.append("Get Position with ");
+				sql.append(" where ");
+				boolean first = true;
 
 				if(positionID != -1){
-					name += "id of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "position_id", positionID);
+					first = false;
 				}
 
 				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, titlePartial, "title", title);
+					first = false;
 				}
-
-				// TODO: Likely edit description (and possibly title) to search for partial? Not
-				// sure if this does that.
+				
 				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, descPartial, "description", description);
+					first = false;
 				}
 
 				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "priority", priority);
+					first = false;
 				}
 			}
-			ArrayList<Position> results = db.executeQuery(name, sql, db.getPosResFormat());
+			ArrayList<Position> results = db.executeQuery(name.toString(), sql.toString(), db.getPosResFormat());
 			if(positionID != -1){
 				if(results.size() == 0){
 					System.out.println("No Position found with ID " + positionID);

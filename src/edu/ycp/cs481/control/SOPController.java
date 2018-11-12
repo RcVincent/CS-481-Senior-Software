@@ -16,77 +16,51 @@ public class SOPController{
 						String.valueOf(authorID), String.valueOf(isArchived)});
 	}
 	
-	public ArrayList<SOP> searchForSOPs(int sopID, String title, String description, int priority, int version, int authorID){
+	public ArrayList<SOP> searchForSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
+			int priority, int version, int authorID){
 		try{
-			String name = "";
-			String sql = "select * from SOP";
+			StringBuilder name = new StringBuilder("");
+			StringBuilder sql = new StringBuilder("select * from SOP");
 			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
 					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
 					authorID == -1){
-				name = "Get All SOPs";
+				name.append("Get All SOPs");
 			}else{
-				name = "Get SOP with ";
-				sql += " where ";
-				boolean prevSet = false;
+				name.append("Get SOP with ");
+				sql.append(" where ");
+				boolean first = true;
 				
 				if(sopID != -1){
-					name += "id of " + sopID;
-					sql += "sop_id = " + sopID;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "sop_id", sopID);
+					first = false;
 				}
 				
 				if(title != null && !title.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "title of " + title;
-					sql += "title = '" + title + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, titlePartial, "title", title);
+					first = false;
 				}
 				
-				// TODO: Likely need to change to search partial descriptions
 				if(description != null && !description.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "description of " + description;
-					sql += "description = '" + description + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, descPartial, "description", description);
+					first = false;
 				}
 				
 				if(priority != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "priority " + priority;
-					sql += "priority = " + priority;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "priority", priority);
+					first = false;
 				}
 				
 				if(version != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "version " + version;
-					sql += "version = " + version;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "version", version);
+					first = false;
 				}
 				
 				if(authorID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "author_id of" + authorID;
-					sql += "author_id = " + authorID;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "author_id", authorID);
+					first = false;
 				}
 			}
-			ArrayList<SOP> results = db.executeQuery(name, sql, db.getSopResFormat());
+			ArrayList<SOP> results = db.executeQuery(name.toString(), sql.toString(), db.getSopResFormat());
 			if(sopID != -1){
 				if(results.size() == 0){
 					System.out.println("No SOP found with ID " + sopID);

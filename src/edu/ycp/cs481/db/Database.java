@@ -119,7 +119,7 @@ public class Database {
 				u.setLockedOut(resultSet.getBoolean(7));
 				u.setArchived(resultSet.getBoolean(8));
 				PositionController pc = new PositionController();
-				u.setPosition(pc.searchForPositions(resultSet.getInt(9), null, null, -1).get(0));
+				u.setPosition(pc.searchForPositions(resultSet.getInt(9), false, null, false, null, -1).get(0));
 				
 				users.add(u);
 			}
@@ -190,6 +190,30 @@ public class Database {
 	
 	public QueryResultFormat<ArrayList<ClockTime>> getTimeResFormat(){
 		return timeResFormat;
+	}
+	
+	public void addIntSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, String arg, int value){
+		if(!first){
+			name.append(" and ");
+			sql.append(" and ");
+		}
+		name.append(arg + " of " + value);
+		sql.append(arg + " = " + value);
+	}
+	
+	public void addStringSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, boolean partial, 
+			String arg, String value){
+		if(!first){
+			name.append(" and ");
+			sql.append(" and "); 
+		}
+		if(partial){
+			name.append(arg + " with " + value);
+			sql.append(arg + " like '%" + value + "%'");
+		}else{
+			name.append(arg + " of " + value);
+			sql.append(arg + " = '" + value + "'");
+		}
 	}
 	
 	public<ResultType> ResultType executeQuery(String name, String sql, QueryResultFormat<ResultType> querExec) throws SQLException{

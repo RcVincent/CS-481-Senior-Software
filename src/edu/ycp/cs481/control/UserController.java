@@ -34,85 +34,60 @@ public class UserController{
 						String.valueOf(positionID)});
 	}
 
-	public ArrayList<User> searchForUsers(int userID, int employeeID, String email, String firstName, String lastName, 
-			int positionID){
+	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
+			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID){
 		try{
-			String name = "";
-			String sql = "select " + db.getUserPieces() + " from User";
+			StringBuilder name = new StringBuilder("");
+			StringBuilder sql = new StringBuilder("select " + db.getUserPieces() + " from User");
 			if(userID == -1 && employeeID == -1 && (email == null || email.equalsIgnoreCase(""))
 					&& (firstName == null || firstName.equalsIgnoreCase(""))
 					&& (lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
-				name = "Get All Users";
+				name.append("Get All Users");
 			}else{
-				name = "Get User with ";
-				sql += " where ";
-				boolean prevSet = false;
+				name.append("Get User with ");
+				sql.append(" where ");
+				boolean first = true;
 
 				if(userID != -1){
-					name += "id of " + userID;
-					sql += "user_id = " + userID;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "user_id", userID);
+					first = false;
 				}
 				
-				if(employeeID != -1) {
-					if(prevSet) {
-						name += " and ";
-						sql += " and "; 
-					}
-					name += "employee ID of " + employeeID;
-					sql += "employee_id = " + employeeID;
-					prevSet = true;
+				if(employeeID != -1){
+					db.addIntSearchToSelect(first, name, sql, "employee_id", employeeID);
+					first = false;
 				}
 
-				// TODO: Likely change strings for searching by partial?
 				if(email != null && !email.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "email of " + email;
-					sql += "email = '" + email + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, emailPartial, "email", email);
+					first = false;
 				}
 
 				if(firstName != null && !firstName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "first name of " + firstName;
-					sql += "first_name = '" + firstName + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, firstNamePartial, "first_name", firstName);
+					first = false;
 				}
 
 				if(lastName != null && !lastName.equalsIgnoreCase("")){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "last name of " + lastName;
-					sql += "last_name = '" + lastName + "'";
-					prevSet = true;
+					db.addStringSearchToSelect(first, name, sql, lastNamePartial, "last_name", lastName);
+					first = false;
 				}
 
 				if(positionID != -1){
-					if(prevSet){
-						name += " and ";
-						sql += " and ";
-					}
-					name += "position ID of " + positionID;
-					sql += "position_id = " + positionID;
-					prevSet = true;
+					db.addIntSearchToSelect(first, name, sql, "position_id", positionID);
+					first = false;
 				}
 			}
-			ArrayList<User> results = db.executeQuery(name, sql, db.getUserResFormat());
+			System.out.println("Name: " + name.toString());
+			System.out.println("SQL: " + sql);
+			ArrayList<User> results = db.executeQuery(name.toString(), sql.toString(), db.getUserResFormat());
 			if(results.size() == 0 && userID != -1){
 				System.out.println("No User found with ID " + userID);
 			}else if(results.size() > 1){
 				if(userID != -1){
 					System.out.println("Multiple Users found with ID " + userID + "! Returning null");
 					return null;
-				}else if(email != null && !email.equalsIgnoreCase("")){
+				}else if(!emailPartial && (email != null && !email.equalsIgnoreCase(""))){
 					System.out.println("Multiple Users found with email " + email + "! Returning null");
 					return null;
 				}
@@ -136,7 +111,7 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
-			ArrayList<User> u = searchForUsers(userID, -1, null, null, null, -1);
+			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
