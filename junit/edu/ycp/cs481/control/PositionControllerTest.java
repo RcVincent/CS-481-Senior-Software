@@ -106,7 +106,7 @@ public class PositionControllerTest {
 	public void testGetPositionByID() {
 		List<Position> testList = new ArrayList<Position>(); 
 		int searchID = 2;
-		testList = poscontrol.searchForPositions(searchID, "", "", 0);
+		testList = poscontrol.searchForPositions(searchID, false, "", false, "", 0);
 		
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
@@ -119,7 +119,7 @@ public class PositionControllerTest {
 	public void testSearchByName() {
 		List<Position> testList = new ArrayList<Position>();
 		String searchName = "CEO";
-		testList = poscontrol.searchForPositions(-1, searchName, "", -1);
+		testList = poscontrol.searchForPositions(-1, false, searchName, false, "", -1);
 		
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
@@ -132,7 +132,7 @@ public class PositionControllerTest {
 	public void testSearchByPriority() {
 		List<Position> testList = new ArrayList<Position>();
 		int priority = 1; 
-		testList = poscontrol.searchForPositions(0, "", "", priority);
+		testList = poscontrol.searchForPositions(0, false, "", false, "", priority);
 		assertEquals(2, testList.size());
 		
 		Position p1 = testList.get(0);

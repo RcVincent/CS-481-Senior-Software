@@ -35,7 +35,7 @@ public class SearchPositionsServlet extends HttpServlet{
 		int priority = priorityStr.equalsIgnoreCase("")?-1:Integer.parseInt(priorityStr);
 		
 		PositionController pc = new PositionController();
-		ArrayList<Position> positions = pc.searchForPositions(id, title, desc, priority);
+		ArrayList<Position> positions = pc.searchForPositions(id, true, title, true, desc, priority);
 		
 		for(int i = 0; i < positions.size(); i++){
 			req.setAttribute("positionID" + (i+1), positions.get(i).getID());

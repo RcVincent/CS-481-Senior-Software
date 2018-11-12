@@ -45,7 +45,7 @@ public class SearchSOPsServlet extends HttpServlet {
 		String authorIDStr = req.getParameter("authorID");
 		int authorID = authorIDStr.equalsIgnoreCase("")?-1:Integer.parseInt(authorIDStr);
 		
-		ArrayList<SOP> sops = sc.searchForSOPs(id, title, description, priority, version, authorID);
+		ArrayList<SOP> sops = sc.searchForSOPs(id, true, title, true, description, priority, version, authorID);
 		for(int i = 0; i < sops.size(); i++){
 			req.setAttribute("sopID" + (i+1), sops.get(i).getID());
 			req.setAttribute("title" + (i+1), sops.get(i).getName());

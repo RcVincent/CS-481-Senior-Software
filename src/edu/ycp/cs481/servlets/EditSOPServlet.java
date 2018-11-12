@@ -38,7 +38,7 @@ public class EditSOPServlet extends HttpServlet {
 		String sopID = req.getParameter("sopID");
 		int sid = Integer.parseInt(sopID);
 		
-		ArrayList<SOP> result = sc.searchForSOPs(sid, "", "", 0, 0, 0);
+		ArrayList<SOP> result = sc.searchForSOPs(sid, false, "", false, "", 0, 0, 0);
 		SOP s = result.get(0);
 		
 		String newPriority = req.getParameter("newPriority");
