@@ -218,6 +218,20 @@ public class UserController{
 		return false;
 	}
 	
+	/*public ArrayList<User> getManagerOfUser(int userID) {
+		try {
+			return db.executeQuery("Get Manager of User",
+				"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + userID,
+				db.getUserResFormat());
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}*/
+
+	public void overturnLockout(int userID) {
+		db.executeUpdate("Overturn lockout on User with ID " + userID, "update User set lock_out = false where user_id = " + userID);
+	}
+	
 	public void archiveUser(int userID){
 		db.executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
 	}
