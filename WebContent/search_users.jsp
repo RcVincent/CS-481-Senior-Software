@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Search Users</h1>
+<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">
 		<div class="form-group row">
