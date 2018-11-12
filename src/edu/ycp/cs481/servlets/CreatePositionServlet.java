@@ -75,7 +75,7 @@ public class CreatePositionServlet extends HttpServlet {
 				req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
 			} else {
 				System.out.println("Position successfully inserted into db with ID " + posID);
-				
+				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}
 		} else {
 			req.setAttribute("title", positionTitle);

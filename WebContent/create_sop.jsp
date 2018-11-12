@@ -32,8 +32,8 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="description" class="control-label col-2">SOP Description:</label>
-					<textarea rows = "4" cols = "50" name = "description">
-					Enter SOP purpose here... </textarea><br>
+					<textarea rows = "4" cols = "50" name = "description"></textarea>
+					<br>
 				</div>
 			</div>
 		</div>
