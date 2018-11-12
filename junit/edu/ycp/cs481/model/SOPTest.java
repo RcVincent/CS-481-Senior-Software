@@ -127,5 +127,17 @@ public class SOPTest{
 		assertEquals(4, sop.getRevision());
 		
 	}
+	
+	@Test
+	public void testComplete() {
+		assertFalse(sop.isComplete());
+	}
+	
+	@Test
+	public void testSetAsComplete() {
+		sop.setComplete(true);
+		assertTrue(sop.isComplete());
+	}
+	
 }
 
