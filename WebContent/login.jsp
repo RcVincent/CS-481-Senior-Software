@@ -34,11 +34,11 @@ $SESSION["sessionid"];
 		</c:if>
 		<div class="form-group row">
 					<label for="email" class="control-label col-2">Email:</label>
-					<input type="text" class="form-control col-10" id="email" name="email" value="${email}">
+					<input type="text" class="form-control col-2" id="email" name="email" value="${email}">
 		</div>
 		<div class="row">
 					<label for="password" class="control-label col-2">Password:</label>
-					<input type="password" class="form-control col-10" id="password" name="password" value="${password}">
+					<input type="password" class="form-control col-2" id="password" name="password" value="${password}">
 		</div>
 		<div class="row">
 			<div class="col">
