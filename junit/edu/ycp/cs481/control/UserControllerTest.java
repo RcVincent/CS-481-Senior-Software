@@ -271,6 +271,10 @@ public class UserControllerTest {
 		//this method also appears to not be working 
 		uc.changeUserPassword(user3.getUserID(), newPass);
 		
+		//search for users and pass that through user 3
+		
+		//user3 = uc.searchForUsers(-1, -1, false, "failTest@@gmail.com" , false, null, false, null, -1).get(0);
+		
 		assertEquals("Password4", user3.getPassword()); 
 		
 	}
