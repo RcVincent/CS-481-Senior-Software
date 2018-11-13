@@ -3,7 +3,6 @@ package edu.ycp.cs481.db;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -233,7 +232,6 @@ public class Database {
 		sql.append(junction);
 	}
 	
-	// TODO: Use otherTables
 	public<ResultType> ResultType doSearch(QueryResultFormat<ResultType> queryResFormat, String mainTable, 
 			ArrayList<String> otherTables, ArrayList<String> junctions, 
 			String[] intArgs, int[] intValues, 
@@ -663,65 +661,6 @@ public class Database {
 					DBUtil.closeQuietly(insert);
 					DBUtil.closeQuietly(selectID);
 					DBUtil.closeQuietly(id);
-				}
-			}
-		});
-	}
-	
-	// TODO: I think Ryan wants revert to go back to using an old version of an SOP, as in archiving the newer revision and 
-	// unarchiving the old one?
-	public SOP revertSOP(final int sop_id, final int revision) {
-		return executeTransaction(new Transaction<SOP>() {
-			@Override
-			public SOP execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-
-
-				try{
-					stmt = conn.prepareStatement(
-							"UPDATE SOP SET version = ? WHERE sop_id = ? ");
-					
-					stmt.setInt(1, revision);
-					stmt.setInt(2, sop_id);
-					stmt.executeUpdate();
-					
-					
-					stmt2 = conn.prepareStatement(
-							"SELECT * FROM SOP WHERE sop_id = ?");
-					
-					stmt2.setInt(1, sop_id);
-					
-					resultSet = stmt2.executeQuery();
-
-					SOP result = new SOP(); 
-					
-					Boolean found = false;
-					
-					while(resultSet.next()) {
-						found = true;
-						result.setID(resultSet.getInt(1));
-						result.setName(resultSet.getString(2));
-						result.setDescription(resultSet.getString(3));
-						result.setPriority(resultSet.getInt(4));
-						result.setRevision(resultSet.getInt(5));
-						result.setAuthorID(resultSet.getInt(6));
-						result.setArchived(resultSet.getBoolean(7));
-					}
-
-
-					if (!found) {
-						System.out.println("SOP with ID <" + sop_id + "> was not found in the SOP table");
-					}
-
-					return result;
-
-
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(stmt2); 
 				}
 			}
 		});

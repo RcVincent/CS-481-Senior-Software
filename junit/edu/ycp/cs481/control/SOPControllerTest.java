@@ -209,7 +209,7 @@ public class SOPControllerTest {
 		int newVersion = 2; 
 		
 		assertEquals(1, sop1.getRevision()); 
-		sc.revertSOP(sop1.getID(), newVersion);
+		sc.reversionSOP(sop1.getID(), newVersion);
 		
 		if(sop1.getRevision() == 1) {
 			System.out.println("Reversioning of sop not successful");

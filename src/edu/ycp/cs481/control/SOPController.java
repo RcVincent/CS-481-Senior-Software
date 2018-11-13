@@ -47,9 +47,12 @@ public class SOPController{
 	public void unarchiveSOP(int sopID){
 		db.executeUpdate("Unarchive SOP with ID " + sopID, "update SOP set archive_flag = false where sop_id = " + sopID);
 	}
-
-	public SOP revertSOP(int sopID, int version){
-		return db.revertSOP(sopID, version);
+	
+	public void reversionSOP(int sopID, int version){
+		SOP s = searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+		
+		archiveSOP(sopID);
+		insertSOP(s.getName(), s.getDescription(), s.getPriority(), version, s.getAuthorID(), false);
 	}
 
 	public void changeSOPPriority(SOP sop, int priority){
