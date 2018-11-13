@@ -564,10 +564,12 @@ public class Database {
 		for(Position p: posList){
 			List<SOP> reqs = p.getRequirements();
 			
-			for(SOP s: reqs){
-				names.add("Insert SOP " + s.getTitle() + " and Position " + p.getTitle() + " connection");
-				sqls.add("insert into PositionSOP (position_id, sop_id) " + 
-						" values (" + p.getID() + ", " + s.getID() + ")");
+			if(reqs != null){
+				for(SOP s: reqs){
+					names.add("Insert SOP " + s.getTitle() + " and Position " + p.getTitle() + " connection");
+					sqls.add("insert into PositionSOP (position_id, sop_id) " + 
+							" values (" + p.getID() + ", " + s.getID() + ")");
+				}
 			}
 		}
 		
