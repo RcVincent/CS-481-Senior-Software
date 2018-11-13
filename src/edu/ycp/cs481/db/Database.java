@@ -192,28 +192,109 @@ public class Database {
 		return timeResFormat;
 	}
 	
-	public void addIntSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, String arg, int value){
-		if(!first){
+	public void addConditionalAndToQuery(boolean prevSet, StringBuilder name, StringBuilder sql){
+		if(prevSet){
 			name.append(" and ");
 			sql.append(" and ");
 		}
-		name.append(arg + " of " + value);
-		sql.append(arg + " = " + value);
 	}
 	
-	public void addStringSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, boolean partial, 
-			String arg, String value){
-		if(!first){
-			name.append(" and ");
-			sql.append(" and "); 
-		}
-		if(partial){
-			name.append(arg + " with " + value);
-			sql.append(arg + " like '%" + value + "%'");
-		}else{
+	public boolean addConditionalIntToQuery(boolean prevSet, StringBuilder name, StringBuilder sql, String arg, int value){
+		if(value != -1){
+			addConditionalAndToQuery(prevSet, name, sql);
 			name.append(arg + " of " + value);
-			sql.append(arg + " = '" + value + "'");
+			sql.append(arg + " = " + value);
+			return true;
+		}else{
+			return false;
 		}
+	}
+	
+	public boolean addConditionalStringToQuery(boolean prevSet, StringBuilder name, StringBuilder sql, boolean partial, 
+			String arg, String value){
+		if(value != null && !value.equalsIgnoreCase("")){
+			addConditionalAndToQuery(prevSet, name, sql);
+			if(partial){
+				name.append(arg + " with " + value);
+				sql.append(arg + " like '%" + value + "%'");
+			}else{
+				name.append(arg + " of " + value);
+				sql.append(arg + " = '" + value + "'");
+			}
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	// TODO: Use otherTables
+	public<ResultType> ResultType doSearch(QueryResultFormat<ResultType> queryResFormat, String mainTable, String[] otherTables, 
+			String[] intArgs, int[] intValues,
+			boolean[] partialStrings, String[] stringArgs, String[] stringValues) throws SQLException{
+		if(intArgs.length != intValues.length){
+			throw new IllegalArgumentException("Database.doSearch: intArgs and intValues are different sizes!");
+		}
+		if(stringArgs.length != stringValues.length || stringArgs.length != partialStrings.length){
+			throw new IllegalArgumentException("Database.doSearch: partialStrings, stringArgs, and stringValues must be the same "
+					+ "size!");
+		}
+		String returnPieces;
+		switch(mainTable.toLowerCase()){
+			case "user":
+				returnPieces = userPieces;
+				if(queryResFormat != userResFormat){
+					throw new IllegalArgumentException("Database.doSearch: Must use userResFormat if pulling Users!");
+				}
+				break;
+			case "position":
+				returnPieces = positionPieces;
+				if(queryResFormat != posResFormat){
+					throw new IllegalArgumentException("Database.doSearch: Must use posResFormat if pulling Positions!");
+				}
+				break;
+			case "sop":
+				returnPieces = sopPieces;
+				if(queryResFormat != sopResFormat){
+					throw new IllegalArgumentException("Database.doSearch: Must use sopResFormat if pulling SOPs!");
+				}
+				break;
+			default:
+				throw new IllegalArgumentException("Database.doSearch: Unsupported table: " + mainTable + "!");
+		}
+		StringBuilder name = new StringBuilder("");
+		StringBuilder sql = new StringBuilder("select " + returnPieces + " from " + mainTable);
+		boolean searchAll = true;
+		for(int i = 0; searchAll && i < intValues.length; i++){
+			if(intValues[i] != -1){
+				searchAll = false;
+			}
+		}
+		for(int i = 0; searchAll && i < stringValues.length; i++){
+			String s = stringValues[i];
+			if(s != null && !s.equalsIgnoreCase("")){
+				searchAll = false;
+			}
+		}
+		if(searchAll){
+			name.append("Get all " + mainTable + "s");
+		}else{
+			name.append("Get " + mainTable + "s with ");
+			sql.append(" where ");
+			boolean prevSet = false;
+			
+			for(int i = 0; i < intValues.length; i++){
+				prevSet = (addConditionalIntToQuery(prevSet, name, sql, intArgs[i], intValues[i]))?true:prevSet;
+			}
+			for(int i = 0; i < stringValues.length; i++){
+				prevSet = (addConditionalStringToQuery(prevSet, name, sql, partialStrings[i], stringArgs[i], stringValues[i]))
+						?true:prevSet;
+			}
+		}
+		
+		System.out.println("Name: " + name.toString());
+		System.out.println("SQL: " + sql.toString());
+		
+		return executeQuery(name.toString(), sql.toString(), queryResFormat);
 	}
 	
 	public<ResultType> ResultType executeQuery(String name, String sql, QueryResultFormat<ResultType> querExec) throws SQLException{

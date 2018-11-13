@@ -19,37 +19,12 @@ public class PositionController{
 	public ArrayList<Position> searchForPositions(int positionID, boolean titlePartial, String title, 
 			boolean descPartial, String description, int priority){
 		try{
-			StringBuilder name = new StringBuilder("");
-			StringBuilder sql = new StringBuilder("select * from Position");
-			if(positionID == -1 && (title == null || title.equalsIgnoreCase(""))
-					&& (description == null || description.equalsIgnoreCase("")) && priority == -1){
-				name.append("Get All Positions");
-			}else{
-				name.append("Get Position with ");
-				sql.append(" where ");
-				boolean first = true;
-
-				if(positionID != -1){
-					db.addIntSearchToSelect(first, name, sql, "position_id", positionID);
-					first = false;
-				}
-
-				if(title != null && !title.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, titlePartial, "title", title);
-					first = false;
-				}
-				
-				if(description != null && !description.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, descPartial, "description", description);
-					first = false;
-				}
-
-				if(priority != -1){
-					db.addIntSearchToSelect(first, name, sql, "priority", priority);
-					first = false;
-				}
-			}
-			ArrayList<Position> results = db.executeQuery(name.toString(), sql.toString(), db.getPosResFormat());
+			ArrayList<Position> results = db.doSearch(db.getPosResFormat(), "Position", null, 
+					new String[]{"position_id", "priority"}, 
+					new int[]{positionID, priority}, 
+					new boolean[]{titlePartial, descPartial}, 
+					new String[]{"title", "description"}, 
+					new String[]{title, description});
 			if(positionID != -1){
 				if(results.size() == 0){
 					System.out.println("No Position found with ID " + positionID);

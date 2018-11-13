@@ -19,48 +19,12 @@ public class SOPController{
 	public ArrayList<SOP> searchForSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
 			int priority, int version, int authorID){
 		try{
-			StringBuilder name = new StringBuilder("");
-			StringBuilder sql = new StringBuilder("select * from SOP");
-			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
-					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
-					authorID == -1){
-				name.append("Get All SOPs");
-			}else{
-				name.append("Get SOP with ");
-				sql.append(" where ");
-				boolean first = true;
-				
-				if(sopID != -1){
-					db.addIntSearchToSelect(first, name, sql, "sop_id", sopID);
-					first = false;
-				}
-				
-				if(title != null && !title.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, titlePartial, "title", title);
-					first = false;
-				}
-				
-				if(description != null && !description.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, descPartial, "description", description);
-					first = false;
-				}
-				
-				if(priority != -1){
-					db.addIntSearchToSelect(first, name, sql, "priority", priority);
-					first = false;
-				}
-				
-				if(version != -1){
-					db.addIntSearchToSelect(first, name, sql, "version", version);
-					first = false;
-				}
-				
-				if(authorID != -1){
-					db.addIntSearchToSelect(first, name, sql, "author_id", authorID);
-					first = false;
-				}
-			}
-			ArrayList<SOP> results = db.executeQuery(name.toString(), sql.toString(), db.getSopResFormat());
+			ArrayList<SOP> results = db.doSearch(db.getSopResFormat(), "SOP", null, 
+					new String[]{"sop_id", "priority", "version", "author_id"}, 
+					new int[]{sopID, priority, version, authorID}, 
+					new boolean[]{titlePartial, descPartial}, 
+					new String[]{"title", "description"}, 
+					new String[]{title, description});
 			if(sopID != -1){
 				if(results.size() == 0){
 					System.out.println("No SOP found with ID " + sopID);

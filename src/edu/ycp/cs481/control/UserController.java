@@ -22,8 +22,6 @@ public class UserController{
 		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 	
-
-
 	public Integer insertUser(String email, String password, String firstName, String lastName, boolean lockedOut,
 			boolean isArchived, int positionID){
 		password = hashPassword(password);
@@ -37,50 +35,12 @@ public class UserController{
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
 			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID){
 		try{
-			StringBuilder name = new StringBuilder("");
-			StringBuilder sql = new StringBuilder("select " + db.getUserPieces() + " from User");
-			if(userID == -1 && employeeID == -1 && (email == null || email.equalsIgnoreCase(""))
-					&& (firstName == null || firstName.equalsIgnoreCase(""))
-					&& (lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
-				name.append("Get All Users");
-			}else{
-				name.append("Get User with ");
-				sql.append(" where ");
-				boolean first = true;
-
-				if(userID != -1){
-					db.addIntSearchToSelect(first, name, sql, "user_id", userID);
-					first = false;
-				}
-				
-				if(employeeID != -1){
-					db.addIntSearchToSelect(first, name, sql, "employee_id", employeeID);
-					first = false;
-				}
-
-				if(email != null && !email.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, emailPartial, "email", email);
-					first = false;
-				}
-
-				if(firstName != null && !firstName.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, firstNamePartial, "first_name", firstName);
-					first = false;
-				}
-
-				if(lastName != null && !lastName.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, lastNamePartial, "last_name", lastName);
-					first = false;
-				}
-
-				if(positionID != -1){
-					db.addIntSearchToSelect(first, name, sql, "position_id", positionID);
-					first = false;
-				}
-			}
-			System.out.println("Name: " + name.toString());
-			System.out.println("SQL: " + sql);
-			ArrayList<User> results = db.executeQuery(name.toString(), sql.toString(), db.getUserResFormat());
+			ArrayList<User> results = db.doSearch(db.getUserResFormat(), "User", null, 
+					new String[]{"user_id", "employee_id", "position_id"}, 
+					new int[]{userID, employeeID, positionID}, 
+					new boolean[]{emailPartial, firstNamePartial, lastNamePartial}, 
+					new String[]{"email", "first_name", "last_name"}, 
+					new String[]{email, firstName, lastName});
 			if(results.size() == 0 && userID != -1){
 				System.out.println("No User found with ID " + userID);
 			}else if(results.size() > 1){
