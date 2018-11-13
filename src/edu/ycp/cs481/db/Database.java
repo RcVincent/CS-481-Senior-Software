@@ -136,10 +136,10 @@ public class Database {
 					SOP s = new SOP();
 					
 					s.setID(resultSet.getInt(1));
-					s.setName(resultSet.getString(2));
+					s.setTitle(resultSet.getString(2));
 					s.setDescription(resultSet.getString(3));
 					s.setPriority(resultSet.getInt(4));
-					s.setRevision(resultSet.getInt(5));
+					s.setVersion(resultSet.getInt(5));
 					s.setAuthorID(resultSet.getInt(6));
 					s.setArchived(resultSet.getBoolean(7));
 					
@@ -555,17 +555,17 @@ public class Database {
 		}
 		
 		for(SOP s: sopList){
-			names.add("Insert SOP " + s.getName());
+			names.add("Insert SOP " + s.getTitle());
 			sqls.add("insert into SOP (title, description, priority, version, author_id, archive_flag)" +
-					" values ('" + s.getName() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
-					s.getRevision() + ", " + s.getAuthorID() + ", " + s.isArchived() + ")");
+					" values ('" + s.getTitle() + "', '" + s.getDescription() + "', " + s.getPriority() + ", " +
+					s.getVersion() + ", " + s.getAuthorID() + ", " + s.isArchived() + ")");
 		}
 		
 		for(Position p: posList){
 			List<SOP> reqs = p.getRequirements();
 			
 			for(SOP s: reqs){
-				names.add("Insert SOP " + s.getName() + " and Position " + p.getTitle() + " connection");
+				names.add("Insert SOP " + s.getTitle() + " and Position " + p.getTitle() + " connection");
 				sqls.add("insert into PositionSOP (position_id, sop_id) " + 
 						" values (" + p.getID() + ", " + s.getID() + ")");
 			}

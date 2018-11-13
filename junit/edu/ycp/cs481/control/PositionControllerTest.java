@@ -70,22 +70,20 @@ public class PositionControllerTest {
 		positionList.add(pos4);
 		
 		sop1 = new SOP(); 
-		sop1.setName("Login");
+		sop1.setTitle("Login");
 		sop1.setID(1);
 		sop1.setDescription("How to login");
 		sop1.setPriority(7);
-		sop1.setRevision(1);
+		sop1.setVersion(1);
 		sop1.setAuthorID(user1.getUserID());
-		sop1.setPositionsAffected(positionList);
 		
 		sop2 = new SOP(); 
-		sop2.setName("Logout");
+		sop2.setTitle("Logout");
 		sop2.setDescription("How to logout");
 		sop2.setPriority(7);
 		sop2.setID(2);
-		sop2.setRevision(2);
+		sop2.setVersion(2);
 		sop2.setAuthorID(user1.getUserID());
-		sop2.setPositionsAffected(positionList);
 		
 		sopList.add(sop1);
 		sopList.add(sop2);

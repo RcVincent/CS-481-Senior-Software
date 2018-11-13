@@ -52,7 +52,7 @@ public class SOPController{
 		SOP s = searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
 		
 		archiveSOP(sopID);
-		insertSOP(s.getName(), s.getDescription(), s.getPriority(), version, s.getAuthorID(), false);
+		insertSOP(s.getTitle(), s.getDescription(), s.getPriority(), version, s.getAuthorID(), false);
 	}
 
 	public void changeSOPPriority(SOP sop, int priority){

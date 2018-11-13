@@ -13,18 +13,18 @@ public class SOPTest{
 	@Before
 	public void setup(){
 		sop = new SOP();
-		sop.setName("How to Avoid Sexual Harassment");
+		sop.setTitle("How to Avoid Sexual Harassment");
 		sop.setDescription("A how-to guide for men on avoiding sexually harassing women in the workplace environment.");
 		sop.setPriority(1);
 		sop.setID(5);
 		sop.setAuthorID(70);
-		sop.setRevision(2);
+		sop.setVersion(2);
 		sop.setComplete(false);
 	}
 	
 	@Test
-	public void testGetName(){
-		assertEquals("How to Avoid Sexual Harassment", sop.getName());
+	public void testGetTitle(){
+		assertEquals("How to Avoid Sexual Harassment", sop.getTitle());
 	}
 	
 	@Test
@@ -49,20 +49,20 @@ public class SOPTest{
 	}
 	
 	@Test
-	public void testGetRevision(){
-		assertEquals(2, sop.getRevision());
+	public void testGetVersion(){
+		assertEquals(2, sop.getVersion());
 	}
 	
 	@Test
-	public void testSetName(){
+	public void testSetTitle(){
 		// Ensure that name was set correctly in constructor.
-		testGetName();
+		testGetTitle();
 		
 		// Change name
-		sop.setName("How to Avoid Sexual Harassment (For Men)");
+		sop.setTitle("How to Avoid Sexual Harassment (For Men)");
 		
 		// Test new name
-		assertEquals("How to Avoid Sexual Harassment (For Men)", sop.getName());
+		assertEquals("How to Avoid Sexual Harassment (For Men)", sop.getTitle());
 	}
 	
 	@Test
@@ -116,15 +116,15 @@ public class SOPTest{
 	}
 	
 	@Test
-	public void testSetRevision(){
+	public void testSetVersion(){
 		//Ensure SOP version was set correctly in the constructor 
-		//testSetRevision(); 
+		//testSetVersion(); 
 		
 		//set a new revision
-		sop.setRevision(4);
+		sop.setVersion(4);
 		
 		//test the new revision 
-		assertEquals(4, sop.getRevision());
+		assertEquals(4, sop.getVersion());
 		
 	}
 }

@@ -48,10 +48,10 @@ public class SearchSOPsServlet extends HttpServlet {
 		ArrayList<SOP> sops = sc.searchForSOPs(id, true, title, true, description, priority, version, authorID);
 		for(int i = 0; i < sops.size(); i++){
 			req.setAttribute("sopID" + (i+1), sops.get(i).getID());
-			req.setAttribute("title" + (i+1), sops.get(i).getName());
+			req.setAttribute("title" + (i+1), sops.get(i).getTitle());
 			req.setAttribute("description" + (i+1), sops.get(i).getDescription());
 			req.setAttribute("priority" + (i+1), sops.get(i).getPriority());
-			req.setAttribute("version" + (i+1), sops.get(i).getRevision());
+			req.setAttribute("version" + (i+1), sops.get(i).getVersion());
 			req.setAttribute("authorID" + (i+1), sops.get(i).getAuthorID());
 		}
 		

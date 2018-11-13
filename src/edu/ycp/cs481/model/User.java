@@ -6,9 +6,7 @@ public class User{
 	private String firstName, lastName;
 	private Position position;
 	private boolean lockedOut, archived;
-	// TODO: MOVE TO CONTROLLER
 	
-	// Getters/Setters
 	public int getUserID(){
 		return userID;	
 	}

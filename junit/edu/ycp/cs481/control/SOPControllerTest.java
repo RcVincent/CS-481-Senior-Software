@@ -69,22 +69,20 @@ public class SOPControllerTest {
 		positionList.add(pos4);
 		
 		sop1 = new SOP(); 
-		sop1.setName("Login");
+		sop1.setTitle("Login");
 		sop1.setID(1);
 		sop1.setDescription("How to login");
 		sop1.setPriority(7);
-		sop1.setRevision(1);
+		sop1.setVersion(1);
 		sop1.setAuthorID(user1.getUserID());
-		sop1.setPositionsAffected(positionList);
 		
 		sop2 = new SOP(); 
-		sop2.setName("Logout");
+		sop2.setTitle("Logout");
 		sop2.setDescription("How to logout");
 		sop2.setPriority(7);
 		sop2.setID(2);
-		sop2.setRevision(2);
+		sop2.setVersion(2);
 		sop2.setAuthorID(user1.getUserID());
-		sop2.setPositionsAffected(positionList);
 		
 		sopList.add(sop1);
 		sopList.add(sop2);
@@ -102,10 +100,10 @@ public class SOPControllerTest {
 		for(SOP s: sList) {
 			db.insertSOP(s);
 			querySOP = db.findAllSOPs();
-			assertEquals(s.getName(), querySOP.get(querySOP.size()-1).getName());
+			assertEquals(s.getTitle(), querySOP.get(querySOP.size()-1).getTitle());
 			assertEquals(s.getDescription(), querySOP.get(querySOP.size()-1).getDescription());
 			assertEquals(s.getPriority(), querySOP.get(querySOP.size()-1).getPriority());
-			assertEquals(s.getRevision(), querySOP.get(querySOP.size()-1).getRevision());
+			assertEquals(s.getVersion(), querySOP.get(querySOP.size()-1).getVersion());
 			assertEquals(s.getAuthorID(), querySOP.get(querySOP.size()-1).getAuthorID());
 			assertEquals(s.getArchiveFlag(), querySOP.get(querySOP.size()-1).getArchiveFlag());
 		}
@@ -125,9 +123,9 @@ public class SOPControllerTest {
 			assertEquals(1, testList.size()); 
 			
 			SOP s = testList.get(0);
-			assertEquals("Login", s.getName());
+			assertEquals("Login", s.getTitle());
 			assertEquals(7, s.getPriority());
-			assertEquals(1, s.getRevision());
+			assertEquals(1, s.getVersion());
 		}
 	}
 	
@@ -144,7 +142,7 @@ public class SOPControllerTest {
 			assertEquals(1, testList.size()); 
 			SOP s = testList.get(0);
 			assertEquals(7, s.getPriority());
-			assertEquals(2, s.getRevision()); 
+			assertEquals(2, s.getVersion()); 
 			assertEquals(2, s.getID()); 
 		}
 	}
@@ -162,16 +160,16 @@ public class SOPControllerTest {
 			assertEquals(2, testList.size());
 			
 			SOP s1 = testList.get(0); 
-			assertEquals("Login", s1.getName());
+			assertEquals("Login", s1.getTitle());
 			assertEquals(7, s1.getPriority());
-			assertEquals(1, s1.getRevision());
+			assertEquals(1, s1.getVersion());
 			assertEquals(1, s1.getID()); 
 			assertEquals(12, s1.getAuthorID());
 			
 			SOP s2 = testList.get(1);
-			assertEquals("Logout", s2.getName());
+			assertEquals("Logout", s2.getTitle());
 			assertEquals(7, s2.getPriority());
-			assertEquals(2, s2.getRevision()); 
+			assertEquals(2, s2.getVersion()); 
 			assertEquals(2, s2.getID()); 
 			assertEquals(12, s2.getAuthorID());
 			
@@ -190,16 +188,16 @@ public class SOPControllerTest {
 			assertEquals(2, testList.size());
 			
 			SOP s1 = testList.get(0); 
-			assertEquals("Login", s1.getName());
+			assertEquals("Login", s1.getTitle());
 			assertEquals(7, s1.getPriority());
-			assertEquals(1, s1.getRevision());
+			assertEquals(1, s1.getVersion());
 			assertEquals(1, s1.getID()); 
 			
 			
 			SOP s2 = testList.get(1);
-			assertEquals("Logout", s2.getName());
+			assertEquals("Logout", s2.getTitle());
 			assertEquals(7, s2.getPriority());
-			assertEquals(2, s2.getRevision()); 
+			assertEquals(2, s2.getVersion()); 
 			assertEquals(2, s2.getID()); 
 		}
 	}
@@ -208,15 +206,15 @@ public class SOPControllerTest {
 	public void TestChangeVersion() {
 		int newVersion = 2; 
 		
-		assertEquals(1, sop1.getRevision()); 
+		assertEquals(1, sop1.getVersion()); 
 		sc.reversionSOP(sop1.getID(), newVersion);
 		
-		if(sop1.getRevision() == 1) {
+		if(sop1.getVersion() == 1) {
 			System.out.println("Reversioning of sop not successful");
 			//fail();
 		}
 		else {
-			assertEquals(2, sop1.getRevision()); 
+			assertEquals(2, sop1.getVersion()); 
 		}
 	}
 	

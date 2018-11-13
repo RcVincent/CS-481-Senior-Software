@@ -1,23 +1,17 @@
 package edu.ycp.cs481.db;
 
-
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
-//import javafx.util.Pair;
-
-
-
 public class InitialData {
-	private List<User> uList;
+	private ArrayList<User> uList;
 	private User u1, u2;
-	private List<Position> pList;
+	private ArrayList<Position> pList;
 	private Position p1, p2, p3;
-	private List<SOP> sList, p1reqs;	
+	private ArrayList<SOP> sList, p1reqs;	
 	private SOP s1, s2, p1req1, p1req2;
 	private String[] perms, permNames;
 	private int[] permIds;
@@ -71,37 +65,37 @@ public class InitialData {
 		
 		s1 = new SOP();
 		s1.setID(1);
-		s1.setName("Admin");
+		s1.setTitle("Admin");
 		s1.setDescription("IsAdmin");
 		s1.setPriority(1);
-		s1.setRevision(1);
+		s1.setVersion(1);
 		s1.setAuthorID(p1.getID());
 		s1.setArchived(false);
 		
 		s2 = new SOP();
 		s2.setID(2);
-		s2.setName("User");
+		s2.setTitle("User");
 		s2.setDescription("IsUser");
 		s2.setPriority(1);
-		s2.setRevision(1);
+		s2.setVersion(1);
 		s2.setAuthorID(p1.getID());
 		s2.setArchived(false);
 		
 		p1req1 = new SOP();
 		p1req1.setID(3);
-		p1req1.setName("Requirement 1");
+		p1req1.setTitle("Requirement 1");
 		p1req1.setDescription("This is the first requirement");
 		p1req1.setPriority(1);
-		p1req1.setRevision(1);
+		p1req1.setVersion(1);
 		p1req1.setAuthorID(p1.getID());
 		p1req1.setArchived(false);
 		
 		p1req2 = new SOP();
 		p1req2.setID(4);
-		p1req2.setName("Requirement 2");
+		p1req2.setTitle("Requirement 2");
 		p1req2.setDescription("This is the second requirement");
 		p1req2.setPriority(1);
-		p1req2.setRevision(1);
+		p1req2.setVersion(1);
 		p1req2.setAuthorID(p1.getID());
 		p1req2.setArchived(false);
 		
@@ -148,15 +142,15 @@ public class InitialData {
 	}
 
 
-	public List<User> getInitialUsers() {
+	public ArrayList<User> getInitialUsers() {
 		return uList;
 	}
 	
-	public List<Position> getInitialPositions() {
+	public ArrayList<Position> getInitialPositions() {
 		return pList;
 	}
 	
-	public List<SOP> getInitialSOPs() {
+	public ArrayList<SOP> getInitialSOPs() {
 		return sList;
 	}
 	
