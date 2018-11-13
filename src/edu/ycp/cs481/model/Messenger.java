@@ -31,7 +31,7 @@ public class Messenger {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("mailTester481@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
-			InternetAddress.parse(setRecipient("")));
+			InternetAddress.parse(setRecipient("rvincent@ycp.edu")));
 			message.setSubject("Dear User");
 			message.setText(setMessage("Testing Getter"));
 			Transport.send(message);

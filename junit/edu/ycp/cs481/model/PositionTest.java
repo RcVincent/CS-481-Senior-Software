@@ -231,27 +231,27 @@ public class PositionTest {
 				
 				for(SOP s : SOPtestList) {
 					if(s.getID() <=0) {
-						System.out.println("The position with id" + p.getID() + "has an invalid SOP in its requirements. Removing it from queue");
+						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
 						testList.remove(p);
 						failList.add(p);
 					}
 					else if(s.getName() == "" || s.getName() == " " || s.getName() == null ) {
-						System.out.println("The position with id" + p.getID() + "has an invalid SOP in its requirements. Removing it from queue");
+						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
 						testList.remove(p);
 						failList.add(p);
 					}
 					else if(s.getDescription() == "" || s.getDescription() == " " || s.getDescription() == null) {
-						System.out.println("The position with id" + p.getID() + "has an invalid SOP in its requirements. Removing it from queue");
+						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
 						testList.remove(p);
 						failList.add(p);
 					}
 					else if(s.getPriority() <= 0) {
-						System.out.println("The position with id" + p.getID() + "has an invalid SOP in its requirements. Removing it from queue");
+						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
 						testList.remove(p);
 						failList.add(p);
 					}
 					else if(s.getRevision() <= 0) {
-						System.out.println("The position with id" + p.getID() + "has an invalid SOP in its requirements. Removing it from queue");
+						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
 						testList.remove(p);
 						failList.add(p);
 					}
@@ -315,7 +315,7 @@ public class PositionTest {
 			}
 			else {
 				if(p.getTitle() == "" || p.getTitle() == " ") {
-					System.out.println("This position with id:" + p.getID() + "has an invalid title. Removing it from active queue");
+					System.out.println("This position with id:" + p.getID() + " has an invalid title. Removing it from active queue");
 					testList.remove(p); 
 					failList.add(p); 
 					p.setValid(false);
@@ -346,7 +346,7 @@ public class PositionTest {
 			}
 			else {
 				if(p.getID() <= 0) {
-					System.out.println("This position with title:" + p.getTitle() + "has an invalid ID. Removing it from active queue");
+					System.out.println("This position with title:" + p.getTitle() + " has an invalid ID. Removing it from active queue");
 					testList.remove(p); 
 					failList.add(p); 
 					p.setValid(false);
@@ -359,5 +359,24 @@ public class PositionTest {
 		assertEquals(2, failList.size());
 	}
 	
+	@Test
+	public void testGetIncompleteSOPs() {
+		List<SOP> testList = new ArrayList<SOP>();
+		
+		testList = p1.getIncompleteSOPs(p1);
+		
+		assertEquals(2, testList.size()); 
+	}
+	
+	@Test
+	public void testGetCompleteSOPs() {
+		req2.setComplete(true);
+		req3.setComplete(true);
+		
+		List<SOP> testList = new ArrayList<SOP>(); 
+		testList = p2.getCompletedSOPs(p2);
+		
+		assertEquals(2, testList.size()); 
+	}
 	
 }
