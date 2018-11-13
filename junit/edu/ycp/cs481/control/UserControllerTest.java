@@ -136,7 +136,7 @@ public class UserControllerTest {
 	public void testSearchByFName() {
 		String searchFirstName = "Stan";
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, searchFirstName, false, "", 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, searchFirstName, false, "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with FirstName" + searchFirstName);
@@ -157,7 +157,7 @@ public class UserControllerTest {
 	public void testSearchByLName() {
 		String searchLastName = "Smith";
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, searchLastName, 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, searchLastName, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with LastName" + searchLastName);
@@ -183,7 +183,7 @@ public class UserControllerTest {
 		String FirstName = "Stan";
 		String LastName = "Smith"; 
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, FirstName, false, LastName, 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, FirstName, false, LastName, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with first name " + FirstName + " and last name " + LastName);
@@ -204,7 +204,7 @@ public class UserControllerTest {
 	public void testSearchByID() {
 		int searchID = 12; 
 		
-		List<User> testList = uc.searchForUsers(searchID, -1, false, "", false, "", false, "", 0);
+		List<User> testList = uc.searchForUsers(searchID, -1, false, "", false, "", false, "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with ID " + searchID);
@@ -226,7 +226,7 @@ public class UserControllerTest {
 	public void testSearchByPositionID() {
 		int searchPosID = 1;
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, "", searchPosID);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, "", searchPosID, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with position ID"+ searchPosID);

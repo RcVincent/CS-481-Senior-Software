@@ -33,11 +33,18 @@ public class UserController{
 	}
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
-			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID){
+			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID,
+			int managerID){
 		try{
-			ArrayList<User> results = db.doSearch(db.getUserResFormat(), "User", null, 
-					new String[]{"user_id", "employee_id", "position_id"}, 
-					new int[]{userID, employeeID, positionID}, 
+			ArrayList<String> otherTables = new ArrayList<String>();
+			ArrayList<String> junctions = new ArrayList<String>();
+			if(managerID != -1){
+				otherTables.add("Subordinate");
+				junctions.add("Subordinate.subordinate_id = User.user_id");
+			}
+			ArrayList<User> results = db.doSearch(db.getUserResFormat(), "User", otherTables, junctions, 
+					new String[]{"user_id", "employee_id", "position_id", "manager_id"}, 
+					new int[]{userID, employeeID, positionID, managerID}, 
 					new boolean[]{emailPartial, firstNamePartial, lastNamePartial}, 
 					new String[]{"email", "first_name", "last_name"}, 
 					new String[]{email, firstName, lastName});
@@ -71,7 +78,7 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
-			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1);
+			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
@@ -104,17 +111,6 @@ public class UserController{
 			e.printStackTrace();
 		} 
 		return false;
-	}
-	
-	public ArrayList<User> listSubordinates(int managerID) {
-		try{
-			return db.executeQuery("Get Subordinates of Manager",
-					"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + managerID,
-					db.getUserResFormat());
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public boolean SOPisCompleted(int userID, int sopID) {

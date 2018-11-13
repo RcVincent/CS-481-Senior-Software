@@ -227,10 +227,20 @@ public class Database {
 		}
 	}
 	
+	public void addJunctionStringToQuery(boolean prevSet, StringBuilder name, StringBuilder sql, String junction){
+		addConditionalAndToQuery(prevSet, name, sql);
+		name.append(junction);
+		sql.append(junction);
+	}
+	
 	// TODO: Use otherTables
-	public<ResultType> ResultType doSearch(QueryResultFormat<ResultType> queryResFormat, String mainTable, String[] otherTables, 
-			String[] intArgs, int[] intValues,
+	public<ResultType> ResultType doSearch(QueryResultFormat<ResultType> queryResFormat, String mainTable, 
+			ArrayList<String> otherTables, ArrayList<String> junctions, 
+			String[] intArgs, int[] intValues, 
 			boolean[] partialStrings, String[] stringArgs, String[] stringValues) throws SQLException{
+		if(junctions != null && junctions.size() > 0 && (otherTables == null || otherTables.size() == 0)){
+			throw new IllegalArgumentException("Database.doSearch: Need otherTables to do junctions!");
+		}
 		if(intArgs.length != intValues.length){
 			throw new IllegalArgumentException("Database.doSearch: intArgs and intValues are different sizes!");
 		}
@@ -263,7 +273,13 @@ public class Database {
 		}
 		StringBuilder name = new StringBuilder("");
 		StringBuilder sql = new StringBuilder("select " + returnPieces + " from " + mainTable);
-		boolean searchAll = true;
+		boolean prevSet = false;
+		if(otherTables != null && otherTables.size() > 0){
+			for(String table: otherTables){
+				sql.append(", " + table);
+			}
+		}
+		boolean searchAll = junctions == null || junctions.size() == 0;
 		for(int i = 0; searchAll && i < intValues.length; i++){
 			if(intValues[i] != -1){
 				searchAll = false;
@@ -280,8 +296,13 @@ public class Database {
 		}else{
 			name.append("Get " + mainTable + "s with ");
 			sql.append(" where ");
-			boolean prevSet = false;
 			
+			if(junctions != null){
+				for(String junction: junctions){
+					addJunctionStringToQuery(prevSet, name, sql, junction);
+					prevSet = true;
+				}
+			}
 			for(int i = 0; i < intValues.length; i++){
 				prevSet = (addConditionalIntToQuery(prevSet, name, sql, intArgs[i], intValues[i]))?true:prevSet;
 			}

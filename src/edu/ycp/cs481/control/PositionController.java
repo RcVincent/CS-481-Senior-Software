@@ -19,7 +19,7 @@ public class PositionController{
 	public ArrayList<Position> searchForPositions(int positionID, boolean titlePartial, String title, 
 			boolean descPartial, String description, int priority){
 		try{
-			ArrayList<Position> results = db.doSearch(db.getPosResFormat(), "Position", null, 
+			ArrayList<Position> results = db.doSearch(db.getPosResFormat(), "Position", null, null, 
 					new String[]{"position_id", "priority"}, 
 					new int[]{positionID, priority}, 
 					new boolean[]{titlePartial, descPartial}, 
