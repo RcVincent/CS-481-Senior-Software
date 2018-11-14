@@ -167,12 +167,12 @@ public class Database {
 	public QueryResultFormat<ArrayList<Integer>> intResFormat = new QueryResultFormat<ArrayList<Integer>>(){
 		@Override
 		public ArrayList<Integer> convertFromResultSet(ResultSet resultSet) throws SQLException{
-			ArrayList<Integer> times = new ArrayList<Integer>();
+			ArrayList<Integer> results = new ArrayList<Integer>();
 			while(resultSet.next()){
-				int time = resultSet.getInt(1);
-				times.add(time);
+				int value = resultSet.getInt(1);
+				results.add(value);
 			}
-			return times;
+			return results;
 		}
 	};
 	
