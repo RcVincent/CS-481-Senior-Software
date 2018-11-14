@@ -164,6 +164,18 @@ public class Database {
 		}
 	};
 	
+	public QueryResultFormat<ArrayList<Integer>> intResFormat = new QueryResultFormat<ArrayList<Integer>>(){
+		@Override
+		public ArrayList<Integer> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<Integer> values = new ArrayList<Integer>();
+			while(resultSet.next()){
+				int value = resultSet.getInt(1);
+				values.add(value);
+			}
+			return values;
+		}
+	};
+	
 	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
 		return userResFormat;
 	}
@@ -190,6 +202,10 @@ public class Database {
 	
 	public QueryResultFormat<ArrayList<ClockTime>> getTimeResFormat(){
 		return timeResFormat;
+	}
+	
+	public QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
+		return intResFormat;
 	}
 	
 	public void addIntSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, String arg, int value){
@@ -422,6 +438,32 @@ public class Database {
 				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
 				   ");");
 		
+		names.add("Create Clock table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Clock (" +
+				   "user_id INT NOT NULL, " +
+				   "time TIMESTAMP NOT NULL," +
+				   "in TINYINT NOT NULL DEFAULT 0," +
+				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
+				   ");");
+		
+		// Quarantine table
+		/*names.add("Create Quarantine table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Q (" +
+				  "user_id INT NOT NULL AUTO_INCREMENT," +
+				  "email VARCHAR(255) NOT NULL," +
+				  "password VARCHAR(80) NOT NULL, " +
+				  "first_name VARCHAR(80) NOT NULL, " +
+				  "last_name VARCHAR(80) NOT NULL, " +
+				  "locked_out TINYINT NOT NULL, " +
+				  "archive_flag TINYINT NOT NULL, " +
+				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+				  "position_id INT NOT NULL, " +
+				  "employee_id INT NOT NULL DEFAULT 0, " +
+				  "PRIMARY KEY (user_id), " +
+				  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
+				  "ON DELETE NO ACTION " +
+				  "ON UPDATE NO ACTION);");
+		*/
 		executeUpdates(names, sqls);
 	}
 	
