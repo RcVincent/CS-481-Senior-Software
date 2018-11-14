@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.model.ClockTime;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.*;
@@ -247,51 +248,37 @@ public class UserController{
 	
 	public boolean isClockedIn(int userID) {
 		try{
-			String name = "";
-			String sql = "select * from Clock where user_id = " + userID + 
-												 " and clock_in <> 0";			// <> is equivalent to != in VB and SQL
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee is not clocked in");
-				return false;
-			}
-			else
-				return true;
+			String name = "Is user clocked in";
+			String sql = "select * from Clock where user_id = " + userID + " order by time desc";
+			ClockTime result = db.executeQuery(name, sql, db.getTimeResFormat()).get(0);
+			return result.getIn();
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	public void clockIn(int userID, int time) {
+	public void clockIn(int userID) {
 		if(!isClockedIn(userID)) {
-			db.executeUpdate("Clock in user_id " + userID, 
-					"update Clock set clock_in = " + time + " where user_id = " + userID);
+			db.insert("Clock",
+					new String[]{"user_id", "in"},
+					new String[]{String.valueOf(userID), String.valueOf(true)});
 		}
 		else
 			System.out.println("This employee is already clocked in");
 	}
 	
-	public void clockOut(int userID, int time) {
-		int inTime = 0;
-		
+	public void clockOut(int userID) {
 		if(isClockedIn(userID)) {
-			try {
-				inTime = db.executeQuery("Get user clock in time", 
-						"select clock_in from Clock where user_id = " + userID + " order by clock_in desc", db.getIntResFormat()).get(0);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			// TODO: LOGIC WITH 3RD SHIFT//
-			//		   D E V I N		 //
-			//							 //
-			///////////////////////////////
-			
-			db.executeUpdate("Update hours", "update Clock set hours = " + (time - inTime) + " where user_id = " + userID);
-			db.executeUpdate("Reset clock in time", "update Clock set clock_in = 0 where user_id = " + userID);
+			db.insert("Clock",
+					new String[]{"user_id", "in"},
+					new String[]{String.valueOf(userID), String.valueOf(false)});
 		}
 		else
 			System.out.println("This employee is not clocked in yet");
+	}
+	
+	public void updateHours() {
+		// TODO
 	}
 }

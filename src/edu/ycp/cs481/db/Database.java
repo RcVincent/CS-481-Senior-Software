@@ -441,8 +441,8 @@ public class Database {
 		names.add("Create Clock table");
 		sqls.add("CREATE TABLE IF NOT EXISTS Clock (" +
 				   "user_id INT NOT NULL, " +
-				   "clock_in INT NOT NULL DEFAULT 0," +
-				   "hours INT NOT NULL DEFAULT 0," +
+				   "time TIMESTAMP NOT NULL," +
+				   "in TINYINT NOT NULL DEFAULT 0," +
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
 				   ");");
 		
