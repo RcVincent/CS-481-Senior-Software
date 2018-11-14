@@ -164,6 +164,18 @@ public class Database {
 		}
 	};
 	
+	public QueryResultFormat<ArrayList<Integer>> intResFormat = new QueryResultFormat<ArrayList<Integer>>(){
+		@Override
+		public ArrayList<Integer> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<Integer> times = new ArrayList<Integer>();
+			while(resultSet.next()){
+				int time = resultSet.getInt(1);
+				times.add(time);
+			}
+			return times;
+		}
+	};
+	
 	public QueryResultFormat<ArrayList<User>> getUserResFormat(){
 		return userResFormat;
 	}
@@ -190,6 +202,10 @@ public class Database {
 	
 	public QueryResultFormat<ArrayList<ClockTime>> getTimeResFormat(){
 		return timeResFormat;
+	}
+	
+	public QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
+		return intResFormat;
 	}
 	
 	public void addIntSearchToSelect(boolean first, StringBuilder name, StringBuilder sql, String arg, int value){
@@ -262,37 +278,6 @@ public class Database {
 						return true;
 					else
 						return false;
-				}finally{
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-			
-		});
-	}
-	
-	public Integer getIntField(String name, String sql) throws SQLException {
-		return executeTransaction(new Transaction<Integer>() {
-			@Override
-			public Integer execute(Connection conn) throws SQLException{
-				Statement stmt = null;
-				ResultSet resultSet = null;
-				
-				try{
-					if(name != null){
-						System.out.println("Doing query " + name);
-					}
-					stmt = conn.createStatement();
-					resultSet = stmt.executeQuery(sql);
-					int result = -1;
-					
-					if(name != null){
-						System.out.println("Finished query " + name);
-					}
-					
-					if(resultSet.next()){
-						result = resultSet.getInt(1);						
-					}
-					return result;
 				}finally{
 					DBUtil.closeQuietly(resultSet);
 				}

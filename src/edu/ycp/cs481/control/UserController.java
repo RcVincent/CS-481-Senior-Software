@@ -277,7 +277,8 @@ public class UserController{
 		
 		if(isClockedIn(userID)) {
 			try {
-				inTime = db.getIntField("User clock in time", "select clock_in from Clock where user_id = " + userID);
+				inTime = db.executeQuery("Get user clock in time", 
+						"select clock_in from Clock where user_id = " + userID + " order by clock_in desc", db.getIntResFormat()).get(0);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
