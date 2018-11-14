@@ -273,9 +273,22 @@ public class UserController{
 	}
 	
 	public void clockOut(int userID, int time) {
+		int inTime = 0;
+		
 		if(isClockedIn(userID)) {
-			// TODO: return clock in time, subtract from passed time,
-			// pass the result into Clock.hours
+			try {
+				inTime = db.getIntField("User clock in time", "select clock_in from Clock where user_id = " + userID);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			// TODO: LOGIC WITH 3RD SHIFT//
+			//		   D E V I N		 //
+			//							 //
+			///////////////////////////////
+			
+			db.executeUpdate("Update hours", "update Clock set hours = " + (time - inTime) + " where user_id = " + userID);
+			db.executeUpdate("Reset clock in time", "update Clock set clock_in = 0 where user_id = " + userID);
 		}
 		else
 			System.out.println("This employee is not clocked in yet");

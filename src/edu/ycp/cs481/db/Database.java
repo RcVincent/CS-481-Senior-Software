@@ -269,6 +269,37 @@ public class Database {
 			
 		});
 	}
+	
+	public Integer getIntField(String name, String sql) throws SQLException {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException{
+				Statement stmt = null;
+				ResultSet resultSet = null;
+				
+				try{
+					if(name != null){
+						System.out.println("Doing query " + name);
+					}
+					stmt = conn.createStatement();
+					resultSet = stmt.executeQuery(sql);
+					int result = -1;
+					
+					if(name != null){
+						System.out.println("Finished query " + name);
+					}
+					
+					if(resultSet.next()){
+						result = resultSet.getInt(1);						
+					}
+					return result;
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+			
+		});
+	}
 
 	private Connection connect() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName +"?user=root&password=password");
