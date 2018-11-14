@@ -244,4 +244,40 @@ public class UserController{
 		db.executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
 				manager_id + " and subordinate_id = " + subordinate_id);
 	}
+	
+	public boolean isClockedIn(int userID) {
+		try{
+			String name = "";
+			String sql = "select * from Clock where user_id = " + userID + 
+												 " and clock_in <> 0";			// <> is equivalent to != in VB and SQL
+			boolean results = db.executeCheck(name, sql);
+			if(results == false){
+				System.out.println("This employee is not clocked in");
+				return false;
+			}
+			else
+				return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
+	public void clockIn(int userID, int time) {
+		if(!isClockedIn(userID)) {
+			db.executeUpdate("Clock in user_id " + userID, 
+					"update Clock set clock_in = " + time + " where user_id = " + userID);
+		}
+		else
+			System.out.println("This employee is already clocked in");
+	}
+	
+	public void clockOut(int userID, int time) {
+		if(isClockedIn(userID)) {
+			// TODO: return clock in time, subtract from passed time,
+			// pass the result into Clock.hours
+		}
+		else
+			System.out.println("This employee is not clocked in yet");
+	}
 }
