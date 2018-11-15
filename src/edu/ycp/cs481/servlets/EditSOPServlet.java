@@ -28,8 +28,21 @@ public class EditSOPServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		SOPController sc = new SOPController(); 
+		SOP s = null;
+		int searchID = Integer.parseInt(req.getParameter("sop_id"));
 		
+		if(searchID <=0 ) {
+			System.out.println("Invalid search id");
+			req.setAttribute("searchError", "Invalid search ID!");
+		} else {
+			s = sc.searchForSOPs(searchID, false, "", false, "", -1, -1, -1).get(0);
+		}
 		
+		if(s == null) {
+			System.out.println("There was a search error, returning to the homepage");
+			resp.sendRedirect(req.getContextPath() + "/user_home");
+		}
 		req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
 	}
 }

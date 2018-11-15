@@ -30,11 +30,21 @@ public class EditPositionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		boolean editError = false;
 		PositionController pc = new PositionController(); 
-		
+		Position p = null; 
 		int searchID = Integer.parseInt(req.getParameter("position_id"));
 		
-		Position p = pc.searchForPositions(searchID, false, "", false, "", -1).get(0);
+		if(searchID <=0 ) {
+			System.out.println("Invalid search id");
+			req.setAttribute("searchError", "Invalid search ID!");
+		}
+		else { 
+			 p = pc.searchForPositions(searchID, false, "", false, "", -1).get(0);
+		}
 		
+		if(p == null) {
+			System.out.println("There was a search error, returning to the homepage");
+			resp.sendRedirect(req.getContextPath() + "/user_home");
+		}
 		String newPositionTitle = req.getParameter("newTitle");
 		String newPositionTitleConfirm = req.getParameter("newTitleConfirm");
 		
