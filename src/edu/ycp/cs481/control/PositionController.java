@@ -101,6 +101,8 @@ public class PositionController{
 		pos.setPriority(priority);
 	}
 
+	
+	
 	public void removePosition(int positionID){
 		db.executeUpdate("Delete Position with ID " + positionID,
 				"delete from Position where position_id = " + positionID);
