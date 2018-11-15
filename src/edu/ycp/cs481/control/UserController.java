@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
-import edu.ycp.cs481.model.ClockTime;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.*;
@@ -43,7 +43,7 @@ public class UserController{
 				otherTables.add("Subordinate");
 				junctions.add("Subordinate.subordinate_id = User.user_id");
 			}
-			ArrayList<User> results = db.doSearch(db.getUserResFormat(), "User", otherTables, junctions, 
+			ArrayList<User> results = db.doSearch(DBFormat.getUserResFormat(), "User", otherTables, junctions, 
 					new String[]{"user_id", "employee_id", "position_id", "manager_id"}, 
 					new int[]{userID, employeeID, positionID, managerID}, 
 					new boolean[]{emailPartial, firstNamePartial, lastNamePartial}, 
@@ -202,39 +202,40 @@ public class UserController{
 				manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
-	public boolean isClockedIn(int userID) {
-		try{
+	public boolean isClockedIn(int userID){
+		// TODO: Rework for new stuff
+		/*try{
 			String name = "Is user clocked in";
 			String sql = "select * from Clock where user_id = " + userID + " order by time desc";
-			ClockTime result = db.executeQuery(name, sql, db.getTimeResFormat()).get(0);
+			ClockTime result = db.executeQuery(name, sql, db.getDateResFormat()).get(0);
 			return result.getIn();
 		}catch(SQLException e){
 			e.printStackTrace();
-		} 
+		}*/
 		return false;
 	}
 	
-	public void clockIn(int userID) {
-		if(!isClockedIn(userID)) {
+	// TODO: Rework for new tables
+	public void clockIn(int userID){
+		if(!isClockedIn(userID)){
 			db.insert("Clock",
 					new String[]{"user_id", "in"},
 					new String[]{String.valueOf(userID), String.valueOf(true)});
-		}
-		else
+		}else
 			System.out.println("This employee is already clocked in");
 	}
 	
-	public void clockOut(int userID) {
-		if(isClockedIn(userID)) {
+	// TODO: Rework for new tables
+	public void clockOut(int userID){
+		if(isClockedIn(userID)){
 			db.insert("Clock",
 					new String[]{"user_id", "in"},
 					new String[]{String.valueOf(userID), String.valueOf(false)});
-		}
-		else
+		}else
 			System.out.println("This employee is not clocked in yet");
 	}
 	
-	public void updateHours() {
+	public void updateHours(){
 		// TODO
 	}
 }

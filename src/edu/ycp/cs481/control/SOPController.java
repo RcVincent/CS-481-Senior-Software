@@ -3,6 +3,7 @@ package edu.ycp.cs481.control;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.SOP;
 
@@ -19,7 +20,7 @@ public class SOPController{
 	public ArrayList<SOP> searchForSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
 			int priority, int version, int authorID){
 		try{
-			ArrayList<SOP> results = db.doSearch(db.getSopResFormat(), "SOP", null, null, 
+			ArrayList<SOP> results = db.doSearch(DBFormat.getSopResFormat(), "SOP", null, null, 
 					new String[]{"sop_id", "priority", "version", "author_id"}, 
 					new int[]{sopID, priority, version, authorID}, 
 					new boolean[]{titlePartial, descPartial}, 

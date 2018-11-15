@@ -3,6 +3,7 @@ package edu.ycp.cs481.control;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
@@ -19,7 +20,7 @@ public class PositionController{
 	public ArrayList<Position> searchForPositions(int positionID, boolean titlePartial, String title, 
 			boolean descPartial, String description, int priority){
 		try{
-			ArrayList<Position> results = db.doSearch(db.getPosResFormat(), "Position", null, null, 
+			ArrayList<Position> results = db.doSearch(DBFormat.getPosResFormat(), "Position", null, null, 
 					new String[]{"position_id", "priority"}, 
 					new int[]{positionID, priority}, 
 					new boolean[]{titlePartial, descPartial}, 
@@ -42,9 +43,9 @@ public class PositionController{
 
 	public Position getPositionByUser(int userID){
 		try{
-			ArrayList<Position> results = db.executeQuery("Get Position By User", "select " + db.getPositionPieces()
+			ArrayList<Position> results = db.executeQuery("Get Position By User", "select " + DBFormat.getPositionPieces()
 					+ " from Position, User where user_id = " + userID + " and Position.position_id = User.position_id",
-					db.getPosResFormat());
+					DBFormat.getPosResFormat());
 			if(results.size() == 0){
 				System.out.println("No positions found for User_id " + userID + "!");
 			}else if(results.size() > 1){
@@ -61,9 +62,9 @@ public class PositionController{
 	public ArrayList<Position> getPositionBySOPID(int SOPID){
 		try{
 			return db.executeQuery("Get Position by SOP ID",
-					"select " + db.getPositionPieces() + " from Position, PositionSOP " + "where PositionSOP.sop_id = "
+					"select " + DBFormat.getPositionPieces() + " from Position, PositionSOP " + "where PositionSOP.sop_id = "
 							+ SOPID + " and Position.position_id = PositionSOP.position_id",
-					db.getPosResFormat());
+					DBFormat.getPosResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -86,7 +87,6 @@ public class PositionController{
 				new String[]{String.valueOf(pos.getID()), String.valueOf(perm.getID())});
 	}
 	
-	// TODO: Work this out
 	public void removePositionPermission(Position pos, EnumPermission perm){
 		db.executeUpdate("Remove Permission " + perm.getPerm() + " from Position " + pos.getTitle(),
 				"delete from PositionPermission where position_id = " + pos.getID() + " and perm_id = " + perm.getID());
@@ -100,14 +100,15 @@ public class PositionController{
 	public ArrayList<SOP> findSOPsOfPosition(int positionID){
 		try{
 			return db.executeQuery("Get SOPs By Position",
-					"select " + db.getSopPieces() + " from PositionSOP, SOP " + "where position_id = " + positionID,
-					db.getSopResFormat());
+					"select " + DBFormat.getSopPieces() + " from PositionSOP, SOP " + "where position_id = " + positionID,
+					DBFormat.getSopResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	// TODO: Wouldn't this make more sense to check a particular requirement?
 	public boolean hasRequirement(int positionID) {
 		try{
 			String name = "";
