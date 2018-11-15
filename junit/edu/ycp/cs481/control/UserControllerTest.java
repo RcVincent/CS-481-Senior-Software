@@ -14,7 +14,7 @@ import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.control.UserController;
 
 public class UserControllerTest {
-	private Position pos1, pos2, pos3, pos4;
+	private Position pos1, pos2, pos3, pos4, pos5;
 	private SOP sop1, sop2;
 	private User user1, user2, user3, user4; 
 	private List<Position> positionList; 
@@ -47,6 +47,11 @@ public class UserControllerTest {
 		pos4.setID(4);
 		pos4.setPriority(9);
 		pos4.setTitle("Intern");
+		
+		pos5 = new Position(); 
+		pos5.setTitle("Manager");
+		pos5.setID(5);
+		pos5.setPriority(4);
 		
 		user1 = new User();
 		user1.setEmail("Admin@google.com");
@@ -264,6 +269,10 @@ public class UserControllerTest {
 		//this method also appears to not be working 
 		uc.changeUserPassword(user3.getUserID(), newPass);
 		
+		//search for users and pass that through user 3
+		
+		//user3 = uc.searchForUsers(-1, -1, false, "failTest@@gmail.com" , false, null, false, null, -1).get(0);
+		
 		assertEquals("Password4", user3.getPassword()); 
 		
 	}
@@ -284,6 +293,7 @@ public class UserControllerTest {
 	@Test 
 	public void testUserHasPermission() {
 		assertEquals(true, uc.userHasPermission(1, EnumPermission.ALL));
+		assertEquals(false, uc.userHasPermission(2, EnumPermission.ALL));
 	}
 	
 	//@Test

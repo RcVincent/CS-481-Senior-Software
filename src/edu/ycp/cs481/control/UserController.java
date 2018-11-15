@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.model.ClockTime;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.*;
@@ -199,5 +200,41 @@ public class UserController{
 	public void removeSubordinate(int manager_id, int subordinate_id){
 		db.executeUpdate("Remove subordinate with ID " + subordinate_id, "delete from Subordinate where manager_id = " + 
 				manager_id + " and subordinate_id = " + subordinate_id);
+	}
+	
+	public boolean isClockedIn(int userID) {
+		try{
+			String name = "Is user clocked in";
+			String sql = "select * from Clock where user_id = " + userID + " order by time desc";
+			ClockTime result = db.executeQuery(name, sql, db.getTimeResFormat()).get(0);
+			return result.getIn();
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
+	public void clockIn(int userID) {
+		if(!isClockedIn(userID)) {
+			db.insert("Clock",
+					new String[]{"user_id", "in"},
+					new String[]{String.valueOf(userID), String.valueOf(true)});
+		}
+		else
+			System.out.println("This employee is already clocked in");
+	}
+	
+	public void clockOut(int userID) {
+		if(isClockedIn(userID)) {
+			db.insert("Clock",
+					new String[]{"user_id", "in"},
+					new String[]{String.valueOf(userID), String.valueOf(false)});
+		}
+		else
+			System.out.println("This employee is not clocked in yet");
+	}
+	
+	public void updateHours() {
+		// TODO
 	}
 }
