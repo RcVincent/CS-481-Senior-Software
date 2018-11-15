@@ -41,6 +41,13 @@ public class DBFormat{
 		}
 	};
 	
+	private static QueryResultFormat<Boolean> checkResFormat = new QueryResultFormat<Boolean>(){
+		@Override
+		public Boolean convertFromResultSet(ResultSet resultSet) throws SQLException{
+			return resultSet.next();
+		}
+	};
+	
 	private static QueryResultFormat<ArrayList<User>> userResFormat = new QueryResultFormat<ArrayList<User>>(){
 		@Override
 		public ArrayList<User> convertFromResultSet(ResultSet resultSet) throws SQLException{
@@ -151,6 +158,10 @@ public class DBFormat{
 	
 	public static QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
 		return intResFormat;
+	}
+	
+	public static QueryResultFormat<Boolean> getCheckResFormat(){
+		return checkResFormat;
 	}
 	
 	public static QueryResultFormat<ArrayList<User>> getUserResFormat(){

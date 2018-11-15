@@ -113,7 +113,7 @@ public class PositionController{
 		try{
 			String name = "";
 			String sql = "select * from PositionSOP where position_id = " + positionID;
-			boolean results = db.executeCheck(name, sql);
+			boolean results = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 			if(results == false){
 				System.out.println("This Position has no requirements");
 				return false;

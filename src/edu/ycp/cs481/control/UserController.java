@@ -83,82 +83,59 @@ public class UserController{
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This user doesn't have this permission");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	public boolean managerHasSubordinate(int managerID, int userID) {
+	public boolean managerHasSubordinate(int managerID, int userID){
 		try{
 			String name = "";
 			String sql = "select * from Subordinate where manager_id = " + managerID + 
 												 " and subordinate_id = " + userID;
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee doesn't report to this manager");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 
-	public boolean SOPisCompleted(int userID, int sopID) {
+	public boolean SOPisCompleted(int userID, int sopID){
 		try{
 			String name = "";
 			String sql = "select * from CompletedSOP where user_id = " + userID + 
 												 " and sop_id = " + sopID;
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee hasn't finished this SOP");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	public boolean isLockedOut(int userID) {
+	public boolean isLockedOut(int userID){
 		try{
 			String name = "";
 			String sql = "select * from User where user_id = " + userID + 
 												 " and locked_out = 1";
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee is not locked out");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	/*public ArrayList<User> getManagerOfUser(int userID) {
-		try {
-			return db.executeQuery("Get Manager of User",
-				"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + userID,
-				db.getUserResFormat());
-		}catch(SQLException e) {
+	public ArrayList<User> getManagersOfUser(int userID){
+		try{
+			return db.executeQuery("Get Managers of User",
+				"select " + DBFormat.getUserPieces() + " from Subordinate, User " + "where manager_id = " + userID,
+				DBFormat.getUserResFormat());
+		}catch(SQLException e){
 			e.printStackTrace();
 		}
-	}*/
+		return null;
+	}
 
 	public void overturnLockout(int userID) {
 		db.executeUpdate("Overturn lockout on User with ID " + userID, "update User set lock_out = false where user_id = " + userID);
