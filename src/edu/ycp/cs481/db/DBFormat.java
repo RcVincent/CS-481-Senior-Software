@@ -8,6 +8,7 @@ import java.util.Date;
 import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
+import edu.ycp.cs481.model.Shift;
 import edu.ycp.cs481.model.User;
 
 public class DBFormat{
@@ -17,13 +18,24 @@ public class DBFormat{
 	private static String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, "
 			+ "SOP.archive_flag";
 	
+	
+	private static QueryResultFormat<ArrayList<Boolean>> boolResFormat = new QueryResultFormat<ArrayList<Boolean>>(){
+		@Override
+		public ArrayList<Boolean> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<Boolean> values = new ArrayList<Boolean>();
+			while(resultSet.next()){
+				values.add(resultSet.getBoolean(1));
+			}
+			return values;
+		}
+	};
+	
 	private static QueryResultFormat<ArrayList<Integer>> intResFormat = new QueryResultFormat<ArrayList<Integer>>(){
 		@Override
 		public ArrayList<Integer> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<Integer> values = new ArrayList<Integer>();
 			while(resultSet.next()){
-				int value = resultSet.getInt(1);
-				values.add(value);
+				values.add(resultSet.getInt(1));
 			}
 			return values;
 		}
@@ -107,6 +119,20 @@ public class DBFormat{
 		}
 	};
 	
+	private static QueryResultFormat<ArrayList<Shift>> shiftResFormat = new QueryResultFormat<ArrayList<Shift>>(){
+		@Override
+		public ArrayList<Shift> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<Shift> shifts = new ArrayList<Shift>();
+			while(resultSet.next()){
+				Date timeIn = resultSet.getTimestamp(1);
+				Date timeOut = resultSet.getTimestamp(2);
+				int hours = resultSet.getInt(3);
+				shifts.add(new Shift(timeIn, timeOut, hours));
+			}
+			return shifts;
+		}
+	};
+	
 	public static String getUserPieces(){
 		return userPieces;
 	}
@@ -117,6 +143,10 @@ public class DBFormat{
 	
 	public static String getSopPieces(){
 		return sopPieces;
+	}
+	
+	public static QueryResultFormat<ArrayList<Boolean>> getBoolResFormat(){
+		return boolResFormat;
 	}
 	
 	public static QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
@@ -137,6 +167,10 @@ public class DBFormat{
 	
 	public static QueryResultFormat<ArrayList<Date>> getDateResFormat(){
 		return dateResFormat;
+	}
+	
+	public static QueryResultFormat<ArrayList<Shift>> getShiftResFormat(){
+		return shiftResFormat;
 	}
 	
 	public static void addConditionalAndToQuery(boolean prevSet, StringBuilder name, StringBuilder sql){
