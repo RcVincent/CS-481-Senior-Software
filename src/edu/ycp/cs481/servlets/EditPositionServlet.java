@@ -30,6 +30,22 @@ public class EditPositionServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
+		boolean editError = false;
+		PositionController pc = new PositionController(); 
+		String newPositionTitle = req.getParameter("newTitle");
+		String newPositionTitleConfirm = req.getParameter("newTitleConfirm");
+		
+		if((newPositionTitle == null ||  newPositionTitle.equalsIgnoreCase("")) || (newPositionTitleConfirm == null || newPositionTitleConfirm.equalsIgnoreCase(""))) {
+			//do not do the edit 
+		}
+		else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm)) {
+			req.setAttribute("changeTitleError", "Titles do not match!");
+			editError = true; 
+		} else {
+			
+		}
+		
+		
 		
 		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 	}
