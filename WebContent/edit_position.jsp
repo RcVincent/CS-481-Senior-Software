@@ -7,6 +7,26 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
+<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
+
+<form class="form-horizontal" method="post">
+		<div class="row">
+			<div class="col">
+				<h3>Search for Position</h3>
+			</div>
+		</div>
+		<div class="col">
+				<div class="form-group row">
+						<input type="number" class="form-control" id="position_id" name="position_id" value="${position_id}" placeholder="Position ID">				
+				</div>
+			</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" class="btn btn-info">Search Position</button>
+			</div>
+		</div>
+	</form>
+
 <h1>Position Details</h1>
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">
@@ -155,7 +175,7 @@
 					<input type="priority" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
 				</div>
 			</div>
-		
+		</div>
 		<div class="row">
 			<div class="col">
 				<button type="submit" name="doStuff" value="changePriority" class="btn btn-info">Change Priority</button>
