@@ -20,10 +20,9 @@ public class SearchUsersServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
+		}else{
+			req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 		}
-		
-		req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 	}
 	
 
