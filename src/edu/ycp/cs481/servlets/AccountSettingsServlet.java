@@ -25,7 +25,7 @@ public class AccountSettingsServlet extends HttpServlet{
 		}else{
 			UserController uc = new UserController();
 			ArrayList<User> user = uc.searchForUsers((int) session.getAttribute("user_id"), -1, false, null, false, null, 
-					false, null, -1);
+					false, null, -1, -1);
 			session.setAttribute("email", user.get(0).getEmail());
 			req.getRequestDispatcher("/account_settings.jsp").forward(req, resp);
 		}
@@ -40,7 +40,7 @@ public class AccountSettingsServlet extends HttpServlet{
 		
 		UserController uc = new UserController();
 		ArrayList<User> users = uc.searchForUsers((int) session.getAttribute("user_id"), -1, false, null, false, null, 
-				false, null, -1);
+				false, null, -1, -1);
 		User user = users.get(0);
 		
 		if(action.equalsIgnoreCase("changeEmail")){

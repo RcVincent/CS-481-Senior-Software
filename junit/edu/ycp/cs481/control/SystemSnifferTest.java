@@ -1,11 +1,8 @@
 package edu.ycp.cs481.control;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
-import org.junit.Test;
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.Position;
@@ -18,8 +15,8 @@ public class SystemSnifferTest {
 	
 	private SOP s1, s2, s3, s4, s5, s6, s7, s8, s9, s10; 
 	private Position adminP, userP, managerP; 
-	private List<SOP> adminReqs, userReqs, managerReqs; 
-	private List<User> userList;  
+	private ArrayList<SOP> adminReqs, userReqs, managerReqs; 
+	private ArrayList<User> userList;  
 	
 	@Before 
 	public void setUp() {
@@ -132,29 +129,25 @@ public class SystemSnifferTest {
 		s10.setID(10);
 		s10.setComplete(false);
 		
-		//add sops to the user position list
+		//add sops to the user position ArrayList
 		userReqs.add(s2);
 		userReqs.add(s5);
 		userReqs.add(s6);
 		userReqs.add(s7);
 		userReqs.add(s9);
 		
-		//add sops to the admin position list
+		//add sops to the admin position ArrayList
 		adminReqs.add(s1);
 		adminReqs.add(s3);
 		adminReqs.add(s4);
 		adminReqs.add(s5);
 		adminReqs.add(s10);
 		
-		//add sops top to the manager position list 
+		//add sops top to the manager position ArrayList 
 		managerReqs.add(s3);
 		managerReqs.add(s6);
 		managerReqs.add(s7);
 		managerReqs.add(s8);
 		managerReqs.add(s9);
-		
-	
 	}
-	
-
 }

@@ -2,7 +2,6 @@ package edu.ycp.cs481.model;
  
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import edu.ycp.cs481.model.SOP;
 public class PositionTest {
 	private Position p1, p2, p3, p4, p5, p6, p7, p8;
 	private SOP req1, req2, req3, req4, req5, req6;
-	private ArrayList<Position> positionList, inactiveList; 
+	private ArrayList<Position> positionList; 
 	
 	@Before
 	public void setUp() {
@@ -28,69 +27,68 @@ public class PositionTest {
 		p8 = new Position(); 
 		
 		positionList = new ArrayList<Position>();
-		inactiveList = new ArrayList<Position>(); 
 		
-		List<SOP> p1Reqs = new ArrayList<SOP>(); 
-		List<SOP> p2Reqs = new ArrayList<SOP>();
-		List<SOP> p3Reqs = new ArrayList<SOP>(); 
-		List<SOP> p4Reqs = new ArrayList<SOP>();
-		List<SOP> p5Reqs = new ArrayList<SOP>();
-		List<SOP> p6Reqs = new ArrayList<SOP>();
-		List<SOP> p7Reqs = new ArrayList<SOP>();
-		List<SOP> p8Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p1Reqs = new ArrayList<SOP>(); 
+		ArrayList<SOP> p2Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p3Reqs = new ArrayList<SOP>(); 
+		ArrayList<SOP> p4Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p5Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p6Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p7Reqs = new ArrayList<SOP>();
+		ArrayList<SOP> p8Reqs = new ArrayList<SOP>();
 		
 		req1 = new SOP(); 
-		req1.setName("Test 1");
+		req1.setTitle("Test 1");
 		req1.setDescription("For testing");
 		req1.setPriority(1);
 		req1.setID(1);
 		req1.setAuthorID(12);
-		req1.setRevision(7);
+		req1.setVersion(7);
 		req1.setArchived(false);
 		
 		req2 = new SOP(); 
-		req2.setName("Test 2");
+		req2.setTitle("Test 2");
 		req2.setDescription("For testing");
 		req2.setPriority(2);
 		req2.setID(2);
 		req2.setAuthorID(12);
-		req2.setRevision(6);
+		req2.setVersion(6);
 		req2.setArchived(false);
 		
 		req3 = new SOP(); 
-		req3.setName("Test 3");
+		req3.setTitle("Test 3");
 		req3.setDescription("For testing");
 		req3.setPriority(3);
 		req3.setID(3);
 		req3.setAuthorID(0);
-		req3.setRevision(1);
+		req3.setVersion(1);
 		req3.setArchived(false);
 		
 		req4 = new SOP(); 
-		req4.setName(null);
+		req4.setTitle(null);
 		req4.setDescription(null);
 		req4.setPriority(0);
 		req4.setID(0);
 		req4.setAuthorID(0);
-		req4.setRevision(0);
+		req4.setVersion(0);
 		req4.setArchived(false);
 		
 		req5 = new SOP(); 
-		req5.setName("");
+		req5.setTitle("");
 		req5.setDescription("testing");
 		req5.setPriority(1);
 		req5.setID(5);
 		req5.setAuthorID(23);
-		req5.setRevision(4);
+		req5.setVersion(4);
 		req5.setArchived(false);
 		
 		req6 = new SOP(); 
-		req6.setName("Test 6");
+		req6.setTitle("Test 6");
 		req6.setDescription(" ");
 		req6.setPriority(4);
 		req6.setID(6);
 		req6.setAuthorID(0);
-		req6.setRevision(0);
+		req6.setVersion(0);
 		req6.setArchived(false);
 		
 		p1Reqs.add(req1);
@@ -110,52 +108,44 @@ public class PositionTest {
 		p1.setPriority(1);
 		p1.setRequirements(p1Reqs);
 		p1.setTitle("CEO");
-		p1.setValid(true);
 		p1.setRequirements(p1Reqs);
 		
 		p2.setID(10);
 		p2.setPriority(4);
 		p2.setRequirements(p2Reqs);
 		p2.setTitle("Manager");
-		p2.setValid(true);
 		p2.setRequirements(p2Reqs);
 		
 		p3.setID(0);
 		p3.setPriority(2);
 		p3.setRequirements(p3Reqs);
 		p3.setTitle("Admin");
-		p3.setValid(true);
 		p3.setRequirements(p3Reqs);
 		
 		p4.setID(999);
 		p4.setPriority(8);
 		p4.setRequirements(p4Reqs);
 		p4.setTitle("Maintenance");
-		p4.setValid(false);
 		p4.setRequirements(p4Reqs);
 		
 		p5.setID(7);
 		p5.setTitle("");
 		p5.setPriority(2);
-		p5.setValid(true);
 		p5.setRequirements(p5Reqs);
 		
 		p6.setID(19); 
 		p6.setPriority(0);
 		p6.setTitle("Observer");
-		p6.setValid(true);
 		p6.setRequirements(p6Reqs);
 		
 		p7.setID(20);
 		p7.setPriority(1);
 		p7.setTitle(" ");
-		p7.setValid(true);
 		p7.setRequirements(p7Reqs);
 		
 		p8.setID(-2);
 		p8.setTitle("Lol");
 		p8.setPriority(6);
-		p8.setValid(true);
 		p8.setRequirements(p8Reqs);
 		
 		positionList.add(p1);
@@ -201,182 +191,24 @@ public class PositionTest {
 	}
 	
 	@Test
-	public void testValid() {
-		assertEquals(true, p1.isValid());
-		assertEquals(true, p2.isValid());
-		assertEquals(true, p3.isValid());
-		assertEquals(false, p4.isValid());
-	}
-	
-	@Test
-	public void testValidSOP() {
-		List<SOP> SOPtestList; 
-		List<Position> testList = new ArrayList<Position>(); 
-		List<Position> failList = new ArrayList<Position>(); 
-		
-		testList.addAll(positionList);
-		for(Position p: positionList) {
-			if(p.isValid() == false) {
-				System.out.println("This position is not valid, removing it from the test list");
-				testList.remove(p);
-				
-				if(!inactiveList.contains(p)) {
-					inactiveList.add(p);
-				}
-			
-			}
-			else {
-				SOPtestList = new ArrayList<SOP>(); 
-				SOPtestList.addAll(p.getRequirements());
-				
-				for(SOP s : SOPtestList) {
-					if(s.getID() <=0) {
-						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
-						testList.remove(p);
-						failList.add(p);
-					}
-					else if(s.getName() == "" || s.getName() == " " || s.getName() == null ) {
-						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
-						testList.remove(p);
-						failList.add(p);
-					}
-					else if(s.getDescription() == "" || s.getDescription() == " " || s.getDescription() == null) {
-						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
-						testList.remove(p);
-						failList.add(p);
-					}
-					else if(s.getPriority() <= 0) {
-						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
-						testList.remove(p);
-						failList.add(p);
-					}
-					else if(s.getRevision() <= 0) {
-						System.out.println("The position with id" + p.getID() + " has an invalid SOP in its requirements. Removing it from queue");
-						testList.remove(p);
-						failList.add(p);
-					}
-				}
-			}
-		}
-		
-		assertEquals(1, inactiveList.size());
-		assertEquals(2, failList.size());
-		assertEquals(5, testList.size());
-	}
-	
-	@Test
 	public void testHasRequirements() {
-		List<Position> testList = new ArrayList<Position>(); 
-		List<Position> failList = new ArrayList<Position>(); 
-		List<SOP> SOPList;
+		ArrayList<Position> testList = new ArrayList<Position>(); 
+		ArrayList<Position> failList = new ArrayList<Position>(); 
+		ArrayList<SOP> SOPList;
 		
 		testList.addAll(positionList);
 		for(Position p: positionList) {
-			if(p.isValid() == false) {
-				System.out.println("This position is not valid, removing it from the test list");
+			SOPList = new ArrayList<SOP>(); 
+			SOPList.addAll(p.getRequirements());
+			
+			if(SOPList.size() <= 0) {
+				System.out.println("Position woth id "+ p.getID() + " has no SOPs, removing it from active queue.");
 				testList.remove(p);
-				
-				if(!inactiveList.contains(p)) {
-					inactiveList.add(p);
-				}
-			}
-			else {
-				SOPList = new ArrayList<SOP>(); 
-				SOPList.addAll(p.getRequirements());
-				
-				if(SOPList.size() <= 0) {
-					System.out.println("Position woth id "+ p.getID() + " has no SOPs, removing it from active queue.");
-					testList.remove(p);
-					failList.add(p);
-				}
+				failList.add(p);
 			}
 		}
 		
 		assertEquals(1, failList.size());
 		assertEquals(6, testList.size());
-		assertEquals(1, inactiveList.size());
 	}
-	
-	@Test
-	public void testValidPositionTitle() {
-		List<Position> testList = new ArrayList<Position>(); 
-		List<Position> failList = new ArrayList<Position>(); 
-		
-		testList.addAll(positionList);
-		
-		for(Position p: positionList) {
-			if(p.isValid() == false) {
-				System.out.println("This position is not valid, removing it from the test list");
-				testList.remove(p);
-				
-				if(!inactiveList.contains(p)) {
-					inactiveList.add(p);
-				}
-			}
-			else {
-				if(p.getTitle() == "" || p.getTitle() == " ") {
-					System.out.println("This position with id:" + p.getID() + " has an invalid title. Removing it from active queue");
-					testList.remove(p); 
-					failList.add(p); 
-					p.setValid(false);
-				}
-			}
-		}
-		
-		assertEquals(5, testList.size());
-		assertEquals(1, inactiveList.size());
-		assertEquals(2, failList.size());
-	}
-	
-	@Test
-	public void testValidPositionID() {
-		List<Position> testList = new ArrayList<Position>(); 
-		List<Position> failList = new ArrayList<Position>(); 
-		
-		testList.addAll(positionList);
-		
-		for(Position p: positionList) {
-			if(p.isValid() == false) {
-				System.out.println("This position is not valid, removing it from the test list");
-				testList.remove(p);
-				
-				if(!inactiveList.contains(p)) {
-					inactiveList.add(p);
-				}
-			}
-			else {
-				if(p.getID() <= 0) {
-					System.out.println("This position with title:" + p.getTitle() + " has an invalid ID. Removing it from active queue");
-					testList.remove(p); 
-					failList.add(p); 
-					p.setValid(false);
-				}
-			}
-		}
-		
-		assertEquals(5, testList.size());
-		assertEquals(1, inactiveList.size());
-		assertEquals(2, failList.size());
-	}
-	
-	@Test
-	public void testGetIncompleteSOPs() {
-		List<SOP> testList = new ArrayList<SOP>();
-		
-		testList = p1.getIncompleteSOPs(p1);
-		
-		assertEquals(2, testList.size()); 
-	}
-	
-	@Test
-	public void testGetCompleteSOPs() {
-		req2.setComplete(true);
-		req3.setComplete(true);
-		
-		List<SOP> testList = new ArrayList<SOP>(); 
-		testList = p2.getCompletedSOPs(p2);
-		
-		assertEquals(2, testList.size()); 
-	}
-	
 }

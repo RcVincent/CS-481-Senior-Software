@@ -1,10 +1,7 @@
 package edu.ycp.cs481.model;
-//import org.junit.before;
 
-//import org.junit.*; 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -164,57 +161,57 @@ public class UserTest {
 
 		//get the SOPs ready 
 		s1 = new SOP(); 
-		s1.setName("How to sign your name");
+		s1.setTitle("How to sign your name");
 		s1.setDescription("Lets be honest here");
 		s1.setPriority(1);
 		s1.setID(1);
 		s1.setAuthorID(124);
-		s1.setRevision(3);
+		s1.setVersion(3);
 		s1.setArchived(false);
 		
 		s2 = new SOP(); 
-		s2.setName("How to sign into your machine");
+		s2.setTitle("How to sign into your machine");
 		s2.setDescription("Yes we are serious");
 		s2.setPriority(2);
 		s2.setID(2);
 		s2.setAuthorID(125);
-		s2.setRevision(5);
+		s2.setVersion(5);
 		s2.setArchived(false);
 		
 		s3 = new SOP(); 
-		s3.setName("How to flush a toilet");
+		s3.setTitle("How to flush a toilet");
 		s3.setDescription("Some of ya'll nasty");
 		s3.setPriority(6);
 		s3.setID(33);
 		s3.setAuthorID(124);
-		s3.setRevision(1);
+		s3.setVersion(1);
 		s3.setArchived(false);
 		
 		s4 = new SOP(); 
-		s4.setName("How to sigh out");
+		s4.setTitle("How to sigh out");
 		s4.setDescription("Can't have you lot logged in all the time");
 		s4.setPriority(3);
 		s4.setID(55);
 		s4.setAuthorID(124);
-		s4.setRevision(2);
+		s4.setVersion(2);
 		s4.setArchived(false);
 		
 		s5 = new SOP(); 
-		s5.setName("Lelelele");
+		s5.setTitle("Lelelele");
 		s5.setDescription("To annoy the flying Duchman");
 		s5.setPriority(8);
 		s5.setID(68);
 		s5.setAuthorID(125);
-		s5.setRevision(4);
+		s5.setVersion(4);
 		s5.setArchived(false);
 		
 		s6 = new SOP(); 
-		s6.setName(null);
+		s6.setTitle(null);
 		s6.setDescription(null);
 		s6.setPriority(-1);
 		s6.setID(0);
 		s6.setAuthorID(0);
-		s6.setRevision(0);
+		s6.setVersion(0);
 		s6.setArchived(false);
 		
 		//add them to the sop list
@@ -228,10 +225,10 @@ public class UserTest {
 
 
 		//set position to SOP requirements 
-		List<SOP> req1 = new ArrayList<SOP>();
-		List<SOP> req2 = new ArrayList<SOP>();
-		List<SOP> req3 = new ArrayList<SOP>();
-		List<SOP> fail = new ArrayList<SOP>(); 
+		ArrayList<SOP> req1 = new ArrayList<SOP>();
+		ArrayList<SOP> req2 = new ArrayList<SOP>();
+		ArrayList<SOP> req3 = new ArrayList<SOP>();
+		ArrayList<SOP> fail = new ArrayList<SOP>(); 
 
 		req1.add(s1);
 		req1.add(s2);
@@ -291,7 +288,7 @@ public class UserTest {
 
 	@Test
 	public void viewPositionSOPListTest() {
-		List<SOP> testlist = admin1.getPosition().getRequirements();
+		ArrayList<SOP> testlist = admin1.getPosition().getRequirements();
 		
 		assertEquals(3, testlist.size());
 

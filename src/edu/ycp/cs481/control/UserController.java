@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
-import edu.ycp.cs481.model.ClockTime;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.*;
@@ -23,8 +23,6 @@ public class UserController{
 		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 	
-
-
 	public Integer insertUser(String email, String password, String firstName, String lastName, boolean lockedOut,
 			boolean isArchived, int positionID){
 		password = hashPassword(password);
@@ -36,52 +34,21 @@ public class UserController{
 	}
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
-			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID){
+			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID,
+			int managerID){
 		try{
-			StringBuilder name = new StringBuilder("");
-			StringBuilder sql = new StringBuilder("select " + db.getUserPieces() + " from User");
-			if(userID == -1 && employeeID == -1 && (email == null || email.equalsIgnoreCase(""))
-					&& (firstName == null || firstName.equalsIgnoreCase(""))
-					&& (lastName == null || lastName.equalsIgnoreCase("")) && positionID == -1){
-				name.append("Get All Users");
-			}else{
-				name.append("Get User with ");
-				sql.append(" where ");
-				boolean first = true;
-
-				if(userID != -1){
-					db.addIntSearchToSelect(first, name, sql, "user_id", userID);
-					first = false;
-				}
-				
-				if(employeeID != -1){
-					db.addIntSearchToSelect(first, name, sql, "employee_id", employeeID);
-					first = false;
-				}
-
-				if(email != null && !email.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, emailPartial, "email", email);
-					first = false;
-				}
-
-				if(firstName != null && !firstName.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, firstNamePartial, "first_name", firstName);
-					first = false;
-				}
-
-				if(lastName != null && !lastName.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, lastNamePartial, "last_name", lastName);
-					first = false;
-				}
-
-				if(positionID != -1){
-					db.addIntSearchToSelect(first, name, sql, "position_id", positionID);
-					first = false;
-				}
+			ArrayList<String> otherTables = new ArrayList<String>();
+			ArrayList<String> junctions = new ArrayList<String>();
+			if(managerID != -1){
+				otherTables.add("Subordinate");
+				junctions.add("Subordinate.subordinate_id = User.user_id");
 			}
-			System.out.println("Name: " + name.toString());
-			System.out.println("SQL: " + sql);
-			ArrayList<User> results = db.executeQuery(name.toString(), sql.toString(), db.getUserResFormat());
+			ArrayList<User> results = db.doSearch(DBFormat.getUserResFormat(), "User", otherTables, junctions, 
+					new String[]{"user_id", "employee_id", "position_id", "manager_id"}, 
+					new int[]{userID, employeeID, positionID, managerID}, 
+					new boolean[]{emailPartial, firstNamePartial, lastNamePartial}, 
+					new String[]{"email", "first_name", "last_name"}, 
+					new String[]{email, firstName, lastName});
 			if(results.size() == 0 && userID != -1){
 				System.out.println("No User found with ID " + userID);
 			}else if(results.size() > 1){
@@ -112,97 +79,63 @@ public class UserController{
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
-			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1);
+			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1, -1);
 			String name = "";
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This user doesn't have this permission");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	public boolean managerHasSubordinate(int managerID, int userID) {
+	public boolean managerHasSubordinate(int managerID, int userID){
 		try{
 			String name = "";
 			String sql = "select * from Subordinate where manager_id = " + managerID + 
 												 " and subordinate_id = " + userID;
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee doesn't report to this manager");
-				return false;
-			}
-			else
-				return true;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+
+	public boolean SOPisCompleted(int userID, int sopID){
+		try{
+			String name = "";
+			String sql = "select * from CompletedSOP where user_id = " + userID + 
+												 " and sop_id = " + sopID;
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		} 
 		return false;
 	}
 	
-	public ArrayList<User> listSubordinates(int managerID) {
+	public boolean isLockedOut(int userID){
 		try{
-			return db.executeQuery("Get Subordinates of Manager",
-					"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + managerID,
-					db.getUserResFormat());
+			String name = "";
+			String sql = "select * from User where user_id = " + userID + 
+												 " and locked_out = 1";
+			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+		return false;
+	}
+	
+	public ArrayList<User> getManagersOfUser(int userID){
+		try{
+			return db.executeQuery("Get Managers of User",
+				"select " + DBFormat.getUserPieces() + " from Subordinate, User " + "where manager_id = " + userID,
+				DBFormat.getUserResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
-
-	public boolean SOPisCompleted(int userID, int sopID) {
-		try{
-			String name = "";
-			String sql = "select * from CompletedSOP where user_id = " + userID + 
-												 " and sop_id = " + sopID;
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee hasn't finished this SOP");
-				return false;
-			}
-			else
-				return true;
-		}catch(SQLException e){
-			e.printStackTrace();
-		} 
-		return false;
-	}
-	
-	public boolean isLockedOut(int userID) {
-		try{
-			String name = "";
-			String sql = "select * from User where user_id = " + userID + 
-												 " and locked_out = 1";
-			boolean results = db.executeCheck(name, sql);
-			if(results == false){
-				System.out.println("This employee is not locked out");
-				return false;
-			}
-			else
-				return true;
-		}catch(SQLException e){
-			e.printStackTrace();
-		} 
-		return false;
-	}
-	
-	/*public ArrayList<User> getManagerOfUser(int userID) {
-		try {
-			return db.executeQuery("Get Manager of User",
-				"select " + db.getUserPieces() + " from Subordinate, User " + "where manager_id = " + userID,
-				db.getUserResFormat());
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}*/
 
 	public void overturnLockout(int userID) {
 		db.executeUpdate("Overturn lockout on User with ID " + userID, "update User set lock_out = false where user_id = " + userID);
@@ -246,39 +179,40 @@ public class UserController{
 				manager_id + " and subordinate_id = " + subordinate_id);
 	}
 	
-	public boolean isClockedIn(int userID) {
-		try{
+	public boolean isClockedIn(int userID){
+		// TODO: Rework for new stuff
+		/*try{
 			String name = "Is user clocked in";
 			String sql = "select * from Clock where user_id = " + userID + " order by time desc";
-			ClockTime result = db.executeQuery(name, sql, db.getTimeResFormat()).get(0);
+			ClockTime result = db.executeQuery(name, sql, db.getDateResFormat()).get(0);
 			return result.getIn();
 		}catch(SQLException e){
 			e.printStackTrace();
-		} 
+		}*/
 		return false;
 	}
 	
-	public void clockIn(int userID) {
-		if(!isClockedIn(userID)) {
+	// TODO: Rework for new tables
+	public void clockIn(int userID){
+		if(!isClockedIn(userID)){
 			db.insert("Clock",
 					new String[]{"user_id", "in"},
 					new String[]{String.valueOf(userID), String.valueOf(true)});
-		}
-		else
+		}else
 			System.out.println("This employee is already clocked in");
 	}
 	
-	public void clockOut(int userID) {
-		if(isClockedIn(userID)) {
+	// TODO: Rework for new tables
+	public void clockOut(int userID){
+		if(isClockedIn(userID)){
 			db.insert("Clock",
 					new String[]{"user_id", "in"},
 					new String[]{String.valueOf(userID), String.valueOf(false)});
-		}
-		else
+		}else
 			System.out.println("This employee is not clocked in yet");
 	}
 	
-	public void updateHours() {
+	public void updateHours(){
 		// TODO
 	}
 }

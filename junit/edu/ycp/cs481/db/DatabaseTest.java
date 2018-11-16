@@ -24,14 +24,15 @@ public class DatabaseTest {
 	
 	@BeforeClass
 	public static void cleanBefore(){
+		// TODO: NEED BETTER WAY FOR THIS ANYWAY
 		// Clean the database in case someone/something else messed with it
-		Database.cleanDB();
+		//Database.cleanDB();
 	}
 	
 	@AfterClass
 	public static void cleanAfter(){
 		// Clean the database for the next person
-		Database.cleanDB();
+		//Database.cleanDB();
 	}
 	
 	@Before
