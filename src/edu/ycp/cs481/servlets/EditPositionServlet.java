@@ -57,14 +57,14 @@ public class EditPositionServlet extends HttpServlet {
 		if(action.equalsIgnoreCase("changeTitle")) {
 			String newPositionTitle = req.getParameter("newTitle");
 			String newPositionTitleConfirm = req.getParameter("newTitleConfirm");
-
+			String title = p.getTitle();
 			//test change title
 			if((newPositionTitle == null ||  newPositionTitle.equalsIgnoreCase("")) && (newPositionTitleConfirm == null || newPositionTitleConfirm.equalsIgnoreCase(""))) {
 				//do not do the edit 
 				System.out.println("Position title not changed");
 			}
 			//make sure the two fields are identical
-			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm)) {
+			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm) || newPositionTitle.equalsIgnoreCase(title)) {
 				req.setAttribute("changeTitleError", "Titles do not match!");
 				editError = true; 
 			} else {
@@ -82,13 +82,16 @@ public class EditPositionServlet extends HttpServlet {
 		else if(action.equalsIgnoreCase("changeDescription")) {
 			String newPositionDescription = req.getParameter("newDescription");
 			String newPositionDescriptionConfirm = req.getParameter("newDescriptionConfirmation");
+			String description = p.getDescription();
+			
+			//check if both fields are empty and if they are do not edit
 			if((newPositionDescription == null || newPositionDescription.equalsIgnoreCase("")) && newPositionDescriptionConfirm == null || newPositionDescriptionConfirm.equalsIgnoreCase("")) {
 				//do not do the edit
 				System.out.println("Description field not changed.");
 
 			} 
 			//make sure the two fields are identical
-			else if(!newPositionDescription.equalsIgnoreCase(newPositionDescriptionConfirm)) {
+			else if(!newPositionDescription.equalsIgnoreCase(newPositionDescriptionConfirm) || newPositionDescription.equalsIgnoreCase(description)) {
 				req.setAttribute("changeDescriptionError", "Descriptions do not match!");
 				editError = true; 
 			}
@@ -107,6 +110,8 @@ public class EditPositionServlet extends HttpServlet {
 		else if(action.equalsIgnoreCase("changePriority")) {
 			String newP = req.getParameter("newPriority");
 			String newPConfirm = req.getParameter("newPriorityConfirmation");
+			int priority = p.getPriority();
+			
 			if((newP == null || newP.equalsIgnoreCase("")) && (newPConfirm == null || newPConfirm.equalsIgnoreCase("")) ) {
 				//do not do the edit if both fields are empty
 				System.out.println("Priority not changed.");
@@ -119,7 +124,7 @@ public class EditPositionServlet extends HttpServlet {
 				//parse the int
 				int newPriority = Integer.parseInt(newP);
 				//make sure the value is valid
-				if(newPriority <=0 || newPriority > 10 || newPriority == p.getPriority()) {
+				if(newPriority <=0 || newPriority > 10 || newPriority == priority) {
 					req.setAttribute("priorityValueError", "Invalid priority value!");
 					editError = true;
 				}
@@ -134,6 +139,14 @@ public class EditPositionServlet extends HttpServlet {
 			}
 			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
+		
+		/*
+		else if(action.equalsIgnoreCase("deletePosition")) {
+			pc.removePosition(p.getID());
+			req.setAttribute("RemoveMessage", "Position removed from the DB.");
+			System.out.println("Position deleted.");
+			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+		}*/
 
 	}
 }
