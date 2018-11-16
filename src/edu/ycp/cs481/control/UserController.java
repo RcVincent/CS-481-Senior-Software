@@ -215,4 +215,10 @@ public class UserController{
 	public void updateHours(){
 		// TODO
 	}
+	
+	public void assignSOP(int userID, int sopID) {
+		db.insert("UserSOP",
+				new String[] {"user_id", "sop_id"},
+				new String[] {String.valueOf(userID), String.valueOf(sopID)});
+	}
 }

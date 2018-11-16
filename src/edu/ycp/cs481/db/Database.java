@@ -332,14 +332,14 @@ public class Database{
 				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
 				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
 				   ");");
-		
+		/*
 		names.add("Create Clock table");
 		sqls.add("CREATE TABLE IF NOT EXISTS Clock (" +
 				   "user_id INT NOT NULL, " +
 				   "time TIMESTAMP NOT NULL," +
 				   "in TINYINT NOT NULL DEFAULT 0," +
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
-				   ");");
+				   ");");*/
 		
 		// Quarantine table
 		/*names.add("Create Quarantine table");
@@ -359,6 +359,15 @@ public class Database{
 				  "ON DELETE NO ACTION " +
 				  "ON UPDATE NO ACTION);");
 		*/
+		
+		names.add("Create UserSOP table");
+		sqls.add("CREATE TABLE IF NOT EXISTS UserSOP (" +
+				   "user_id INT NOT NULL, " +
+				   "sop_id INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id), " +
+				   "CONSTRAINT FOREIGN KEY (sop_id) REFERENCES SOP (sop_id) " +
+				   ");");
+		
 		executeUpdates(names, sqls);
 	}
 	
