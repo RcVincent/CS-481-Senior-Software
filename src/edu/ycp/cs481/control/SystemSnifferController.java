@@ -35,7 +35,7 @@ public class SystemSnifferController {
 		String id = (String) session.getAttribute("user_id");
 		int user_id = Integer.parseInt(id);
 		
-		u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", 0).get(0); 
+		u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", 0, -1).get(0); 
 		p = u.getPosition();
 		
 		//do a permissions check here
@@ -44,7 +44,7 @@ public class SystemSnifferController {
 	public void setAndShowToDoList() {
 		List<SOP> displayList = p.getIncompleteSOPs(p);
 		for(SOP s: displayList) {
-			System.out.println(s.getID() + " | " + s.getName() + " | " + s.getDescription());
+			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription());
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class SystemSnifferController {
 		List<SOP> displayList = p.getCompletedSOPs(p);
 		
 		for(SOP s: displayList) {
-			System.out.println(s.getID() + " | " + s.getName() + " | " + s.getDescription());
+			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription());
 		}
 	}
 	

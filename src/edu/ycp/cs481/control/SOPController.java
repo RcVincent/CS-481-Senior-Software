@@ -65,7 +65,7 @@ public class SOPController{
 	public void changeSOPTitle(SOP sop, String newTitle) {
 		db.executeUpdate("Change SOP " + sop.getID() + " to Title " + newTitle, "update SOP set title = " + newTitle +
 				"where sop_id = " + sop.getID());
-		sop.setName(newTitle);
+		sop.setTitle(newTitle);
 	}
 	
 	public void changeSOPDescription(SOP sop, String newDesc) {
@@ -77,7 +77,7 @@ public class SOPController{
 	public void changeSOPVersion(SOP sop, int newVersion) {
 		db.executeUpdate("Change SOP " + sop.getID() + " to Version " + newVersion, "update SOP set version = " + newVersion +
 				"where sop_id = " + sop.getID());
-		sop.setRevision(newVersion);
+		sop.setVersion(newVersion);
 	}
 	
 	public void insertCompletedSOP(int user_id, int sop_id){
