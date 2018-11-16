@@ -51,7 +51,7 @@
 					<c:when test="${! empty changeTitleError}">
 						<p class="alert alert-warning">${changeTitleError}</p>
 					</c:when>
-					<c:when test="${! empty changeEmailSuccess}">
+					<c:when test="${! empty SuccessMessage}">
 						<p class="alert alert-success">${SuccessMessage}</p>
 					</c:when>
 				</c:choose>
@@ -98,7 +98,7 @@
 					<c:when test="${! empty changeDescriptionError}">
 						<p class="alert alert-warning">${changeDescriptionError}</p>
 					</c:when>
-					<c:when test="${! empty changePasswordSuccess}">
+					<c:when test="${! empty SuccessMessage}">
 						<p class="alert alert-success">${SuccessMessage}</p>
 					</c:when>
 				</c:choose>
@@ -155,7 +155,7 @@
 					<c:when test="${! empty priorityError}">
 						<p class="alert alert-warning">${priorityError}</p>
 					</c:when>
-					<c:when test="${! empty changePasswordSuccess}">
+					<c:when test="${! empty SuccessMessage}">
 						<p class="alert alert-success">${SuccessMessage}</p>
 					</c:when>
 				</c:choose>
