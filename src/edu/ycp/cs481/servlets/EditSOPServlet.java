@@ -147,7 +147,7 @@ public class EditSOPServlet extends HttpServlet {
 				//parse the integer value 
 				int newVersion = Integer.parseInt(newV);
 				//see if the version has an invalid value or is still the same value
-				if(newVersion <= 0 || newVersion == s.getRevision()) {
+				if(newVersion <= 0 || newVersion == s.getVersion()) {
 					req.setAttribute("versionValueError", "The version has an invalid value!");
 					editError = true;
 				}
