@@ -162,7 +162,12 @@ public class EditSOPServlet extends HttpServlet {
 			}
 			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
-
-
+		
+		//add an archive option
+		else if(action.equalsIgnoreCase("archiveSOP")) {
+			sc.archiveSOP(s.getID());
+			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			
+		}
 	}
 }
