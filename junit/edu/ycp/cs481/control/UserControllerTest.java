@@ -115,6 +115,10 @@ public class UserControllerTest {
 		
 	}
 	
+	@Test
+	public void testInsertQuarantineUser() {
+		uc.insertQuarantineUser("zhenry@ycp.edu", "password", "Chuck", "Norris");
+	}
 	
 	//this needs to be updated to handle the new salted passwords 
 	@Test
@@ -182,7 +186,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void testSearchByFUllName() {
+	public void testSearchByFullName() {
 		String FirstName = "Stan";
 		String LastName = "Smith"; 
 		
