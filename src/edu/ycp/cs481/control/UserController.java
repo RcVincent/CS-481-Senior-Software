@@ -39,8 +39,17 @@ public class UserController{
 						String.valueOf(positionID)});
 	}
 	
+	public boolean findQuarantineUser(String email){
+		try{
+			return db.executeQuery("Checking Quarantine User doesn't exist", 
+					"select * from Quarantine where email = '" + email + "'", DBFormat.getCheckResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public void insertQuarantineUser(String email, String password, String firstName, String lastName) {
-		boolean exists = false;
 		// Generate a 4 digit number(0-9999) for the verification
 		Random random = new Random();
 		int verificationNum = random.nextInt(10000);
@@ -49,16 +58,8 @@ public class UserController{
 		password = hashPassword(password);
 		
 		// Verify user doesn't exist in the table
-		try {
-			exists = db.executeQuery("Checking Quarantine User doesn't exist", 
-							"select * from Quarantine where email = '" + email + "'", DBFormat.getCheckResFormat());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		if(exists) {
+		if(findQuarantineUser(email)){
 			retrySendEmail(email);
-			return;
 		} else {
 			db.insert("Quarantine", 
 					new String[] {"email", "password", "first_name", "last_name", "verification"}, 
@@ -176,7 +177,7 @@ public class UserController{
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
 			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1, -1);
-			String name = "";
+			String name = "Permission check for permission " + perm.getPerm();
 			String sql = "select * from PositionPermission where position_id = " + u.get(0).getPosition().getID() + 
 															" and perm_id = " + perm.getID();
 			return db.executeQuery(name, sql, DBFormat.getCheckResFormat());

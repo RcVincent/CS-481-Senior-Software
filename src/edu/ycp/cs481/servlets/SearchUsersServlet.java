@@ -20,10 +20,9 @@ public class SearchUsersServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
+		}else{
+			req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 		}
-		
-		req.getRequestDispatcher("/search_users.jsp").forward(req, resp);
 	}
 	
 
@@ -41,7 +40,7 @@ public class SearchUsersServlet extends HttpServlet {
 		int positionID = posIDStr.equalsIgnoreCase("")?-1:Integer.parseInt(posIDStr);
 		
 		UserController uc = new UserController();
-		ArrayList<User> users = uc.searchForUsers(userID, employeeID, true, email, true, firstName, true, lastName, positionID, 1);
+		ArrayList<User> users = uc.searchForUsers(userID, employeeID, true, email, true, firstName, true, lastName, positionID, -1);
 		
 		for(int i = 0; i < users.size(); i++){
 			req.setAttribute("userID" + (i+1), users.get(i).getUserID());

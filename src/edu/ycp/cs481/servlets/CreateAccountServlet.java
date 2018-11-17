@@ -7,8 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
@@ -17,9 +19,20 @@ public class CreateAccountServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Create Account Servlet: doGet");
 		
-		// TODO: Check for manager/admin status
-		
-		req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
+		HttpSession session = req.getSession();
+		if(session.getAttribute("user_id") == null){
+			req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
+		}else{
+			UserController uc = new UserController();
+			int userID = (int) session.getAttribute("user_id");
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.CREATE_USER)){
+				req.setAttribute("managerCreate", "true");
+				req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
+			}else{
+				session.setAttribute("error", "You don't have permission to Create a User!");
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}
+		}
 	}
 	
 	@Override
@@ -49,13 +62,12 @@ public class CreateAccountServlet extends HttpServlet{
 		}
 		
 		if(email == null || email.equalsIgnoreCase("")){
-			// TODO: Check that it's a valid email
 			goodUser = false;
 			req.setAttribute("emailError", "Please enter a valid email!");
 		}else{
 			ArrayList<User> users = userControl.searchForUsers(-1, -1, false, email, false, null, false, null, -1, -1);
-			// TODO: Check Quarantine table as well
-			if(users != null && users.size() > 0){
+			boolean quarantineUserFound = userControl.findQuarantineUser(email);
+			if(users != null && users.size() > 0 || quarantineUserFound){
 				goodUser = false;
 				req.setAttribute("emailError", "Email is already taken");
 			}
@@ -77,15 +89,19 @@ public class CreateAccountServlet extends HttpServlet{
 		}
 		
 		if(goodUser){
-			// TODO: Handling stuff for when Manager/Admin creates Account
-			//int id = userControl.insertUser(email, password, firstName, lastName, false, false, 2);
-			
 			// Insert into the database
-			userControl.insertQuarantineUser(emailConfirm, passwordConfirm, firstName, lastName);
+			userControl.insertQuarantineUser(email, password, firstName, lastName);
 			
-			System.out.println("User" + firstName + " " + lastName +" inserted with email " + email);
+			System.out.println("User " + firstName + " " + lastName +" inserted with email " + email);
 			
-			resp.sendRedirect(req.getContextPath() + "/login");
+			String managerCreate = (String) req.getParameter("managerCreate");
+			System.out.println("MANCREATE: " + managerCreate);
+			if(managerCreate != null && managerCreate.equalsIgnoreCase("true")){
+				// TODO: Send different email with info?
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}else{
+				resp.sendRedirect(req.getContextPath() + "/login");
+			}
 		}else{
 			req.setAttribute("firstName", firstName);
 			req.setAttribute("lastName", lastName);
@@ -93,7 +109,5 @@ public class CreateAccountServlet extends HttpServlet{
 			req.setAttribute("emailConfirm", emailConfirm);
 			req.getRequestDispatcher("/create_account.jsp").forward(req, resp);
 		}
-		
-		
 	}
 }
