@@ -1,7 +1,6 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.UserController;
-import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
 public class ResetPasswordServlet extends HttpServlet{
