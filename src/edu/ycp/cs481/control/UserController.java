@@ -75,8 +75,8 @@ public class UserController{
 					new String[] {email, password, firstName, lastName, verificationString});
 			
 			// Send email with messenger
-			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is " + verificationString +
-					" \nPlease visit the following URL and enter your email and pin: \n\nlocalhost:8081/CS481-Senior-Software/verify_email"});
+			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is:   " + verificationString +
+					"<br>Please visit the following URL and enter your email and pin: \n\n<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email\">Verify Email</a>"});
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class UserController{
 		
 		// Send email with messenger
 		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationString +
-											" \nPlease visit the following URL and enter your email and pin: \n\nlocalhost:8081/CS481-Senior-Software/verify_email"});
+				"<br>Please visit the following URL and enter your email and pin: \n\n<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email\">Verify Email</a>"});
 	}
 	
 	public Integer verifyUser(String email, String verificationString) {
@@ -189,7 +189,8 @@ public class UserController{
 		db.executeUpdate("Reset User Password", 
 				"update User set password = '" + hashPassword(password) + "' where email = '" + email + "'");
 		
-		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is: \n\n" + password});
+		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is:   " + password + 
+				"<br>Please visit the following URL to sign in: <a href=\"http://localhost:8081/CS481-Senior-Software/login\">CTM MKii Login</a>"});
 	}
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
