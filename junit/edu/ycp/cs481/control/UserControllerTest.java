@@ -115,6 +115,10 @@ public class UserControllerTest {
 		
 	}
 	
+	@Test
+	public void testInsertQuarantineUser() {
+		uc.insertQuarantineUser("zhenry@ycp.edu", "password", "Bob", "Joepeet");
+	}
 	
 	//this needs to be updated to handle the new salted passwords 
 	@Test

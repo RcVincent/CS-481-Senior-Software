@@ -3,6 +3,7 @@ package edu.ycp.cs481.control;
 import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
+import edu.ycp.cs481.model.Messenger;
 import edu.ycp.cs481.model.User;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -42,6 +43,9 @@ public class UserController{
 		db.insert("Quarantine", 
 				new String[] {"email", "password", "first_name", "last_name", "verification"}, 
 				new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
+		
+		// TODO: Send email with messenger
+		Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering. Your pin is " + verificationNum});
 	}
 	
 	public Integer verifyUser(int userID, int verificationNum) {
