@@ -7,6 +7,7 @@ import edu.ycp.cs481.model.User;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +33,28 @@ public class UserController{
 				new String[]{email, password, firstName, lastName, String.valueOf(lockedOut), String.valueOf(isArchived),
 						String.valueOf(positionID)});
 	}
+	
+	public void insertQuarantineUser(String email, String password, String firstName, String lastName) {
+		// Generate a 4 digit number(0-9999) for the verification
+		Random random = new Random();
+		int verificationNum = random.nextInt(10000);
+		
+		db.insert("Quarantine", 
+				new String[] {"email", "password", "first_name", "last_name", "verification"}, 
+				new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
+	}
+	
+	/*public Integer verifyUser(int userID, int verificationNum) {
+		TODO:
+		boolean verify = false;
+		try{
+			String name = "Verifying User";
+			String sql = "select * from Quarantine where user_id = " + userID + " and verification = " + verificationNum;
+			verify = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		} 
+	}*/
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
 			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID,
