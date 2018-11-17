@@ -22,7 +22,14 @@
 	<c:if test="${!empty error}">
 	<div class="row">
 		<div class="col text-center">
-			<p class="alert alert-warning">${error}</p>
+			<p class="alert alert-danger">${error}</p>
+		</div>
+	</div>
+	</c:if>
+	<c:if test="${!empty success}">
+	<div class="row">
+		<div class="col text-center">
+			<p class="alert alert-success">${success}</p>
 		</div>
 	</div>
 	</c:if>

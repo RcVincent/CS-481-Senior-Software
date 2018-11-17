@@ -98,6 +98,8 @@ public class CreateAccountServlet extends HttpServlet{
 			System.out.println("MANCREATE: " + managerCreate);
 			if(managerCreate != null && managerCreate.equalsIgnoreCase("true")){
 				// TODO: Send different email with info?
+				req.getSession().setAttribute("success", "Created Account with email " + email + " for " + firstName + " " +
+						lastName);
 				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}else{
 				resp.sendRedirect(req.getContextPath() + "/login");
