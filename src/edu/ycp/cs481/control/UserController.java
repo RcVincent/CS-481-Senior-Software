@@ -51,7 +51,7 @@ public class UserController{
 		// Verify user doesn't exist in the table
 		try {
 			exists = db.executeQuery("Checking Quarantine User doesn't exist", 
-							"select * from Quarantine where email = " + email, DBFormat.getCheckResFormat());
+							"select * from Quarantine where email = '" + email + "'", DBFormat.getCheckResFormat());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -92,7 +92,8 @@ public class UserController{
 		
 		try{
 			String name = "Verifying User";
-			String sql = "select * from Quarantine where email = " + email + " and verification = " + verificationNum;
+			String sql = "select * from Quarantine where email = '" + email + "' and verification = " + verificationNum;
+			System.out.println(email);
 			verify = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -102,7 +103,7 @@ public class UserController{
 			// Move information from Quarantine -> User
 			try {
 				String name = "Migrating to User table";
-				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = " + email;
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = '" + email + "'";
 				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
 			} catch (SQLException e) {
 				e.printStackTrace();
