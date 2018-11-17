@@ -44,17 +44,38 @@ public class UserController{
 				new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
 	}
 	
-	/*public Integer verifyUser(int userID, int verificationNum) {
-		TODO:
+	public Integer verifyUser(int userID, int verificationNum) {
 		boolean verify = false;
+		int newUserID = 0;
+		ArrayList<String> user = new ArrayList<String>();
+		
 		try{
 			String name = "Verifying User";
 			String sql = "select * from Quarantine where user_id = " + userID + " and verification = " + verificationNum;
 			verify = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
-		} 
-	}*/
+		}
+		
+		if(verify) {
+			// Move information from Quarantine -> User
+			try {
+				String name = "Migrating to User table";
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where user_id = " + userID;
+				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			// Delete entry in Quarantine
+			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where user_id = " + userID);
+			
+			newUserID = insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
+		} else {
+			return -1;
+		}
+		
+		return newUserID;
+	}
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
 			boolean firstNamePartial, String firstName, boolean lastNamePartial, String lastName, int positionID,

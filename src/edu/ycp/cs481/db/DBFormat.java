@@ -17,6 +17,7 @@ public class DBFormat{
 	private static String positionPieces = "Position.position_id, Position.title, Position.description, Position.priority";
 	private static String sopPieces = "SOP.sop_id, SOP.title, SOP.description, SOP.priority, SOP.version, SOP.author_id, "
 			+ "SOP.archive_flag";
+	private static String quarantinePieces = "Quarantine.email, Quarantine.password, Quarantine.first_name, Quarantine.last_name";
 	
 	
 	private static QueryResultFormat<ArrayList<Boolean>> boolResFormat = new QueryResultFormat<ArrayList<Boolean>>(){
@@ -36,6 +37,20 @@ public class DBFormat{
 			ArrayList<Integer> values = new ArrayList<Integer>();
 			while(resultSet.next()){
 				values.add(resultSet.getInt(1));
+			}
+			return values;
+		}
+	};
+	
+	private static QueryResultFormat<ArrayList<String>> quarantineResFormat = new QueryResultFormat<ArrayList<String>>(){
+		@Override
+		public ArrayList<String> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<String> values = new ArrayList<String>();
+			if(resultSet.next()) {
+				values.add(resultSet.getString(1));
+				values.add(resultSet.getString(2));
+				values.add(resultSet.getString(3));
+				values.add(resultSet.getString(4));
 			}
 			return values;
 		}
@@ -152,12 +167,20 @@ public class DBFormat{
 		return sopPieces;
 	}
 	
+	public static String getQuarantinePieces() {
+		return quarantinePieces;
+	}
+	
 	public static QueryResultFormat<ArrayList<Boolean>> getBoolResFormat(){
 		return boolResFormat;
 	}
 	
 	public static QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
 		return intResFormat;
+	}
+	
+	public static QueryResultFormat<ArrayList<String>> getQuarantineResFormat(){
+		return quarantineResFormat;
 	}
 	
 	public static QueryResultFormat<Boolean> getCheckResFormat(){
