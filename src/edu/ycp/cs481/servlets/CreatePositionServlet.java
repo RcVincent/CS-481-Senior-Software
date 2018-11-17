@@ -9,64 +9,68 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.EnumPermission;
 
 @SuppressWarnings("serial")
-public class CreatePositionServlet extends HttpServlet {
-	
-	
-	
+public class CreatePositionServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+			throws ServletException, IOException{
 		System.out.println("Create Position: doget");
 		
 		HttpSession session = req.getSession();
-		if (session.getAttribute("user_id") == null) {
-			// user is not logged in, or the session expired
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-		} else {
-			req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
+		}else{
+			UserController uc = new UserController();
+			int userID = (int) session.getAttribute("user_id");
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.CREATE_POSITION)){
+				req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
+			}else{
+				session.setAttribute("error", "You don't have permission to create a position!");
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}
 		}	
-		
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+			throws ServletException, IOException{
 		System.out.println("Getting Position info from the webform");
 		
-		boolean goodPosition = true; 
+		boolean goodPosition = true;
 		int priority = 0;
-		PositionController pc = new PositionController(); 
+		PositionController pc = new PositionController();
 		
-		String positionTitle = req.getParameter("title");
-		if(positionTitle == null || positionTitle.equalsIgnoreCase("")) {
-			goodPosition = false; 
+		String title = req.getParameter("title");
+		if(title == null || title.equalsIgnoreCase("")){
+			goodPosition = false;
 			req.setAttribute("titleError", "Please enter a valid position title.");
 		}
-		String positionDescription = req.getParameter("description");
-		if(positionDescription == null || positionDescription.equalsIgnoreCase("")) {
+		
+		String description = req.getParameter("description");
+		if(description == null || description.equalsIgnoreCase("")) {
 			goodPosition = false;
 			req.setAttribute("descError", "Please enter a valid position description.");
 		}
 		
-		String Priority = req.getParameter("priority");
-		if(Priority == null || Priority.equalsIgnoreCase("")) {
+		String priorityStr = req.getParameter("priority");
+		if(priorityStr == null || priorityStr.equalsIgnoreCase("")) {
 			goodPosition = false; 
-			req.setAttribute("priError", "Please enter a valid priority.");
+			req.setAttribute("priorityError", "Please enter a valid priority.");
 		} else {
-			priority = Integer.parseInt(Priority);
+			priority = Integer.parseInt(priorityStr);
 			if(priority <= 0 || priority > 10) {
 				goodPosition = false; 
-				req.setAttribute("prioError", "There was either a conversion error or an invalid value.");
+				req.setAttribute("priorityError", "Priority must be between 1 and 10!");
 			}
 		}
 		
-		
 		//get the created position and error check it. 
 		if(goodPosition) {
-			int posID = pc.insertPosition(positionTitle, positionDescription, priority);
+			int posID = pc.insertPosition(title, description, priority);
 			
 			if(posID <= 0) {
 				System.out.println("There was an error inserting the position into the DB");
@@ -76,18 +80,14 @@ public class CreatePositionServlet extends HttpServlet {
 				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}
 		} else {
-			req.setAttribute("title", positionTitle);
-			req.setAttribute("description", positionDescription);
-			req.setAttribute("priority", Priority);
+			req.setAttribute("title", title);
+			req.setAttribute("description", description);
+			req.setAttribute("priority", priority);
 			req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
 		}
-		
 		
 		if(req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");
 		}
-		
-		
 	}
-	
 }
