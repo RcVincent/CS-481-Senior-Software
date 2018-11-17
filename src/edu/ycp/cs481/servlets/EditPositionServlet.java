@@ -1,7 +1,6 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,28 +8,39 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.control.UserController;
 
 @SuppressWarnings("serial")
-public class EditPositionServlet extends HttpServlet {
+public class EditPositionServlet extends HttpServlet{
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
-		//standard session data check 
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-
-		} else {
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+		}else{
+			UserController uc = new UserController();
+			int userID = (int) session.getAttribute("user_id");
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_POSITIONS)){
+				// TODO: Error checking
+				int posID = Integer.parseInt(req.getParameter("posID"));
+				PositionController pc = new PositionController();
+				Position pos = pc.searchForPositions(posID, false, null, false, null, -1).get(0);
+				req.setAttribute("oldID", pos.getID());
+				req.setAttribute("oldTitle", pos.getTitle());
+				req.setAttribute("oldPriority", pos.getPriority());
+				req.setAttribute("oldDescription", pos.getDescription());
+				// TODO: Current Requirements
+				req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			}else{
+				session.setAttribute("error", "You don't have permission to Edit Positions!");
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}
 		}
-		
-
-		//do a permissions check here and if they are a user return them to the home page 
 	}
-
-
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

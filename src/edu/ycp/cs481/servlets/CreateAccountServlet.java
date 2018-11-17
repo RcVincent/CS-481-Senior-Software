@@ -95,7 +95,6 @@ public class CreateAccountServlet extends HttpServlet{
 			System.out.println("User " + firstName + " " + lastName +" inserted with email " + email);
 			
 			String managerCreate = (String) req.getParameter("managerCreate");
-			System.out.println("MANCREATE: " + managerCreate);
 			if(managerCreate != null && managerCreate.equalsIgnoreCase("true")){
 				// TODO: Send different email with info?
 				req.getSession().setAttribute("success", "Created Account with email " + email + " for " + firstName + " " +

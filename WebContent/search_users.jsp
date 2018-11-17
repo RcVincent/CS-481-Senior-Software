@@ -55,7 +55,7 @@
 	<c:if test="${!empty userID1}">
 		<div class="row">
 			<div class="col-3">
-				<p>${userID1} / ${employeeID1}</p>
+				<p><a href="edit_user?${userID1}">Edit User</a>${userID1} / ${employeeID1}</p>
 			</div>
 			<div class="col-3">
 				<p>${email1}</p>

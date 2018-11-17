@@ -20,6 +20,7 @@ public class SearchSOPsServlet extends HttpServlet {
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			// TODO: Use posID if it's sent in via url
 			req.getRequestDispatcher("/search_sops.jsp").forward(req, resp);
 		}
 	}

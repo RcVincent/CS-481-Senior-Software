@@ -9,26 +9,33 @@
 <body>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
 
-<form class="form-horizontal" method="post">
-		<div class="row">
-			<div class="col">
-				<h3>Search for Position</h3>
-			</div>
+<h1>Current Position Details</h1>
+<div class="fluid-container">
+	<div class="row">
+		<div class="col">
+			ID: ${oldID}
 		</div>
 		<div class="col">
-				<div class="form-group row">
-						<input type="number" class="form-control" id="position_id" name="position_id" value="${position_id}" placeholder="Position ID">				
-				</div>
-			</div>
-		<div class="row">
-			<div class="col">
-				<button type="submit" class="btn btn-info">Search Position</button>
-			</div>
+			Title: ${oldTitle}
 		</div>
-	</form>
-
+		<div class="col">
+			Priority: ${oldPriority}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-2">
+			Description: 
+		</div>
+		<div class="col-10">
+			${oldDescription}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			Requirements TBA
+		</div>
+	</div>
 <h1>Position Details</h1>
-<div class="fluid-container">
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">

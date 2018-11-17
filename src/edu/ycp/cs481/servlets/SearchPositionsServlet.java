@@ -21,12 +21,40 @@ public class SearchPositionsServlet extends HttpServlet{
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			// Set default search with no parameters
+			PositionController pc = new PositionController();
+			ArrayList<Position> positions = pc.searchForPositions(-1, false, null, false, null, -1);
+			req.setAttribute("positions", positions);
+			// Set default page and display size
+			req.setAttribute("page", 0);
+			req.setAttribute("displaySize", 10);
 			req.getRequestDispatcher("/search_positions.jsp").forward(req, resp);
 		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		String changePage = req.getParameter("changePage");
+		String changeDisplaySize = req.getParameter("changeDisplaySize");
+		int currentDisplaySize = Integer.parseInt(req.getParameter("displaySize"));
+		
+		if(changePage != null && !changePage.equalsIgnoreCase("")){
+			int currentPage = Integer.parseInt(req.getParameter("page"));
+			if(changePage.equalsIgnoreCase("prev")){
+				req.setAttribute("page", currentPage - 1);
+			}else if(changePage.equalsIgnoreCase("next")){
+				req.setAttribute("page", currentPage + 1);
+			}
+		}else{
+			req.setAttribute("page", 0);
+		}
+		
+		if(changeDisplaySize != null && !changeDisplaySize.equalsIgnoreCase("")){
+			req.setAttribute("displaySize", Integer.parseInt(changeDisplaySize));
+		}else{
+			req.setAttribute("displaySize", currentDisplaySize);
+		}
+		
 		String idStr = req.getParameter("positionID");
 		int id = idStr.equalsIgnoreCase("")?-1:Integer.parseInt(idStr);
 		String title = req.getParameter("title");
@@ -37,12 +65,13 @@ public class SearchPositionsServlet extends HttpServlet{
 		PositionController pc = new PositionController();
 		ArrayList<Position> positions = pc.searchForPositions(id, true, title, true, desc, priority);
 		
-		for(int i = 0; i < positions.size(); i++){
-			req.setAttribute("positionID" + (i+1), positions.get(i).getID());
-			req.setAttribute("title" + (i+1), positions.get(i).getTitle());
-			req.setAttribute("description" + (i+1), positions.get(i).getDescription());
-			req.setAttribute("priority" + (i+1), positions.get(i).getPriority());
-		}
+		req.setAttribute("positions", positions);
+		
+		// Push parameters back so user doesn't have to type them every time
+		req.setAttribute("positionID", idStr);
+		req.setAttribute("title", title);
+		req.setAttribute("description", desc);
+		req.setAttribute("priority", priorityStr);
 		
 		req.getRequestDispatcher("/search_positions.jsp").forward(req, resp);
 	}
