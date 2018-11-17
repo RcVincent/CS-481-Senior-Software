@@ -37,12 +37,12 @@ public class Messenger {
 		  });
 	
 		try {
-			Message message = new MimeMessage(session);
+			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("mailTester481@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 			InternetAddress.parse(setRecipient(args[0])));
 			message.setSubject(args[1]);
-			message.setText(setMessage(args[2]));
+			message.setText(args[2], "UTF-8", "html");
 			Transport.send(message);
 			System.out.println("Message Sent");
 		} catch (MessagingException e) {
