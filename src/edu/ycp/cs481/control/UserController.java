@@ -168,7 +168,7 @@ public class UserController{
 		int password = random.nextInt(10000);
 		
 		db.executeUpdate("Reset User Password", 
-				"update User set password = " + hashPassword(String.valueOf(password)) + " where email = '" + email + "'");
+				"update User set password = '" + hashPassword(String.valueOf(password)) + "' where email = '" + email + "'");
 		
 		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is " + password});
 	}
