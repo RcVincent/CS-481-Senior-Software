@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-
-=======
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
@@ -64,16 +61,16 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitle" class="control-label col-2">New Title:</label>
-					<input type="title" class="form-control col-10" id="newTitle" name="newTitle" value="${newTitle}">
+					<input type="text" class="form-control col-10" id="newTitle" name="newTitle" value="${newTitle}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Title:</label>
-					<input type="title" class="form-control col-10" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
+					<input type="text" class="form-control col-10" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
 				</div>
 			</div>
-		
+		</div>
 		<div class="row">
 			<div class="col">
 				<button type="submit" name="doStuff" value="changeTitle" class="btn btn-info">Change Title</button>
@@ -169,13 +166,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newPriority" class="control-label col-2">New Priority:</label>
-					<input type="priority" class="form-control col-10" id="newPriority" name="newPriority" value="${newPriority}">
+					<input type="number" class="form-control col-10" id="newPriority" name="newPriority" value="${newPriority}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Priority :</label>
-					<input type="priority" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
+					<input type="number" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
 				</div>
 			</div>
 		</div>
@@ -203,5 +200,4 @@
 	
 </div>
 </body>
->>>>>>> branch 'master' of https://github.com/RcVincent/CS-481-Senior-Software.git
 </html>

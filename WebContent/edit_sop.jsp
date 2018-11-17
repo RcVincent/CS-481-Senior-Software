@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-
-=======
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
 	<title>CTM mkii - Edit Position</title>
@@ -11,7 +7,6 @@
 </head>
 <body>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
-
 <h1>Position Details</h1>
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">
@@ -46,23 +41,22 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitle" class="control-label col-2">New Title:</label>
-					<input type="title" class="form-control col-10" id="newTitle" name="newTitle" value="${newTitle}">
+					<input type="text" class="form-control col-10" id="newTitle" name="newTitle" value="${newTitle}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Title:</label>
-					<input type="title" class="form-control col-10" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
+					<input type="text" class="form-control col-10" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
 				</div>
 			</div>
-		
+		</div>
 		<div class="row">
 			<div class="col">
 				<button type="submit" name="doStuff" value="changeTitle" class="btn btn-info">Change Title</button>
 			</div>
 		</div>
 	</form>
-	
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">
@@ -105,20 +99,10 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				
-			</div>
-	
-			<div class="col">
-				
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
 				<button type="submit" name="doStuff" value="changeDescription" class="btn btn-info">Change Description</button>
 			</div>
 		</div>
 	</form>
-	
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">
@@ -133,7 +117,6 @@
 					${priority}
 				</div>
 		</div>
-		
 		<div class="row">
 			<div class="col">
 				<c:choose>
@@ -149,29 +132,26 @@
 				</c:choose>
 			</div>
 		</div>
-		
 		<div class="row">
 			<div class="col">
 				<div class="form-group row">
 					<label for="newPriority" class="control-label col-2">New Priority:</label>
-					<input type="priority" class="form-control col-10" id="newPriority" name="newPriority" value="${newPriority}">
+					<input type="number" class="form-control col-10" id="newPriority" name="newPriority" value="${newPriority}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Priority :</label>
-					<input type="priority" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
+					<input type="number" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
 				</div>
 			</div>
-		
+		</div>
 		<div class="row">
 			<div class="col">
 				<button type="submit" name="doStuff" value="changePriority" class="btn btn-info">Change Priority</button>
 			</div>
 		</div>
-
 	</form>
-	
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">
@@ -207,13 +187,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newVersion" class="control-label col-2">New Version:</label>
-					<input type="version" class="form-control col-10" id="newVersion" name="newVersion" value="${newVersion}">
+					<input type="number" class="form-control col-10" id="newVersion" name="newVersion" value="${newVersion}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newVersionConfirmation" class="control-label col-2">Confirm Version :</label>
-					<input type="version" class="form-control col-10" id="newPriorityConfirmation" name="newVersionConfirmation" value="${newVersionConfirmation}">
+					<input type="number" class="form-control col-10" id="newPriorityConfirmation" name="newVersionConfirmation" value="${newVersionConfirmation}">
 				</div>
 			</div>
 		</div>
@@ -222,10 +202,7 @@
 				<button type="submit" name="doStuff" value="changeVersion" class="btn btn-info">Change Version</button>
 			</div>
 		</div>
-
 	</form>
-	
 </div>
 </body>
->>>>>>> branch 'master' of https://github.com/RcVincent/CS-481-Senior-Software.git
 </html>
