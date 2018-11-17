@@ -332,14 +332,22 @@ public class Database{
 				   "CONSTRAINT FOREIGN KEY (manager_id) REFERENCES User (user_id), " +
 				   "CONSTRAINT FOREIGN KEY (subordinate_id) REFERENCES User (user_id)" +
 				   ");");
-		/*
-		names.add("Create Clock table");
-		sqls.add("CREATE TABLE IF NOT EXISTS Clock (" +
+		
+		names.add("Create UnresolvedClockIn table");
+		sqls.add("CREATE TABLE IF NOT EXISTS UnresolvedClockIn (" +
 				   "user_id INT NOT NULL, " +
 				   "time TIMESTAMP NOT NULL," +
-				   "in TINYINT NOT NULL DEFAULT 0," +
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
-				   ");");*/
+				   ");");
+		
+		names.add("Create CompletedShift table");
+		sqls.add("CREATE TABLE IF NOT EXISTS CompletedShift (" +
+				   "user_id INT NOT NULL, " +
+				   "time_in TIMESTAMP NOT NULL," +
+				   "time_out TIMESTAMP NOT NULL," +
+				   "hours INT NOT NULL," +
+				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
+				   ");");
 		
 		// Quarantine table
 		/*names.add("Create Quarantine table");
