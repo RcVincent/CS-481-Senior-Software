@@ -66,6 +66,11 @@
 			<a href="search_sops" class="btn btn-info btn-block" role="button">Search SOPs</a>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col text-center">
+			<a href="search_system" class="btn btn-info btn-block" role="button">Seinor Swiffer</a>
+		</div>
+	</div>
 </div>
 </body>
 </html>
