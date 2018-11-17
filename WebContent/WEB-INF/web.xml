@@ -127,6 +127,15 @@
   	<url-pattern>/edit_sop</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>SystemSniffer</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.SystemSnifferServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SystemSniffer</servlet-name>
+  	<url-pattern>/search_system</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
   	<welcome-file>user_home</welcome-file>
   </welcome-file-list>

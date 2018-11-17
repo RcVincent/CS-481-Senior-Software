@@ -24,6 +24,10 @@ public class UserHomeServlet extends HttpServlet{
 				req.setAttribute("error", session.getAttribute("error"));
 				session.setAttribute("error", null);
 			}
+			if(session.getAttribute("success") != null){
+				req.setAttribute("success", session.getAttribute("success"));
+				session.setAttribute("success", null);
+			}
 			req.getRequestDispatcher("/user_home.jsp").forward(req, resp);
 		}
 	}
