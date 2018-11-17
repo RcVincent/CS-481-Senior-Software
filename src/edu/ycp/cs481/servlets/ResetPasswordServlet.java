@@ -14,13 +14,13 @@ import edu.ycp.cs481.control.UserController;
 public class ResetPasswordServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		System.out.println("Login Servlet: doGet");
-		req.getRequestDispatcher("/login.jsp").forward(req, resp);
+		System.out.println("Reset Password Servlet: doGet");
+		req.getRequestDispatcher("/reset_password.jsp").forward(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		System.out.println("Login Servlet: doPost");
+		System.out.println("Reset Password Servlet: doPost");
 		
 		String errorMessage = null;
 		String email = null;
