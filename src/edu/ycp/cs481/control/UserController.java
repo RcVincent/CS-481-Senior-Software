@@ -85,14 +85,14 @@ public class UserController{
 											". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_account"});
 	}
 	
-	public Integer verifyUser(int userID, int verificationNum) {
+	public Integer verifyUser(String email, int verificationNum) {
 		boolean verify = false;
 		int newUserID = 0;
 		ArrayList<String> user = new ArrayList<String>();
 		
 		try{
 			String name = "Verifying User";
-			String sql = "select * from Quarantine where user_id = " + userID + " and verification = " + verificationNum;
+			String sql = "select * from Quarantine where email = " + email + " and verification = " + verificationNum;
 			verify = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -102,13 +102,13 @@ public class UserController{
 			// Move information from Quarantine -> User
 			try {
 				String name = "Migrating to User table";
-				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where user_id = " + userID;
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = " + email;
 				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			// Delete entry in Quarantine
-			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where user_id = " + userID);
+			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where email = " + email);
 			
 			newUserID = insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
 		} else {

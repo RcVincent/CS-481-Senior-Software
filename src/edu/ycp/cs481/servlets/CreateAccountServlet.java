@@ -54,6 +54,7 @@ public class CreateAccountServlet extends HttpServlet{
 			req.setAttribute("emailError", "Please enter a valid email!");
 		}else{
 			ArrayList<User> users = userControl.searchForUsers(-1, -1, false, email, false, null, false, null, -1, -1);
+			// TODO: Check Quarantine table as well
 			if(users != null && users.size() > 0){
 				goodUser = false;
 				req.setAttribute("emailError", "Email is already taken");
@@ -77,11 +78,12 @@ public class CreateAccountServlet extends HttpServlet{
 		
 		if(goodUser){
 			// TODO: Handling stuff for when Manager/Admin creates Account
+			//int id = userControl.insertUser(email, password, firstName, lastName, false, false, 2);
 			
 			// Insert into the database
-			int id = userControl.insertUser(email, password, firstName, lastName, false, false, 2);
+			userControl.insertQuarantineUser(emailConfirm, passwordConfirm, firstName, lastName);
 			
-			System.out.println("User inserted with id" + id);
+			System.out.println("User" + firstName + " " + lastName +" inserted with email " + email);
 			
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
