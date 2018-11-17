@@ -19,7 +19,7 @@
 		</c:if>
 		<div class="form-group row">
 					<label for="email" class="control-label col-2">Email:</label>
-					<input type="email" class="form-control col-2" id="email" name="email" value="${email}">
+					<input type="text" class="form-control col-2" id="email" name="email" value="${email}">
 		</div>
 		<div class="row">
 					<label for="pin" class="control-label col-2">Pin:</label>
