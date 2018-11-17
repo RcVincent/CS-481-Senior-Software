@@ -24,14 +24,14 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group row">
-					<label for="title" class="control-label col-2">Position Title:</label>
+					<label for="title" class="control-label col-2">Title:</label>
 					<input type="text" class="form-control col-10" id="title" name="title" value="${title}">
 				</div>
 			</div>
 			<div class="col">
 				<br>
 				<div class="form-group row">
-					<label for="description" class="control-label col-2">Position Description:</label>
+					<label for="description" class="control-label col-2">Description:</label>
 					<textarea rows = "4" cols = "50" name = "description"></textarea>
 				<br>
 				</div>
@@ -39,8 +39,8 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<c:if test="${! empty priError}">
-					<p class="alert alert-warning">${priError}</p>
+				<c:if test="${! empty priorityError}">
+					<p class="alert alert-warning">${priorityError}</p>
 				</c:if>
 			</div>
 		</div>

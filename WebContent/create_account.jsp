@@ -84,10 +84,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="passwordConfirm" class="form-label col-2">Confirm Password:</label>
-					<input type="password" class="form-control col-10" id="passwordConfirm" name="passwordConfirm" value="${passwordConfirm}">
+					<input type="password" class="form-control col-10" id="passwordConfirm" name="passwordConfirm" 
+					value="${passwordConfirm}">
 				</div>
 			</div>
 		</div>
+		<!-- This input line passes managerCreate value from doGet to ensure proper redirect -->
+		<input type="hidden" name="managerCreate" value="${managerCreate}">
 		<div class="row">
 			<div class="col">
 				<button type="submit" class="btn btn-info">Submit</button>
@@ -95,7 +98,8 @@
 		</div>
 	</form>
 </div>
+<c:if test="${empty managerCreate}">
 <p class="note">Already have an account? <a href="./login">Login</a></p>
+</c:if>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
-
 </body></html>
