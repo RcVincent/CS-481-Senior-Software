@@ -66,7 +66,7 @@ public class UserController{
 			
 			// Send email with messenger
 			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is " + verificationNum +
-					". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_account"});
+					". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_email"});
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class UserController{
 		
 		// Send email with messenger
 		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationNum +
-											". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_account"});
+											". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_email"});
 	}
 	
 	public Integer verifyUser(String email, int verificationNum) {
