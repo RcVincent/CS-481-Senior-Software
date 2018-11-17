@@ -2,8 +2,8 @@ package edu.ycp.cs481.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 
 import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.model.Position;
@@ -115,14 +115,14 @@ public class DBFormat{
 		}
 	};
 	
-	private static QueryResultFormat<ArrayList<Date>> dateResFormat = new QueryResultFormat<ArrayList<Date>>(){
+	private static QueryResultFormat<ArrayList<Timestamp>> timeResFormat = new QueryResultFormat<ArrayList<Timestamp>>(){
 		@Override
-		public ArrayList<Date> convertFromResultSet(ResultSet resultSet) throws SQLException{
-			ArrayList<Date> dates = new ArrayList<Date>();
+		public ArrayList<Timestamp> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<Timestamp> times = new ArrayList<Timestamp>();
 			while(resultSet.next()){
-				dates.add(resultSet.getTimestamp(1));
+				times.add(resultSet.getTimestamp(1));
 			}
-			return dates;
+			return times;
 		}
 	};
 	
@@ -131,8 +131,8 @@ public class DBFormat{
 		public ArrayList<Shift> convertFromResultSet(ResultSet resultSet) throws SQLException{
 			ArrayList<Shift> shifts = new ArrayList<Shift>();
 			while(resultSet.next()){
-				Date timeIn = resultSet.getTimestamp(1);
-				Date timeOut = resultSet.getTimestamp(2);
+				Timestamp timeIn = resultSet.getTimestamp(1);
+				Timestamp timeOut = resultSet.getTimestamp(2);
 				int hours = resultSet.getInt(3);
 				shifts.add(new Shift(timeIn, timeOut, hours));
 			}
@@ -176,8 +176,8 @@ public class DBFormat{
 		return sopResFormat;
 	}
 	
-	public static QueryResultFormat<ArrayList<Date>> getDateResFormat(){
-		return dateResFormat;
+	public static QueryResultFormat<ArrayList<Timestamp>> getTimeResFormat(){
+		return timeResFormat;
 	}
 	
 	public static QueryResultFormat<ArrayList<Shift>> getShiftResFormat(){
