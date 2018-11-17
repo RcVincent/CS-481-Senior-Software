@@ -20,12 +20,30 @@
   </servlet-mapping>
   
   <servlet>
+  	<servlet-name>VerifyEmail</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.VerifyEmailServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>VerifyEmail</servlet-name>
+  	<url-pattern>/verify_email</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
   	<servlet-name>AccountSettings</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.AccountSettingsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>AccountSettings</servlet-name>
   	<url-pattern>/account_settings</url-pattern>
+  </servlet-mapping>
+    
+  <servlet>
+  	<servlet-name>ResetPassword</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.ResetPasswordServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ResetPassword</servlet-name>
+  	<url-pattern>/reset_password</url-pattern>
   </servlet-mapping>
   
   <servlet>

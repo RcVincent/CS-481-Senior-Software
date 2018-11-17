@@ -3,10 +3,12 @@ package edu.ycp.cs481.control;
 import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
+import edu.ycp.cs481.model.Messenger;
 import edu.ycp.cs481.model.User;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,12 +27,96 @@ public class UserController{
 	
 	public Integer insertUser(String email, String password, String firstName, String lastName, boolean lockedOut,
 			boolean isArchived, int positionID){
-		password = hashPassword(password);
+		// Hash password if positionID is not 2, with 2 meaning their account was created themselves. ID different than 2 means
+		// an Admin/Manager made the account
+		if(positionID != 2)
+			password = hashPassword(password);
+		
 		return db.insertAndGetID("User", "user_id",
 				new String[]{"email", "password", "first_name", "last_name", "locked_out", "archive_flag",
 						"position_id"},
 				new String[]{email, password, firstName, lastName, String.valueOf(lockedOut), String.valueOf(isArchived),
 						String.valueOf(positionID)});
+	}
+	
+	public void insertQuarantineUser(String email, String password, String firstName, String lastName) {
+		boolean exists = false;
+		// Generate a 4 digit number(0-9999) for the verification
+		Random random = new Random();
+		int verificationNum = random.nextInt(10000);
+		// Hash the password. We assure this is only called once by only hashing the password
+		// in insertUser if it's being called with a positionID different than 2
+		password = hashPassword(password);
+		
+		// Verify user doesn't exist in the table
+		try {
+			exists = db.executeQuery("Checking Quarantine User doesn't exist", 
+							"select * from Quarantine where email = '" + email + "'", DBFormat.getCheckResFormat());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(exists) {
+			retrySendEmail(email);
+			return;
+		} else {
+			db.insert("Quarantine", 
+					new String[] {"email", "password", "first_name", "last_name", "verification"}, 
+					new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
+			
+			// Send email with messenger
+			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is " + verificationNum +
+					". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_email"});
+		}
+	}
+	
+	public void retrySendEmail(String email) {
+		int verificationNum = 0;
+		try {
+			String name = "Get Quarantine User";
+			String sql = "select verification from Quarantine where email = " + email;
+			verificationNum = db.executeQuery(name, sql, DBFormat.getIntResFormat()).get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// Send email with messenger
+		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationNum +
+											". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_email"});
+	}
+	
+	public Integer verifyUser(String email, int verificationNum) {
+		boolean verify = false;
+		int newUserID = 0;
+		ArrayList<String> user = new ArrayList<String>();
+
+		System.out.println(email);
+		try{
+			String name = "Verifying User";
+			String sql = "select * from Quarantine where email = '" + email + "' and verification = " + verificationNum;
+			verify = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		if(verify) {
+			// Move information from Quarantine -> User
+			try {
+				String name = "Migrating to User table";
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = '" + email + "'";
+				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			// Delete entry in Quarantine
+			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where email = '" + email + "'");
+			
+			newUserID = insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
+		} else {
+			return -1;
+		}
+		
+		return newUserID;
 	}
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
@@ -75,6 +161,16 @@ public class UserController{
 	public void changeUserPassword(int userID, String newPass){
 		db.executeUpdate("Change User Password",
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
+	}
+	
+	public void resetPassword(String email) {
+		Random random = new Random();
+		int password = random.nextInt(10000);
+		
+		db.executeUpdate("Reset User Password", 
+				"update User set password = '" + hashPassword(String.valueOf(password)) + "' where email = '" + email + "'");
+		
+		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is " + password});
 	}
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){

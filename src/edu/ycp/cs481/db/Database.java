@@ -349,24 +349,17 @@ public class Database{
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
 				   ");");
 		
-		// Quarantine table
-		/*names.add("Create Quarantine table");
-		sqls.add("CREATE TABLE IF NOT EXISTS Q (" +
+		names.add("Create Quarantine table");
+		sqls.add("CREATE TABLE IF NOT EXISTS Quarantine (" +
 				  "user_id INT NOT NULL AUTO_INCREMENT," +
 				  "email VARCHAR(255) NOT NULL," +
 				  "password VARCHAR(80) NOT NULL, " +
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
-				  "locked_out TINYINT NOT NULL, " +
-				  "archive_flag TINYINT NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-				  "position_id INT NOT NULL, " +
-				  "employee_id INT NOT NULL DEFAULT 0, " +
-				  "PRIMARY KEY (user_id), " +
-				  "UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE, " +
-				  "ON DELETE NO ACTION " +
-				  "ON UPDATE NO ACTION);");
-		*/
+				  "verification INT NOT NULL, " +
+				  "PRIMARY KEY (user_id)" +
+				   ");");
 		
 		names.add("Create UserSOP table");
 		sqls.add("CREATE TABLE IF NOT EXISTS UserSOP (" +
