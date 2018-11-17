@@ -13,7 +13,16 @@ public class Messenger {
 	}	
 	
 	public static void main(String[] args) {
-		final String username = "mailTester481@gmail.com";
+		/*
+		 * args[0] = to (email)
+		 * args[1] = Subject
+		 * args[2] = Message
+		 * 
+		 * Call this method in a required class using
+		 * Messenger.main(new String[] {"", "", ""});
+		 * 
+		 * */
+		final String username = "ctm.mkii@gmail.com";
 		final String password = "cS4B1SrS0ft!";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -31,9 +40,9 @@ public class Messenger {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("mailTester481@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
-			InternetAddress.parse(setRecipient("rvincent@ycp.edu")));
-			message.setSubject("Dear User");
-			message.setText(setMessage("Testing Getter"));
+			InternetAddress.parse(setRecipient(args[0])));
+			message.setSubject(args[1]);
+			message.setText(setMessage(args[2]));
 			Transport.send(message);
 			System.out.println("Message Sent");
 		} catch (MessagingException e) {

@@ -51,5 +51,6 @@ $SESSION["sessionid"];
 		</div>
 	</form>
 	<p class="note">Don't have an account? <a href="./create_account">Create an Account</a></p>
+	<p class="note">Forgot your password? <a href="./reset_password">Reset password</a></p>
 </div>
 </body></html>

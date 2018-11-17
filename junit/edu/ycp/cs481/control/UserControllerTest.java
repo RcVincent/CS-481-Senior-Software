@@ -91,22 +91,20 @@ public class UserControllerTest {
 		positionList.add(pos4);
 		
 		sop1 = new SOP(); 
-		sop1.setName("Login");
+		sop1.setTitle("Login");
 		sop1.setID(1);
 		sop1.setDescription("How to login");
 		sop1.setPriority(7);
-		sop1.setRevision(1);
+		sop1.setVersion(1);
 		sop1.setAuthorID(user1.getUserID());
-		sop1.setPositionsAffected(positionList);
 		
 		sop2 = new SOP(); 
-		sop2.setName("Logout");
+		sop2.setTitle("Logout");
 		sop2.setDescription("How to logout");
 		sop2.setPriority(7);
 		sop2.setID(2);
-		sop2.setRevision(2);
+		sop2.setVersion(2);
 		sop2.setAuthorID(user1.getUserID());
-		sop2.setPositionsAffected(positionList);
 		
 		sopList.add(sop1);
 		sopList.add(sop2);
@@ -117,6 +115,10 @@ public class UserControllerTest {
 		
 	}
 	
+	@Test
+	public void testInsertQuarantineUser() {
+		uc.insertQuarantineUser("zhenry@ycp.edu", "password", "Chuck", "Norris");
+	}
 	
 	//this needs to be updated to handle the new salted passwords 
 	@Test
@@ -141,7 +143,7 @@ public class UserControllerTest {
 	public void testSearchByFName() {
 		String searchFirstName = "Stan";
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, searchFirstName, false, "", 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, searchFirstName, false, "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with FirstName" + searchFirstName);
@@ -162,7 +164,7 @@ public class UserControllerTest {
 	public void testSearchByLName() {
 		String searchLastName = "Smith";
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, searchLastName, 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, searchLastName, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with LastName" + searchLastName);
@@ -184,11 +186,11 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void testSearchByFUllName() {
+	public void testSearchByFullName() {
 		String FirstName = "Stan";
 		String LastName = "Smith"; 
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, FirstName, false, LastName, 0);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, FirstName, false, LastName, 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with first name " + FirstName + " and last name " + LastName);
@@ -209,7 +211,7 @@ public class UserControllerTest {
 	public void testSearchByID() {
 		int searchID = 12; 
 		
-		List<User> testList = uc.searchForUsers(searchID, -1, false, "", false, "", false, "", 0);
+		List<User> testList = uc.searchForUsers(searchID, -1, false, "", false, "", false, "", 0, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with ID " + searchID);
@@ -231,7 +233,7 @@ public class UserControllerTest {
 	public void testSearchByPositionID() {
 		int searchPosID = 1;
 		
-		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, "", searchPosID);
+		List<User> testList = uc.searchForUsers(0, -1, false, "", false, "", false, "", searchPosID, -1);
 		
 		if(testList.isEmpty()) {
 			System.out.println("Search failed for user with position ID"+ searchPosID);

@@ -3,6 +3,7 @@ package edu.ycp.cs481.control;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.SOP;
 
@@ -19,48 +20,12 @@ public class SOPController{
 	public ArrayList<SOP> searchForSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
 			int priority, int version, int authorID){
 		try{
-			StringBuilder name = new StringBuilder("");
-			StringBuilder sql = new StringBuilder("select * from SOP");
-			if(sopID == -1 && (title == null || title.equalsIgnoreCase("")) &&
-					(description == null || description.equalsIgnoreCase("")) && priority == -1 && version == -1 && 
-					authorID == -1){
-				name.append("Get All SOPs");
-			}else{
-				name.append("Get SOP with ");
-				sql.append(" where ");
-				boolean first = true;
-				
-				if(sopID != -1){
-					db.addIntSearchToSelect(first, name, sql, "sop_id", sopID);
-					first = false;
-				}
-				
-				if(title != null && !title.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, titlePartial, "title", title);
-					first = false;
-				}
-				
-				if(description != null && !description.equalsIgnoreCase("")){
-					db.addStringSearchToSelect(first, name, sql, descPartial, "description", description);
-					first = false;
-				}
-				
-				if(priority != -1){
-					db.addIntSearchToSelect(first, name, sql, "priority", priority);
-					first = false;
-				}
-				
-				if(version != -1){
-					db.addIntSearchToSelect(first, name, sql, "version", version);
-					first = false;
-				}
-				
-				if(authorID != -1){
-					db.addIntSearchToSelect(first, name, sql, "author_id", authorID);
-					first = false;
-				}
-			}
-			ArrayList<SOP> results = db.executeQuery(name.toString(), sql.toString(), db.getSopResFormat());
+			ArrayList<SOP> results = db.doSearch(DBFormat.getSopResFormat(), "SOP", null, null, 
+					new String[]{"sop_id", "priority", "version", "author_id"}, 
+					new int[]{sopID, priority, version, authorID}, 
+					new boolean[]{titlePartial, descPartial}, 
+					new String[]{"title", "description"}, 
+					new String[]{title, description});
 			if(sopID != -1){
 				if(results.size() == 0){
 					System.out.println("No SOP found with ID " + sopID);
@@ -83,15 +48,36 @@ public class SOPController{
 	public void unarchiveSOP(int sopID){
 		db.executeUpdate("Unarchive SOP with ID " + sopID, "update SOP set archive_flag = false where sop_id = " + sopID);
 	}
-
-	public SOP revertSOP(int sopID, int version){
-		return db.revertSOP(sopID, version);
+	
+	public void reversionSOP(int sopID, int version){
+		SOP s = searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+		
+		archiveSOP(sopID);
+		insertSOP(s.getTitle(), s.getDescription(), s.getPriority(), version, s.getAuthorID(), false);
 	}
 
 	public void changeSOPPriority(SOP sop, int priority){
 		db.executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
 				"where sop_id = " + sop.getID());
 		sop.setPriority(priority);
+	}
+	
+	public void changeSOPTitle(SOP sop, String newTitle) {
+		db.executeUpdate("Change SOP " + sop.getID() + " to Title " + newTitle, "update SOP set title = " + newTitle +
+				"where sop_id = " + sop.getID());
+		sop.setTitle(newTitle);
+	}
+	
+	public void changeSOPDescription(SOP sop, String newDesc) {
+		db.executeUpdate("Change SOP " + sop.getID() + " to Description " + newDesc, "update SOP set description = " + newDesc +
+				"where sop_id = " + sop.getID());
+		sop.setDescription(newDesc);
+	}
+	
+	public void changeSOPVersion(SOP sop, int newVersion) {
+		db.executeUpdate("Change SOP " + sop.getID() + " to Version " + newVersion, "update SOP set version = " + newVersion +
+				"where sop_id = " + sop.getID());
+		sop.setVersion(newVersion);
 	}
 	
 	public void insertCompletedSOP(int user_id, int sop_id){
