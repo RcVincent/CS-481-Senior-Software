@@ -22,22 +22,28 @@ public class EditPositionServlet extends HttpServlet {
 		if(session.getAttribute("user_id") == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 
-		} else { 
+		} else {
 			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		
-		//do a permissions check here 
+
+		//do a permissions check here and if they are a user return them to the home page 
 	}
+
+
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+
 		boolean editError = false;
-		PositionController pc = new PositionController(); 
+		PositionController pc = new PositionController();
+
 		Position p = null;
 
 		String action = req.getParameter("doStuff");
 		int searchID = Integer.parseInt(req.getParameter("position_id"));
-		
+
+
 		//make sure the search value is valid even before we execute the search
 		if(searchID <=0 ) {
 			System.out.println("Invalid search id");
@@ -46,8 +52,10 @@ public class EditPositionServlet extends HttpServlet {
 		else { 
 			//do the search
 			p = pc.searchForPositions(searchID, false, "", false, "", -1).get(0);
+			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		
+
 		//do a null change to make sure that we pulled the object we need to edit
 		if(p == null) {
 			System.out.println("There was a search error, returning to the homepage");
@@ -148,5 +156,7 @@ public class EditPositionServlet extends HttpServlet {
 			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}*/
 
+
 	}
 }
+

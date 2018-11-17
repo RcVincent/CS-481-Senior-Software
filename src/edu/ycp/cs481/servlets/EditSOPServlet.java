@@ -24,10 +24,14 @@ public class EditSOPServlet extends HttpServlet {
 		} else {
 			req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
 		}
+		
+		//do a permissions check here and if they are a user return them to the home page
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		
+		req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
 		SOPController sc = new SOPController(); 
 		SOP s = null;
 		boolean editError = false; 

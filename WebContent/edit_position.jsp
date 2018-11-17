@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+
+=======
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
@@ -200,4 +203,5 @@
 	
 </div>
 </body>
+>>>>>>> branch 'master' of https://github.com/RcVincent/CS-481-Senior-Software.git
 </html>
