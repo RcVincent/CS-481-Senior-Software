@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
 	<title>CTM mkii - Create SOP</title>
@@ -53,13 +52,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="priority" class="form-label col-2">Priority (1-10):</label>
-					<input type="priority" class="form-control col-10" id="priority" name="priority" value="${priority}">
+					<input type="number" class="form-control col-10" id="priority" name="priority" value="${priority}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="emailConfirm" class="form-label col-2">Version:</label>
-					<input type="revision" class="form-control col-10" id="revision" name="revision" value="${revision}">
+					<input type="number" class="form-control col-10" id="revision" name="revision" value="${revision}">
 				</div>
 			</div>
 		</div>

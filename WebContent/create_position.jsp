@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
 	<title>CTM mkii - Create Position</title>
@@ -49,7 +48,7 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="priority" class="form-label col-2">Priority (1-10):</label>
-					<input type="priority" class="form-control col-10" id="priority" name="priority" value="${priority}">
+					<input type="number" class="form-control col-10" id="priority" name="priority" value="${priority}">
 				</div>
 			</div>
 		</div>
@@ -62,5 +61,4 @@
 	</form>
 </div>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
-
 </body></html>	
