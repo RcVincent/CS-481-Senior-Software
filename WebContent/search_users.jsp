@@ -55,23 +55,23 @@
 		</div>
 	</div>
 	<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize) - 1}" items="${users}" var="current">
-			<div class="row">
-				<div class="col-1 text-center">
-					<p><a href="edit_user?userID=${current.ID}">Edit</a>
-				</div>
-				<div class="col-2 text-center">
-					<p>${current.ID} / ${current.employeeID}</p>
-				</div>
-				<div class="col-3 text-center">
-					<p>${current.email}</p>
-				</div>
-				<div class="col-3 text-center">
-					<p>${current.firstName} ${current.lastName}</p>
-				</div>
-				<div class="col-3 text-center">
-					<p>${current.position.title}</p>
-				</div>
+		<div class="row">
+			<div class="col-1 text-center">
+				<p><a href="edit_user?userID=${current.ID}">Edit</a>
 			</div>
+			<div class="col-2 text-center">
+				<p>${current.ID} / ${current.employeeID}</p>
+			</div>
+			<div class="col-3 text-center">
+				<p>${current.email}</p>
+			</div>
+			<div class="col-3 text-center">
+				<p>${current.firstName} ${current.lastName}</p>
+			</div>
+			<div class="col-3 text-center">
+				<p>${current.position.title}</p>
+			</div>
+		</div>
 	</c:forEach>
 	<input type="hidden" name="page" value="${page}">
 	<input type="hidden" name="displaySize" value="${displaySize}">

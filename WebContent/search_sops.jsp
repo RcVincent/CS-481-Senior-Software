@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -9,7 +10,6 @@
 <body>
 <h1>Search SOPs</h1>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
-
 <div class="fluid-container">
 	<form class="form-horizontal" method="post">
 		<div class="form-group row">
@@ -37,182 +37,85 @@
 				<button type="submit" class="btn btn-info">Search</button>
 			</div>
 		</div>
-	</form>
 	<div class="row">
-		<div class="col-3">
-			<p><b>SOP ID / Version / Author ID</b></p>
+		<div class="col-1">
+		
 		</div>
-		<div class="col-3">
+		<div class="col-2 text-center">
+			<p><b>ID / Version / Author ID</b></p>
+		</div>
+		<div class="col-3 text-center">
 			<p><b>Title</b></p>
 		</div>
-		<div class="col-3">
+		<div class="col-3 text-center">
 			<p><b>Description</b></p>
 		</div>
-		<div class="col-3">
+		<div class="col-3 text-center">
 			<p><b>Priority</b></p>
 		</div>
 	</div>
-	<!-- TODO: Find a better way -->
-	<c:if test="${!empty sopID1}">
+	<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize) - 1}" items="${sops}" var="current">
 		<div class="row">
-			<div class="col-3">
-				<p>${sopID1} / ${version1} / ${authorID1}</p>
+			<div class="col-1 text-center">
+				<p><a href="edit_sop?sopID=${current.ID}">Edit</a>
 			</div>
-			<div class="col-3">
-				<p>${title1}</p>
+			<div class="col-2 text-center">
+				<p>${current.ID} / ${current.version} / ${current.authorID}</p>
 			</div>
-			<div class="col-3">
-				<p>${description1}</p>
+			<div class="col-3 text-center">
+				<p>${current.title}</p>
 			</div>
-			<div class="col-3">
-				<p>${priority1}</p>
+			<div class="col-3 text-center">
+				<p>${current.description}</p>
+			</div>
+			<div class="col-3 text-center">
+				<p>${current.priority}</p>
 			</div>
 		</div>
-	</c:if>
-	<c:if test="${!empty sopID2}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID2} / ${version2} / ${authorID2}</p>
-			</div>
-			<div class="col-3">
-				<p>${title2}</p>
-			</div>
-			<div class="col-3">
-				<p>${description2}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority2}</p>
-			</div>
+	</c:forEach>
+	<input type="hidden" name="page" value="${page}">
+	<input type="hidden" name="displaySize" value="${displaySize}">
+	<div class="row">
+		<div class="col-2 text-center">
+			<c:if test="${page gt 0}">
+				<button type="submit" name="changePage" value="prev" class="btn btn-info">Prev Page</button>
+			</c:if>
 		</div>
-	</c:if>
-	<c:if test="${!empty sopID3}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID3} / ${version3} / ${authorID3}</p>
-			</div>
-			<div class="col-3">
-				<p>${title3}</p>
-			</div>
-			<div class="col-3">
-				<p>${description3}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority3}</p>
-			</div>
+		<div class="col-2 text-right">
+			Results Per Page:
 		</div>
-	</c:if>
-	<c:if test="${!empty sopID4}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID4} / ${version4} / ${authorID4}</p>
+		<c:if test="${displaySize != 5}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="5" class="btn btn-info">5</button>
 			</div>
-			<div class="col-3">
-				<p>${title4}</p>
+		</c:if>
+		<c:if test="${displaySize != 10}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="10" class="btn btn-info">10</button>
 			</div>
-			<div class="col-3">
-				<p>${description4}</p>
+		</c:if>
+		<c:if test="${displaySize != 25}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="25" class="btn btn-info">25</button>
 			</div>
-			<div class="col-3">
-				<p>${priority4}</p>
+		</c:if>
+		<c:if test="${displaySize != 50}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="50" class="btn btn-info">50</button>
 			</div>
+		</c:if>
+		<c:if test="${displaySize != 100}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="100" class="btn btn-info">100</button>
+			</div>
+		</c:if>
+		<div class="col-2 text-center">
+			<c:if test="${fn:length(users) gt (displaySize*(page + 1))}">
+				<button type="submit" name="changePage" value="next" class="btn btn-info">Next Page</button>
+			</c:if>
 		</div>
-	</c:if>
-	<c:if test="${!empty sopID5}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID5} / ${version5} / ${authorID5}</p>
-			</div>
-			<div class="col-3">
-				<p>${title5}</p>
-			</div>
-			<div class="col-3">
-				<p>${description5}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority5}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty sopID6}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID6} / ${version6} / ${authorID6}</p>
-			</div>
-			<div class="col-3">
-				<p>${title6}</p>
-			</div>
-			<div class="col-3">
-				<p>${description6}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority6}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty sopID7}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID7} / ${version7} / ${authorID7}</p>
-			</div>
-			<div class="col-3">
-				<p>${title7}</p>
-			</div>
-			<div class="col-3">
-				<p>${description7}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority7}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty sopID8}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID8} / ${version8} / ${authorID8}</p>
-			</div>
-			<div class="col-3">
-				<p>${title8}</p>
-			</div>
-			<div class="col-3">
-				<p>${description8}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority8}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty sopID9}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID9} / ${version9} / ${authorID9}</p>
-			</div>
-			<div class="col-3">
-				<p>${title9}</p>
-			</div>
-			<div class="col-3">
-				<p>${description9}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority9}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty sopID10}">
-		<div class="row">
-			<div class="col-3">
-				<p>${sopID10} / ${version10} / ${authorID10}</p>
-			</div>
-			<div class="col-3">
-				<p>${title10}</p>
-			</div>
-			<div class="col-3">
-				<p>${description10}</p>
-			</div>
-			<div class="col-3">
-				<p>${priority10}</p>
-			</div>
-		</div>
-	</c:if>
+	</div>
+	</form>
 </div>
 </body>
 </html>
