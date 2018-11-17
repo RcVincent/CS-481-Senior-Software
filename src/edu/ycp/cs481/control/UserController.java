@@ -163,6 +163,16 @@ public class UserController{
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
+	public void resetPassword(String email) {
+		Random random = new Random();
+		int password = random.nextInt(10000);
+		
+		db.executeUpdate("Reset User Password", 
+				"update User set password = " + password + " where email = '" + email + "'");
+		
+		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is " + password});
+	}
+	
 	public boolean userHasPermission(int userID, EnumPermission perm){
 		try{
 			ArrayList<User> u = searchForUsers(userID, -1, false, null, false, null, false, null, -1, -1);

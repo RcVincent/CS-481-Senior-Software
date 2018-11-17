@@ -36,6 +36,15 @@
   	<servlet-name>AccountSettings</servlet-name>
   	<url-pattern>/account_settings</url-pattern>
   </servlet-mapping>
+    
+  <servlet>
+  	<servlet-name>ResetPassword</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.ResetPasswordServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ResetPassword</servlet-name>
+  	<url-pattern>/reset_password</url-pattern>
+  </servlet-mapping>
   
   <servlet>
   	<servlet-name>CreateAccount</servlet-name>
