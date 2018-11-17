@@ -336,7 +336,7 @@ public class Database{
 		names.add("Create UnresolvedClockIn table");
 		sqls.add("CREATE TABLE IF NOT EXISTS UnresolvedClockIn (" +
 				   "user_id INT NOT NULL, " +
-				   "time TIMESTAMP NOT NULL," +
+				   "time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
 				   ");");
 		
@@ -344,8 +344,8 @@ public class Database{
 		sqls.add("CREATE TABLE IF NOT EXISTS CompletedShift (" +
 				   "user_id INT NOT NULL, " +
 				   "time_in TIMESTAMP NOT NULL," +
-				   "time_out TIMESTAMP NOT NULL," +
-				   "hours INT NOT NULL," +
+				   "time_out TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+				   "hours INT NOT NULL DEFAULT 0," +
 				   "CONSTRAINT FOREIGN KEY (user_id) REFERENCES User (user_id)" +
 				   ");");
 		

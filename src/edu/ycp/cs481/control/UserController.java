@@ -1,6 +1,7 @@
 package edu.ycp.cs481.control;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +9,7 @@ import edu.ycp.cs481.db.DBFormat;
 import edu.ycp.cs481.db.Database;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.model.Shift;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.*;
@@ -180,40 +182,55 @@ public class UserController{
 	}
 	
 	public boolean isClockedIn(int userID){
-		// TODO: Rework for new stuff
-		/*try{
+		try{
 			String name = "Is user clocked in";
-			String sql = "select * from Clock where user_id = " + userID + " order by time desc";
-			ClockTime result = db.executeQuery(name, sql, db.getDateResFormat()).get(0);
-			return result.getIn();
+			String sql = "select * from UnresolvedClockIn where user_id = " + userID;
+			boolean result = db.executeQuery(name, sql, DBFormat.getCheckResFormat());
+			return result;
 		}catch(SQLException e){
 			e.printStackTrace();
-		}*/
+		}
 		return false;
 	}
 	
-	// TODO: Rework for new tables
 	public void clockIn(int userID){
 		if(!isClockedIn(userID)){
-			db.insert("Clock",
-					new String[]{"user_id", "in"},
-					new String[]{String.valueOf(userID), String.valueOf(true)});
+			db.insert("UnresolvedClockIn",
+					new String[]{"user_id"},
+					new String[]{String.valueOf(userID)});
 		}else
 			System.out.println("This employee is already clocked in");
 	}
 	
-	// TODO: Rework for new tables
 	public void clockOut(int userID){
+		Date in = null, out = null;
+		long hours = 0;
+		
+		// Start out confirming user is clocked in, get their clock in time		
 		if(isClockedIn(userID)){
-			db.insert("Clock",
-					new String[]{"user_id", "in"},
-					new String[]{String.valueOf(userID), String.valueOf(false)});
+			try {						
+				in = db.executeQuery("Fetching Clock In time", "select time from UnresolvedClockIn where user_id = " + userID, DBFormat.getDateResFormat()).get(0);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		// Insert completed shift using clock in time, clock out time auto generates
+			db.insert("CompletedShift",
+					new String[]{"user_id", "time_in"},
+					new String[]{String.valueOf(userID), String.valueOf(in.getTime())});
+		// Pull the newly inserted CompletedShift to find out the clock in time	
+			try {
+				out = db.executeQuery("Fetching Clock Out time", "select time_out from CompletedShift where user_id = " + userID + " order by time_out desc", DBFormat.getDateResFormat()).get(0);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		// Calculate hours and insert our hours	
+			hours = out.getTime() - in.getTime();
+			db.executeUpdate("Updating hours", "update CompletedShift set hours = " + hours + " where user_id = " + userID + " and time_out = " + out.getTime());
+		// Remove unresolvedclockin entry
+			db.executeUpdate("Removing Unresolved ClockIn", "delete from UnresolvedClockIn where user_id = " + userID);
+			
 		}else
 			System.out.println("This employee is not clocked in yet");
-	}
-	
-	public void updateHours(){
-		// TODO
 	}
 	
 	public void assignSOP(int userID, int sopID) {
