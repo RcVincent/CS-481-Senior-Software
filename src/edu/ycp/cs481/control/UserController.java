@@ -76,7 +76,7 @@ public class UserController{
 			
 			// Send email with messenger
 			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is " + verificationString +
-					". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_email"});
+					" \nPlease visit the following URL and enter your email and pin: \n\nlocalhost:8081/CS481-Senior-Software/verify_email"});
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class UserController{
 		
 		// Send email with messenger
 		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationString +
-											". Please visit the following URL and enter your email and pin: \n\nlocalhost:8081/CS481-Senior-Software/verify_email"});
+											" \nPlease visit the following URL and enter your email and pin: \n\nlocalhost:8081/CS481-Senior-Software/verify_email"});
 	}
 	
 	public Integer verifyUser(String email, String verificationString) {
@@ -174,13 +174,22 @@ public class UserController{
 	}
 	
 	public void resetPassword(String email) {
-		Random random = new Random();
-		int password = random.nextInt(10000);
+		// Generate a 10 digit string
+				int leftLimit = 33;
+			    int rightLimit = 126;
+			    Random random = new Random();
+			    StringBuilder buffer = new StringBuilder(10);
+			    for (int i = 0; i < 10; i++) {
+			        int randomLimitedInt = leftLimit + (int) 
+			          (random.nextFloat() * (rightLimit - leftLimit + 1));
+			        buffer.append((char) randomLimitedInt);
+			    }
+			    String password = buffer.toString();
 		
 		db.executeUpdate("Reset User Password", 
-				"update User set password = '" + hashPassword(String.valueOf(password)) + "' where email = '" + email + "'");
+				"update User set password = '" + hashPassword(password) + "' where email = '" + email + "'");
 		
-		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is " + password});
+		Messenger.main(new String[] {email, "CTM Password Reset", "Your new password is: \n\n" + password});
 	}
 	
 	public boolean userHasPermission(int userID, EnumPermission perm){
