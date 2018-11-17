@@ -223,9 +223,9 @@ public class UserController{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		// Calculate hours and insert our hours	
-			hours = out.getTime() - in.getTime();
-			db.executeUpdate("Updating hours", "update CompletedShift set hours = " + hours + " where user_id = " + userID + " and time_out = " + out.getTime());
+		// Calculate hours and insert our hours
+			hours = (out.getTime() - in.getTime()) / 3600000; // getTime returns milliseconds, there are 3.6e+6 milliseconds per hour
+			db.executeUpdate("Updating hours", "update CompletedShift set hours = " + (int)hours + " where user_id = " + userID + " and time_out = " + out.getTime());
 		// Remove unresolvedclockin entry
 			db.executeUpdate("Removing Unresolved ClockIn", "delete from UnresolvedClockIn where user_id = " + userID);
 			
