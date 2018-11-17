@@ -17,7 +17,13 @@ public class LoginServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Login Servlet: doGet");
-		req.getRequestDispatcher("/login.jsp").forward(req, resp);
+		HttpSession session = req.getSession();
+		if(session.getAttribute("user_id") == null){
+			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+		}else{
+			session.setAttribute("error", "You're already logged in!");
+			resp.sendRedirect(req.getContextPath() + "/user_home");
+		}
 	}
 	
 	@Override
