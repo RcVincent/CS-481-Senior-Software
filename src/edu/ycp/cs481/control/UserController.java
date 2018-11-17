@@ -27,7 +27,11 @@ public class UserController{
 	
 	public Integer insertUser(String email, String password, String firstName, String lastName, boolean lockedOut,
 			boolean isArchived, int positionID){
-		password = hashPassword(password);
+		// Hash password if positionID is not 2, with 2 meaning their account was created themselves. ID different than 2 means
+		// an Admin/Manager made the account
+		if(positionID != 2)
+			password = hashPassword(password);
+		
 		return db.insertAndGetID("User", "user_id",
 				new String[]{"email", "password", "first_name", "last_name", "locked_out", "archive_flag",
 						"position_id"},
@@ -36,16 +40,49 @@ public class UserController{
 	}
 	
 	public void insertQuarantineUser(String email, String password, String firstName, String lastName) {
+		boolean exists = false;
 		// Generate a 4 digit number(0-9999) for the verification
 		Random random = new Random();
 		int verificationNum = random.nextInt(10000);
+		// Hash the password. We assure this is only called once by only hashing the password
+		// in insertUser if it's being called with a positionID different than 2
+		password = hashPassword(password);
 		
-		db.insert("Quarantine", 
-				new String[] {"email", "password", "first_name", "last_name", "verification"}, 
-				new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
+		// Verify user doesn't exist in the table
+		try {
+			exists = db.executeQuery("Checking Quarantine User doesn't exist", 
+							"select * from Quarantine where email = " + email, DBFormat.getCheckResFormat());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
-		// TODO: Send email with messenger
-		Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering. Your pin is " + verificationNum});
+		if(exists) {
+			retrySendEmail(email);
+			return;
+		} else {
+			db.insert("Quarantine", 
+					new String[] {"email", "password", "first_name", "last_name", "verification"}, 
+					new String[] {email, password, firstName, lastName, String.valueOf(verificationNum)});
+			
+			// Send email with messenger
+			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is " + verificationNum +
+					". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_account"});
+		}
+	}
+	
+	public void retrySendEmail(String email) {
+		int verificationNum = 0;
+		try {
+			String name = "Get Quarantine User";
+			String sql = "select verification from Quarantine where email = " + email;
+			verificationNum = db.executeQuery(name, sql, DBFormat.getIntResFormat()).get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// Send email with messenger
+		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationNum +
+											". Please visit the following URL and enter your email and pin: localhost:8081/CS481-Senior-Software/verify_account"});
 	}
 	
 	public Integer verifyUser(int userID, int verificationNum) {
