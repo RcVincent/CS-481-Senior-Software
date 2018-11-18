@@ -225,7 +225,7 @@ public class SOPControllerTest {
 		assertEquals(7, sop2.getPriority());
 		
 		//TODO: this method fails we need to fix it 
-		sc.changeSOPPriority(sop2, newPriority);
+		sc.changePriority(sop2.getID(), newPriority);
 		
 		if(sop2.getPriority() == 7) {
 			System.out.println("Changing the priority of the sop failed");

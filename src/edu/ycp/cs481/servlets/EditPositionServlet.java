@@ -29,7 +29,7 @@ public class EditPositionServlet extends HttpServlet{
 				int posID = Integer.parseInt(req.getParameter("posID"));
 				PositionController pc = new PositionController();
 				Position pos = pc.searchForPositions(posID, false, null, false, null, -1).get(0);
-				req.setAttribute("oldID", pos.getID());
+				req.setAttribute("ID", pos.getID());
 				req.setAttribute("oldTitle", pos.getTitle());
 				req.setAttribute("oldPriority", pos.getPriority());
 				req.setAttribute("oldDescription", pos.getDescription());

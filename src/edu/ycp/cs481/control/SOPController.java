@@ -55,29 +55,25 @@ public class SOPController{
 		archiveSOP(sopID);
 		insertSOP(s.getTitle(), s.getDescription(), s.getPriority(), version, s.getAuthorID(), false);
 	}
-
-	public void changeSOPPriority(SOP sop, int priority){
-		db.executeUpdate("Change SOP " + sop.getID() + " to Priority " + priority, "update SOP set priority = " + priority +
-				"where sop_id = " + sop.getID());
-		sop.setPriority(priority);
+	
+	public void changeTitle(int id, String newTitle){
+		db.executeUpdate("Change SOP with id " + id + " to Title " + newTitle, "update SOP set title = '" + newTitle +
+				"' where sop_id = " + id);
 	}
 	
-	public void changeSOPTitle(SOP sop, String newTitle) {
-		db.executeUpdate("Change SOP " + sop.getID() + " to Title " + newTitle, "update SOP set title = " + newTitle +
-				"where sop_id = " + sop.getID());
-		sop.setTitle(newTitle);
+	public void changeDescription(int id, String newDesc){
+		db.executeUpdate("Change SOP with id " + id + " to Description " + newDesc, "update SOP set description = '" + newDesc +
+				"' where sop_id = " + id);
 	}
 	
-	public void changeSOPDescription(SOP sop, String newDesc) {
-		db.executeUpdate("Change SOP " + sop.getID() + " to Description " + newDesc, "update SOP set description = " + newDesc +
-				"where sop_id = " + sop.getID());
-		sop.setDescription(newDesc);
+	public void changePriority(int id, int priority){
+		db.executeUpdate("Change SOP with id " + id + " to Priority " + priority, "update SOP set priority = " + priority +
+				" where sop_id = " + id);
 	}
 	
-	public void changeSOPVersion(SOP sop, int newVersion) {
-		db.executeUpdate("Change SOP " + sop.getID() + " to Version " + newVersion, "update SOP set version = " + newVersion +
-				"where sop_id = " + sop.getID());
-		sop.setVersion(newVersion);
+	public void changeVersion(int id, int newVersion){
+		db.executeUpdate("Change SOP with id " + id + " to Version " + newVersion, "update SOP set version = " + newVersion +
+				" where sop_id = " + id);
 	}
 	
 	public void insertCompletedSOP(int user_id, int sop_id){

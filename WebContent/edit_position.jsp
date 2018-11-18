@@ -21,7 +21,7 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			ID: ${oldID}
+			ID: ${ID}
 		</div>
 		<div class="col">
 			Title: ${oldTitle}
