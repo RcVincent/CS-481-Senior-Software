@@ -1,7 +1,6 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,114 +9,96 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.SOPController;
-import edu.ycp.cs481.model.SOP;
-import edu.ycp.cs481.model.User;
+import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.EnumPermission;
 
 @SuppressWarnings("serial")
 public class CreateSOPServlet extends HttpServlet{
 		
-	private SOPController sc = null; 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+			throws ServletException, IOException{
 		System.out.println("Create SOP Servlet: doget");
 		
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
-			//user isnt logged in or the session expired 
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-		} else {
-			//TODO: Check for admin/privileges check
-			req.getRequestDispatcher("/create_sop.jsp").forward(req, resp);
+		}else{
+			UserController uc = new UserController();
+			int userID = (int) session.getAttribute("user_id");
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.CREATE_SOP)){
+				req.getRequestDispatcher("/create_sop.jsp").forward(req, resp);
+			}else{
+				session.setAttribute("error", "You don't have permission to create an SOP!");
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}
 		}
-		
-		
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		
-		HttpSession session = req.getSession();
-		//String errorMessage = null; 
-		//String successMessage = null; 
-		
+			throws ServletException, IOException{
 		boolean goodSOP = true;
 		
 		SOPController sc = new SOPController(); 
 		
-		String sopTitle = null; 
-		String sopDescription = null;  
+		String title = null; 
+		String description = null;  
 		int version = 0; 
 		int priority = 0; 
 		int authorID = 0; 
 		
-		 
-		
-		sopTitle = req.getParameter("title");
-		if(sopTitle == null || sopTitle.equalsIgnoreCase("")) {
+		title = req.getParameter("title");
+		if(title == null || title.equalsIgnoreCase("")) {
 			goodSOP = false; 
 			req.setAttribute("titleError", "Please enter a valid title!");
 		}
 		
-		sopDescription = req.getParameter("description");
-		if(sopDescription == null || sopDescription.equalsIgnoreCase("")) {
+		description = req.getParameter("description");
+		if(description == null || description.equalsIgnoreCase("")) {
 			goodSOP = false;
 			req.setAttribute("descriptionError", "Please enter a valid description");
 		}
-		String Priority = req.getParameter("priority");
-		if(Priority == null || Priority.equalsIgnoreCase("")) {
+		String priorityStr = req.getParameter("priority");
+		if(priorityStr == null || priorityStr.equalsIgnoreCase("")) {
 			goodSOP = false;
 			req.setAttribute("priorityError", "Please enter a valid priority");
 		} else {
-			priority = Integer.parseInt(Priority);
+			priority = Integer.parseInt(priorityStr);
 			if(priority <= 0 || priority > 10) {
 				goodSOP = false;
-				req.setAttribute("conversionErr", "There was an error parsing from string to integer");
+				req.setAttribute("priorityError", "Priority must be 1-10!");
 			}
 		}
-		String Version = req.getParameter("revision");
-		if(Version == null || Version.equalsIgnoreCase("")) {
+		String versionStr = req.getParameter("revision");
+		if(versionStr == null || versionStr.equalsIgnoreCase("")) {
 			goodSOP = false;
 			req.setAttribute("versionError", "Please enter a valid version number");
 		} else {
-			version = Integer.parseInt(Version);
+			version = Integer.parseInt(versionStr);
 			if(version <= 0) {
 				goodSOP = false; 
-				req.setAttribute("conversionErr", "There was an error parsing from string to integer");
+				req.setAttribute("versionError", "Version must be greater than 0!");
 			}
 		}
 		
+		HttpSession session = req.getSession();
 		authorID = (int) session.getAttribute("user_id"); 
 		if(authorID <= 0) {
 			goodSOP = false; 
 			req.setAttribute("authorIDError", "There was an error getting the authorID from the author and sessoin data.");
 		}
 		
-		if(goodSOP) {
-			//insert sop 
-			int sopID = sc.insertSOP(sopTitle, sopDescription, priority, version, authorID, false);
-			if(sopID <= 0) {
-				System.out.println("There was an error inserting the sop into the DB");
-			}
-			else {
-				System.out.println("SOP inserted into the DB with ID " + sopID);
-				resp.sendRedirect(req.getContextPath() + "/user_home");
-			}
-		} else {
-			req.setAttribute("title", sopTitle);
-			req.setAttribute("description", sopDescription);
-			req.setAttribute("priority", Priority);
-			req.setAttribute("revision", Version);
-			
+		if(goodSOP){
+			sc.insertSOP(title, description, priority, version, authorID, false);
+			session.setAttribute("success", "Created SOP " + title + " v." + version + " with priority " + priority);
+			resp.sendRedirect(req.getContextPath() + "/user_home");
+		}else{
+			req.setAttribute("title", title);
+			req.setAttribute("description", description);
+			req.setAttribute("priority", priority);
+			req.setAttribute("revision", version);
 			req.getRequestDispatcher("/create_sop.jsp").forward(req, resp);
-			
 		}
-		
-		if(req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/index");
-		}
-		
 	}
-	
 }

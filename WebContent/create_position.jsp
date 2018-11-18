@@ -17,7 +17,7 @@
 			</div>
 			<div class="col">
 				<c:if test="${! empty descError}">
-					<p class="alert alert-warning">${descriptionError}</p>
+					<p class="alert alert-warning">${descError}</p>
 				</c:if>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 				<br>
 				<div class="form-group row">
 					<label for="description" class="control-label col-2">Description:</label>
-					<textarea rows = "4" cols = "50" name = "description"></textarea>
+					<textarea rows="4" cols="50" name="description"><c:out value="${description}" /></textarea>
 				<br>
 				</div>
 			</div>

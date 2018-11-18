@@ -51,19 +51,6 @@ public class EditPositionServlet extends HttpServlet{
 		Position p = null;
 
 		String action = req.getParameter("doStuff");
-		int searchID = Integer.parseInt(req.getParameter("position_id"));
-
-
-		//make sure the search value is valid even before we execute the search
-		if(searchID <=0 ) {
-			System.out.println("Invalid search id");
-			req.setAttribute("searchError", "Invalid search ID!");
-		}
-		else { 
-			//do the search
-			p = pc.searchForPositions(searchID, false, "", false, "", -1).get(0);
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
-		}
 		
 
 		//do a null change to make sure that we pulled the object we need to edit

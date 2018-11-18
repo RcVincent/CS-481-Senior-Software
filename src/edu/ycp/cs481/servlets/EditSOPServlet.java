@@ -50,24 +50,6 @@ public class EditSOPServlet extends HttpServlet{
 		SOP s = null;
 		boolean editError = false; 
 		String action = req.getParameter("doStuff");
-		int searchID = Integer.parseInt(req.getParameter("sop_id"));
-
-		//make sure the search value is valid even before we execute the search
-		if(searchID <=0 ) {
-			System.out.println("Invalid search id");
-			req.setAttribute("searchError", "Invalid search ID!");
-		} else {
-			//do the search
-			s = sc.searchForSOPs(searchID, false, "", false, "", -1, -1, -1).get(0);
-		}
-
-		//do a null change to make sure that we pulled the object we need to edit
-		if(s == null) {
-			System.out.println("There was a search error, returning to the homepage");
-			resp.sendRedirect(req.getContextPath() + "/user_home");
-		}
-		
-		//time to get cracking 
 		
 		if(action.equalsIgnoreCase("changeTitle")) {
 			//get the new title parameters 
