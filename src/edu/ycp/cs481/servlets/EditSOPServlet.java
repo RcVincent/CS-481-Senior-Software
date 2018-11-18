@@ -1,7 +1,6 @@
 package edu.ycp.cs481.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,27 +9,42 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.SOPController;
+import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.SOP;
 
 @SuppressWarnings("serial")
-public class EditSOPServlet extends HttpServlet {
+public class EditSOPServlet extends HttpServlet{
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-
 		HttpSession session = req.getSession();
-		if(session.getAttribute("user_id") == null) {
+		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
-		} else {
-			req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
+		}else{
+			UserController uc = new UserController();
+			int userID = (int) session.getAttribute("user_id");
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_SOPS)){
+				// TODO: Error checking
+				int sopID = Integer.parseInt(req.getParameter("sopID"));
+				SOPController sc = new SOPController();
+				SOP sop = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+				req.setAttribute("oldID", sop.getID());
+				req.setAttribute("oldTitle", sop.getTitle());
+				req.setAttribute("oldPriority", sop.getPriority());
+				req.setAttribute("oldVersion", sop.getVersion());
+				req.setAttribute("authorID", sop.getAuthorID());
+				req.setAttribute("oldDescription", sop.getDescription());
+				req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
+			}else{
+				session.setAttribute("error", "You don't have permission to edit SOPs!");
+				resp.sendRedirect(req.getContextPath() + "/user_home");
+			}
 		}
-		
-		//do a permissions check here and if they are a user return them to the home page
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
 		req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
 		SOPController sc = new SOPController(); 
 		SOP s = null;
