@@ -10,24 +10,32 @@
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
 <div class="fluid-container">
 	<div class="row">
+		<div class="col">
+			<c:if test="${! empty successMessage}">
+				<p class="alert alert-success">${successMessage}</p>
+			</c:if>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-6">
 			<h1>Current Position Details</h1>
 		</div>
 		<div class="col-6 text-right">
 			<form class="form-horizontal" method="post">
+				<input type="hidden" name="posID" value="${posID}">
 				<button type="submit" name="doStuff" value="deletePosition" class="btn btn-danger">Delete Position</button>
 			</form>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			ID: ${ID}
+			ID: ${posID}
 		</div>
 		<div class="col">
-			Title: ${oldTitle}
+			Title: ${title}
 		</div>
 		<div class="col">
-			Priority: ${oldPriority}
+			Priority: ${priority}
 		</div>
 	</div>
 	<div class="row">
@@ -35,26 +43,33 @@
 			Description: 
 		</div>
 		<div class="col-10">
-			${oldDescription}
+			${description}
 		</div>
 	</div>
 	<div class="row">
-		<div class="col">
+		<div class="col text-center">
 			Requirements TBA
 		</div>
 	</div>
-<h2>Change Basic Details</h2>
+	<h2>Change Basic Details</h2>
 	<form class="form-horizontal" method="post">
+		<input type="hidden" name="posID" value="${posID}">
 		<div class="row">
-			<div class="col">
-				<c:choose>
-					<c:when test="${! empty changeTitleError}">
-						<p class="alert alert-warning">${changeTitleError}</p>
-					</c:when>
-					<c:when test="${! empty SuccessMessage}">
-						<p class="alert alert-success">${SuccessMessage}</p>
-					</c:when>
-				</c:choose>
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${! empty titleError}">
+					<p class="alert alert-warning">${titleError}</p>
+				</c:if>
+			</div>
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty titleConfirmError}">
+					<p class="alert alert-warning">${titleConfirmError}</p>
+				</c:if>
 			</div>
 		</div>
 		<div class="row">
@@ -78,16 +93,23 @@
 		</div>
 	</form>
 	<form class="form-horizontal" method="post">
+	<input type="hidden" name="posID" value="${posID}">
 		<div class="row">
-			<div class="col">
-				<c:choose>
-					<c:when test="${! empty priorityError}">
-						<p class="alert alert-warning">${priorityError}</p>
-					</c:when>
-					<c:when test="${! empty SuccessMessage}">
-						<p class="alert alert-success">${SuccessMessage}</p>
-					</c:when>
-				</c:choose>
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty priorityError}">
+					<p class="alert alert-warning">${priorityError}</p>
+				</c:if>
+			</div>
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty priorityConfirmError}">
+					<p class="alert alert-warning">${priorityConfirmError}</p>
+				</c:if>
 			</div>
 		</div>
 		<div class="row">
@@ -100,7 +122,7 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Priority :</label>
-					<input type="number" class="form-control col-10" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
+					<input type="number" class="form-control col-10" id="newPriorityConfirm" name="newPriorityConfirm" value="${newPriorityConfirm}">
 				</div>
 			</div>
 		</div>
@@ -111,21 +133,20 @@
 		</div>
 	</form>
 	<form class="form-horizontal" method="post">
+		<input type="hidden" name="posID" value="${posID}">
 		<div class="row">
 			<div class="col">
 				<h2>Change Description</h2>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col">
-				<c:choose>
-					<c:when test="${! empty changeDescriptionError}">
-						<p class="alert alert-warning">${changeDescriptionError}</p>
-					</c:when>
-					<c:when test="${! empty SuccessMessage}">
-						<p class="alert alert-success">${SuccessMessage}</p>
-					</c:when>
-				</c:choose>
+			<div class="col-2">
+			
+			</div>
+			<div class="col-10">
+				<c:if test="${!empty descriptionError}">
+					<p class="alert alert-warning">${descriptionError}</p>
+				</c:if>
 			</div>
 		</div>
 		<div class="form-group row">

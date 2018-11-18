@@ -22,7 +22,6 @@
 		<div class="col-6 text-right">
 			<form class="form-horizontal" method="post">
 				<input type="hidden" name="sopID" value="${sopID}">
-				<!-- TODO: Check archived vs not archived -->
 				<c:if test="${archived == false}">
 					<button type="submit" name="doStuff" value="archiveSOP" class="btn btn-danger">Archive SOP</button>
 				</c:if>
