@@ -82,7 +82,7 @@ public class DBFormat{
 			while(resultSet.next()){
 				User u = new User();
 				
-				u.setUserID(resultSet.getInt(1));
+				u.setID(resultSet.getInt(1));
 				u.setEmployeeID(resultSet.getInt(2));
 				u.setEmail(resultSet.getString(3));
 				u.setPassword(resultSet.getString(4));

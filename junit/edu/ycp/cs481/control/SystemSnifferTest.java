@@ -33,7 +33,7 @@ public class SystemSnifferTest {
 		admin.setArchived(false);
 		admin.setEmail("oscarWinner@gmail.com");
 		admin.setPassword("legendary");
-		admin.setUserID(14);
+		admin.setID(14);
 		admin.setFirstName("Guillermo");
 		admin.setLastName("Del-Toro");
 		//admin.setPosition(adminP);
@@ -41,7 +41,7 @@ public class SystemSnifferTest {
 		user = new User();
 		//user.setAdminFlag(false);
 		user.setArchived(true);
-		user.setUserID(33);
+		user.setID(33);
 		user.setEmail("zod@krypton.com");
 		user.setFirstName("General");
 		user.setLastName("Zod");
@@ -55,7 +55,7 @@ public class SystemSnifferTest {
 		manager.setPassword("weRunGuns");
 		manager.setFirstName("Clay");
 		manager.setLastName("Marrow");
-		manager.setUserID(89);
+		manager.setID(89);
 		//manager.setPosition(managerP);
 		
 		userList.add(admin);

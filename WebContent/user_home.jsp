@@ -35,13 +35,13 @@
 	</c:if>
 	<div class="row">
 		<div class="col text-center">
-				<a href="edit_position" class = "btn btn-info btn-block" role = "button">Edit Position</a>
+		
 		</div>
 		<div class="col text-center">
 				<a href="account_settings" class="btn btn-info btn-block" role="button">Account Settings</a>
 		</div>
 		<div class="col">
-				<a href="edit_sop" class = "btn btn-info btn-block" role = "button">Edit SOP</a>
+		
 		</div>
 	</div>
 	<div class="row">
@@ -67,8 +67,14 @@
 		</div>
 	</div>
 	<div class="row">
+		<div class="col">
+		
+		</div>
 		<div class="col text-center">
 			<a href="search_system" class="btn btn-info btn-block" role="button">Seinor Swiffer</a>
+		</div>
+		<div class="col">
+		
 		</div>
 	</div>
 </div>

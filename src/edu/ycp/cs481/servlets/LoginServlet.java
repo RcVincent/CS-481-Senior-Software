@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet{
 		}else{
 			User u = user.get(0);
 			HttpSession session = req.getSession();
-			session.setAttribute("user_id", u.getUserID());
+			session.setAttribute("user_id", u.getID());
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}	
 	}

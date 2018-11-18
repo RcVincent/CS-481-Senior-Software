@@ -271,9 +271,9 @@ public class UserController{
 	public void changePosition(User user, int positionID){
 		db.executeUpdate(
 				"Change User " + user.getFirstName() + " " + user.getLastName() + " Position to id " + positionID,
-				"update User set position_id = " + positionID + " where user_id = " + user.getUserID());
+				"update User set position_id = " + positionID + " where user_id = " + user.getID());
 		PositionController pc = new PositionController();
-		user.setPosition(pc.getPositionByUser(user.getUserID()));
+		user.setPosition(pc.getPositionByUser(user.getID()));
 	}
 	
 	public void changeEmployeeID(int userID, int employeeID){

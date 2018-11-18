@@ -27,7 +27,7 @@ public class UserTest {
 		positionList = new ArrayList<Position>();
 
 		user1 = new User(); 
-		user1.setUserID(902685223);
+		user1.setID(902685223);
 		user1.setEmail("gmailsucks@bing.com");
 		user1.setPassword("Pass");
 		//user1.setAdminFlag(false); 
@@ -43,7 +43,7 @@ public class UserTest {
 		userlist.add(user1);
 
 		user2 = new User(); 
-		user2.setUserID(901678905);
+		user2.setID(901678905);
 		user2.setEmail("bingSucks@gmail.com");
 		user2.setPassword("Yeet");
 		//user2.setAdminFlag(false); 
@@ -58,7 +58,7 @@ public class UserTest {
 		userlist.add(user2); 
 
 		user3 = new User(); 
-		user3.setUserID(901678509);
+		user3.setID(901678509);
 		user3.setEmail("IamADegenerate@ycp.edu");
 		user3.setPassword("No");
 		//user3.setAdminFlag(false);
@@ -74,7 +74,7 @@ public class UserTest {
 		userlist.add(user3); 
 
 		user4 = new User(); 
-		user4.setUserID(905678509);
+		user4.setID(905678509);
 		user4.setEmail(""); 
 		user4.setPassword("lelelele");
 		user4.setArchived(false);
@@ -84,7 +84,7 @@ public class UserTest {
 		userlist.add(user4); 
 
 		user5 = new User(); 
-		user5.setUserID(900174502);
+		user5.setID(900174502);
 		user5.setEmail("yayayaya@mrc.org");
 		user5.setPassword("");
 		//user5.setAdminFlag(false);
@@ -94,7 +94,7 @@ public class UserTest {
 		userlist.add(user5);
 
 		user6 = new User(); 
-		user6.setUserID(0);
+		user6.setID(0);
 		user6.setEmail("Yesnomaybeso@gmail.com");
 		user6.setPassword("NNOOOOOOOOOO");
 
@@ -102,7 +102,7 @@ public class UserTest {
 		userlist.add(user6);
 
 		user7 = new User(); 
-		user7.setUserID(899245663);
+		user7.setID(899245663);
 		user7.setEmail("kbdack@hot.com");
 		//user7.setAdminFlag(false);
 		user7.setArchived(false);
@@ -115,7 +115,7 @@ public class UserTest {
 		user8.setPosition(p4);
 		
 		admin1 = new User(); 
-		admin1.setUserID(124);
+		admin1.setID(124);
 		admin1.setEmail("admin@email.com");
 		admin1.setPassword("LetmeIn");
 		admin1.setArchived(false);
@@ -130,7 +130,7 @@ public class UserTest {
 		userlist.add(admin1);
 
 		admin2 = new User(); 
-		admin2.setUserID(125);
+		admin2.setID(125);
 		admin2.setEmail("admin2@email.com");
 		admin2.setPassword("Now");
 		admin2.setArchived(false);
@@ -145,7 +145,7 @@ public class UserTest {
 		userlist.add(admin2); 
 
 		admin3 = new User(); 
-		admin3.setUserID(126); 
+		admin3.setID(126); 
 		admin3.setEmail("");
 		admin3.setPassword("OpenUP");
 		admin3.setArchived(false);
@@ -276,7 +276,7 @@ public class UserTest {
 
 	@Test
 	public void testGetID() {
-		int id = user3.getUserID();
+		int id = user3.getID();
 		assertEquals(901678509, id); 
 	}
 

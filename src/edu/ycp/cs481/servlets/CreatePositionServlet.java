@@ -68,26 +68,16 @@ public class CreatePositionServlet extends HttpServlet{
 			}
 		}
 		
-		//get the created position and error check it. 
-		if(goodPosition) {
-			int posID = pc.insertPosition(title, description, priority);
-			
-			if(posID <= 0) {
-				System.out.println("There was an error inserting the position into the DB");
-				req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
-			} else {
-				System.out.println("Position successfully inserted into db with ID " + posID);
-				resp.sendRedirect(req.getContextPath() + "/user_home");
-			}
-		} else {
+		if(goodPosition){
+			pc.insertPosition(title, description, priority);
+			HttpSession session = req.getSession();
+			session.setAttribute("success", "Created Position " + title + " with priority " + priority);
+			resp.sendRedirect(req.getContextPath() + "/user_home");
+		}else{
 			req.setAttribute("title", title);
 			req.setAttribute("description", description);
 			req.setAttribute("priority", priority);
 			req.getRequestDispatcher("/create_position.jsp").forward(req, resp);
-		}
-		
-		if(req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 	}
 }
