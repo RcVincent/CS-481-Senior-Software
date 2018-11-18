@@ -357,7 +357,7 @@ public class Database{
 				  "first_name VARCHAR(80) NOT NULL, " +
 				  "last_name VARCHAR(80) NOT NULL, " +
 				  "create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-				  "verification VARCHAR(10) NOT NULL, " +
+				  "verification VARCHAR(60) NOT NULL, " +
 				  "PRIMARY KEY (user_id)" +
 				   ");");
 		
