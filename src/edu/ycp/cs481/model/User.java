@@ -1,18 +1,18 @@
 package edu.ycp.cs481.model;
 
 public class User{
-	private int userID, employeeID;
+	private int ID, employeeID;
 	private String email, password;
 	private String firstName, lastName;
 	private Position position;
 	private boolean lockedOut, archived;
 	
-	public int getUserID(){
-		return userID;	
+	public int getID(){
+		return ID;	
 	}
 	
-	public void setUserID(int userID){
-		this.userID = userID;
+	public void setID(int ID){
+		this.ID = ID;
 	}
 	
 	public int getEmployeeID(){

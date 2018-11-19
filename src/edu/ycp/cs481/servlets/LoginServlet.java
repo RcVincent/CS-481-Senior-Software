@@ -44,8 +44,12 @@ public class LoginServlet extends HttpServlet{
 			errorMessage = "Please specify both email and password"; 
 		}else{
 			user = uc.searchForUsers(-1, -1, false, email, false, null, false, null, -1, -1);
+			boolean quarantineExists = uc.findQuarantineUser(email);
 			if(user == null || user.size() == 0 || !uc.authenticate(user.get(0), password)){
 				errorMessage = "Incorrect email or password";
+			}
+			if(quarantineExists) {
+				errorMessage = "Please verify your account before logging in";
 			}
 		}
 		if(errorMessage != null){
@@ -54,7 +58,7 @@ public class LoginServlet extends HttpServlet{
 		}else{
 			User u = user.get(0);
 			HttpSession session = req.getSession();
-			session.setAttribute("user_id", u.getUserID());
+			session.setAttribute("user_id", u.getID());
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}	
 	}

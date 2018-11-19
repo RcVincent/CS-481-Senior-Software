@@ -44,7 +44,7 @@ public class InitialData {
 		p3.setPriority(1);
 		
 		u1 = new User();
-		u1.setUserID(1);
+		u1.setID(1);
 		u1.setEmail("CEO@Google.com");
 		u1.setPassword("yes");
 		u1.setFirstName("Carl");
@@ -54,7 +54,7 @@ public class InitialData {
 		u1.setPosition(p1);
 		
 		u2 = new User();
-		u2.setUserID(2);
+		u2.setID(2);
 		u2.setEmail("Worker@Google.com");
 		u2.setPassword("no");
 		u2.setFirstName("Billiam");

@@ -51,7 +51,7 @@ public class PositionControllerTest {
 		user1.setEmail("Admin@google.com");
 		user1.setFirstName("Rodger");
 		user1.setLastName("Smith");
-		user1.setUserID(12);
+		user1.setID(12);
 		user1.setPosition(pos1);
 		//user1.setAdminFlag(true);
 		
@@ -62,7 +62,7 @@ public class PositionControllerTest {
 		//user2.setAdminFlag(false);
 		user2.setPassword("bangBang");
 		user2.setPosition(pos3);
-		user2.setUserID(4);
+		user2.setID(4);
 		
 		positionList.add(pos1);
 		positionList.add(pos2);
@@ -75,7 +75,7 @@ public class PositionControllerTest {
 		sop1.setDescription("How to login");
 		sop1.setPriority(7);
 		sop1.setVersion(1);
-		sop1.setAuthorID(user1.getUserID());
+		sop1.setAuthorID(user1.getID());
 		
 		sop2 = new SOP(); 
 		sop2.setTitle("Logout");
@@ -83,7 +83,7 @@ public class PositionControllerTest {
 		sop2.setPriority(7);
 		sop2.setID(2);
 		sop2.setVersion(2);
-		sop2.setAuthorID(user1.getUserID());
+		sop2.setAuthorID(user1.getID());
 		
 		sopList.add(sop1);
 		sopList.add(sop2);

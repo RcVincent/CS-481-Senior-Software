@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -36,182 +37,85 @@
 				<button type="submit" class="btn btn-info">Search</button>
 			</div>
 		</div>
-	</form>
 	<div class="row">
-		<div class="col-3">
+		<div class="col-1">
+		
+		</div>
+		<div class="col-2 text-center">
 			<p><b>UID / EID</b></p>
 		</div>
-		<div class="col-3">
+		<div class="col-3 text-center">
 			<p><b>Email</b></p>
 		</div>
-		<div class="col-3">
+		<div class="col-3 text-center">
 			<p><b>Name</b></p>
 		</div>
-		<div class="col-3">
+		<div class="col-3 text-center">
 			<p><b>Position Title</b></p>
 		</div>
 	</div>
-	<!-- TODO: Find a better way -->
-	<c:if test="${!empty userID1}">
+	<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize) - 1}" items="${users}" var="current">
 		<div class="row">
-			<div class="col-3">
-				<p>${userID1} / ${employeeID1}</p>
+			<div class="col-1 text-center">
+				<p><a href="edit_user?userID=${current.ID}">Edit</a>
 			</div>
-			<div class="col-3">
-				<p>${email1}</p>
+			<div class="col-2 text-center">
+				<p>${current.ID} / ${current.employeeID}</p>
 			</div>
-			<div class="col-3">
-				<p>${firstName1} ${lastName1}</p>
+			<div class="col-3 text-center">
+				<p>${current.email}</p>
 			</div>
-			<div class="col-3">
-				<p>${posTitle1}</p>
+			<div class="col-3 text-center">
+				<p>${current.firstName} ${current.lastName}</p>
+			</div>
+			<div class="col-3 text-center">
+				<p>${current.position.title}</p>
 			</div>
 		</div>
-	</c:if>
-	<c:if test="${!empty userID2}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID2} / ${employeeID2}</p>
-			</div>
-			<div class="col-3">
-				<p>${email2}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName2} ${lastName2}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle2}</p>
-			</div>
+	</c:forEach>
+	<input type="hidden" name="page" value="${page}">
+	<input type="hidden" name="displaySize" value="${displaySize}">
+	<div class="row">
+		<div class="col-2 text-center">
+			<c:if test="${page gt 0}">
+				<button type="submit" name="changePage" value="prev" class="btn btn-info">Prev Page</button>
+			</c:if>
 		</div>
-	</c:if>
-	<c:if test="${!empty userID3}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID3} / ${employeeID3}</p>
-			</div>
-			<div class="col-3">
-				<p>${email3}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName3} ${lastName3}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle3}</p>
-			</div>
+		<div class="col-2 text-right">
+			Results Per Page:
 		</div>
-	</c:if>
-	<c:if test="${!empty userID4}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID4} / ${employeeID4}</p>
+		<c:if test="${displaySize != 5}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="5" class="btn btn-info">5</button>
 			</div>
-			<div class="col-3">
-				<p>${email4}</p>
+		</c:if>
+		<c:if test="${displaySize != 10}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="10" class="btn btn-info">10</button>
 			</div>
-			<div class="col-3">
-				<p>${firstName4} ${lastName4}</p>
+		</c:if>
+		<c:if test="${displaySize != 25}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="25" class="btn btn-info">25</button>
 			</div>
-			<div class="col-3">
-				<p>${posTitle4}</p>
+		</c:if>
+		<c:if test="${displaySize != 50}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="50" class="btn btn-info">50</button>
 			</div>
+		</c:if>
+		<c:if test="${displaySize != 100}">
+			<div class="col-1">
+					<button type="submit" name="changeDisplaySize" value="100" class="btn btn-info">100</button>
+			</div>
+		</c:if>
+		<div class="col-2 text-center">
+			<c:if test="${fn:length(users) gt (displaySize*(page + 1))}">
+				<button type="submit" name="changePage" value="next" class="btn btn-info">Next Page</button>
+			</c:if>
 		</div>
-	</c:if>
-	<c:if test="${!empty userID5}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID5} / ${employeeID5}</p>
-			</div>
-			<div class="col-3">
-				<p>${email5}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName5} ${lastName5}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle5}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty userID6}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID6} / ${employeeID6}</p>
-			</div>
-			<div class="col-3">
-				<p>${email6}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName6} ${lastName6}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle6}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty userID7}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID7} / ${employeeID7}</p>
-			</div>
-			<div class="col-3">
-				<p>${email7}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName7} ${lastName7}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle7}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty userID8}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID8} / ${employeeID8}</p>
-			</div>
-			<div class="col-3">
-				<p>${email8}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName8} ${lastName8}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle8}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty userID9}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID9} / ${employeeID9}</p>
-			</div>
-			<div class="col-3">
-				<p>${email9}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName9} ${lastName9}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle9}</p>
-			</div>
-		</div>
-	</c:if>
-	<c:if test="${!empty userID10}">
-		<div class="row">
-			<div class="col-3">
-				<p>${userID10} / ${employeeID10}</p>
-			</div>
-			<div class="col-3">
-				<p>${email10}</p>
-			</div>
-			<div class="col-3">
-				<p>${firstName10} ${lastName10}</p>
-			</div>
-			<div class="col-3">
-				<p>${posTitle10}</p>
-			</div>
-		</div>
-	</c:if>
+	</div>
+	</form>
 </div>
 </body>
 </html>

@@ -31,7 +31,7 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="description" class="control-label col-2">SOP Description:</label>
-					<textarea rows = "4" cols = "50" name = "description"></textarea>
+					<textarea rows = "4" cols = "50" name = "description"><c:out value="${description}" /></textarea>
 					<br>
 				</div>
 			</div>

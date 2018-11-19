@@ -42,6 +42,17 @@ public class DBFormat{
 		}
 	};
 	
+	private static QueryResultFormat<ArrayList<String>> stringResFormat = new QueryResultFormat<ArrayList<String>>(){
+		@Override
+		public ArrayList<String> convertFromResultSet(ResultSet resultSet) throws SQLException{
+			ArrayList<String> values = new ArrayList<String>();
+			while(resultSet.next()){
+				values.add(resultSet.getString(1));
+			}
+			return values;
+		}
+	};
+	
 	private static QueryResultFormat<ArrayList<String>> quarantineResFormat = new QueryResultFormat<ArrayList<String>>(){
 		@Override
 		public ArrayList<String> convertFromResultSet(ResultSet resultSet) throws SQLException{
@@ -71,7 +82,7 @@ public class DBFormat{
 			while(resultSet.next()){
 				User u = new User();
 				
-				u.setUserID(resultSet.getInt(1));
+				u.setID(resultSet.getInt(1));
 				u.setEmployeeID(resultSet.getInt(2));
 				u.setEmail(resultSet.getString(3));
 				u.setPassword(resultSet.getString(4));
@@ -177,6 +188,10 @@ public class DBFormat{
 	
 	public static QueryResultFormat<ArrayList<Integer>> getIntResFormat(){
 		return intResFormat;
+	}
+	
+	public static QueryResultFormat<ArrayList<String>> getStringResFormat(){
+		return stringResFormat;
 	}
 	
 	public static QueryResultFormat<ArrayList<String>> getQuarantineResFormat(){
