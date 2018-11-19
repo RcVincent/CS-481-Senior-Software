@@ -43,7 +43,7 @@ public class SystemSnifferController {
 	public void setAndShowToDoList(Position p) {
 		List<SOP> displayList = p.getIncompleteSOPs(p);
 		for(SOP s: displayList) {
-			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription());
+			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription() + " | " +s.getPriority() + " | " + s.getVersion());
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class SystemSnifferController {
 		List<SOP> displayList = p.getCompletedSOPs(p);
 		
 		for(SOP s: displayList) {
-			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription());
+			System.out.println(s.getID() + " | " + s.getTitle() + " | " + s.getDescription() + " | " +s.getPriority() + " | " + s.getVersion());
 		}
 	}
 	
@@ -72,10 +72,11 @@ public class SystemSnifferController {
 	
 	//time to do the actual testing and checking of peoples training histories  
 	public void SniffDeeply() {
-		List<User> systemUsers = uc.searchForUsers(-1, -1, false, "", false, "", false, "", 0, -1);
+		List<User> systemUsers = uc.searchForUsers(-1, -1, false, "", false, "", false, "", -1, -1);
 		
 		if(systemUsers.isEmpty()) {
 			System.out.println("There was an error searching for users.");
+			
 		}
 		else {
 			for(User u: systemUsers) {
@@ -90,6 +91,7 @@ public class SystemSnifferController {
 					
 					//Display the List
 					setAndShowToDoList(p); 
+					System.out.println("Message sent to the user about their missing training.");
 					//send the users manager an email 
 					//TODO: get the users manager 
 					

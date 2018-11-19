@@ -48,7 +48,7 @@ public class SystemSnifferServlet extends HttpServlet{
 		if(searchID.equalsIgnoreCase("") || searchID == null) {
 			System.out.println("There is no ID to search by don't do the search.");
 		}
-		else {
+		else if(action.equalsIgnoreCase("searchAll")){
 			int search_id = Integer.parseInt(searchID);
 			User u = uc.searchForUsers(search_id, 0, false, "", false, "", false, "", 0, -1).get(0);
 			Position p = u.getPosition();
