@@ -81,6 +81,7 @@ public class EditSOPServlet extends HttpServlet{
 		}else if(action.equalsIgnoreCase("changePriority")){
 			String newPriorityStr = req.getParameter("newPriority");
 			String newPriorityConfirmStr = req.getParameter("newPriorityConfirm");
+			
 			if(newPriorityStr == null || newPriorityStr.equalsIgnoreCase("")){
 				req.setAttribute("priorityError", "Please enter a number!");
 				goodUpdate = false;
@@ -101,6 +102,7 @@ public class EditSOPServlet extends HttpServlet{
 		}else if(action.equalsIgnoreCase("changeVersion")){
 			String newVersionStr = req.getParameter("newVersion");
 			String newVersionConfirmStr = req.getParameter("newVersionConfirm");
+			
 			if(newVersionStr == null || newVersionStr.equalsIgnoreCase("")){
 				req.setAttribute("versionError", "Please enter a number!");
 				goodUpdate = false;
