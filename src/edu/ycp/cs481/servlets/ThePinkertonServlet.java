@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs481.control.SystemSnifferController;
+import edu.ycp.cs481.control.ThePinkerton;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Messenger;
@@ -16,7 +16,7 @@ import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
-public class SystemSnifferServlet extends HttpServlet{
+public class ThePinkertonServlet extends HttpServlet{
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -38,7 +38,7 @@ public class SystemSnifferServlet extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		SystemSnifferController sfc = new SystemSnifferController(); 
+		ThePinkerton sfc = new ThePinkerton(); 
 		UserController uc = new UserController(); 
 		String action = req.getParameter("WhatToSniff");
 		

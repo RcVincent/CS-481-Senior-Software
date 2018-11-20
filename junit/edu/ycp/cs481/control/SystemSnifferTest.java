@@ -10,11 +10,11 @@ import static org.junit.Assert.*;
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.Position;
-import edu.ycp.cs481.control.SystemSnifferController;
+import edu.ycp.cs481.control.ThePinkerton;
 
 public class SystemSnifferTest {
 	
-	private SystemSnifferController s; 
+	private ThePinkerton s; 
 	private User admin, user, manager, failUser;
 	
 	private SOP s1, s2, s3, s4, s5, s6, s7, s8, s9, s10; 
@@ -25,7 +25,7 @@ public class SystemSnifferTest {
 	@Before 
 	public void setUp() {
 		
-		s = new SystemSnifferController(); 
+		s = new ThePinkerton(); 
 		
 		userList = new ArrayList<User>(); 
 		 

@@ -14,7 +14,7 @@ import edu.ycp.cs481.model.Messenger;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 
-public class SystemSnifferController {
+public class ThePinkerton {
 	private Database db = new Database();
 	private static User u; 
 	private static Position p;
@@ -22,7 +22,7 @@ public class SystemSnifferController {
 	private static UserController uc = new UserController();
 	private static SOPController sc = new SOPController(); 
 	
-	public SystemSnifferController() {
+	public ThePinkerton() {
 	
 	}
 	

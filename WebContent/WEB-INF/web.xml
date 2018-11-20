@@ -128,11 +128,11 @@
   </servlet-mapping>
   
   <servlet>
-  	<servlet-name>SystemSniffer</servlet-name>
-  	<servlet-class>edu.ycp.cs481.servlets.SystemSnifferServlet</servlet-class>
+  	<servlet-name>ThePinkerton</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.ThePinkertonServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>SystemSniffer</servlet-name>
+  	<servlet-name>ThePinkerton</servlet-name>
   	<url-pattern>/search_system</url-pattern>
   </servlet-mapping>
   
