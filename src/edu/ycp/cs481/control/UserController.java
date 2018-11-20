@@ -255,10 +255,15 @@ public class UserController{
 		}
 		return null;
 	}
-
+	
+	public void Lockout(int userID) {
+		db.executeUpdate("Initiate lockout on User with ID " + userID, "update User set lock_out = true where user_id = " + userID);
+	}
+	
 	public void overturnLockout(int userID) {
 		db.executeUpdate("Overturn lockout on User with ID " + userID, "update User set lock_out = false where user_id = " + userID);
 	}
+	
 	
 	public void archiveUser(int userID){
 		db.executeUpdate("Archive User with ID " + userID, "update User set archive_flag = true where user_id = " + userID);
