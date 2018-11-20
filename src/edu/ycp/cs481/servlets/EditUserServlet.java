@@ -38,9 +38,9 @@ public class EditUserServlet extends HttpServlet {
 		}else{
 			UserController uc = new UserController();
 			int userID = (int) session.getAttribute("user_id");
-			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_SOPS)){
+			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_USERS)){
 				loadUser(req);
-				req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
+				req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
 			}else{
 				session.setAttribute("error", "You don't have permission to edit SOPs!");
 				resp.sendRedirect(req.getContextPath() + "/user_home");
