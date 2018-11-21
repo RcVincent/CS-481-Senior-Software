@@ -24,13 +24,13 @@ public class VerifyEmailServlet extends HttpServlet{
 		UserController uc = new UserController();
 		
 		verify = uc.verifyUser(email, token);
+		HttpSession session = req.getSession();
 		
 		if(!verify) {
-			req.setAttribute("errorMessage", "Email verification failed");
-            resp.sendRedirect(req.getContextPath() + "/login");
+			session.setAttribute("errorMessage", "Email verification failed");
 		} else {
-			req.setAttribute("emailVerify", "Email successfully verified");
-            resp.sendRedirect(req.getContextPath() + "/login");
+			session.setAttribute("emailVerify", "Email successfully verified");
 		}
+        resp.sendRedirect(req.getContextPath() + "/login");
 	}
 }
