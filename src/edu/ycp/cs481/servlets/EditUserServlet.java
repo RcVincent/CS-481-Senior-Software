@@ -81,14 +81,15 @@ public class EditUserServlet extends HttpServlet {
 		}
 		else if(action.equalsIgnoreCase("changePosition")) {
 			int positionID = Integer.parseInt(req.getParameter("newPositionID"));
+			User thisUser = uc.searchForUsers(userID, -1, false, "", false, "", false, "", 0, -1).get(0);
 			if(positionID <= 0) {
 				req.setAttribute("positionIDError", "Invalid position ID, please try again.");
 			} else {
-				//uc.changePosition(user, positionID);
+				uc.changePosition(thisUser, positionID);
 			}
 		}
 		
-		else if(action.equalsIgnoreCase("AssignSOP")) {
+		else if(action.equalsIgnoreCase("assignSOP")) {
 			String sopid = req.getParameter("sop_ID");
 			if(sopid == null || sopid.equalsIgnoreCase("")) {
 				System.out.println("SOP not being assigned, the sop id was empty");
