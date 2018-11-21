@@ -17,34 +17,21 @@ public class VerifyEmailServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Verify Email Servlet: doGet");
-		req.getRequestDispatcher("/verify_email.jsp").forward(req, resp);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		System.out.println("Verify Email Servlet: doPost");
 		
-		String errorMessage = null;
-		String email = null;
-		String pin = null;
-		int userID;
-		
+		String token = req.getParameter("token");
+		boolean verify = false;
 		UserController uc = new UserController();
 		
-		email = req.getParameter("email");
-		pin = req.getParameter("pin");
+		verify = uc.verifyUser(token);
 		
-		if(email == null || pin == null || email.equals("") || pin.equals("")) {
-			errorMessage = "Please specify both email and pin"; 
-		}else{
-			userID = uc.verifyUser(email,pin);
+		if(!verify) {
+			req.setAttribute("errorMessage", "Email verification failed");
+			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+		} else {
+			req.setAttribute("errorMessage", "Email successfully verified");
+			req.getRequestDispatcher("/login.jsp").forward(req, resp);
 		}
-		if(errorMessage != null){
-			req.setAttribute("errorMessage", errorMessage);
-			req.getRequestDispatcher("/verify_email.jsp").forward(req, resp);
-		}else{
-			HttpSession session = req.getSession();
-			resp.sendRedirect(req.getContextPath() + "/login");
-		}	
+		
+		req.getRequestDispatcher("/verify_email.jsp").forward(req, resp);
 	}
 }

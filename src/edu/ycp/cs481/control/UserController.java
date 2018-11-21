@@ -66,10 +66,12 @@ public class UserController{
 			
 			// Send email with messenger
 			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is:   " + verificationString +
-					"<br>Please visit the following URL and enter your email and pin: \n\n<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email\">Verify Email</a>"});
+					"<br>Please visit the following URL and enter your email and pin: <a href=\"http://localhost:8081/CS481-Senior-Software/verify_email?token="
+					+ verificationString + "\">Verify Email</a>"});
 		}
 	}
 	
+	//doesn't work with hashed pin
 	public void retrySendEmail(String email) {
 		String verificationString = "";
 		try {
@@ -85,41 +87,43 @@ public class UserController{
 				"<br>Please visit the following URL and enter your email and pin: \n\n<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email\">Verify Email</a>"});
 	}
 	
-	public Integer verifyUser(String email, String verificationString) {
+	public boolean verifyUser(String verificationString) {
 		boolean verify = false;
-		int newUserID = 0;
 		ArrayList<String> user = new ArrayList<String>();
+		ArrayList<String> hashedVerifStrings = null;
 		String hashedVerifString = null;
 
-		System.out.println(email);
 		try{
 			String name = "Verifying User";
-			String sql = "select verification from Quarantine where email = '" + email + "'";
-			hashedVerifString = db.executeQuery(name, sql, DBFormat.getStringResFormat()).get(0);
+			String sql = "select verification from Quarantine";
+			hashedVerifStrings = db.executeQuery(name, sql, DBFormat.getStringResFormat());
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		
-		verify = BCrypt.checkpw(verificationString, hashedVerifString);
+		for(int i = 0; i < hashedVerifStrings.size(); i++) {
+			if(BCrypt.checkpw(verificationString, hashedVerifStrings.get(i))) {
+				verify = true;
+				hashedVerifString = hashedVerifStrings.get(i);
+				break;
+			}
+		}
 		
 		if(verify) {
 			// Move information from Quarantine -> User
 			try {
 				String name = "Migrating to User table";
-				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = '" + email + "'";
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where verification = '" + hashedVerifString + "'";
 				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			// Delete entry in Quarantine
-			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where email = '" + email + "'");
+			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where verification = '" + hashedVerifString + "'");
 			
-			newUserID = insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
-		} else {
-			return -1;
-		}
-		
-		return newUserID;
+			insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
+		} 
+		return verify;
 	}
 
 	public ArrayList<User> searchForUsers(int userID, int employeeID, boolean emailPartial, String email, 
@@ -167,12 +171,11 @@ public class UserController{
 	}
 	
 	public String generateString() {
-		// Generate a 10 digit string
 		int leftLimit = 33;
 		int rightLimit = 126;
 		Random random = new Random();
 		StringBuilder buffer = new StringBuilder(10);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 20; i++) {
 		    int randomLimitedInt = leftLimit + (int) 
 		      (random.nextFloat() * (rightLimit - leftLimit + 1));
 		    buffer.append((char) randomLimitedInt);
