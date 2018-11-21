@@ -42,7 +42,7 @@ public class EditUserServlet extends HttpServlet {
 				loadUser(req);
 				req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
 			}else{
-				session.setAttribute("error", "You don't have permission to edit SOPs!");
+				session.setAttribute("error", "You don't have permission to edit users!");
 				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}
 		}
@@ -89,15 +89,22 @@ public class EditUserServlet extends HttpServlet {
 		}
 		
 		else if(action.equalsIgnoreCase("AssignSOP")) {
-			int sopID = Integer.parseInt(req.getParameter("sop_id"));
-			if(sopID <= 0) {
-				req.setAttribute("sopIDError", "Invalid SOP ID. Please try again.");
+			String sopid = req.getParameter("sop_ID");
+			if(sopid == null || sopid.equalsIgnoreCase("")) {
+				System.out.println("SOP not being assigned, the sop id was empty");
 			}
 			else {
-				uc.assignSOP(userID, sopID);
-				System.out.println("Added sop with ID "+sopID+"assigned to user with ID " + userID);
+				int sopID = Integer.parseInt(sopid);
+				if(sopID <= 0) {
+					req.setAttribute("sopIDError", "Invalid SOP ID. Please try again.");
+				}
+				else {
+					uc.assignSOP(userID, sopID);
+					System.out.println("Added sop with ID "+sopID+"assigned to user with ID " + userID);
+				}
 			}
 		}
+			
 		
 		loadUser(req);
 		req.getRequestDispatcher("/edit_user.jsp").forward(req, resp);
