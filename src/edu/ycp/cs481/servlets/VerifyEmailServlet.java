@@ -29,7 +29,7 @@ public class VerifyEmailServlet extends HttpServlet{
 		if(!verify) {
 			session.setAttribute("errorMessage", "Email verification failed");
 		} else {
-			session.setAttribute("emailVerify", "Email successfully verified");
+			session.setAttribute("successMessage", "Email successfully verified");
 		}
         resp.sendRedirect(req.getContextPath() + "/login");
 	}
