@@ -18,20 +18,19 @@ public class VerifyEmailServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		System.out.println("Verify Email Servlet: doGet");
 		
+		String email = req.getParameter("email");
 		String token = req.getParameter("token");
 		boolean verify = false;
 		UserController uc = new UserController();
 		
-		verify = uc.verifyUser(token);
+		verify = uc.verifyUser(email, token);
 		
 		if(!verify) {
 			req.setAttribute("errorMessage", "Email verification failed");
-			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
 		} else {
-			req.setAttribute("errorMessage", "Email successfully verified");
-			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+			req.setAttribute("emailVerify", "Email successfully verified");
+            resp.sendRedirect(req.getContextPath() + "/login");
 		}
-		
-		req.getRequestDispatcher("/verify_email.jsp").forward(req, resp);
 	}
 }

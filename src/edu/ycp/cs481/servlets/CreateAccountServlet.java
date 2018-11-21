@@ -101,7 +101,7 @@ public class CreateAccountServlet extends HttpServlet{
 						lastName);
 				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}else{
-				resp.sendRedirect(req.getContextPath() + "/verify_email");
+				resp.sendRedirect(req.getContextPath() + "/login");
 			}
 		}else{
 			req.setAttribute("firstName", firstName);

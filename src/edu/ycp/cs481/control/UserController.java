@@ -65,64 +65,63 @@ public class UserController{
 					new String[] {email, password, firstName, lastName, hashPassword(verificationString)});
 			
 			// Send email with messenger
-			Messenger.main(new String[] {email, "CTM Verification Pin", "Thank you for registering " + firstName + " " + lastName + ". Your pin is:   " + verificationString +
-					"<br>Please visit the following URL and enter your email and pin: <a href=\"http://localhost:8081/CS481-Senior-Software/verify_email?token="
-					+ verificationString + "\">Verify Email</a>"});
+			Messenger.main(new String[] {email, "CTM Verification Pin", "Please visit the following URL and enter your email and pin: "
+					+ "<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email?"
+					+ "email=" + email
+					+ "&token=" + verificationString 
+					+ "\">Verify Email</a>"});
 		}
 	}
 	
-	//doesn't work with hashed pin
 	public void retrySendEmail(String email) {
-		String verificationString = "";
+		String pin = generateString();
 		try {
 			String name = "Get Quarantine User";
 			String sql = "select verification from Quarantine where email = " + email;
-			verificationString = db.executeQuery(name, sql, DBFormat.getStringResFormat()).get(0);
+			pin = db.executeQuery(name, sql, DBFormat.getStringResFormat()).get(0);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		// Send email with messenger
-		Messenger.main(new String[] {email, "CTM Verification Pin", "Your pin is " + verificationString +
-				"<br>Please visit the following URL and enter your email and pin: \n\n<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email\">Verify Email</a>"});
+		Messenger.main(new String[] {email, "CTM Verification Pin", "Please visit the following URL and enter your email and pin: "
+				+ "<a href=\"http://localhost:8081/CS481-Senior-Software/verify_email?"
+				+ "email=" + email
+				+ "&token=" + pin 
+				+ "\">Verify Email</a>"});
 	}
 	
-	public boolean verifyUser(String verificationString) {
+	public boolean verifyUser(String email, String verificationString) {
 		boolean verify = false;
 		ArrayList<String> user = new ArrayList<String>();
-		ArrayList<String> hashedVerifStrings = null;
 		String hashedVerifString = null;
 
+		System.out.println(email);
 		try{
 			String name = "Verifying User";
-			String sql = "select verification from Quarantine";
-			hashedVerifStrings = db.executeQuery(name, sql, DBFormat.getStringResFormat());
+			String sql = "select verification from Quarantine where email = '" + email + "'";
+			hashedVerifString = db.executeQuery(name, sql, DBFormat.getStringResFormat()).get(0);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		
-		for(int i = 0; i < hashedVerifStrings.size(); i++) {
-			if(BCrypt.checkpw(verificationString, hashedVerifStrings.get(i))) {
-				verify = true;
-				hashedVerifString = hashedVerifStrings.get(i);
-				break;
-			}
-		}
+		verify = BCrypt.checkpw(verificationString, hashedVerifString);
 		
 		if(verify) {
 			// Move information from Quarantine -> User
 			try {
 				String name = "Migrating to User table";
-				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where verification = '" + hashedVerifString + "'";
+				String sql = "select " + DBFormat.getQuarantinePieces() + " from Quarantine where email = '" + email + "'";
 				user = db.executeQuery(name, sql, DBFormat.getQuarantineResFormat());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			// Delete entry in Quarantine
-			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where verification = '" + hashedVerifString + "'");
+			db.executeUpdate("Deleting Quarantine User", "delete from Quarantine where email = '" + email + "'");
 			
 			insertUser(user.get(0), user.get(1), user.get(2), user.get(3),  false, false, 2);
 		} 
+		
 		return verify;
 	}
 
@@ -171,8 +170,8 @@ public class UserController{
 	}
 	
 	public String generateString() {
-		int leftLimit = 33;
-		int rightLimit = 126;
+		int leftLimit = 65;
+		int rightLimit = 122;
 		Random random = new Random();
 		StringBuilder buffer = new StringBuilder(10);
 		for (int i = 0; i < 20; i++) {
