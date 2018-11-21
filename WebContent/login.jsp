@@ -20,7 +20,7 @@
 		<c:if test="${! empty emailVerify}">
 			<div class="row">
 				<div class="col">
-					<p class="alert alert-warning">${emailVerify}</p>
+					<p class="alert alert-success">${emailVerify}</p>
 				</div>
 			</div>
 		</c:if>
