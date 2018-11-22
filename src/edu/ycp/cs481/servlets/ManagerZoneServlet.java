@@ -75,6 +75,7 @@ public class ManagerZoneServlet extends HttpServlet{
 		else if(action.equalsIgnoreCase("addSubordinate")) {
 			if(uc.managerHasSubordinate(managerID, userID)) {
 				System.out.println("This manager already has this user as a subordinate");
+				req.setAttribute("addSubordinateError", "User is already reporting to you.");
 			} else {
 				uc.addSubordinate(managerID, userID);
 				System.out.println("Subordinate added to manager");
@@ -84,6 +85,7 @@ public class ManagerZoneServlet extends HttpServlet{
 		else if(action.equalsIgnoreCase("removeSubordinate")) {
 			if(!uc.managerHasSubordinate(managerID, userID)) {
 				System.out.println("This manager does not have that subordinate that can be removed");
+				req.setAttribute("removeSubordinateError", "User is already not reporting to you.");
 			} else {
 				uc.removeSubordinate(managerID, userID);
 				System.out.println("Subordinate removed from manager");

@@ -16,6 +16,16 @@ import edu.ycp.cs481.control.UserController;
 @SuppressWarnings("serial")
 public class EditPositionServlet extends HttpServlet{
 	
+	public void loadPosition(HttpServletRequest req) {
+		int positionID = Integer.parseInt(req.getParameter("posID"));
+		PositionController pc = new PositionController(); 
+		Position p = pc.searchForPositions(positionID, false, null, false, null, -1).get(0);
+		req.setAttribute("positionID", p.getID());
+		req.setAttribute("title", p.getTitle());
+		req.setAttribute("description", p.getDescription());
+		req.setAttribute("priority", p.getPriority());
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
@@ -26,14 +36,15 @@ public class EditPositionServlet extends HttpServlet{
 			int userID = (int) session.getAttribute("user_id");
 			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_POSITIONS)){
 				// TODO: Error checking
-				int posID = Integer.parseInt(req.getParameter("posID"));
+				/*int posID = Integer.parseInt(req.getParameter("posID"));
 				PositionController pc = new PositionController();
 				Position pos = pc.searchForPositions(posID, false, null, false, null, -1).get(0);
 				req.setAttribute("ID", pos.getID());
 				req.setAttribute("oldTitle", pos.getTitle());
 				req.setAttribute("oldPriority", pos.getPriority());
 				req.setAttribute("oldDescription", pos.getDescription());
-				// TODO: Current Requirements
+				// TODO: Current Requirements*/
+				loadPosition(req); 
 				req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 			}else{
 				session.setAttribute("error", "You don't have permission to Edit Positions!");
@@ -44,50 +55,40 @@ public class EditPositionServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-
+		int id = Integer.parseInt(req.getParameter("posID"));
 		boolean editError = false;
 		PositionController pc = new PositionController();
-
-		Position p = null;
-
 		String action = req.getParameter("doStuff");
-		
-
-		//do a null change to make sure that we pulled the object we need to edit
-		if(p == null) {
-			System.out.println("There was a search error, returning to the homepage");
-			resp.sendRedirect(req.getContextPath() + "/user_home");
-		}
+			
 		
 		if(action.equalsIgnoreCase("changeTitle")) {
 			String newPositionTitle = req.getParameter("newTitle");
 			String newPositionTitleConfirm = req.getParameter("newTitleConfirm");
-			String title = p.getTitle();
+			
 			//test change title
 			if((newPositionTitle == null ||  newPositionTitle.equalsIgnoreCase("")) && (newPositionTitleConfirm == null || newPositionTitleConfirm.equalsIgnoreCase(""))) {
 				//do not do the edit 
 				System.out.println("Position title not changed");
 			}
 			//make sure the two fields are identical
-			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm) || newPositionTitle.equalsIgnoreCase(title)) {
+			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm)) {
 				req.setAttribute("changeTitleError", "Titles do not match!");
 				editError = true; 
 			} else {
 				//change the title field
-				pc.changePositionTitle(p, newPositionTitle);
+				pc.changePositionTitle(id, newPositionTitle);
 				System.out.println("Position title successfully changed");
 			}
 			
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		//change the description
 		else if(action.equalsIgnoreCase("changeDescription")) {
 			String newPositionDescription = req.getParameter("newDescription");
 			String newPositionDescriptionConfirm = req.getParameter("newDescriptionConfirmation");
-			String description = p.getDescription();
 			
 			//check if both fields are empty and if they are do not edit
 			if((newPositionDescription == null || newPositionDescription.equalsIgnoreCase("")) && newPositionDescriptionConfirm == null || newPositionDescriptionConfirm.equalsIgnoreCase("")) {
@@ -96,26 +97,25 @@ public class EditPositionServlet extends HttpServlet{
 
 			} 
 			//make sure the two fields are identical
-			else if(!newPositionDescription.equalsIgnoreCase(newPositionDescriptionConfirm) || newPositionDescription.equalsIgnoreCase(description)) {
+			else if(!newPositionDescription.equalsIgnoreCase(newPositionDescriptionConfirm)) {
 				req.setAttribute("changeDescriptionError", "Descriptions do not match!");
 				editError = true; 
 			}
 			else {
 				//change the description field
-				pc.changePositionDescription(p, newPositionDescription);
+				pc.changePositionDescription(id, newPositionDescription);
 				System.out.println("Position description successfully changed");
 			}
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		} 
 		
 		//change the priority
 		else if(action.equalsIgnoreCase("changePriority")) {
 			String newP = req.getParameter("newPriority");
 			String newPConfirm = req.getParameter("newPriorityConfirmation");
-			int priority = p.getPriority();
 			
 			if((newP == null || newP.equalsIgnoreCase("")) && (newPConfirm == null || newPConfirm.equalsIgnoreCase("")) ) {
 				//do not do the edit if both fields are empty
@@ -129,20 +129,20 @@ public class EditPositionServlet extends HttpServlet{
 				//parse the int
 				int newPriority = Integer.parseInt(newP);
 				//make sure the value is valid
-				if(newPriority <=0 || newPriority > 10 || newPriority == priority) {
+				if(newPriority <=0 || newPriority > 10) {
 					req.setAttribute("priorityValueError", "Invalid priority value!");
 					editError = true;
 				}
 				else {
 					//change the position priority 
-					pc.changePositionPriority(p, newPriority);
+					pc.changePositionPriority(id, newPriority);
 					System.out.println("Position priority successfully changed");
 				}
 			}
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		
 		/*
@@ -153,7 +153,8 @@ public class EditPositionServlet extends HttpServlet{
 			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}*/
 
-
+		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+		loadPosition(req);
 	}
 }
 

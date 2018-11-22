@@ -16,38 +16,39 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-6">
+		<div class="col-4">
 			<h1>Current User Details</h1>
 		</div>
-		<div class="col-6 text-right">
+		<div class="col-4 text-right">
 			<form class="form-horizontal" method="post">
-				<input type="hidden" name="user_id" value="${user_id}">
+				<input type="hidden" name="user_id" value="${userID}">
 				<!-- TODO: Check archived vs not archived -->
 				<c:if test="${archived == false}">
-					<button type="submit" name="doStuff" value="archiveUser" class="btn btn-danger">Archive User</button>
+					<button type="submit" name="editType" value="archiveUser" class="btn btn-danger">Archive User</button>
 				</c:if>
+
 				<c:if test="${archived == true}">
-					<button type="submit" name="doStuff" value="unarchiveUser" class="btn btn-danger">Unarchive User</button>
+					<button type="submit" name="editType" value="unarchiveUser" class="btn btn-danger">Unarchive User</button>
 				</c:if>
 			</form>
+			
+		</div>
+		<div class = col-1>
 		</div>
 		<!-- set manual lock out conditions -->
 		<div class="col-6 text-right">
 			<form class="form-horizontal" method="post">
-				<input type="hidden" name="user_id" value="${user_id}">
-				<!-- TODO: Check archived vs not archived -->
-				<c:if test="${locked_out == false}">
-					<button type="submit" name="doStuff" value="lockOutUser" class="btn btn-danger">Lockout User</button>
-				</c:if>
+				<input type="hidden" name="user_id" value="${userID}">
+				<!-- Check if the user is locked out -->
 				<c:if test="${locked_out == true}">
-					<button type="submit" name="doStuff" value="overTurnLockout" class="btn btn-danger">Unlock User</button>
+					<button type="submit" name="editType" value="overTurnLockout" class="btn btn-danger">Unlock User</button>
 				</c:if>
 			</form>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			ID: ${user_id}
+			ID: ${userID}
 		</div>
 		<div class="col">
 			Email: ${email}
@@ -69,7 +70,7 @@
 	
 	<h2>Advanced Admin Functions</h2>
 	<form class="form-horizontal" method="post">
-		<input type="hidden" name="user_id" value="${user_id}">
+		<input type="hidden" name="user_id" value="${userID}">
 		<div class="row">
 			<div class="col-1">
 			
@@ -80,26 +81,28 @@
 				</c:if>
 			</div>
 			<div class="col-1">
-				
+			</div>	
 		</div>
 		
 		<div class="row">
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitle" class="control-label col-2">SOP ID:</label>
-					<input type="text" class="form-control col-10" id="sop_ID" name="sop_ID" value="${sop_ID}">
+					<input type="number" class="form-control col-5" id="sop_ID" name="sop_ID" value="${sop_ID}">
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" name="doStuff" value="assignSOP" class="btn btn-info">Assign SOP</button>
+				<button type="submit" name="editType" value="assignSOP" class="btn btn-info">Assign SOP</button>
 			</div>
 		</div>
 	</form>
 	
+	<div class = col 3>
+	</div>
 	<form class="form-horizontal" method="post">
-		<input type="hidden" name="user_id" value="${user_id}">
+		<input type="hidden" name="user_id" value="${userID}">
 		<div class="row">
 			<div class="col-1">
 			
@@ -117,13 +120,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newPositionID" class="control-label col-2">New Position ID:</label>
-					<input type="number" class="form-control col-10" id="newPositionID" name="newPositionID" value="${newPositionID}">
+					<input type="number" class="form-control col-5" id="newPositionID" name="newPositionID" value="${newPositionID}">
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" name="doStuff" value="changePosition" class="btn btn-info">Change Position</button>
+				<button type="submit" name="editType" value="changePosition" class="btn btn-info">Change Position</button>
 			</div>
 		</div>
 	</form>

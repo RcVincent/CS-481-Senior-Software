@@ -15,9 +15,9 @@ import edu.ycp.cs481.model.User;
 @SuppressWarnings("serial")
 public class EditUserServlet extends HttpServlet {
 	private void loadUser(HttpServletRequest req) {
-		int user_id = Integer.parseInt(req.getParameter("user_id"));
+		int user_id = Integer.parseInt(req.getParameter("userID"));
 		UserController uc = new UserController(); 
-		User u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", 0, -1).get(0);
+		User u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", -1, -1).get(0);
 		req.setAttribute("user_id", u.getID());
 		req.setAttribute("email", u.getEmail());
 		req.setAttribute("firstname", u.getFirstName());
@@ -50,7 +50,7 @@ public class EditUserServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		int userID = Integer.parseInt(req.getParameter("user_id"));
+		int userID = Integer.parseInt(req.getParameter("userID"));
 		
 		UserController uc = new UserController();
 		String action = req.getParameter("editType");
@@ -67,11 +67,6 @@ public class EditUserServlet extends HttpServlet {
 			req.setAttribute("successMessage", "User successfully unarchived");
 		}
 		
-		else if(action.equalsIgnoreCase("lockOutUser")) {
-			System.out.println("Locking out user with ID" + userID);
-			uc.Lockout(userID);
-			req.setAttribute("successMessage", "User locked out");
-		}
 		else if(action.equalsIgnoreCase("overTurnLockout")) {
 			System.out.println("Overturning lockout user with ID" + userID);
 			if(uc.isLockedOut(userID)) {

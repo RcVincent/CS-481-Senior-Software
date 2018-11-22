@@ -24,10 +24,10 @@
 			ID: ${ID}
 		</div>
 		<div class="col">
-			Title: ${oldTitle}
+			Title: ${title}
 		</div>
 		<div class="col">
-			Priority: ${oldPriority}
+			Priority: ${priority}
 		</div>
 	</div>
 	<div class="row">
@@ -35,7 +35,7 @@
 			Description: 
 		</div>
 		<div class="col-10">
-			${oldDescription}
+			${description}
 		</div>
 	</div>
 	<div class="row">
@@ -43,7 +43,7 @@
 			Requirements TBA
 		</div>
 	</div>
-<h2>Change Basic Details</h2>
+	<h2>Change Basic Details</h2>
 	<form class="form-horizontal" method="post">
 		<div class="row">
 			<div class="col">

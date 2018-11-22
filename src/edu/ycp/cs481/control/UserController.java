@@ -257,7 +257,7 @@ public class UserController{
 	}
 	
 	public void Lockout(int userID) {
-		db.executeUpdate("Initiate lockout on User with ID " + userID, "update User set lock_out = true where user_id = " + userID);
+		db.executeUpdate("Overturn lockout on User with ID " + userID, "update User set lock_out = true where user_id = " + userID);
 	}
 	
 	public void overturnLockout(int userID) {
