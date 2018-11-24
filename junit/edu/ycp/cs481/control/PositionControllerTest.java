@@ -149,7 +149,8 @@ public class PositionControllerTest {
 		Position testPos = positionList.get(2);
 		int id = testPos.getID();
 		assertEquals(5, testPos.getPriority()); 
-		poscontrol.changePositionPriority(id, newPrio);
+		
+		poscontrol.changePriority(id, newPrio);
 		
 		assertEquals(3, testPos.getPriority()); 
 	}

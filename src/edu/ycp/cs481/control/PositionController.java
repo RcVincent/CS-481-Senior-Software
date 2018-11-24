@@ -70,25 +70,20 @@ public class PositionController{
 		}
 		return null;
 	}
-
-	public void changePositionPriority(Position pos, int priority){
-		db.executeUpdate("Change Position " + pos.getTitle() + " to priority " + priority,
-				"update Position set priority = " + priority + " where position_id = " + pos.getID());
-		pos.setPriority(priority);
+	
+	public void changeTitle(int posID, String newTitle){
+		db.executeUpdate("Change Position with id " + posID + "to title " + newTitle,
+				"update Position set title = '" + newTitle + "' where position_id = " + posID);
 	}
 
-	
-	public void changePositionTitle(Position p, String newTitle) {
-		db.executeUpdate("Change Position" + p.getID() + "to title" + newTitle,
-				"update Position set title = " + newTitle + "where position_id = " + p.getID());
-		p.setTitle(newTitle);
+	public void changePriority(int posID, int priority){
+		db.executeUpdate("Change Position with id " + posID + " to priority " + priority,
+				"update Position set priority = " + priority + " where position_id = " + posID);
 	}
 	
-	
-	public void changePositionDescription(Position p, String newDesc) {
-		db.executeUpdate("Change Position" + p.getTitle() + "to description " + newDesc,
-				"update Position set description = " + newDesc + "where position_id = " + p.getID());
-		p.setDescription(newDesc);
+	public void changeDescription(int posID, String newDesc){
+		db.executeUpdate("Change Position with id " + posID + "to description " + newDesc,
+				"update Position set description = '" + newDesc + "' where position_id = " + posID);
 	}
 	
 	public void removePosition(int positionID){

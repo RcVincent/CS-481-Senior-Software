@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
@@ -379,8 +380,7 @@ public class Database{
 		List<Position> posList = initData.getInitialPositions();
 		List<User> userList = initData.getInitialUsers();
 		List<SOP> sopList = initData.getInitialSOPs();
-		String[] perms = initData.getInitialPermissions();
-		String[] permNames = initData.getInitialPermissionNames();
+		ArrayList<EnumPermission> perms = initData.getInitialPermissions();
 		int[] permIds = initData.getInitialPermissionIDs();
 		int id = 0;
 		
@@ -420,14 +420,15 @@ public class Database{
 			}
 		}
 		
-		for(int i = 0; i < perms.length; i++) {
-			names.add("Insert Permission " + permNames[i]);
-			sqls.add("insert into Permission (permission) " +
-			" values ('" + perms[i] + "')");
+		for(int i = 0; i < perms.size(); i++){
+			EnumPermission perm = perms.get(i);
+			names.add("Insert Permission " + perm.getPerm() + " with id " + perm.getID());
+			sqls.add("insert into Permission (perm_id, permission) " +
+			" values (" + perm.getID() + ", '" + perm.getPerm() + "')");
 		}
 		
-		for(Position p: posList) {
-			names.add("Insert Position " + p.getTitle() + " and Permission " + permNames[permIds[id] - 1]);
+		for(Position p: posList){
+			names.add("Insert Position " + p.getTitle() + " and Permission " + perms.get(permIds[id] - 1).getPerm());
 			sqls.add("insert into PositionPermission (position_id, perm_id) " +
 			" values (" + p.getID() + ", " + permIds[id] + ")");
 			id++;
