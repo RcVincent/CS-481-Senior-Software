@@ -135,7 +135,7 @@ public class EditPositionServlet extends HttpServlet{
 				}
 				else {
 					//change the position priority 
-					pc.changePositionPriority(id, newPriority);
+					pc.changePriority(id, newPriority);
 					System.out.println("Position priority successfully changed");
 				}
 			}

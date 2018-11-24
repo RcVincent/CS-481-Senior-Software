@@ -71,7 +71,7 @@ public class PositionController{
 		return null;
 	}
 
-	public void changePositionPriority(int id, int priority){
+	public void changePriority(int id, int priority){
 		db.executeUpdate("Change Position with id" + id + " to priority " + priority,
 				"update Position set priority = " + priority + " where position_id = " + id);
 	}
@@ -136,4 +136,5 @@ public class PositionController{
 		} 
 		return false;
 	}
+
 }
