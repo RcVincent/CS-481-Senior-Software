@@ -157,4 +157,3 @@ public class EditPositionServlet extends HttpServlet{
 		loadPosition(req);
 	}
 }
-

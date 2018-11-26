@@ -1,7 +1,9 @@
 package edu.ycp.cs481.db;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
@@ -13,7 +15,6 @@ public class InitialData {
 	private Position p1, p2, p3;
 	private ArrayList<SOP> sList, p1reqs;	
 	private SOP s1, s2, p1req1, p1req2;
-	private String[] perms, permNames;
 	private int[] permIds;
 	
 	public InitialData() {
@@ -21,9 +22,6 @@ public class InitialData {
 		pList = new ArrayList<Position>();
 		sList = new ArrayList<SOP>();
 		p1reqs = new ArrayList<SOP>();
-		perms = new String[6];
-		permNames = new String[6];			// start with 2, work our way up. We won't need that many.
-		
 		
 		p1 = new Position();
 		p1.setID(1);
@@ -116,33 +114,16 @@ public class InitialData {
 		pList.add(p2);
 		pList.add(p3);
 		
-		permNames[0] = "All";
-		perms[0] = "all";
-		
-		permNames[1] = "Create Position";
-		perms[1] = "createPosition";
-
-		permNames[2] = "Create SOP";
-		perms[2] = "createSOP";
-		
-		permNames[3] = "Create User";
-		perms[3] = "createUser";
-		
-		permNames[4] = "Have Subordinates";
-		perms[4] = "haveSubordinates";
-		
-		permNames[5] = "Search Users";
-		perms[5] = "searchUsers";
-		
 		permIds = new int[pList.size()];
 		
+		// TODO: Rework initial permissions to positions
 		permIds[0] = 1;
 		permIds[1] = 4;
 		permIds[2] = 4;
 	}
 
 
-	public ArrayList<User> getInitialUsers() {
+	public ArrayList<User> getInitialUsers(){
 		return uList;
 	}
 	
@@ -154,12 +135,8 @@ public class InitialData {
 		return sList;
 	}
 	
-	public String[] getInitialPermissions() {
-		return perms;
-	}
-	
-	public String[] getInitialPermissionNames() {
-		return permNames;
+	public ArrayList<EnumPermission> getInitialPermissions(){
+		return new ArrayList<EnumPermission>(Arrays.asList(EnumPermission.values()));
 	}
 	
 	public int[] getInitialPermissionIDs() {

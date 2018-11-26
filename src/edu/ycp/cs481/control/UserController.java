@@ -50,17 +50,7 @@ public class UserController{
 	}
 	
 	public void insertQuarantineUser(String email, String password, String firstName, String lastName) {
-		// Generate a 10 digit string
-		int leftLimit = 33;
-	    int rightLimit = 126;
-	    Random random = new Random();
-	    StringBuilder buffer = new StringBuilder(10);
-	    for (int i = 0; i < 10; i++) {
-	        int randomLimitedInt = leftLimit + (int) 
-	          (random.nextFloat() * (rightLimit - leftLimit + 1));
-	        buffer.append((char) randomLimitedInt);
-	    }
-	    String verificationString = buffer.toString();
+	    String verificationString = generateString();
 	    
 		// Hash the password. We assure this is only called once by only hashing the password
 		// in insertUser if it's being called with a positionID different than 2
@@ -176,18 +166,27 @@ public class UserController{
 				"update User set password = '" + hashPassword(newPass) + "' where " + "user_id = " + userID);
 	}
 	
-	public void resetPassword(String email) {
+	public String generateString() {
 		// Generate a 10 digit string
-				int leftLimit = 33;
-			    int rightLimit = 126;
-			    Random random = new Random();
-			    StringBuilder buffer = new StringBuilder(10);
-			    for (int i = 0; i < 10; i++) {
-			        int randomLimitedInt = leftLimit + (int) 
-			          (random.nextFloat() * (rightLimit - leftLimit + 1));
-			        buffer.append((char) randomLimitedInt);
-			    }
-			    String password = buffer.toString();
+		int leftLimit = 33;
+		int rightLimit = 126;
+		Random random = new Random();
+		StringBuilder buffer = new StringBuilder(10);
+		for (int i = 0; i < 10; i++) {
+		    int randomLimitedInt = leftLimit + (int) 
+		      (random.nextFloat() * (rightLimit - leftLimit + 1));
+		    buffer.append((char) randomLimitedInt);
+		}
+		String password = buffer.toString();
+		return password;
+	}
+	
+	public void resetPasswordEmail(String email) {
+		
+	}
+	
+	public void resetPassword(String email) {
+		String password = generateString();
 		
 		db.executeUpdate("Reset User Password", 
 				"update User set password = '" + hashPassword(password) + "' where email = '" + email + "'");

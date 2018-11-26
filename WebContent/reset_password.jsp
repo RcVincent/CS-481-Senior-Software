@@ -23,7 +23,34 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="submit" class="btn btn-info">Submit</button>
+				<button type="submit" name="doThings" value="sendEmail" class="btn btn-info">Submit</button>
+			</div>
+		</div>
+	</form>
+	<br>
+	<form  class="form-horizontal" method="post">
+		<c:if test="${! empty errorMessage}">
+			<div class="row">
+				<div class="col">
+					<p class="alert alert-warning">${errorMessage}</p>
+				</div>
+			</div>
+		</c:if>
+		<div class="form-group row">
+					<label for="pin" class="control-label col-2">Pin:</label>
+					<input type="text" class="form-control col-10" id="pin" name="pin" value="${pin}">
+		</div>
+		<div class="form-group row">
+					<label for="newPassword" class="control-label col-2">New Password:</label>
+					<input type="password" class="form-control col-10" id="newPassword" name="newPassword" value="${newPassword}">
+		</div>
+		<div class="form-group row">
+					<label for="newPasswordConfirm" class="control-label col-2">Confirm Password:</label>
+					<input type="password" class="form-control col-10" id="newPasswordConfirm" name="newPasswordConfirm" value="${newPasswordConfirm}">
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" name="doThings" value="changePassword" class="btn btn-info">Submit</button>
 			</div>
 		</div>
 	</form>
