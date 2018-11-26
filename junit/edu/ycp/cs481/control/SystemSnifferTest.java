@@ -1,17 +1,21 @@
 package edu.ycp.cs481.control;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.Position;
-import edu.ycp.cs481.control.SystemSnifferController;
+import edu.ycp.cs481.control.ThePinkerton;
 
 public class SystemSnifferTest {
 	
-	private SystemSnifferController s; 
-	private User admin, user, manager;
+	private ThePinkerton s; 
+	private User admin, user, manager, failUser;
 	
 	private SOP s1, s2, s3, s4, s5, s6, s7, s8, s9, s10; 
 	private Position adminP, userP, managerP; 
@@ -20,43 +24,52 @@ public class SystemSnifferTest {
 	
 	@Before 
 	public void setUp() {
+		
+		s = new ThePinkerton(); 
+		
 		userList = new ArrayList<User>(); 
 		 
-		
 		adminReqs = new ArrayList<SOP>(); 
 		userReqs = new ArrayList<SOP>(); 
 		managerReqs = new ArrayList<SOP>();
 		
 		//create 3 new users for testing two valid one non valid 
 		admin = new User(); 
-		//admin.setAdminFlag(true);
 		admin.setArchived(false);
 		admin.setEmail("oscarWinner@gmail.com");
 		admin.setPassword("legendary");
 		admin.setID(14);
 		admin.setFirstName("Guillermo");
 		admin.setLastName("Del-Toro");
-		//admin.setPosition(adminP);
+		admin.setPosition(adminP);
 		
 		user = new User();
-		//user.setAdminFlag(false);
 		user.setArchived(true);
 		user.setID(33);
 		user.setEmail("zod@krypton.com");
 		user.setFirstName("General");
 		user.setLastName("Zod");
 		user.setPassword("imAPrick");
-		//user.setPosition(userP);
+		user.setPosition(userP);
 		
 		manager = new User(); 
-		//manager.setAdminFlag(false);
+		
 		manager.setArchived(false);
 		manager.setEmail("headOfTheClub@SOA.com");
 		manager.setPassword("weRunGuns");
 		manager.setFirstName("Clay");
 		manager.setLastName("Marrow");
 		manager.setID(89);
-		//manager.setPosition(managerP);
+		manager.setPosition(managerP);
+		
+		failUser = new User(); 
+		failUser.setEmail("rvincent@ycp.edu");
+		failUser.setFirstName("Ryan");
+		failUser.setLastName("Vincent");
+		failUser.setArchived(false);
+		failUser.setPassword("ppSH");
+		failUser.setLockedOut(false);
+		
 		
 		userList.add(admin);
 		userList.add(user);
@@ -87,48 +100,68 @@ public class SystemSnifferTest {
 		admin.setPosition(adminP);
 		user.setPosition(userP);
 		manager.setPosition(managerP);
+		failUser.setPosition(userP);
+		
 		//create a set of bare-bones SOPs for basic population testing 
 		s1 = new SOP();
 		s1.setID(1);
 		s1.setComplete(false);
+		s1.setPriority(2);
+		s1.setVersion(1);
 		
 		s2 = new SOP();
 		s2.setID(2);
 		s2.setComplete(false);
+		s2.setPriority(8);
+		s2.setVersion(2);
 		
 		s3 = new SOP();
 		s3.setID(3);
 		s3.setComplete(false);
-		
+		s3.setPriority(7);
+		s3.setVersion(1);
 		s4 = new SOP();
+		
 		s4.setID(4);
 		s4.setComplete(false);
+		s4.setPriority(3);
+		s4.setVersion(5);
 		
 		s5 = new SOP();
 		s5.setID(5);
 		s5.setComplete(false);
+		s5.setPriority(5);
+		s5.setVersion(1);
 		
 		s6 = new SOP();
 		s6.setID(6);
-		s1.setComplete(false);
+		s6.setComplete(false);
+		s6.setPriority(10);
+		s6.setVersion(2);
 		
 		s7 = new SOP();
 		s7.setID(7);
 		s7.setComplete(false);
+		s7.setPriority(9); 
+		s7.setVersion(2);
 		
 		s8 = new SOP();
 		s8.setID(8);
 		s8.setComplete(false);
+		s8.setPriority(4);
+		s8.setVersion(1);
 		
 		s9 = new SOP();
 		s9.setID(9);
 		s9.setComplete(false);
-		
+		s9.setPriority(6);
+		s9.setVersion(3);
 		
 		s10 = new SOP();
 		s10.setID(10);
 		s10.setComplete(false);
-		
+		s10.setPriority(1);
+		s10.setVersion(8);
 		//add sops to the user position ArrayList
 		userReqs.add(s2);
 		userReqs.add(s5);
@@ -149,5 +182,46 @@ public class SystemSnifferTest {
 		managerReqs.add(s7);
 		managerReqs.add(s8);
 		managerReqs.add(s9);
+	}
+	
+	
+	@Test
+	public void testDisplayDoneList() {
+		s3.setComplete(true);
+		s4.setComplete(true);
+		s10.setComplete(true);
+		
+		System.out.println("Printing the completed SOP list");
+		s.setAndshowDoneList(adminP);
+	}
+	
+	@Test
+	public void testDisplayToDoList() {
+		
+		System.out.println();
+		System.out.println("Printing out the to do SOP list");
+		s.setAndShowToDoList(userP);
+	}
+	
+	@Test
+	public void testAreGaps() {
+		
+		boolean AreGapstest = s.checkIfToDoIsEmpty(failUser.getPosition());
+		assertTrue(AreGapstest);
+		System.out.println();
+		s1.setComplete(true);
+		s3.setComplete(true);
+		s4.setComplete(true);
+		s5.setComplete(true);
+		s10.setComplete(true);
+		
+		boolean AreGapsTest2 = s.checkIfToDoIsEmpty(adminP);
+		assertFalse(AreGapsTest2);
+		System.out.println();
+	}
+	
+	@Test
+	public void testSniffDeeply() {
+		s.SniffDeeply();
 	}
 }

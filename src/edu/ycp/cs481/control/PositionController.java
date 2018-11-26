@@ -70,6 +70,24 @@ public class PositionController{
 		}
 		return null;
 	}
+
+
+	public void changePriority(int id, int priority){
+		db.executeUpdate("Change Position with id" + id + " to priority " + priority,
+				"update Position set priority = " + priority + " where position_id = " + id);
+	}
+
+	
+	public void changePositionTitle(int id, String newTitle) {
+		db.executeUpdate("Change Position with id" + id + "to title" + newTitle,
+				"update Position set title = " + newTitle + "where position_id = " + id);
+	}
+	
+	
+	public void changePositionDescription(int id, String newDesc) {
+		db.executeUpdate("Change Position with id" + id + "to description " + newDesc,
+				"update Position set description = " + newDesc + "where position_id = " + id);	
+
 	
 	public void changeTitle(int posID, String newTitle){
 		db.executeUpdate("Change Position with id " + posID + "to title " + newTitle,
@@ -84,6 +102,7 @@ public class PositionController{
 	public void changeDescription(int posID, String newDesc){
 		db.executeUpdate("Change Position with id " + posID + "to description " + newDesc,
 				"update Position set description = '" + newDesc + "' where position_id = " + posID);
+
 	}
 	
 	public void removePosition(int positionID){
@@ -134,4 +153,5 @@ public class PositionController{
 		} 
 		return false;
 	}
+
 }
