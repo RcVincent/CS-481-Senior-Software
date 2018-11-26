@@ -87,22 +87,6 @@ public class PositionController{
 	public void changePositionDescription(int id, String newDesc) {
 		db.executeUpdate("Change Position with id" + id + "to description " + newDesc,
 				"update Position set description = " + newDesc + "where position_id = " + id);	
-
-	
-	public void changeTitle(int posID, String newTitle){
-		db.executeUpdate("Change Position with id " + posID + "to title " + newTitle,
-				"update Position set title = '" + newTitle + "' where position_id = " + posID);
-	}
-
-	public void changePriority(int posID, int priority){
-		db.executeUpdate("Change Position with id " + posID + " to priority " + priority,
-				"update Position set priority = " + priority + " where position_id = " + posID);
-	}
-	
-	public void changeDescription(int posID, String newDesc){
-		db.executeUpdate("Change Position with id " + posID + "to description " + newDesc,
-				"update Position set description = '" + newDesc + "' where position_id = " + posID);
-
 	}
 	
 	public void removePosition(int positionID){
