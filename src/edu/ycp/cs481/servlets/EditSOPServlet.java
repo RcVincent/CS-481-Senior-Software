@@ -52,9 +52,10 @@ public class EditSOPServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		int id = Integer.parseInt(req.getParameter("sopID"));
 		SOPController sc = new SOPController();
+		SOP s = sc.searchForSOPs(id, false, null, false, null, -1, -1, -1).get(0);
 		String action = req.getParameter("doStuff");
 		boolean goodUpdate = true;
-		int version = Integer.parseInt("version");
+		int version = s.getVersion();
 		
 		if(action.equalsIgnoreCase("archiveSOP")){
 			sc.archiveSOP(id);
@@ -108,28 +109,6 @@ public class EditSOPServlet extends HttpServlet{
 				}
 			}
 		}
-		/*else if(action.equalsIgnoreCase("changeVersion")){
-			String newVersionStr = req.getParameter("newVersion");
-			String newVersionConfirmStr = req.getParameter("newVersionConfirm");
-			
-			if(newVersionStr == null || newVersionStr.equalsIgnoreCase("")){
-				req.setAttribute("versionError", "Please enter a number!");
-				goodUpdate = false;
-			}
-			if(!newVersionStr.equalsIgnoreCase(newVersionConfirmStr)){
-				req.setAttribute("versionConfirmError", "The versions don't match!");
-				goodUpdate = false;
-			}
-			if(goodUpdate){
-				int newVersion = Integer.parseInt(req.getParameter("newVersion"));
-				if(newVersion <= 0){
-					req.setAttribute("versionError", "Version must be greater than 0!");
-				}else{
-					sc.changeVersion(id, newVersion);
-					req.setAttribute("successMessage", "Updated version to " + newVersion + "!");
-				}
-			}
-		}*/
 		
 		else if(action.equalsIgnoreCase("changeDescription")){
 			String newDescription = req.getParameter("newDescription");
