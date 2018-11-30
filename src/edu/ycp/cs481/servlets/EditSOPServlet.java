@@ -51,18 +51,20 @@ public class EditSOPServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		int id = Integer.parseInt(req.getParameter("sopID"));
-		
 		SOPController sc = new SOPController();
 		String action = req.getParameter("doStuff");
 		boolean goodUpdate = true;
+		int version = Integer.parseInt("version");
 		
 		if(action.equalsIgnoreCase("archiveSOP")){
 			sc.archiveSOP(id);
 			req.setAttribute("successMessage", "Archived SOP!");
-		}else if(action.equalsIgnoreCase("unarchiveSOP")){
+		}
+		else if(action.equalsIgnoreCase("unarchiveSOP")){
 			sc.unarchiveSOP(id);
 			req.setAttribute("successMessage", "Unarchived SOP!");
-		}else if(action.equalsIgnoreCase("changeTitle")){
+		}
+		else if(action.equalsIgnoreCase("changeTitle")){
 			String newTitle = req.getParameter("newTitle");
 			String newTitleConfirm = req.getParameter("newTitleConfirm");
 			
@@ -76,8 +78,12 @@ public class EditSOPServlet extends HttpServlet{
 			}
 			if(goodUpdate){
 				sc.changeTitle(id, newTitle);
+				version++;
+				sc.changeVersion(id, version);
 				req.setAttribute("successMessage", "Updated Title to " + newTitle + "!");
 			}
+			
+			
 		}else if(action.equalsIgnoreCase("changePriority")){
 			String newPriorityStr = req.getParameter("newPriority");
 			String newPriorityConfirmStr = req.getParameter("newPriorityConfirm");
@@ -96,10 +102,13 @@ public class EditSOPServlet extends HttpServlet{
 					req.setAttribute("priorityError", "Priority must be between 1 and 10!");
 				}else{
 					sc.changePriority(id, newPriority);
+					version++;
+					sc.changeVersion(id, version);
 					req.setAttribute("successMessage", "Updated priority to " + newPriority + "!");
 				}
 			}
-		}else if(action.equalsIgnoreCase("changeVersion")){
+		}
+		/*else if(action.equalsIgnoreCase("changeVersion")){
 			String newVersionStr = req.getParameter("newVersion");
 			String newVersionConfirmStr = req.getParameter("newVersionConfirm");
 			
@@ -120,10 +129,15 @@ public class EditSOPServlet extends HttpServlet{
 					req.setAttribute("successMessage", "Updated version to " + newVersion + "!");
 				}
 			}
-		}else if(action.equalsIgnoreCase("changeDescription")){
+		}*/
+		
+		else if(action.equalsIgnoreCase("changeDescription")){
 			String newDescription = req.getParameter("newDescription");
 			sc.changeDescription(id, newDescription);
+			version++;
+			sc.changeVersion(id, version);
 			req.setAttribute("successMessage", "Updated description!");
+			
 		}
 		loadSOP(req);
 		req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
