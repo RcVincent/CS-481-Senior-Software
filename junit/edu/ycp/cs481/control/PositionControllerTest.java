@@ -28,12 +28,12 @@ public class PositionControllerTest {
 		sopList = new ArrayList<SOP>(); 
 		
 		pos1 = new Position(); 
-		pos1.setID(2);
+		pos1.setID(1);
 		pos1.setPriority(1);
 		pos1.setTitle("Admin");
 		
 		pos2 = new Position(); 
-		pos2.setID(1);
+		pos2.setID(2);
 		pos2.setPriority(1);
 		pos2.setTitle("CEO");
 		
@@ -104,11 +104,11 @@ public class PositionControllerTest {
 	public void testGetPositionByID() {
 		List<Position> testList = new ArrayList<Position>(); 
 		int searchID = 2;
-		testList = poscontrol.searchForPositions(searchID, false, "", false, "", 0);
+		testList = poscontrol.searchForPositions(searchID, false, "", false, "", -1);
 		
 		assertEquals(1, testList.size());
 		Position p = testList.get(0);
-		assertEquals(1, p.getPriority());
+		assertEquals(6, p.getPriority());
 		assertEquals("Admin", p.getTitle());
 		
 	}
@@ -130,16 +130,16 @@ public class PositionControllerTest {
 	public void testSearchByPriority() {
 		List<Position> testList = new ArrayList<Position>();
 		int priority = 1; 
-		testList = poscontrol.searchForPositions(0, false, "", false, "", priority);
-		assertEquals(2, testList.size());
+		testList = poscontrol.searchForPositions(-1, false, "", false, "", priority);
+		assertEquals(1, testList.size());
 		
 		Position p1 = testList.get(0);
-		Position p2 = testList.get(1);
+		//Position p2 = testList.get(1);
 		
-		assertEquals(2, p1.getID());
-		assertEquals(1, p2.getID()); 
+		assertEquals(1, p1.getID());
+		//assertEquals(1, p2.getID()); 
 		assertEquals(1, p1.getPriority());
-		assertEquals(1, p2.getPriority()); 
+		//assertEquals(1, p2.getPriority()); 
 	}
 	
 	
@@ -154,11 +154,5 @@ public class PositionControllerTest {
 		
 		assertEquals(3, testPos.getPriority()); 
 	}
-	
-	/*
-	@Test
-	public void testAddSOPtoPosition() {
-		
-	}
-	 */
+	 
 }

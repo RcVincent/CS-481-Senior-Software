@@ -181,9 +181,6 @@ public class UserController{
 		return password;
 	}
 	
-	public void resetPasswordEmail(String email) {
-		
-	}
 	
 	public void resetPassword(String email) {
 		String password = generateString();

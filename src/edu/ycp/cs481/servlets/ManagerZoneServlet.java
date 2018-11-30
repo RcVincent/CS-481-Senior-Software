@@ -28,7 +28,7 @@ public class ManagerZoneServlet extends HttpServlet{
 				//loadUser(req);
 				req.getRequestDispatcher("/.jsp").forward(req, resp);
 			}else{
-				session.setAttribute("error", "You don't have permission to edit SOPs!");
+				session.setAttribute("error", "You don't have permission to edit subordinates!");
 				resp.sendRedirect(req.getContextPath() + "/user_home");
 			}
 		}
