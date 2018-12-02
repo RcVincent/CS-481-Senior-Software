@@ -136,6 +136,24 @@
   	<url-pattern>/search_system</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>CompleteSOP</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.CompleteSOPServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>CompleteSOP</servlet-name>
+  	<url-pattern>/CompleteSOP</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>EmployeePosition</servlet-name>
+  	<servlet-class>edu.ycp.cs481.servlets.EmployeeProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>EmployeePosition</servlet-name>
+  	<url-pattern>/employeeProfile</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
   	<welcome-file>user_home</welcome-file>
   </welcome-file-list>
