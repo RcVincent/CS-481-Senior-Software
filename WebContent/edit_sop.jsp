@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
+<p class="note">Want to return to the search page? <a href="./search_sops">Back</a></p>
 <div class="fluid-container">
 	<div class="row">
 		<div class="col">
@@ -137,46 +137,7 @@
 			</div>
 		</div>
 	</form>
-	<form class="form-horizontal" method="post">
-		<input type="hidden" name="sopID" value="${sopID}">
-		<div class="row">
-			<div class="col-1">
-			
-			</div>
-			<div class="col-5">
-				<c:if test="${!empty versionError}">
-					<p class="alert alert-warning">${versionError}</p>
-				</c:if>
-			</div>
-			<div class="col-1">
-			
-			</div>
-			<div class="col-5">
-				<c:if test="${!empty versionConfirmError}">
-					<p class="alert alert-warning">${versionConfirmError}</p>
-				</c:if>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="form-group row">
-					<label for="newVersion" class="control-label col-2">New Version:</label>
-					<input type="number" class="form-control col-10" id="newVersion" name="newVersion" value="${newVersion}">
-				</div>
-			</div>
-			<div class="col">
-				<div class="form-group row">
-					<label for="newVersionConfirmation" class="control-label col-2">Confirm Version :</label>
-					<input type="number" class="form-control col-10" id="newPriorityConfirm" name="newVersionConfirm" value="${newVersionConfirm}">
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<button type="submit" name="doStuff" value="changeVersion" class="btn btn-info">Change Version</button>
-			</div>
-		</div>
-	</form>
+	
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="sopID" value="${sopID}">
 		<div class="row">

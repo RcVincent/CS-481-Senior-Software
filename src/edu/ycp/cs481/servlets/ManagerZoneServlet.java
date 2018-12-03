@@ -75,9 +75,7 @@ public class ManagerZoneServlet extends HttpServlet{
 						uc.assignSOP(userID, sopID);
 						User u = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
 						Position p = u.getPosition();
-						SOP s = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
-						//p.getCompletedSOPs(p).add(s);
-						
+						pc.insertPositionSOP(p.getID(), sopID);
 						System.out.println("Added sop with ID "+ sopID +" assigned to user with ID " + userID);
 					}
 				}

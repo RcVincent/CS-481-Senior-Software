@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
+<p class="note">Want to return to the search page? <a href="./search_positions">Back</a></p>
 <div class="fluid-container">
 	<div class="row">
 		<div class="col">
@@ -20,12 +20,12 @@
 		<div class="col-6">
 			<h1>Current Position Details</h1>
 		</div>
-		<div class="col-6 text-right">
+		<!-- <div class="col-6 text-right">
 			<form class="form-horizontal" method="post">
 				<input type="hidden" name="posID" value="${posID}">
 				<button type="submit" name="doStuff" value="deletePosition" class="btn btn-danger">Delete Position</button>
 			</form>
-		</div>
+		</div> --> 
 	</div>
 	<div class="row">
 		<div class="col">
@@ -46,11 +46,7 @@
 			${description}
 		</div>
 	</div>
-	<div class="row">
-		<div class="col text-center">
-			Requirements TBA
-		</div>
-	</div>
+	
 	<h2>Change Basic Details</h2>
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="posID" value="${posID}">
@@ -76,13 +72,13 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitle" class="control-label col-2">New Title:</label>
-					<input type="text" class="form-control col-10" id="newTitle" name="newTitle" value="${newTitle}">
+					<input type="text" class="form-control col-8" id="newTitle" name="newTitle" value="${newTitle}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Title:</label>
-					<input type="text" class="form-control col-10" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
+					<input type="text" class="form-control col-8" id="newTitleConfirm" name="newTitleConfirm" value="${newTitleConfirm}">
 				</div>
 			</div>
 		</div>
@@ -116,19 +112,50 @@
 			<div class="col">
 				<div class="form-group row">
 					<label for="newPriority" class="control-label col-2">New Priority:</label>
-					<input type="number" class="form-control col-10" id="newPriority" name="newPriority" value="${newPriority}">
+					<input type="number" class="form-control col-8" id="newPriority" name="newPriority" value="${newPriority}">
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group row">
 					<label for="newTitleConfirm" class="control-label col-2">Confirm Priority :</label>
-					<input type="number" class="form-control col-10" id="newPriorityConfirm" name="newPriorityConfirm" value="${newPriorityConfirm}">
+					<input type="number" class="form-control col-8" id="newPriorityConfirm" name="newPriorityConfirm" value="${newPriorityConfirm}">
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
 				<button type="submit" name="doStuff" value="changePriority" class="btn btn-info">Change Priority</button>
+			</div>
+		</div>
+	</form>
+	
+	<form class="form-horizontal" method="post">
+	<input type="hidden" name="posID" value="${posID}">
+		<div class="row">
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty sopIDError}">
+					<p class="alert alert-warning">${sopIDError}</p>
+				</c:if>
+			</div>
+			
+			<div class="col-1">
+			
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="sop_id" class="control-label col-2">SOP ID:</label>
+					<input type="number" class="form-control col-5" id="sop_id" name="sop_id" value="${sop_id}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" name="doStuff" value="assignSOP" class="btn btn-info">Assign SOP</button>
 			</div>
 		</div>
 	</form>

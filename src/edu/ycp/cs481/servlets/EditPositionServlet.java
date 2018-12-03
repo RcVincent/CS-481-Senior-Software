@@ -150,6 +150,7 @@ public class EditPositionServlet extends HttpServlet{
 				}
 				else {
 					pc.insertPositionSOP(id, sopID);
+					req.setAttribute("SuccessMessage", "SOP Assigned!");
 					System.out.println("SOP with id " + sopID + "assigned to the position with position id:" + id);
 				}
 			}
@@ -157,10 +158,10 @@ public class EditPositionServlet extends HttpServlet{
 		
 		/*
 		else if(action.equalsIgnoreCase("deletePosition")) {
-			pc.removePosition(p.getID());
+			pc.removePosition(id);
 			req.setAttribute("RemoveMessage", "Position removed from the DB.");
 			System.out.println("Position deleted.");
-			req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}*/
 
 		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);

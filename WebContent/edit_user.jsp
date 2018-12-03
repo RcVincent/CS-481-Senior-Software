@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
+<p class="note">Want to return to the search page? <a href="./search_users">Back</a></p>
 <div class="fluid-container">
 	<div class="row">
 		<div class="col">
