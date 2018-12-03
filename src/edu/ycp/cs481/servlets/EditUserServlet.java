@@ -8,11 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs481.control.SOPController;
+import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.EnumPermission;
 import edu.ycp.cs481.model.Position;
-import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
@@ -56,9 +55,11 @@ public class EditUserServlet extends HttpServlet {
 		int userID = Integer.parseInt(req.getParameter("userID"));
 		
 		UserController uc = new UserController();
-		SOPController sc = new SOPController(); 
+		PositionController pc = new PositionController(); 
 		String action = req.getParameter("editType");
-		boolean goodEdits = true;
+		User you = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
+		Position p = you.getPosition();
+		//boolean goodEdits = true;
 		
 		if(action.equalsIgnoreCase("archiveUser")) {
 			System.out.println("Archiving user with ID" + userID);
@@ -80,11 +81,12 @@ public class EditUserServlet extends HttpServlet {
 		}
 		else if(action.equalsIgnoreCase("changePosition")) {
 			int positionID = Integer.parseInt(req.getParameter("newPositionID"));
-			User thisUser = uc.searchForUsers(userID, -1, false, "", false, "", false, "", 0, -1).get(0);
 			if(positionID <= 0) {
 				req.setAttribute("positionIDError", "Invalid position ID, please try again.");
 			} else {
-				uc.changePosition(thisUser, positionID);
+				uc.changePosition(you, positionID);
+				req.setAttribute("successMessage", "User Position Changed!");
+				
 			}
 		}
 		
@@ -100,11 +102,9 @@ public class EditUserServlet extends HttpServlet {
 				}
 				else {
 					uc.assignSOP(userID, sopID);
-					User u = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
-					Position p = u.getPosition();
-					SOP s = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
-					p.getIncompleteSOPs(p).add(s);
+					pc.insertPositionSOP(p.getID(), sopID);
 					System.out.println("Added sop with ID "+sopID+"assigned to user with ID " + userID);
+					req.setAttribute("successMessage", "SOP Assigned to this user!");
 				}
 			}
 		}
