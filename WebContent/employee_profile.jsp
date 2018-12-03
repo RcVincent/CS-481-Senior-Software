@@ -8,27 +8,51 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<h1> Employee Profile <h1>
+<h1> Employee Profile </h1>
 <p class="note">Want to return to the Homepage? <a href="./user_home">Home</a></p>
 
 <div class="fluid-container">
 	<form class = "form-horizontal" method = "post">
-	<!-- TODO: Populate the sop List through the position -->
 		<div class="col-6">
 			<h1>Current Employee Details</h1> 	
 		</div>
+		<div class = "col">
+		
+		</div>
 		<div class="row">
 			<div class="col">
-				Firstname: ${firstName}
+				Firstname: ${firstname}
 			</div>
 			<div class="col">
-				Lastname: ${lastName}
+				Lastname: ${lastname}
 			</div>
 			
 			<div class = "col">
-				Position Title: ${PositionTitle}
+				Position Title: ${position_title}
 			</div>
 		</div>	
+		<div class = "col">
+		
+		</div>
+		<div class = "col"> 
+			<h1> Current Manager Details </h1>
+		</div>
+		
+		<div class= "row">
+			<div class = "col">
+				Manager First Name: ${ManagerFirstName}
+			</div>
+			<div class = "col">
+				Manager Last Name: ${ManagerLastName}
+			</div>
+			<div class = "col">
+				Manager Position Title: ${ManagerPositionTitle}
+			</div>
+		</div> 
+		
+		<div>
+			<h1> Current non finished SOPs </h1>
+		</div>
 			<div class="col">
 				Showing results ${(page*displaySize) + 1} - ${fn:length(sops) lt (((page+1)*displaySize) - 1)?fn:length(sops):(((page+1)*displaySize) - 1)} of ${fn:length(sops)}
 			</div>
@@ -49,7 +73,8 @@
 				<p><b>Priority</b></p>
 			</div>
 		</div>
-		<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize) - 1}" items="${sops}" var="current">
+		
+		<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize)}" items="${sops}" var="current">
 			<div class="row">
 				<div class="col-1 text-center">
 					<p><a href="employee_profile?sopID=${current.ID}">Edit</a>
@@ -93,16 +118,6 @@
 			<c:if test="${displaySize != 25}">
 				<div class="col-1">
 						<button type="submit" name="changeDisplaySize" value="25" class="btn btn-info">25</button>
-				</div>
-			</c:if>
-			<c:if test="${displaySize != 50}">
-				<div class="col-1">
-						<button type="submit" name="changeDisplaySize" value="50" class="btn btn-info">50</button>
-				</div>
-			</c:if>
-			<c:if test="${displaySize != 100}">
-				<div class="col-1">
-						<button type="submit" name="changeDisplaySize" value="100" class="btn btn-info">100</button>
 				</div>
 			</c:if>
 			<div class="col-2 text-center">

@@ -17,13 +17,29 @@ import edu.ycp.cs481.model.Position;
 
 @SuppressWarnings("serial")
 public class EmployeeProfileServlet extends HttpServlet{
-
+	
+	private void loadUser(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		int user_id = (int) session.getAttribute("user_id");
+		UserController uc = new UserController(); 
+		User u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", -1, -1).get(0);
+		req.setAttribute("user_id", u.getID());
+		req.setAttribute("email", u.getEmail());
+		req.setAttribute("firstname", u.getFirstName());
+		req.setAttribute("lastname", u.getLastName());
+		req.setAttribute("archived", u.isArchived());
+		req.setAttribute("locked_out", u.isLockedOut());
+		req.setAttribute("position_title", u.getPosition().getTitle());
+		
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			loadUser(req);
 			req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);
 		}
 	}
@@ -63,9 +79,9 @@ public class EmployeeProfileServlet extends HttpServlet{
 		Position managerP = manager.getPosition();
 		
 		//set information for display in the jsp
-		req.setAttribute("firstName", you.getFirstName());
-		req.setAttribute("lastName", you.getLastName());
-		req.setAttribute("PositionTitle", P.getTitle());
+		//req.setAttribute("firstName", you.getFirstName());
+		//req.setAttribute("lastName", you.getLastName());
+		//req.setAttribute("PositionTitle", P.getTitle());
 		
 		//set manager info to be displayed 
 		req.setAttribute("ManagerFirstName", manager.getFirstName());
@@ -75,6 +91,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 		ArrayList<SOP> sops = P.getIncompleteSOPs(P);
 		req.setAttribute("sops", sops); 
 		
+		loadUser(req);
 		req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);
 	}
 
