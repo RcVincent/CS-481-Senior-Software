@@ -59,15 +59,23 @@ public class EmployeeProfileServlet extends HttpServlet{
 			req.setAttribute("displaySize", currentDisplaySize);
 		}
 		
+		User manager = uc.getManagersOfUser(userID).get(0);
+		Position managerP = manager.getPosition();
 		
 		//set information for display in the jsp
-		req.setAttribute("firstName" you.getFirstName());
+		req.setAttribute("firstName", you.getFirstName());
 		req.setAttribute("lastName", you.getLastName());
 		req.setAttribute("PositionTitle", P.getTitle());
+		
+		//set manager info to be displayed 
+		req.setAttribute("ManagerFirstName", manager.getFirstName());
+		req.setAttribute("ManagerLastName", manager.getLastName());
+		req.setAttribute("ManagerPositionTitle", managerP.getTitle());
 		
 		ArrayList<SOP> sops = P.getIncompleteSOPs(P);
 		req.setAttribute("sops", sops); 
 		
+		req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);
 	}
 
 }

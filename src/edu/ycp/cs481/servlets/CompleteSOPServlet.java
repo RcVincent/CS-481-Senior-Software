@@ -10,10 +10,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.UserController;
+import edu.ycp.cs481.model.SOP;
+import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.SOPController;
+
 
 @SuppressWarnings("serial")
 public class CompleteSOPServlet extends HttpServlet {
+	
+	private void loadSOP(HttpServletRequest req){
+		// TODO: Error checking
+		int sopID = Integer.parseInt(req.getParameter("sopID"));
+		SOPController sc = new SOPController();
+		SOP sop = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+		req.setAttribute("sopID", sop.getID());
+		req.setAttribute("title", sop.getTitle());
+		req.setAttribute("priority", sop.getPriority());
+		req.setAttribute("version", sop.getVersion());
+		req.setAttribute("authorID", sop.getAuthorID());
+		req.setAttribute("description", sop.getDescription());
+		req.setAttribute("archived", sop.isArchived());
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
@@ -21,6 +39,7 @@ public class CompleteSOPServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
 			//
+			loadSOP(req);
 			req.getRequestDispatcher("/complete_sop.jsp").forward(req, resp);
 		}
 	}
@@ -30,6 +49,7 @@ public class CompleteSOPServlet extends HttpServlet {
 		int sopID =  Integer.parseInt(req.getParameter("sopID"));
 		UserController uc = new UserController(); 
 		SOPController sc = new SOPController(); 
+		PositionController pc = new PositionController(); 
 		HttpSession session = req.getSession();
 		int userID = (int) session.getAttribute("user_id");
 		
@@ -60,6 +80,7 @@ public class CompleteSOPServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/employeeProfile");
 		}
 		
+		loadSOP(req);
 		req.getRequestDispatcher("/complete_sop.jsp").forward(req, resp);
 	}
 }

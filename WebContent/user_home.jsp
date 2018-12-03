@@ -45,6 +45,10 @@
 		<div class="col-3 text-center">
 				<a href="account_settings" class="btn btn-info btn-block" role="button">Account Settings</a>
 		</div>
+		
+		<div class = "col text-center"> 
+			<a href="employeeProfile" class="btn btn-info btn-block" role="button">Employee Profile</a>	
+		</div>
 		<div class="col">
 		
 		</div>
@@ -120,8 +124,13 @@
 		
 		</div>
 		<div class="col text-center">
-			<a href="search_system" class="btn btn-info btn-block" role="button">Seinor Swiffer</a>
+			<a href="search_system" class="btn btn-info btn-block" role="button">The Pinkerton</a>
 		</div>
+		
+		<div class = "col text-center"> 
+			<a href="managerZone" class="btn btn-info btn-block" role="button">Managers Only</a>	
+		</div>
+		
 		<div class="col">
 		
 		</div>
