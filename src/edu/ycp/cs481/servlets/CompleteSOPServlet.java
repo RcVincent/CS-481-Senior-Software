@@ -46,8 +46,8 @@ public class CompleteSOPServlet extends HttpServlet {
 				sc.insertCompletedSOP(userID, sopID);
 				if(!uc.SOPisCompleted(userID, sopID)) {
 					System.out.println("There was a problem adding that SOP to the completed List");
-					resp.sendRedirect(req.getContextPath() + "/employeeProfile");
 					session.setAttribute("Error", "There was an issue sending the Completed SOP to the appropriate table.");
+					resp.sendRedirect(req.getContextPath() + "/employeeProfile");
 				}
 				else {
 					System.out.println("The sop was completed. Good for you.");
