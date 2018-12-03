@@ -35,15 +35,6 @@ public class EditPositionServlet extends HttpServlet{
 			UserController uc = new UserController();
 			int userID = (int) session.getAttribute("user_id");
 			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_POSITIONS)){
-				// TODO: Error checking
-				/*int posID = Integer.parseInt(req.getParameter("posID"));
-				PositionController pc = new PositionController();
-				Position pos = pc.searchForPositions(posID, false, null, false, null, -1).get(0);
-				req.setAttribute("ID", pos.getID());
-				req.setAttribute("oldTitle", pos.getTitle());
-				req.setAttribute("oldPriority", pos.getPriority());
-				req.setAttribute("oldDescription", pos.getDescription());
-				// TODO: Current Requirements*/
 				loadPosition(req); 
 				req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 			}else{
@@ -143,6 +134,25 @@ public class EditPositionServlet extends HttpServlet{
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
 			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+		}
+		
+		else if(action.equalsIgnoreCase("assignSOP")) {
+			String sop_id = req.getParameter("sop_id");
+			
+			if(sop_id.equalsIgnoreCase("") || sop_id == null) {
+				System.out.println("Invalid ID, do not add the SOP to this position");
+			} 
+			else {
+				int sopID = Integer.parseInt(sop_id);
+				if(sopID <= 0) {
+					System.out.println("Invalid SOP id, must be larger than 0");
+					req.setAttribute("sopIDError", "Invalid SOP id, please enter a valid ID.");
+				}
+				else {
+					pc.insertPositionSOP(id, sopID);
+					System.out.println("SOP with id " + sopID + "assigned to the position with position id:" + id);
+				}
+			}
 		}
 		
 		/*

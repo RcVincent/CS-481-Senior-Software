@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.EnumPermission;
+import edu.ycp.cs481.model.Position;
+import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
@@ -53,6 +56,7 @@ public class EditUserServlet extends HttpServlet {
 		int userID = Integer.parseInt(req.getParameter("userID"));
 		
 		UserController uc = new UserController();
+		SOPController sc = new SOPController(); 
 		String action = req.getParameter("editType");
 		boolean goodEdits = true;
 		
@@ -96,6 +100,10 @@ public class EditUserServlet extends HttpServlet {
 				}
 				else {
 					uc.assignSOP(userID, sopID);
+					User u = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
+					Position p = u.getPosition();
+					SOP s = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+					p.getIncompleteSOPs(p).add(s);
 					System.out.println("Added sop with ID "+sopID+"assigned to user with ID " + userID);
 				}
 			}

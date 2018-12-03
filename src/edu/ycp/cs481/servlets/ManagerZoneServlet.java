@@ -8,8 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.EnumPermission;
+import edu.ycp.cs481.model.Position;
+import edu.ycp.cs481.model.SOP;
+import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
 public class ManagerZoneServlet extends HttpServlet{
@@ -38,6 +43,8 @@ public class ManagerZoneServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		int userID = Integer.parseInt(req.getParameter("user_ID"));
 		UserController uc = new UserController(); 
+		SOPController sc = new SOPController(); 
+		PositionController pc = new PositionController(); 
 		HttpSession session = req.getSession();
 		int managerID = (int) session.getAttribute("user_id");
 		
@@ -66,6 +73,11 @@ public class ManagerZoneServlet extends HttpServlet{
 					}
 					else {
 						uc.assignSOP(userID, sopID);
+						User u = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
+						Position p = u.getPosition();
+						SOP s = sc.searchForSOPs(sopID, false, null, false, null, -1, -1, -1).get(0);
+						//p.getCompletedSOPs(p).add(s);
+						
 						System.out.println("Added sop with ID "+ sopID +" assigned to user with ID " + userID);
 					}
 				}
