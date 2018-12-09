@@ -158,11 +158,11 @@
   	<servlet-name>ManagerZone</servlet-name>
   	<servlet-class>edu.ycp.cs481.servlets.ManagerZoneServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
   	<servlet-name>ManagerZone</servlet-name>
   	<url-pattern>/managerZone</url-pattern>
   </servlet-mapping>
+  
   <welcome-file-list>
   	<welcome-file>user_home</welcome-file>
   </welcome-file-list>

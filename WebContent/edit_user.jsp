@@ -99,8 +99,11 @@
 		</div>
 	</form>
 	
-	<div class = col 3>
+	<div class = "col 3">
+	
 	</div>
+	
+	
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="user_id" value="${userID}">
 		<div class="row">
