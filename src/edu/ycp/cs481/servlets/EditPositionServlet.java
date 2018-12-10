@@ -83,16 +83,11 @@ public class EditPositionServlet extends HttpServlet{
 			String newPositionDescriptionConfirm = req.getParameter("newDescriptionConfirmation");
 			
 			//check if both fields are empty and if they are do not edit
-			if((newPositionDescription == null || newPositionDescription.equalsIgnoreCase("")) && newPositionDescriptionConfirm == null || newPositionDescriptionConfirm.equalsIgnoreCase("")) {
+			if(newPositionDescription == null || newPositionDescription.equalsIgnoreCase("")) {
 				//do not do the edit
 				System.out.println("Description field not changed.");
 
 			} 
-			//make sure the two fields are identical
-			else if(!newPositionDescription.equalsIgnoreCase(newPositionDescriptionConfirm)) {
-				req.setAttribute("changeDescriptionError", "Descriptions do not match!");
-				editError = true; 
-			}
 			else {
 				//change the description field
 				pc.changePositionDescription(id, newPositionDescription);
@@ -165,7 +160,8 @@ public class EditPositionServlet extends HttpServlet{
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 		}*/
 
-		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		loadPosition(req);
+		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
+		
 	}
 }
