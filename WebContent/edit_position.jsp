@@ -117,8 +117,8 @@
 			</div>
 			<div class="col">
 				<div class="form-group row">
-					<label for="newTitleConfirm" class="control-label col-2">Confirm Priority :</label>
-					<input type="number" class="form-control col-8" id="newPriorityConfirm" name="newPriorityConfirm" value="${newPriorityConfirm}">
+					<label for="newPriorityConfirmation" class="control-label col-2">Confirm Priority :</label>
+					<input type="number" class="form-control col-8" id="newPriorityConfirmation" name="newPriorityConfirmation" value="${newPriorityConfirmation}">
 				</div>
 			</div>
 		</div>

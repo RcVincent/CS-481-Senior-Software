@@ -4,5 +4,5 @@
 <!-- The Pinkerton JSP -->
 <html>
 
-
+	<h1> Hello World! I'm a very efficient pinkerton. </h1>
 </html>

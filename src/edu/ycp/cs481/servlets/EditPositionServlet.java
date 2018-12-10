@@ -75,12 +75,10 @@ public class EditPositionServlet extends HttpServlet{
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		//change the description
 		else if(action.equalsIgnoreCase("changeDescription")) {
 			String newPositionDescription = req.getParameter("newDescription");
-			String newPositionDescriptionConfirm = req.getParameter("newDescriptionConfirmation");
 			
 			//check if both fields are empty and if they are do not edit
 			if(newPositionDescription == null || newPositionDescription.equalsIgnoreCase("")) {
@@ -96,7 +94,6 @@ public class EditPositionServlet extends HttpServlet{
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		} 
 		
 		//change the priority
@@ -129,7 +126,6 @@ public class EditPositionServlet extends HttpServlet{
 			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
-			//req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);
 		}
 		
 		else if(action.equalsIgnoreCase("assignSOP")) {
