@@ -65,7 +65,8 @@ public class EditPositionServlet extends HttpServlet{
 			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm)) {
 				req.setAttribute("changeTitleError", "Titles do not match!");
 				editError = true; 
-			} else {
+			} 
+			else {
 				//change the title field
 				pc.changePositionTitle(id, newPositionTitle);
 				System.out.println("Position title successfully changed");
