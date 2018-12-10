@@ -72,6 +72,44 @@
 		</div>
 	</form> 
 	
+	<form class="form-horizontal" method="post">
+		<input type="hidden" name="user_id" value="${userID}">
+		<div class="row">
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty SubjectError}">
+					<p class="alert alert-warning">${SubjectError}</p>
+				</c:if>
+			</div>
+			<div class="col-1">
+			</div>	
+		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="newTitle" class="control-label col-2">Message Subject:</label>
+					<input type="text" class="form-control col-5" id="subject" name="subject" value="${subject}">
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="newTitle" class="control-label col-2">Message Contents:</label>
+					<textarea rows = "4" cols = "50" name = "newDescription"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" name="managerEdit" value="messageSubordinate" class="btn btn-info">Message User</button>
+			</div>
+		</div>
+	</form> 
 	
 </div>
 </body>

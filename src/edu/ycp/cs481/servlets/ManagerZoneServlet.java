@@ -12,6 +12,7 @@ import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.EnumPermission;
+import edu.ycp.cs481.model.Messenger;
 import edu.ycp.cs481.model.Position;
 import edu.ycp.cs481.model.SOP;
 import edu.ycp.cs481.model.User;
@@ -113,6 +114,25 @@ public class ManagerZoneServlet extends HttpServlet{
 			} else {
 				uc.removeSubordinate(managerID, userID);
 				System.out.println("Subordinate removed from manager");
+			}
+		}
+		
+		else if(action.equalsIgnoreCase("messageSubordinate")) {
+			String message = req.getParameter("Message_Contents");
+			if(message == null || message.equalsIgnoreCase("")) {
+				System.out.println("There is no message content, do not send one");
+			}
+			else {
+				User u = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
+				String Subject = req.getParameter("subject");
+				if(Subject == null || Subject.equalsIgnoreCase("")) {
+					req.setAttribute("SubjectError", "Email subjects cannot be left blank!");
+				}
+				else {
+					Messenger.main(new String[] {u.getEmail(), Subject, message});
+					System.out.println("Messaging user");
+					req.setAttribute("successMessage", "User will be emailed.");
+				}
 			}
 		}
 		//loadUser(req);
