@@ -103,6 +103,7 @@ public class EditUserServlet extends HttpServlet {
 				else {
 					uc.assignSOP(userID, sopID);
 					pc.insertPositionSOP(p.getID(), sopID);
+					
 					System.out.println("Added sop with ID "+sopID+"assigned to user with ID " + userID);
 					req.setAttribute("successMessage", "SOP Assigned to this user!");
 				}

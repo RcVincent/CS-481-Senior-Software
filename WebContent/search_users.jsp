@@ -66,6 +66,7 @@
 			<div class="row">
 				<div class="col-1 text-center">
 					<p><a href="edit_user?userID=${current.ID}">Edit</a>
+					<p><a href="manager_zone?userID=${current.ID}">Managers</a>
 				</div>
 				<div class="col-2 text-center">
 					<p>${current.ID} / ${current.employeeID}</p>

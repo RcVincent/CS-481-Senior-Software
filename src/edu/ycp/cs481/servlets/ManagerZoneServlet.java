@@ -44,7 +44,7 @@ public class ManagerZoneServlet extends HttpServlet{
 			int userID = (int) session.getAttribute("user_id");
 			if(uc.userHasPermission(userID, EnumPermission.ALL) || uc.userHasPermission(userID, EnumPermission.EDIT_USERS) || 
 					uc.userHasPermission(userID, EnumPermission.HAVE_SUBORDINATES)){
-				loadUser(req);
+				//loadUser(req);
 				req.getRequestDispatcher("/manager_zone.jsp").forward(req, resp);
 			}else{
 				session.setAttribute("error", "You don't have permission to edit subordinates!");
@@ -115,7 +115,7 @@ public class ManagerZoneServlet extends HttpServlet{
 				System.out.println("Subordinate removed from manager");
 			}
 		}
-		loadUser(req);
+		//loadUser(req);
 		req.getRequestDispatcher("/manager_zone.jsp").forward(req, resp);
 	}
 }
