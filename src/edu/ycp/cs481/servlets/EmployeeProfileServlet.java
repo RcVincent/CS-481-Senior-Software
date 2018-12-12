@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs481.control.PositionController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
@@ -48,6 +49,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession(); 
 		UserController uc = new UserController(); 
+		PositionController pc = new PositionController(); 
 		int userID = (int) session.getAttribute("user_id");
 		
 		User you = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
@@ -88,7 +90,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 		req.setAttribute("ManagerLastName", manager.getLastName());
 		req.setAttribute("ManagerPositionTitle", managerP.getTitle());
 		
-		ArrayList<SOP> sops = P.getIncompleteSOPs(P);
+		ArrayList<SOP> sops = pc.findSOPsOfPosition(P.getID());
 		req.setAttribute("sops", sops); 
 		
 		loadUser(req);
