@@ -47,7 +47,6 @@ public class EditPositionServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		int id = Integer.parseInt(req.getParameter("posID"));
-		boolean editError = false;
 		PositionController pc = new PositionController();
 		String action = req.getParameter("doStuff");
 		
@@ -65,16 +64,12 @@ public class EditPositionServlet extends HttpServlet{
 			//make sure the two fields are identical
 			else if(!newPositionTitle.equalsIgnoreCase(newPositionTitleConfirm)) {
 				req.setAttribute("changeTitleError", "Titles do not match!");
-				editError = true; 
 			} 
 			else {
 				//change the title field
 				pc.changePositionTitle(id, newPositionTitle);
 				System.out.println("Position title successfully changed");
-			}
-			
-			if(!editError) {
-				req.setAttribute("SuccessMessage", "Title successfully Changed!");
+				req.setAttribute("successMessage", "Title successfully Changed!");
 			}
 		}
 		//change the description
@@ -91,8 +86,6 @@ public class EditPositionServlet extends HttpServlet{
 				//change the description field
 				pc.changePositionDescription(id, newPositionDescription);
 				System.out.println("Position description successfully changed");
-			}
-			if(!editError) {
 				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
 			}
 		} 
@@ -109,14 +102,12 @@ public class EditPositionServlet extends HttpServlet{
 			//make sure the two fields are identical
 			else if(!newP.equalsIgnoreCase(newPConfirm)) {
 				req.setAttribute("priorityError", "Priorities do not match!");
-				editError = true;
 			} else {
 				//parse the int
 				int newPriority = Integer.parseInt(newP);
 				//make sure the value is valid
 				if(newPriority <=0 || newPriority > 10) {
 					req.setAttribute("priorityValueError", "Invalid priority value!");
-					editError = true;
 				}
 				else {
 					//change the position priority 

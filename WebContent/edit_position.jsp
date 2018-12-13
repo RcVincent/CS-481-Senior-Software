@@ -16,6 +16,7 @@
 			</c:if>
 		</div>
 	</div>
+	
 	<div class="row">
 		<div class="col-6">
 			<h1>Current Position Details</h1>
@@ -159,6 +160,38 @@
 			</div>
 		</div>
 	</form>
+	
+	<form class="form-horizontal" method="post">
+	<input type="hidden" name="posID" value="${posID}">
+		<div class="row">
+			<div class="col-1">
+			
+			</div>
+			<div class="col-5">
+				<c:if test="${!empty permIDError}">
+					<p class="alert alert-warning">${permIDError}</p>
+				</c:if>
+			</div>
+			
+			<div class="col-1">
+			
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="form-group row">
+					<label for="sop_id" class="control-label col-2">Permission ID:</label>
+					<input type="number" class="form-control col-5" id="permissionID" name="permissionID" value="${permissionID}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="submit" name="doStuff" value="changePermissions" class="btn btn-info">Add Permission</button>
+			</div>
+		</div>
+	</form>
+	
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="posID" value="${posID}">
 		<div class="row">
