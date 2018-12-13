@@ -94,9 +94,9 @@ public class PositionController{
 				"delete from Position where position_id = " + positionID);
 	}
 	
-	public void addPositionPermission(Position pos, EnumPermission perm){
+	public void addPositionPermission(Position pos, int permID){
 		db.insert("PositionPermission", new String[]{"position_id", "permission_id"}, 
-				new String[]{String.valueOf(pos.getID()), String.valueOf(perm.getID())});
+				new String[]{String.valueOf(pos.getID()), String.valueOf(permID)});
 	}
 	
 	public void removePositionPermission(Position pos, EnumPermission perm){

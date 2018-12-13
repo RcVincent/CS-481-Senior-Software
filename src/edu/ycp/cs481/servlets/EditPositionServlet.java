@@ -50,7 +50,8 @@ public class EditPositionServlet extends HttpServlet{
 		boolean editError = false;
 		PositionController pc = new PositionController();
 		String action = req.getParameter("doStuff");
-			
+		
+		Position pos = pc.searchForPositions(id, false, "", false, "", -1).get(0);
 		
 		if(action.equalsIgnoreCase("changeTitle")) {
 			String newPositionTitle = req.getParameter("newTitle");
@@ -73,7 +74,7 @@ public class EditPositionServlet extends HttpServlet{
 			}
 			
 			if(!editError) {
-				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
+				req.setAttribute("SuccessMessage", "Title successfully Changed!");
 			}
 		}
 		//change the description
@@ -121,11 +122,10 @@ public class EditPositionServlet extends HttpServlet{
 					//change the position priority 
 					pc.changePriority(id, newPriority);
 					System.out.println("Position priority successfully changed");
+					req.setAttribute("successMessage", "Position Priority Updated!");
 				}
 			}
-			if(!editError) {
-				req.setAttribute("SuccessMessage", "Fields Successfully Changed!");
-			}
+	
 		}
 		
 		else if(action.equalsIgnoreCase("assignSOP")) {
@@ -144,6 +144,23 @@ public class EditPositionServlet extends HttpServlet{
 					pc.insertPositionSOP(id, sopID);
 					req.setAttribute("SuccessMessage", "SOP Assigned!");
 					System.out.println("SOP with id " + sopID + "assigned to the position with position id:" + id);
+				}
+			}
+		}
+		
+		else if(action.equalsIgnoreCase("changePermissions")) {
+			String reqID = req.getParameter("permissionID"); 
+			if(reqID.equalsIgnoreCase("") || reqID == null) {
+				System.out.println("No permission id specified, do not add one");
+			}
+			else {
+				int permID = Integer.parseInt(reqID);
+				if(permID <= 0) {
+					System.out.println("Invalid permission ID");
+					req.setAttribute("permIDError",	"Please specify a valid permissions ID!");
+				} else {
+					pc.addPositionPermission(pos, permID);
+					req.setAttribute("successMessage", "Permission added to position!");
 				}
 			}
 		}

@@ -53,7 +53,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 		int userID = (int) session.getAttribute("user_id");
 		
 		User you = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);
-		Position P = you.getPosition();
+		Position P = pc.getPositionByUser(userID);
 		
 		//change the display size of required SOPs
 		String changePage = req.getParameter("changePage");
