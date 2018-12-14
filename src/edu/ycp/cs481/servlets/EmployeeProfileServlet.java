@@ -92,7 +92,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 		req.setAttribute("ManagerLastName", manager.getLastName());
 		req.setAttribute("ManagerPositionTitle", managerP.getTitle());
 		
-		ArrayList<SOP> sops = pc.findSOPsOfPosition(P.getID());
+		ArrayList<SOP> sops = pc.findSOPsOfPosition(you.getPosition().getID());
 		req.setAttribute("sops", sops); 
 		
 		loadUser(req);

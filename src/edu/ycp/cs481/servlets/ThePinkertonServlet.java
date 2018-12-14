@@ -17,7 +17,7 @@ import edu.ycp.cs481.model.User;
 
 @SuppressWarnings("serial")
 public class ThePinkertonServlet extends HttpServlet{
-	
+
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		HttpSession session = req.getSession();
@@ -35,39 +35,40 @@ public class ThePinkertonServlet extends HttpServlet{
 			}
 		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		ThePinkerton sfc = new ThePinkerton(); 
 		UserController uc = new UserController(); 
 		String action = req.getParameter("WhatToSniff");
-		
+
 		if(action.equalsIgnoreCase("searchSpecific")) {
-		String searchID = req.getParameter("user_id");
-		
-		if(searchID.equalsIgnoreCase("") || searchID == null) {
-			System.out.println("There is no ID to search by don't do the search.");
-		}
-		else if(action.equalsIgnoreCase("searchAll")){
-			int search_id = Integer.parseInt(searchID);
-			User u = uc.searchForUsers(search_id, 0, false, "", false, "", false, "", 0, -1).get(0);
-			Position p = u.getPosition();
-			
-			if(!sfc.checkIfToDoIsEmpty(p)) {
-				req.setAttribute("historyNotEmpty", "There are SOPs you must finish");
-				Messenger.main(new String[] {u.getEmail(), "Incomplete Training", u.getFirstName() + ", you have incomplete SOPs in your training"
-						+ "	history, please complete these as soon as possible. A message will also be sent to your manager. Have a great day."});
-			} else {
-				System.out.println("There were no gaps in this users history");
-				req.setAttribute("SuccessMessage", "There were no gaps in this users training history.");
-				
+			String searchID = req.getParameter("user_id");
+
+			if(searchID.equalsIgnoreCase("") || searchID == null) {
+				System.out.println("There is no ID to search by don't do the search.");
 			}
-			req.getRequestDispatcher("/search_system.jsp").forward(req, resp);
-			
-			
+			//if you want to search by a specific user
+			else {
+				int search_id = Integer.parseInt(searchID);
+				User u = uc.searchForUsers(search_id, 0, false, "", false, "", false, "", 0, -1).get(0);
+				Position p = u.getPosition();
+
+				if(!sfc.checkIfToDoIsEmpty(p)) {
+					req.setAttribute("historyNotEmpty", "There are SOPs you must finish");
+					Messenger.main(new String[] {u.getEmail(), "Incomplete Training", u.getFirstName() + ", you have incomplete SOPs in your training"
+							+ "	history, please complete these as soon as possible. A message will also be sent to your manager. Have a great day."});
+				} else {
+					System.out.println("There were no gaps in this users history");
+					req.setAttribute("SuccessMessage", "There were no gaps in this users training history.");
+
+				}
+				req.getRequestDispatcher("/search_system.jsp").forward(req, resp);
+
+			}
+
 		}
-		
-		}
+		//if you want to search the entire system. 
 		else if(action.equalsIgnoreCase("searchAll")) {
 			sfc.SniffDeeply();
 			req.getRequestDispatcher("/search_system.jsp").forward(req, resp);
