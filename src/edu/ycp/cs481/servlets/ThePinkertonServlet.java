@@ -60,7 +60,7 @@ public class ThePinkertonServlet extends HttpServlet{
 							+ "	history, please complete these as soon as possible. A message will also be sent to your manager. Have a great day."});
 				} else {
 					System.out.println("There were no gaps in this users history");
-					req.setAttribute("SuccessMessage", "There were no gaps in this users training history.");
+					req.setAttribute("successMessage", "There were no gaps in this users training history.");
 
 				}
 				req.getRequestDispatcher("/search_system.jsp").forward(req, resp);
