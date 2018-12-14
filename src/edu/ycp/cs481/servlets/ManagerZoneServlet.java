@@ -20,7 +20,7 @@ import edu.ycp.cs481.model.User;
 @SuppressWarnings("serial")
 public class ManagerZoneServlet extends HttpServlet{
 	
-	private void loadUser(HttpServletRequest req) {
+	/*private void loadUser(HttpServletRequest req) {
 		int user_id = Integer.parseInt(req.getParameter("userID"));
 		UserController uc = new UserController(); 
 		User u = uc.searchForUsers(user_id, -1, false, "", false, "", false, "", -1, -1).get(0);
@@ -32,7 +32,7 @@ public class ManagerZoneServlet extends HttpServlet{
 		req.setAttribute("locked_out", u.isLockedOut());
 		req.setAttribute("position_title", u.getPosition().getTitle());
 		
-	}
+	}*/
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -92,6 +92,7 @@ public class ManagerZoneServlet extends HttpServlet{
 						Position p = u.getPosition();
 						pc.insertPositionSOP(p.getID(), sopID);
 						System.out.println("Added sop with ID "+ sopID +" assigned to user with ID " + userID);
+						req.setAttribute("successMessage", "Assigned SOP to user");
 					}
 				}
 			}
@@ -104,6 +105,7 @@ public class ManagerZoneServlet extends HttpServlet{
 			} else {
 				uc.addSubordinate(managerID, userID);
 				System.out.println("Subordinate added to manager");
+				req.setAttribute("successMessage", "User added to your team!");
 			}
 		}
 		
@@ -114,6 +116,7 @@ public class ManagerZoneServlet extends HttpServlet{
 			} else {
 				uc.removeSubordinate(managerID, userID);
 				System.out.println("Subordinate removed from manager");
+				req.setAttribute("successMessage", "User removed from your team.");
 			}
 		}
 		
