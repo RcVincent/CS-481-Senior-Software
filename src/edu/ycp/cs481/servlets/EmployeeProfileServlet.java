@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs481.control.PositionController;
+import edu.ycp.cs481.control.SOPController;
 import edu.ycp.cs481.control.UserController;
 import edu.ycp.cs481.model.User;
 import edu.ycp.cs481.model.SOP;
@@ -50,6 +51,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 		HttpSession session = req.getSession(); 
 		UserController uc = new UserController(); 
 		PositionController pc = new PositionController(); 
+		SOPController sc = new SOPController();
 		int userID = (int) session.getAttribute("user_id");
 		
 		User you = uc.searchForUsers(userID, -1, false, "", false, "", false, "", -1, -1).get(0);

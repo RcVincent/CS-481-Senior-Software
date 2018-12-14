@@ -52,6 +52,7 @@ public class EditPositionServlet extends HttpServlet{
 		
 		Position pos = pc.searchForPositions(id, false, "", false, "", -1).get(0);
 		
+		
 		if(action.equalsIgnoreCase("changeTitle")) {
 			String newPositionTitle = req.getParameter("newTitle");
 			String newPositionTitleConfirm = req.getParameter("newTitleConfirm");
@@ -133,7 +134,7 @@ public class EditPositionServlet extends HttpServlet{
 				}
 				else {
 					pc.insertPositionSOP(id, sopID);
-					req.setAttribute("SuccessMessage", "SOP Assigned!");
+					req.setAttribute("successMessage", "SOP Assigned!");
 					System.out.println("SOP with id " + sopID + "assigned to the position with position id:" + id);
 				}
 			}
@@ -164,7 +165,7 @@ public class EditPositionServlet extends HttpServlet{
 			//get session data to return home
 			HttpSession session = req.getSession();
 			session.setAttribute("success", "Deleted Position with id " + id);
-			
+			//return after deleting the position
 			resp.sendRedirect(req.getContextPath() + "/user_home");
 			return;
 		}

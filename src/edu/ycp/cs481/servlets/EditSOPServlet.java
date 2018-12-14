@@ -15,7 +15,7 @@ import edu.ycp.cs481.model.SOP;
 
 @SuppressWarnings("serial")
 public class EditSOPServlet extends HttpServlet{
-	
+
 	private void loadSOP(HttpServletRequest req){
 		// TODO: Error checking
 		int sopID = Integer.parseInt(req.getParameter("sopID"));
@@ -56,10 +56,12 @@ public class EditSOPServlet extends HttpServlet{
 		String action = req.getParameter("doStuff");
 		boolean goodUpdate = true;
 		int version = s.getVersion();
-		
+		HttpSession session = req.getSession();
+
 		if(action.equalsIgnoreCase("archiveSOP")){
 			sc.archiveSOP(id);
 			req.setAttribute("successMessage", "Archived SOP!");
+			resp.sendRedirect(req.getContextPath() + "/search_sops");
 		}
 		else if(action.equalsIgnoreCase("unarchiveSOP")){
 			sc.unarchiveSOP(id);
@@ -68,7 +70,7 @@ public class EditSOPServlet extends HttpServlet{
 		else if(action.equalsIgnoreCase("changeTitle")){
 			String newTitle = req.getParameter("newTitle");
 			String newTitleConfirm = req.getParameter("newTitleConfirm");
-			
+
 			if(newTitle == null || newTitle.equalsIgnoreCase("")){
 				req.setAttribute("titleError", "Title can't be null!");
 				goodUpdate = false;
@@ -83,12 +85,12 @@ public class EditSOPServlet extends HttpServlet{
 				sc.changeVersion(id, version);
 				req.setAttribute("successMessage", "Updated Title to " + newTitle + "!");
 			}
-			
-			
+
+
 		}else if(action.equalsIgnoreCase("changePriority")){
 			String newPriorityStr = req.getParameter("newPriority");
 			String newPriorityConfirmStr = req.getParameter("newPriorityConfirm");
-			
+
 			if(newPriorityStr == null || newPriorityStr.equalsIgnoreCase("")){
 				req.setAttribute("priorityError", "Please enter a number!");
 				goodUpdate = false;
@@ -109,15 +111,16 @@ public class EditSOPServlet extends HttpServlet{
 				}
 			}
 		}
-		
+
 		else if(action.equalsIgnoreCase("changeDescription")){
 			String newDescription = req.getParameter("newDescription");
 			sc.changeDescription(id, newDescription);
 			version++;
 			sc.changeVersion(id, version);
 			req.setAttribute("successMessage", "Updated description!");
-			
+
 		}
+
 		loadSOP(req);
 		req.getRequestDispatcher("/edit_sop.jsp").forward(req, resp);
 	}
