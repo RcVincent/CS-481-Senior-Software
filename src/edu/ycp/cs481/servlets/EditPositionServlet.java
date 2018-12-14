@@ -139,30 +139,35 @@ public class EditPositionServlet extends HttpServlet{
 			}
 		}
 		
-		else if(action.equalsIgnoreCase("changePermissions")) {
+		/*else if(action.equalsIgnoreCase("changePermissions")) {
 			String reqID = req.getParameter("permissionID"); 
 			if(reqID.equalsIgnoreCase("") || reqID == null) {
 				System.out.println("No permission id specified, do not add one");
 			}
-			else {
-				int permID = Integer.parseInt(reqID);
+			else { 
+				int permID =Integer.parseInt(reqID);
 				if(permID <= 0) {
 					System.out.println("Invalid permission ID");
 					req.setAttribute("permIDError",	"Please specify a valid permissions ID!");
 				} else {
-					pc.addPositionPermission(pos, permID);
+					EnumPermission perm;
+					perm.getID();
+					pc.addPositionPermission(pos, perm);
 					req.setAttribute("successMessage", "Permission added to position!");
 				}
 			}
-		}
+		}*/
 		
-		/*
+		
 		else if(action.equalsIgnoreCase("deletePosition")) {
 			pc.removePosition(id);
-			req.setAttribute("RemoveMessage", "Position removed from the DB.");
-			System.out.println("Position deleted.");
+			//get session data to return home
+			HttpSession session = req.getSession();
+			session.setAttribute("success", "Deleted Position with id " + id);
+			
 			resp.sendRedirect(req.getContextPath() + "/user_home");
-		}*/
+			return;
+		}
 
 		loadPosition(req);
 		req.getRequestDispatcher("/edit_position.jsp").forward(req, resp);

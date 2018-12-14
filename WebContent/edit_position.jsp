@@ -21,12 +21,12 @@
 		<div class="col-6">
 			<h1>Current Position Details</h1>
 		</div>
-		<!-- <div class="col-6 text-right">
+		 <div class="col-6 text-right">
 			<form class="form-horizontal" method="post">
 				<input type="hidden" name="posID" value="${posID}">
 				<button type="submit" name="doStuff" value="deletePosition" class="btn btn-danger">Delete Position</button>
 			</form>
-		</div> --> 
+		</div>  
 	</div>
 	<div class="row">
 		<div class="col">
@@ -161,6 +161,7 @@
 		</div>
 	</form>
 	
+	<!-- 
 	<form class="form-horizontal" method="post">
 	<input type="hidden" name="posID" value="${posID}">
 		<div class="row">
@@ -190,7 +191,7 @@
 				<button type="submit" name="doStuff" value="changePermissions" class="btn btn-info">Add Permission</button>
 			</div>
 		</div>
-	</form>
+	</form> -->
 	
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="posID" value="${posID}">
