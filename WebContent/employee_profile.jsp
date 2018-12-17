@@ -77,7 +77,7 @@
 		<c:forEach begin="${page*displaySize}" end="${((page+1)*displaySize)}" items="${sops}" var="current">
 			<div class="row">
 				<div class="col-1 text-center">
-					<p><a href="employee_profile?sopID=${current.ID}">Edit</a>
+					<p><a href="CompleteSOP?sopID=${current.ID}">Complete</a>
 				</div>
 				<div class="col-2 text-center">
 					<p>${current.ID} / ${current.version} / ${current.authorID}</p>
