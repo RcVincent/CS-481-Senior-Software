@@ -40,7 +40,48 @@ public class SOPController{
 		}
 		return null;
 	}
-
+	
+	//search only the requisite sop tables to get the sops assigned to a user
+	public ArrayList<SOP> getSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
+			int priority, int version, int authorID, int userID) {
+		
+		try {
+			//used the user search for this inspiration
+			ArrayList<String> extraTable = new ArrayList<String>();
+			ArrayList<String> junctionInfo = new ArrayList<String>(); 
+			
+			if(userID != -1) {
+				extraTable.add("UserSOP");
+				extraTable.add("User");
+				junctionInfo.add("UserSOP.user_id = User.user_id");
+				junctionInfo.add("UserSOP.sop_id = SOP.sop_id");
+			}
+			
+			ArrayList<SOP> sopsToDo = db.doSearch(DBFormat.getSopResFormat(), "SOP", extraTable, junctionInfo, 
+					new String[]{"sop_id", "priority", "version", "author_id", "User.user_id"}, 
+					new int[]{sopID, priority, version, authorID, userID}, 
+					new boolean[]{titlePartial, descPartial}, 
+					new String[]{"title", "description"}, 
+					new String[]{title, description});
+			
+			if(sopID != -1){
+				if(sopsToDo.size() == 0){
+					System.out.println("No SOP found with ID " + sopID);
+				}else if(sopsToDo.size() > 1){
+					System.out.println("Multiple SOPs found with ID " + sopID + "! Returning null");
+					return null;
+				}
+			}
+			
+			return sopsToDo;
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null; 
+	}
+	
 	public void archiveSOP(int sopID){
 		db.executeUpdate("Archive SOP with ID " + sopID, "update SOP set archive_flag = true where sop_id = " + sopID);
 	}

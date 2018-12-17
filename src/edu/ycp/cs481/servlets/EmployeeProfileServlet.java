@@ -41,7 +41,11 @@ public class EmployeeProfileServlet extends HttpServlet{
 		if(session.getAttribute("user_id") == null){
 			resp.sendRedirect(req.getContextPath() + "/login");
 		}else{
+			SOPController sc = new SOPController();
 			loadUser(req);
+			int id = (int) session.getAttribute("user_id");
+			ArrayList<SOP> sops = sc.getSOPs(-1, false, null, false, null, -1, -1, -1, id);
+			req.setAttribute("sops", sops); 
 			req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);
 		}
 	}
@@ -92,8 +96,6 @@ public class EmployeeProfileServlet extends HttpServlet{
 		req.setAttribute("ManagerLastName", manager.getLastName());
 		req.setAttribute("ManagerPositionTitle", managerP.getTitle());
 		
-		ArrayList<SOP> sops = pc.findSOPsOfPosition(you.getPosition().getID());
-		req.setAttribute("sops", sops); 
 		
 		loadUser(req);
 		req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);
