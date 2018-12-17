@@ -44,6 +44,7 @@ public class EmployeeProfileServlet extends HttpServlet{
 			SOPController sc = new SOPController();
 			loadUser(req);
 			int id = (int) session.getAttribute("user_id");
+			//here it is. My maltese falcon. My Sistine chapel" - Justin Hammer "Iron Man 2"
 			ArrayList<SOP> sops = sc.getSOPs(-1, false, null, false, null, -1, -1, -1, id);
 			req.setAttribute("sops", sops); 
 			req.getRequestDispatcher("/employee_profile.jsp").forward(req, resp);

@@ -41,6 +41,7 @@ public class SOPController{
 		return null;
 	}
 	
+	//here it is. My maltese falcon. My Sistine chapel" - Justin Hammer "Iron Man 2"
 	//search only the requisite sop tables to get the sops assigned to a user
 	public ArrayList<SOP> getSOPs(int sopID, boolean titlePartial, String title, boolean descPartial, String description, 
 			int priority, int version, int authorID, int userID) {
@@ -50,13 +51,14 @@ public class SOPController{
 			ArrayList<String> extraTable = new ArrayList<String>();
 			ArrayList<String> junctionInfo = new ArrayList<String>(); 
 			
+			//set requisite junction information so i can search the UserSOP junction table. 
 			if(userID != -1) {
 				extraTable.add("UserSOP");
 				extraTable.add("User");
 				junctionInfo.add("UserSOP.user_id = User.user_id");
 				junctionInfo.add("UserSOP.sop_id = SOP.sop_id");
 			}
-			
+			//"and here we go" -The Joker "The Dark Knight"
 			ArrayList<SOP> sopsToDo = db.doSearch(DBFormat.getSopResFormat(), "SOP", extraTable, junctionInfo, 
 					new String[]{"sop_id", "priority", "version", "author_id", "User.user_id"}, 
 					new int[]{sopID, priority, version, authorID, userID}, 
@@ -64,6 +66,7 @@ public class SOPController{
 					new String[]{"title", "description"}, 
 					new String[]{title, description});
 			
+			//standard error checking
 			if(sopID != -1){
 				if(sopsToDo.size() == 0){
 					System.out.println("No SOP found with ID " + sopID);
@@ -73,6 +76,7 @@ public class SOPController{
 				}
 			}
 			
+			//"BRING ME THE DIAMONDS" -ARP Overlord, 'Far Cry 2'
 			return sopsToDo;
 			
 		}
